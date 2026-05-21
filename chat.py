@@ -234,7 +234,7 @@ _HTML = """\
   }
   .tok {
     display: inline-flex; flex-direction: column; align-items: center;
-    padding: 2px 4px; border-radius: 3px; cursor: default; min-width: 0;
+    padding: 2px 0; border-radius: 3px; cursor: default; min-width: 0;
   }
   .tok-id {
     font-family: 'Courier New', monospace; font-size: 0.58rem;
