@@ -127,7 +127,7 @@ Useful `program.md` updates a human might make:
 Because each run has a fixed 5-minute training budget, throughput is roughly:
 
 - ~12 experiments per hour (theoretical max from 60/5)
-- ~90-100 experiments in ~8 hours after startup/eval overhead and occasional failed runs
+- ~90-100 experiments in ~8 hours after per-run startup/evaluation/logging overhead and occasional failed runs
 
 The exact total depends on your hardware and any failed runs.
 
