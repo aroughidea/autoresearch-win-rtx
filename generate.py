@@ -101,6 +101,7 @@ def generate(
     max_new_tokens: int,
     temperature: float = 0.9,
     top_k: int | None = 50,
+    eos_id: int | None = None,
 ) -> torch.Tensor:
     """Auto-regressively sample max_new_tokens tokens, appending to idx."""
     for _ in range(max_new_tokens):
@@ -110,6 +111,8 @@ def generate(
         logits = logits[:, -1, :]  # last position only
         next_token = _sample_top_k(logits, top_k, temperature)
         idx = torch.cat((idx, next_token), dim=1)
+        if eos_id is not None and next_token.item() == eos_id:
+            break
     return idx
 
 
@@ -142,7 +145,7 @@ def main() -> None:
         "--temperature",
         type=float,
         default=0.9,
-        help="Sampling temperature — higher means more random (default: 0.9)",
+        help="Sampling temperature — 0 = always pick most likely word, higher = more random (default: 0.9)",
     )
     parser.add_argument(
         "--top-k",
@@ -199,6 +202,7 @@ def main() -> None:
     print(f"Prompt : {args.prompt!r}")
     print("-" * 60)
 
+    eos_id = tokenizer.get_eos_token_id()
     amp_enabled = device == "cuda"
     with torch.autocast(device_type=device, dtype=torch.bfloat16, enabled=amp_enabled):
         out = generate(
@@ -207,6 +211,7 @@ def main() -> None:
             max_new_tokens=args.max_tokens,
             temperature=args.temperature,
             top_k=args.top_k if args.top_k > 0 else None,
+            eos_id=eos_id,
         )
 
     generated_ids = out[0, len(token_ids) :].tolist()

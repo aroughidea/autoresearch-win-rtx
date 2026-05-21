@@ -37,6 +37,7 @@ SPLIT_PATTERN = r"""'(?i:[sdmt]|ll|ve|re)|[^\r\n\p{L}\p{N}]?+\p{L}+|\p{N}{1,2}| 
 
 SPECIAL_TOKENS = [f"<|reserved_{i}|>" for i in range(4)]
 BOS_TOKEN = "<|reserved_0|>"
+EOS_TOKEN = "<|reserved_1|>"  # end-of-sequence: appended to every document during data prep
 
 # ---------------------------------------------------------------------------
 # Dataset + cache configuration
@@ -359,6 +360,7 @@ class Tokenizer:
         self.enc = enc
         self.dataset = _resolve_dataset_name(dataset)
         self.bos_token_id = enc.encode_single_token(BOS_TOKEN)
+        self.eos_token_id = enc.encode_single_token(EOS_TOKEN)
 
     @classmethod
     def from_directory(cls, tokenizer_dir=None, dataset=None):
@@ -373,6 +375,9 @@ class Tokenizer:
 
     def get_bos_token_id(self):
         return self.bos_token_id
+
+    def get_eos_token_id(self):
+        return self.eos_token_id
 
     def encode(self, text, prepend=None, num_threads=8):
         if prepend is not None:
@@ -442,6 +447,9 @@ def make_dataloader(tokenizer, B, T, split, device="cuda", dataset=None, buffer_
         nonlocal epoch
         doc_batch, epoch = next(batches)
         token_lists = tokenizer.encode(doc_batch, prepend=bos_token)
+        eos_token = tokenizer.get_eos_token_id()
+        for row in token_lists:
+            row.append(eos_token)
         doc_buffer.extend(token_lists)
 
     row_buffer = torch.empty((B, row_capacity), dtype=torch.long)

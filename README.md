@@ -45,7 +45,7 @@ The model is not learning to be a general assistant. It is learning to predict s
 
 ### How does the training loop work?
 
-1. `uv run prepare.py` — downloads TinyStories and builds a vocabulary (called a tokenizer) that converts words and characters into numbers the model can process. This is a one-time setup step.
+1. `uv run prepare.py` — downloads TinyStories and builds a vocabulary (called a tokenizer) that converts words and characters into numbers the model can process. It also marks the end of each story with an **end-of-sequence (EOS) token**, so the model learns where stories naturally conclude. This is a one-time setup step; re-run it if you switch datasets.
 2. `uv run train.py` — trains the model for 5 minutes on the stories, then tests it on a separate set of stories it has never seen. At the end it prints a score.
 3. You (or the agent) review the score, change something in `train.py`, and run again.
 4. Repeat. Keep changes that lower the score.
@@ -73,7 +73,7 @@ You cannot chat with the model directly from this repo. The checkpoint is a raw 
 
 You can. There are two ways to interact with it.
 
-**`chat.py` — browser UI.** Opens a local page at `http://localhost:7860` where you type a prompt and watch the model continue it word by word in real time. Sliders let you adjust how creative or focused the output is.
+**`chat.py` — browser UI.** Opens a local page at `http://localhost:8000` where you type a prompt and watch the model continue it word by word in real time. Sliders let you adjust how creative or focused the output is.
 
 ```powershell
 uv run chat.py
