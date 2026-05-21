@@ -101,6 +101,36 @@ If you switch to a different dataset later, the model will reflect the style and
 | `train.py` | The agent (or you) | The model and training settings — this is what gets improved |
 | `prepare.py` | Nobody | Data download and evaluation wiring — do not modify |
 
+### How do I use `program.md` with an AI assistant?
+
+Think of `program.md` as the playbook for your agent. You edit it, then the agent follows it while iterating on `train.py`.
+
+A practical loop:
+
+1. Update `program.md` with your priorities and constraints.
+2. Ask your assistant to read `program.md` and start/continue experiments.
+3. Let it run multiple iterations and log outcomes.
+4. Review results, then refine `program.md` for the next batch.
+
+Useful `program.md` updates a human might make:
+
+- Narrow scope (for example: "focus only on optimizer changes for the next 10 runs").
+- Add guardrails (for example: "avoid changes that increase VRAM above X GB").
+- Raise/lower risk appetite (for example: "prefer simple tweaks" vs "try larger architecture changes").
+- Add keep/discard criteria (for example: "discard tiny gains if complexity increases").
+- Add run hygiene rules (for example: "always record crashes in `results.tsv` with a short reason").
+
+### What does "overnight" mean here?
+
+"Overnight" is not a built-in mode or timer. It just means letting the agent run unattended for a long block (often while you sleep), then reviewing the results later.
+
+Because each run has a fixed 5-minute training budget, throughput is roughly:
+
+- ~12 experiments per hour
+- ~90-100 experiments in ~8 hours (plus startup/eval overhead)
+
+The exact total depends on your hardware and any failed runs.
+
 ### What does a successful run look like?
 
 When you run `uv run train.py` you will see GPU info, then progress lines like:
@@ -183,13 +213,17 @@ If the above commands all work ok, your setup is working and you can go into aut
 
 ## Running the agent
 
-Simply spin up your Claude/Codex or whatever you want in this repo (and disable all permissions), then you can prompt something like:
+Open your assistant in this repository and tell it to follow `program.md`.
+
+Give it the permissions it needs to run commands and edit files in this repo. If permissions are fully disabled, it cannot execute the setup or experiment loop.
+
+A simple prompt:
 
 ```
-Hi have a look at program.md and let's kick off a new experiment! let's do the setup first.
+Read program.md, do setup checks, and start a new experiment loop. Log each result in results.tsv.
 ```
 
-The `program.md` file is essentially a super lightweight "skill".
+`program.md` is a lightweight instruction playbook for the agent.
 
 ## Project structure
 
@@ -205,7 +239,7 @@ pyproject.toml  — dependencies
 ## Design choices
 
 - **Single file to modify.** The agent only touches `train.py`. This keeps the scope manageable and diffs reviewable.
-- **Fixed time budget.** Training always runs for exactly 5 minutes, regardless of your specific platform. This means you can expect approx 12 experiments/hour and approx 100 experiments while you sleep. There are two upsides of this design decision. First, this makes experiments directly comparable regardless of what the agent changes (model size, batch size, architecture, etc). Second, this means that autoresearch will find the most optimal model for your platform in that time budget. The downside is that your runs (and results) become not comparable to other people running on other compute platforms.
+- **Fixed time budget.** Training always runs for exactly 5 minutes, regardless of your specific platform. This means you can expect approx 12 experiments/hour and roughly 90-100 experiments in an unattended ~8-hour "overnight" window (plus startup/eval overhead). There are two upsides of this design decision. First, this makes experiments directly comparable regardless of what the agent changes (model size, batch size, architecture, etc). Second, this means that autoresearch will find the most optimal model for your platform in that time budget. The downside is that your runs (and results) become not comparable to other people running on other compute platforms.
 - **Self-contained.** No external dependencies beyond PyTorch and a few small packages. No distributed training, no complex configs. One GPU, one file, one metric.
 
 ## Platform support
