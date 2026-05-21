@@ -127,7 +127,7 @@ Useful `program.md` updates a human might make:
 Because each run has a fixed 5-minute training budget, throughput is roughly:
 
 - ~12 experiments per hour (theoretical max from 60/5)
-- ~90-100 experiments in ~8 hours, accounting for per-run startup/evaluation/logging overhead and occasional failed runs
+- ~85-95 experiments in ~8 hours, accounting for per-run startup/evaluation/logging overhead and occasional failed runs
 
 The exact total varies with hardware speed, first-run warmup, eval/logging overhead, and failed runs.
 
@@ -240,7 +240,7 @@ pyproject.toml  — dependencies
 
 - **Single file to modify.** The agent only touches `train.py`. This keeps the scope manageable and diffs reviewable.
 - **Fixed time budget.** Training always runs for exactly 5 minutes, regardless of your specific platform.
-  - Throughput is about 12 experiments/hour in theory, and roughly 90-100 experiments in an unattended ~8-hour "overnight" window after startup/eval overhead and occasional failures.
+  - Throughput is about 12 experiments/hour in theory, and roughly 85-95 experiments in an unattended ~8-hour "overnight" window after startup/eval overhead and occasional failures.
   - Upside 1: experiments stay directly comparable regardless of what the agent changes (model size, batch size, architecture, etc).
   - Upside 2: the system can search for the best model for your platform within a fixed per-run budget.
   - Downside: your runs and results are not directly comparable to people on different hardware.
