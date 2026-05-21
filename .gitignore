@@ -25,3 +25,6 @@ checkpoint_pre_eval.pt
 *.pth
 *.ckpt
 *.safetensors
+
+# Run logs
+*.log
