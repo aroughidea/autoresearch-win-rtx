@@ -230,19 +230,19 @@ _HTML = """\
   /* ---- Token chips ---- */
   .token-box {
     min-height: 100px;
-    display: flex; flex-wrap: wrap; gap: 6px 5px; align-content: flex-start;
+    display: flex; flex-wrap: wrap; gap: 0; align-content: flex-start;
   }
   .tok {
     display: inline-flex; flex-direction: column; align-items: center;
-    padding: 4px 8px; border-radius: 4px; cursor: default; min-width: 52px;
+    padding: 2px 4px; border-radius: 3px; cursor: default; min-width: 0;
   }
   .tok-id {
-    font-family: 'Courier New', monospace; font-size: 0.68rem;
-    font-weight: 700; color: #555; line-height: 1.3;
+    font-family: 'Courier New', monospace; font-size: 0.58rem;
+    font-weight: 700; color: #888; line-height: 1.2;
   }
   .tok-text {
-    font-family: 'Courier New', monospace; font-size: 0.8rem;
-    white-space: pre; line-height: 1.4; color: #1a1a1a;
+    font-family: 'Courier New', monospace; font-size: 0.78rem;
+    white-space: pre; line-height: 1.3; color: #1a1a1a;
   }
 
   /* ---- Page navigation ---- */
