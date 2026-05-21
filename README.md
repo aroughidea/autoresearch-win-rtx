@@ -13,9 +13,10 @@ The idea: give an AI agent a small but real LLM training setup and let it experi
 ## Fork scope
 
 - Upstream source: [karpathy/autoresearch](https://github.com/karpathy/autoresearch)
-- Primary objective: run natively on Windows with desktop consumer NVIDIA GPUs (Turing with >=8 GB VRAM, Ampere/Ada/Blackwell with >=10 GB VRAM), without unofficial Triton-on-Windows stacks.
+- Primary objective: run natively on Windows with NVIDIA GPUs that meet the architecture VRAM floor (Turing with >=8 GB VRAM, Ampere/Ada/Blackwell with >=10 GB VRAM), without unofficial Triton-on-Windows stacks.
 - Scope of changes: compatibility and stability updates required for that target platform.
 - The original Linux/H100-oriented path from upstream is removed in this fork and is not supported here.
+- High-end laptop/workstation GPUs are supported when they meet the same VRAM floors, though power and thermal variance can still affect throughput.
 - If you need the upstream Linux/H100 path, use [karpathy/autoresearch](https://github.com/karpathy/autoresearch).
 
 ## How it works
@@ -89,13 +90,15 @@ pyproject.toml  — dependencies
 
 This fork's platform policy is explicit and tiered.
 
-| Architecture | Minimum VRAM floor | Supported desktop consumer GPUs |
+This matters for machines like the Dell Precision 7780: an RTX 4000 Ada Laptop GPU with 12 GB VRAM is now inside the supported Ada floor, so it should be treated as a supported profile rather than a fallback-only profile.
+
+| Architecture | Minimum VRAM floor | Supported NVIDIA GPUs |
 | --- | --- | --- |
 | Turing | `>=8 GB` | `RTX 2060 12GB`, `RTX 2060 SUPER 8GB`, `RTX 2070 8GB`, `RTX 2070 SUPER 8GB`, `RTX 2080 8GB`, `RTX 2080 SUPER 8GB`, `RTX 2080 Ti 11GB` |
 | Ampere | `>=10 GB` | `RTX 3060 12GB`, `RTX 3080 10GB`, `RTX 3080 12GB`, `RTX 3080 Ti 12GB`, `RTX 3090 24GB`, `RTX 3090 Ti 24GB` |
 | Ada | `>=10 GB` | `RTX 4060 Ti 16GB`, `RTX 4070 12GB`, `RTX 4070 SUPER 12GB`, `RTX 4070 Ti 12GB`, `RTX 4070 Ti SUPER 16GB`, `RTX 4080 16GB`, `RTX 4080 SUPER 16GB`, `RTX 4090 24GB` |
 | Blackwell | `>=10 GB` | `RTX 5060 Ti 16GB`, `RTX 5070 12GB`, `RTX 5070 Ti 16GB`, `RTX 5080 16GB`, `RTX 5090 32GB` |
-- Desktop only: laptop GPUs are not officially supported due to wide power and thermal variance.
+- Laptop and mobile workstation GPUs are supported when they meet the VRAM floor, but power and thermal variance may reduce achievable batch sizes.
 - Floor policy: Turing desktop GPUs are supported at >=8 GB VRAM; Ampere/Ada/Blackwell desktop GPUs require >=10 GB VRAM.
 - `RTX 2060 6GB` remains out of matrix support due to VRAM floor.
 - Runtime path is intentionally unified across platforms: PyTorch SDPA attention + eager optimizer steps.

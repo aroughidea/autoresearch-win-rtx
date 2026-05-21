@@ -127,10 +127,8 @@ def _resolve_gpu_profile(gpu_name, capability, gpu_vram_gb, is_windows):
     arch = SUPPORTED_CONSUMER_CAPABILITIES.get(capability)
     min_vram_gb = MIN_SUPPORTED_VRAM_GB_BY_ARCH.get(arch, float("inf"))
     is_rtx = "rtx" in name
-    is_laptop = "laptop" in name
     supported_consumer = (
         is_rtx
-        and not is_laptop
         and arch is not None
         and gpu_vram_gb >= (min_vram_gb - VRAM_FLOOR_TOLERANCE_GB)
     )
@@ -148,13 +146,15 @@ def _resolve_gpu_profile(gpu_name, capability, gpu_vram_gb, is_windows):
             )
         if gpu_vram_gb < 16.0:
             mid_tier_name = f"{arch}-12-15gb" if arch == "turing" else f"{arch}-10-15gb"
+            checkpoint_modes = (True,) if arch == "turing" else (False, True)
+            default_checkpointing = True if arch == "turing" else False
             return GpuProfile(
                 name=mid_tier_name,
                 is_supported_consumer=True,
                 is_compatibility_only=False,
                 train_batch_candidates=(16, 8, 4),
-                checkpoint_modes=(True,),
-                default_checkpointing=True,
+                checkpoint_modes=checkpoint_modes,
+                default_checkpointing=default_checkpointing,
             )
         if gpu_vram_gb < 24.0:
             return GpuProfile(
@@ -190,8 +190,6 @@ def _compatibility_warning(gpu_name, capability, gpu_vram_gb):
     arch = SUPPORTED_CONSUMER_CAPABILITIES.get(capability)
     if "rtx" not in name:
         return None
-    if "laptop" in name:
-        return "laptop GPUs are outside the supported desktop matrix"
     if arch is None:
         return f"compute capability {capability[0]}.{capability[1]} is outside supported consumer tiers"
     min_vram_gb = MIN_SUPPORTED_VRAM_GB_BY_ARCH.get(arch, float("inf"))
