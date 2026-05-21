@@ -69,6 +69,30 @@ After a completed run you have:
 
 You cannot chat with the model directly from this repo. The checkpoint is a raw file of learned numbers. To actually generate text from it you would need additional code. The purpose of this project is the research loop itself — finding which training configurations produce the best scores — not deployment.
 
+### But I want to actually run my model
+
+You can. There are two ways to interact with it.
+
+**`chat.py` — browser UI.** Opens a local page at `http://localhost:7860` where you type a prompt and watch the model continue it word by word in real time. Sliders let you adjust how creative or focused the output is.
+
+```powershell
+uv run chat.py
+```
+
+**`generate.py` — terminal.** Prints the continuation directly. Good for quick checks, scripting, or saving output to a log file.
+
+```powershell
+uv run generate.py "Once upon a time"
+uv run generate.py "The little dog" --max-tokens 200
+uv run generate.py "Once upon a time" --temperature 1.2
+```
+
+Both scripts detect the model architecture automatically from the checkpoint — no configuration needed.
+
+**What to expect:** The model trained on TinyStories will continue your prompt in the style of short children's stories. The quality depends directly on how many training iterations have run and how well the settings have been tuned. An early model produces plausible but odd sentences. A well-tuned model reads more coherently. Watching that improvement across runs is the point of the project.
+
+If you switch to a different dataset later, the model will reflect the style and content of that data instead.
+
 ### Which files do I touch?
 
 | File | Who edits it | What it is |
@@ -170,6 +194,8 @@ The `program.md` file is essentially a super lightweight "skill".
 ```
 prepare.py      — constants, data prep + runtime utilities (do not modify)
 train.py        — model, optimizer, training loop (agent modifies this)
+generate.py     — load a checkpoint and generate text from a prompt (terminal)
+chat.py         — local browser UI for the trained model (streams output)
 program.md      — agent instructions
 pyproject.toml  — dependencies
 ```
