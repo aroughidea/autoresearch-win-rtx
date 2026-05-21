@@ -116,23 +116,23 @@ _HTML = """\
     background: #ebebeb;
     color: #1a1a1a;
     min-height: 100vh;
-    padding: 44px 16px 72px;
+    padding: 20px 16px 32px;
   }
 
-  .container { max-width: 1080px; margin: 0 auto; }
+  .container { width: 100%; margin: 0 auto; }
 
   /* ---- Header ---- */
-  .header { margin-bottom: 24px; }
-  .header h1 { font-size: 1.45rem; font-weight: 700; margin-bottom: 10px; }
-  .header p  { font-size: 0.92rem; color: #555; line-height: 1.65; }
+  .header { margin-bottom: 14px; }
+  .header h1 { font-size: 1.25rem; font-weight: 700; margin-bottom: 6px; }
+  .header p  { font-size: 0.82rem; color: #888; line-height: 1.5; }
   .header strong { color: #1a1a1a; }
 
   /* ---- Cards ---- */
   .card {
     background: #fff;
-    border-radius: 10px;
-    padding: 22px 24px;
-    margin-bottom: 12px;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 8px;
     box-shadow: 0 1px 3px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.04);
   }
   .card-label {
@@ -141,14 +141,14 @@ _HTML = """\
     text-transform: uppercase;
     letter-spacing: .1em;
     color: #aaa;
-    margin-bottom: 18px;
+    margin-bottom: 10px;
   }
 
   /* ---- Parameters ---- */
-  .params { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .params { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
   .param-row {
     display: flex; justify-content: space-between; align-items: baseline;
-    font-size: 0.86rem; margin-bottom: 7px;
+    font-size: 0.86rem; margin-bottom: 4px;
   }
   .param-row .name  { font-weight: 600; }
   .param-row .value {
@@ -160,9 +160,9 @@ _HTML = """\
 
   /* ---- Prompt ---- */
   textarea {
-    width: 100%; min-height: 100px;
+    width: 100%; min-height: 68px;
     font-size: 0.96rem; font-family: inherit; line-height: 1.55;
-    padding: 10px 12px;
+    padding: 8px 10px;
     border: 1.5px solid #ddd; border-radius: 6px;
     resize: vertical; outline: none;
     transition: border-color .15s;
@@ -170,7 +170,7 @@ _HTML = """\
   textarea:focus { border-color: #666; }
   .prompt-footer {
     display: flex; justify-content: space-between; align-items: center;
-    margin-top: 12px;
+    margin-top: 8px;
   }
   .prompt-hint { font-size: 0.75rem; color: #ccc; }
 
@@ -186,7 +186,7 @@ _HTML = """\
 
   /* ---- Output ---- */
   .output-box {
-    min-height: 140px;
+    min-height: 100px;
     font-family: Georgia, "Times New Roman", serif;
     font-size: 1.04rem; line-height: 1.8;
     white-space: pre-wrap;
@@ -206,7 +206,7 @@ _HTML = """\
   /* ---- Output view toggle ---- */
   .card-label-row {
     display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 18px;
+    margin-bottom: 10px;
   }
   .card-label-row .card-label { margin-bottom: 0; }
   .view-toggle { display: flex; gap: 4px; }
@@ -247,7 +247,7 @@ _HTML = """\
 
   /* ---- Page navigation ---- */
   .page-nav {
-    display: flex; margin-bottom: 22px;
+    display: flex; margin-bottom: 12px;
     border-bottom: 2px solid #ddd;
   }
   .page-tab {
@@ -258,6 +258,20 @@ _HTML = """\
   }
   .page-tab.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
   .page-tab:hover:not(.active) { color: #555; }
+
+  /* ---- Generator two-column layout ---- */
+  #page-gen {
+    display: grid;
+    grid-template-columns: 360px 1fr;
+    gap: 8px;
+    align-items: start;
+  }
+  .gen-left { display: flex; flex-direction: column; gap: 8px; }
+  .gen-left .card { margin-bottom: 0; }
+  .card-output { display: flex; flex-direction: column; margin-bottom: 0; }
+  .card-output .card-label-row { flex-shrink: 0; }
+  .card-output .output-box { flex: 1; min-height: 320px; }
+  .card-output .token-box  { flex: 1; min-height: 320px; }
 
   /* ---- Vocabulary browser ---- */
   .vocab-search {
@@ -305,6 +319,8 @@ _HTML = """\
 
   <div id="page-gen">
 
+  <div class="gen-left">
+
   <div class="card">
     <div class="card-label">Model parameters</div>
     <div class="params">
@@ -348,7 +364,9 @@ _HTML = """\
     </div>
   </div>
 
-  <div class="card">
+  </div><!-- /gen-left -->
+
+  <div class="card card-output">
     <div class="card-label-row">
       <div class="card-label">Output</div>
       <div style="display:flex;gap:12px;align-items:center">
