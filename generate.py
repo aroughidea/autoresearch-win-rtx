@@ -85,7 +85,9 @@ def _config_from_state_dict(state_dict: dict, n_head_override: int | None = None
 
 def _sample_top_k(logits: torch.Tensor, top_k: int | None, temperature: float) -> torch.Tensor:
     """Apply temperature + top-k, return a single sampled token id (shape: 1,1)."""
-    logits = logits / max(temperature, 1e-8)
+    if temperature < 1e-6:
+        return logits.argmax(dim=-1, keepdim=True).unsqueeze(0)
+    logits = logits / temperature
     if top_k is not None and top_k > 0:
         k = min(top_k, logits.size(-1))
         threshold, _ = torch.topk(logits, k)
