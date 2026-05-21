@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "C:\Users\tj\repos\autoresearch-win-rtx\train.py", line 19, in <module>
+    import torch
+  File "c:\Users\tj\repos\autoresearch-win-rtx\.venv\lib\site-packages\torch\__init__.py", line 281, in <module>
+    _load_dll_libraries()
+  File "c:\Users\tj\repos\autoresearch-win-rtx\.venv\lib\site-packages\torch\__init__.py", line 264, in _load_dll_libraries
+    raise err
+OSError: [WinError 1455] The paging file is too small for this operation to complete. Error loading "c:\Users\tj\repos\autoresearch-win-rtx\.venv\lib\site-packages\torch\lib\cublas64_12.dll" or one of its dependencies.

@@ -51,6 +51,7 @@ class RuntimeConfig:
     gpu_total_memory_bytes: int
     tf32_enabled: bool
     gpu_profile: "GpuProfile"
+    forced_checkpointing: bool | None
 
 
 @dataclass(frozen=True)
@@ -282,10 +283,13 @@ def detect_runtime():
     force_checkpointing = os.environ.get("AUTORESEARCH_FORCE_CHECKPOINTING")
     if force_checkpointing == "1":
         use_activation_checkpointing = True
+        forced_checkpointing = True
     elif force_checkpointing == "0":
         use_activation_checkpointing = False
+        forced_checkpointing = False
     else:
         use_activation_checkpointing = gpu_profile.default_checkpointing
+        forced_checkpointing = None
 
     return RuntimeConfig(
         device=device,
@@ -301,6 +305,7 @@ def detect_runtime():
         gpu_total_memory_bytes=gpu_total_memory_bytes,
         tf32_enabled=tf32_enabled,
         gpu_profile=gpu_profile,
+        forced_checkpointing=forced_checkpointing,
     )
 
 
@@ -814,7 +819,7 @@ FINAL_LR_FRAC = 0.0
 
 # Model size + memory defaults
 DEPTH = 8
-DEVICE_BATCH_SIZE = 16
+DEVICE_BATCH_SIZE = int(os.environ.get("AUTORESEARCH_DEVICE_BATCH_SIZE", "16"))
 EVAL_BATCH_SIZE = 8
 
 
@@ -855,8 +860,12 @@ def _filter_train_batch_sizes(candidates):
 
 def _build_train_candidates(runtime):
     batch_sizes = _filter_train_batch_sizes(runtime.gpu_profile.train_batch_candidates)
+    if runtime.forced_checkpointing is None:
+        checkpoint_modes = runtime.gpu_profile.checkpoint_modes
+    else:
+        checkpoint_modes = (runtime.forced_checkpointing,)
     candidates = []
-    for checkpointing in runtime.gpu_profile.checkpoint_modes:
+    for checkpointing in checkpoint_modes:
         for batch_size in batch_sizes:
             candidate = (batch_size, checkpointing)
             if candidate not in candidates:
