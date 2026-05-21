@@ -229,7 +229,7 @@ This matters for machines like the Dell Precision 7780: an RTX 4000 Ada Laptop G
 - Autotune env controls: `AUTORESEARCH_DISABLE_AUTOTUNE=1` skips probing; `AUTORESEARCH_AUTOTUNE_REFRESH=1` refreshes the cached decision.
 - Tested hardware in this repo remains RTX 3080 10 GB on Windows. Other listed SKUs are matrix-supported but may be less field-tested here.
 - Non-goals for this fork include FA3/H100-specialized paths, unofficial Triton-for-Windows stacks, AMD/ROCm, Apple Metal, and multi-GPU training.
-- Default dataset is TinyStories GPT-4 clean (`karpathy/tinystories-gpt4-clean`); the local parquet filename is `tinystories_gpt4_clean.parquet`.
+- Default dataset is TinyStories GPT-4 clean. The Hugging Face dataset ID is `karpathy/tinystories-gpt4-clean`, while the local parquet filename is `tinystories_gpt4_clean.parquet`.
 
 ## License
 
