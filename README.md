@@ -67,7 +67,7 @@ After a completed run you have:
 - **`checkpoint_pre_eval.pt`** — a saved snapshot of the model weights at the end of training. This is what the model "knows." It is overwritten each run, so save a copy if you want to keep a particular version.
 - **A terminal log** (or a file like `run1.log` if you redirect output) — shows every training step, the final score, VRAM used, and how long it took.
 
-You cannot chat with the model directly from this repo. The checkpoint is a raw file of learned numbers. To actually generate text from it you would need additional code. The purpose of this project is the research loop itself — finding which training configurations produce the best scores — not deployment.
+The main output is the checkpoint and its score, not a packaged application. This repo does include simple local inference tools (`generate.py` and `chat.py`) so you can sample from the trained model, but the primary purpose of the project is the research loop itself — finding which training configurations produce the best scores — not deployment.
 
 ### But I want to actually run my model
 
@@ -128,6 +128,8 @@ The reason for this order: TinyStories is already fully wired in. It gives you a
 
 When you are ready for other datasets, the dataset definitions live in `prepare.py` under `DATASET_CONFIGS`. Adding a new one requires adding it there and running `prepare.py` again to download and prepare it.
 
+## Technical reference
+
 ## Fork scope
 
 - Upstream source: [karpathy/autoresearch](https://github.com/karpathy/autoresearch)
@@ -139,9 +141,9 @@ When you are ready for other datasets, the dataset definitions live in `prepare.
 
 ## How it works
 
-The repo is deliberately kept small and only really has a three files that matter:
+The repo is deliberately kept small and really only has three files that matter:
 
-- **`prepare.py`** — fixed constants, one-time data prep (downloads TinyStories data, trains a BPE tokenizer), and runtime utilities (dataloader, evaluation).
+- **`prepare.py`** — fixed constants, one-time data prep (downloads the TinyStories GPT-4 clean dataset, trains a BPE tokenizer), and runtime utilities (dataloader, evaluation).
 - **`train.py`** — the single file the agent edits. Contains the full GPT model, optimizer (Muon + AdamW), and training loop. Everything is fair game: architecture, hyperparameters, optimizer, batch size, etc. **This file is edited and iterated on by the agent**.
 - **`program.md`** — baseline instructions for one agent. Point your agent here and let it go. **This file is edited and iterated on by the human**.
 
@@ -153,7 +155,7 @@ By design, training runs for a **fixed 5-minute time budget** (wall clock, exclu
 
 - Single runtime path uses PyTorch SDPA attention and eager execution (no FA3/`torch.compile` fast path).
 - Native Windows support targets desktop consumer GPUs with a tiered VRAM policy (Turing >=8 GB, Ampere/Ada/Blackwell >=10 GB), official PyTorch CUDA wheels, and SDPA attention.
-- Default dataset is now TinyStories GPT-4 clean for practical consumer-GPU setup.
+- Default dataset is TinyStories GPT-4 clean (`karpathy/tinystories-gpt4-clean`) for practical consumer-GPU setup.
 
 ```powershell
 
@@ -164,7 +166,7 @@ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | ie
 uv sync
 
 # 3. Download data and train tokenizer (one-time)
-#    Default dataset: TinyStories GPT-4 clean
+#    Default dataset: TinyStories GPT-4 clean (`karpathy/tinystories-gpt4-clean`)
 uv run prepare.py
 
 # 4. Manually run a single training experiment (~5 min)
@@ -227,7 +229,7 @@ This matters for machines like the Dell Precision 7780: an RTX 4000 Ada Laptop G
 - Autotune env controls: `AUTORESEARCH_DISABLE_AUTOTUNE=1` skips probing; `AUTORESEARCH_AUTOTUNE_REFRESH=1` refreshes the cached decision.
 - Tested hardware in this repo remains RTX 3080 10 GB on Windows. Other listed SKUs are matrix-supported but may be less field-tested here.
 - Non-goals for this fork include FA3/H100-specialized paths, unofficial Triton-for-Windows stacks, AMD/ROCm, Apple Metal, and multi-GPU training.
-- Default dataset is `karpathy/tinystories_gpt4_clean` for consumer-GPU practicality.
+- Default dataset is TinyStories GPT-4 clean. The Hugging Face dataset ID is `karpathy/tinystories-gpt4-clean`, while the local parquet filename is `tinystories_gpt4_clean.parquet`.
 
 ## License
 
