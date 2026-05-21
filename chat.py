@@ -76,7 +76,7 @@ def _make_respond(model: GPT, tokenizer: Tokenizer, device: str):
         idx = torch.tensor([token_ids], dtype=torch.long, device=device)
         prompt_len = len(token_ids)
         top_k_val = top_k if top_k > 0 else None
-        tok_strings: list[str] = []  # running list of decoded token strings
+        tok_dicts: list[dict] = []  # running list of {id, text} per generated token
 
         amp_enabled = device == "cuda"
         with torch.autocast(device_type=device, dtype=torch.bfloat16, enabled=amp_enabled):
@@ -91,8 +91,8 @@ def _make_respond(model: GPT, tokenizer: Tokenizer, device: str):
                 idx = torch.cat((idx, next_token), dim=1)
                 if next_token.item() == eos_id:
                     break
-                tok_strings.append(tokenizer.decode([next_token.item()]))
-                yield tokenizer.decode(idx[0, prompt_len:].tolist()), list(tok_strings)
+                tok_dicts.append({"id": next_token.item(), "text": tokenizer.decode([next_token.item()])})
+                yield tokenizer.decode(idx[0, prompt_len:].tolist()), list(tok_dicts)
 
     return respond
 
@@ -218,16 +218,70 @@ _HTML = """\
     cursor: pointer; transition: all .15s;
   }
   .toggle-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .clear-btn {
+    padding: 3px 12px; font-size: 0.75rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .05em;
+    background: transparent; color: #bbb;
+    border: 1.5px solid #ddd; border-radius: 4px;
+    cursor: pointer; transition: all .15s;
+  }
+  .clear-btn:hover { color: #c00; border-color: #c00; }
 
   /* ---- Token chips ---- */
   .token-box {
     min-height: 100px;
-    display: flex; flex-wrap: wrap; gap: 4px 3px; align-content: flex-start;
+    display: flex; flex-wrap: wrap; gap: 6px 5px; align-content: flex-start;
   }
   .tok {
-    display: inline-block; padding: 2px 6px; border-radius: 3px;
-    font-family: 'Courier New', monospace; font-size: 0.82rem; line-height: 1.7;
-    white-space: pre; cursor: default;
+    display: inline-flex; flex-direction: column; align-items: center;
+    padding: 4px 8px; border-radius: 4px; cursor: default; min-width: 52px;
+  }
+  .tok-id {
+    font-family: 'Courier New', monospace; font-size: 0.68rem;
+    font-weight: 700; color: #555; line-height: 1.3;
+  }
+  .tok-text {
+    font-family: 'Courier New', monospace; font-size: 0.8rem;
+    white-space: pre; line-height: 1.4; color: #1a1a1a;
+  }
+
+  /* ---- Page navigation ---- */
+  .page-nav {
+    display: flex; margin-bottom: 22px;
+    border-bottom: 2px solid #ddd;
+  }
+  .page-tab {
+    padding: 10px 22px; background: transparent; border: none;
+    font-size: 0.88rem; font-weight: 600; color: #bbb;
+    cursor: pointer; border-bottom: 2px solid transparent;
+    margin-bottom: -2px; transition: color .15s, border-color .15s;
+  }
+  .page-tab.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
+  .page-tab:hover:not(.active) { color: #555; }
+
+  /* ---- Vocabulary browser ---- */
+  .vocab-search {
+    display: block; width: 100%; padding: 8px 12px;
+    font-size: 0.9rem; font-family: inherit;
+    border: 1.5px solid #ddd; border-radius: 6px; margin-bottom: 16px;
+    outline: none; transition: border-color .15s;
+  }
+  .vocab-search:focus { border-color: #666; }
+  .vocab-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 5px; max-height: 580px; overflow-y: auto;
+  }
+  .vocab-entry {
+    background: #f8f8f8; border-radius: 4px; padding: 5px 8px; overflow: hidden;
+  }
+  .vocab-entry-id {
+    font-family: 'Courier New', monospace; font-size: 0.7rem;
+    font-weight: 700; color: #999;
+  }
+  .vocab-entry-text {
+    font-family: 'Courier New', monospace; font-size: 0.82rem;
+    white-space: pre; overflow: hidden; text-overflow: ellipsis;
+    display: block; color: #333;
   }
 </style>
 </head>
@@ -243,6 +297,13 @@ _HTML = """\
       <strong>Generate</strong>. Output appears word&nbsp;by&nbsp;word in real time.
     </p>
   </div>
+
+  <nav class="page-nav">
+    <button class="page-tab active" id="tab-gen" onclick="switchPage('gen')">Generator</button>
+    <button class="page-tab" id="tab-vocab" onclick="switchPage('vocab')">Vocabulary</button>
+  </nav>
+
+  <div id="page-gen">
 
   <div class="card">
     <div class="card-label">Model parameters</div>
@@ -290,14 +351,28 @@ _HTML = """\
   <div class="card">
     <div class="card-label-row">
       <div class="card-label">Output</div>
-      <div class="view-toggle">
-        <button class="toggle-btn active" id="btn-text" onclick="setView('text')">Text</button>
-        <button class="toggle-btn" id="btn-tokens" onclick="setView('tokens')">Tokens</button>
+      <div style="display:flex;gap:12px;align-items:center">
+        <div class="view-toggle">
+          <button class="toggle-btn active" id="btn-text" onclick="setView('text')">Text</button>
+          <button class="toggle-btn" id="btn-tokens" onclick="setView('tokens')">Tokens</button>
+        </div>
+        <button class="clear-btn" onclick="clearOutput()">Clear</button>
       </div>
     </div>
     <div id="output-text" class="output-box empty">Output will appear here&hellip;</div>
     <div id="output-tokens" class="token-box" style="display:none"></div>
   </div>
+
+  </div><!-- /page-gen -->
+
+  <div id="page-vocab" style="display:none">
+    <div class="card">
+      <div class="card-label">Vocabulary &mdash; <span id="vocab-count"></span> tokens</div>
+      <input class="vocab-search" id="vocab-search" type="text"
+        placeholder="Filter by token ID or text…" oninput="filterVocab()">
+      <div id="vocab-grid" class="vocab-grid"></div>
+    </div>
+  </div><!-- /page-vocab -->
 
 </div>
 <script>
@@ -311,6 +386,23 @@ _HTML = """\
     if (e.key === 'Enter' && e.ctrlKey) { e.preventDefault(); generate(); }
   });
 
+  // ---- Page navigation (Generator / Vocabulary) ----
+  function switchPage(p) {
+    $('page-gen').style.display   = p === 'gen'   ? 'block' : 'none';
+    $('page-vocab').style.display = p === 'vocab' ? 'block' : 'none';
+    $('tab-gen').className   = 'page-tab' + (p === 'gen'   ? ' active' : '');
+    $('tab-vocab').className = 'page-tab' + (p === 'vocab' ? ' active' : '');
+    if (p === 'vocab') loadVocab();
+  }
+
+  // ---- Clear output ----
+  function clearOutput() {
+    const out = $('output-text');
+    out.className = 'output-box empty';
+    out.textContent = 'Output will appear here\u2026';
+    $('output-tokens').innerHTML = '';
+  }
+
   // ---- View toggle (Text / Tokens) ----
   function setView(v) {
     $('output-text').style.display   = v === 'text'   ? 'block' : 'none';
@@ -319,22 +411,73 @@ _HTML = """\
     $('btn-tokens').className = 'toggle-btn' + (v === 'tokens' ? ' active' : '');
   }
 
-  // Six soft pastel backgrounds that cycle across tokens
+  // ---- Token chip helpers ----
   const TOK_COLORS = ['#dbeafe','#fce7f3','#d1fae5','#fef9c3','#ede9fe','#ffedd5'];
+
+  function escapeHtml(s) {
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function displayText(s) {
+    // Replace invisible whitespace chars with visible markers
+    return s.replace(/\\n/g, '\u21b5').replace(/\\r/g, '\u21b5').replace(/\\t/g, '\u2192');
+  }
 
   function updateTokens(toks) {
     const box = $('output-tokens');
     box.innerHTML = '';
-    toks.forEach((tok, i) => {
-      const el = document.createElement('span');
+    toks.forEach(({ id, text }, i) => {
+      const el = document.createElement('div');
       el.className = 'tok';
       el.style.background = TOK_COLORS[i % TOK_COLORS.length];
-      el.textContent = tok;
-      el.title = '#' + (i + 1) + '  ' + JSON.stringify(tok);
+      el.innerHTML =
+        '<span class="tok-id">' + id + '</span>' +
+        '<span class="tok-text">' + escapeHtml(displayText(text)) + '</span>';
+      el.title = '#' + (i + 1) + '  id=' + id + '  ' + JSON.stringify(text);
       box.appendChild(el);
     });
   }
 
+  // ---- Vocabulary browser ----
+  let _vocabData = null;
+
+  async function loadVocab() {
+    if (_vocabData) return;
+    const grid = $('vocab-grid');
+    grid.innerHTML = '<div style="padding:20px;color:#aaa">Loading\u2026</div>';
+    const { entries } = await (await fetch('/vocab')).json();
+    _vocabData = entries;
+    $('vocab-count').textContent = entries.length.toLocaleString();
+    renderVocab(entries);
+  }
+
+  function renderVocab(entries) {
+    const frag = document.createDocumentFragment();
+    entries.forEach(({ id, text }) => {
+      const el = document.createElement('div');
+      el.className = 'vocab-entry';
+      el.title = 'id=' + id + '  ' + JSON.stringify(text);
+      const disp = escapeHtml(displayText(text)) || '<span style="color:#ddd">\u2205</span>';
+      el.innerHTML =
+        '<div class="vocab-entry-id">' + id + '</div>' +
+        '<span class="vocab-entry-text">' + disp + '</span>';
+      frag.appendChild(el);
+    });
+    const grid = $('vocab-grid');
+    grid.innerHTML = '';
+    grid.appendChild(frag);
+  }
+
+  function filterVocab() {
+    if (!_vocabData) return;
+    const q = $('vocab-search').value.toLowerCase();
+    if (!q) { renderVocab(_vocabData); return; }
+    renderVocab(_vocabData.filter(({ id, text }) =>
+      String(id).includes(q) || text.toLowerCase().includes(q)
+    ));
+  }
+
+  // ---- Generator ----
   async function generate() {
     const prompt = $('prompt').value.trim();
     if (!prompt) { $('prompt').focus(); return; }
@@ -423,6 +566,12 @@ def build_app(model: GPT, tokenizer: Tokenizer, device: str) -> FastAPI:
             for text, toks in respond(req.prompt, req.max_tokens, req.temperature, req.top_k):
                 yield json.dumps({"t": text, "toks": toks}) + "\n"
         return StreamingResponse(stream(), media_type="text/plain")
+
+    @app.get("/vocab")
+    def vocab():
+        n = tokenizer.get_vocab_size()
+        entries = [{"id": i, "text": tokenizer.decode([i])} for i in range(n)]
+        return {"entries": entries}
 
     return app
 
