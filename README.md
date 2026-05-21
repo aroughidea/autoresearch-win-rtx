@@ -129,7 +129,7 @@ Because each run has a fixed 5-minute training budget, throughput is roughly:
 - ~12 experiments per hour (theoretical max from 60/5)
 - ~90-100 experiments in ~8 hours, accounting for per-run startup/evaluation/logging overhead and occasional failed runs
 
-The exact total depends on your hardware and any failed runs.
+The exact total varies with hardware speed, first-run warmup, eval/logging overhead, and failed runs.
 
 ### What does a successful run look like?
 
