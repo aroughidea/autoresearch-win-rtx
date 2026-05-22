@@ -38,3 +38,4 @@ timestamp	commit	val_bpb	memory_gb	status	description
 2026-05-22T03:33:09-07:00	6cabb82			missing	experiment: x0_lambdas init 0.2->0.3 (push higher)
 2026-05-22T04:22:43-07:00	3f0c9f5			missing	experiment: muon ns_steps 5->6 (better Newton-Schulz orthogonalization)
 2026-05-22T07:23:56-07:00	df9a34f	0.526564	6.6	discard	softcap 15->30: less clipping hurts, 15 is right
+2026-05-22T10:07:43-07:00	e7c643f	0.526564	6.6	keep	embedding_lr 0.8->1.0 (continue higher embedding LR trend)
