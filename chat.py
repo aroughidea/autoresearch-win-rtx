@@ -20,10 +20,12 @@ import sys
 import threading
 import time
 import webbrowser
+from datetime import datetime, timezone
+from pathlib import Path
 
 import torch
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.responses import HTMLResponse, StreamingResponse
 from pydantic import BaseModel
 
@@ -33,8 +35,18 @@ from train import GPT
 
 
 # ---------------------------------------------------------------------------
-# Load model (once, at startup)
+# Load model (startup + on-demand switch)
 # ---------------------------------------------------------------------------
+
+def _load_model_from_checkpoint(checkpoint_path: str, device: str) -> GPT:
+  state_dict = torch.load(checkpoint_path, map_location=device, weights_only=True)
+  config = _config_from_state_dict(state_dict)
+  model = GPT(config)
+  model.load_state_dict(state_dict)
+  model.to(device)
+  model.eval()
+  return model
+
 
 def _load(checkpoint_path: str):
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -47,19 +59,110 @@ def _load(checkpoint_path: str):
         sys.exit(1)
 
     try:
-        state_dict = torch.load(checkpoint_path, map_location=device, weights_only=True)
+        model = _load_model_from_checkpoint(checkpoint_path, device)
     except FileNotFoundError:
         print(f"Checkpoint not found: {checkpoint_path}")
         print("Run 'uv run train.py' first to produce a checkpoint.")
         sys.exit(1)
 
-    config = _config_from_state_dict(state_dict)
-    model = GPT(config)
-    model.load_state_dict(state_dict)
-    model.to(device)
-    model.eval()
     print("Model ready.\n")
     return model, tokenizer, device
+
+
+def _discover_checkpoints(primary_checkpoint: str) -> list[dict]:
+    candidates: list[Path] = []
+    primary = Path(primary_checkpoint)
+    if primary.exists():
+        candidates.append(primary)
+
+    root = Path(".")
+    checkpoints_dir = root / "checkpoints"
+    if checkpoints_dir.exists():
+        candidates.extend(sorted(checkpoints_dir.glob("*.pt")))
+    candidates.extend(sorted(root.glob("*.pt")))
+
+    seen: set[Path] = set()
+    entries: list[dict] = []
+    for path in candidates:
+        if not path.exists():
+            continue
+        resolved = path.resolve()
+        if resolved in seen:
+            continue
+        seen.add(resolved)
+        stat = path.stat()
+        entries.append(
+            {
+                "path": str(path).replace("\\", "/"),
+                "mtime_ts": stat.st_mtime,
+                "mtime_iso": datetime.fromtimestamp(stat.st_mtime, tz=timezone.utc).isoformat(),
+                "size_mb": stat.st_size / (1024 * 1024),
+                "label": path.name,
+            }
+        )
+
+    entries.sort(key=lambda e: e["mtime_ts"])
+    for i, entry in enumerate(entries):
+        entry["id"] = f"m{i + 1}"
+    return entries
+
+
+class ModelStore:
+    def __init__(self, initial_model: GPT, tokenizer: Tokenizer, device: str, entries: list[dict], active_path: str):
+        self._tokenizer = tokenizer
+        self._device = device
+        self._entries = entries
+        self._entries_by_id = {e["id"]: e for e in entries}
+        self._cache: dict[str, GPT] = {}
+        self._lock = threading.Lock()
+
+        normalized_active = str(Path(active_path)).replace("\\", "/")
+        active_entry = next((e for e in entries if e["path"] == normalized_active), None)
+        if active_entry is None and entries:
+            active_entry = entries[-1]
+
+        if active_entry is None:
+            raise RuntimeError("No checkpoint files found. Provide --checkpoint or add .pt files.")
+
+        self._active_id = active_entry["id"]
+        self._cache[active_entry["path"]] = initial_model
+
+    @property
+    def tokenizer(self) -> Tokenizer:
+        return self._tokenizer
+
+    @property
+    def device(self) -> str:
+        return self._device
+
+    def list_models(self) -> list[dict]:
+        with self._lock:
+            return [
+                {
+                    **entry,
+                    "active": entry["id"] == self._active_id,
+                }
+                for entry in self._entries
+            ]
+
+    def get_active_bundle(self) -> tuple[GPT, Tokenizer, str, dict]:
+        with self._lock:
+            entry = self._entries_by_id[self._active_id]
+            model = self._cache.get(entry["path"])
+            if model is None:
+                model = _load_model_from_checkpoint(entry["path"], self._device)
+                self._cache[entry["path"]] = model
+            return model, self._tokenizer, self._device, entry
+
+    def select(self, model_id: str) -> dict:
+        with self._lock:
+            if model_id not in self._entries_by_id:
+                raise KeyError(f"Unknown model id: {model_id}")
+            entry = self._entries_by_id[model_id]
+            if entry["path"] not in self._cache:
+                self._cache[entry["path"]] = _load_model_from_checkpoint(entry["path"], self._device)
+            self._active_id = model_id
+            return entry
 
 
 # ---------------------------------------------------------------------------
@@ -155,6 +258,66 @@ _HTML = """\
     letter-spacing: .08em;
     color: var(--muted);
     margin-bottom: 12px;
+  }
+
+  /* ---- Model timeline ---- */
+  .model-active {
+    font-size: 0.82rem;
+    color: var(--muted-strong);
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+  .timeline-wrap {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+  .timeline-node {
+    min-width: 190px;
+    border: 1.5px solid var(--border);
+    background: #fafafa;
+    border-radius: 8px;
+    padding: 8px 10px;
+    text-align: left;
+    color: var(--text);
+  }
+  .timeline-node:hover:not(:disabled) {
+    border-color: var(--border-strong);
+    background: #f3f4f6;
+  }
+  .timeline-node.active {
+    border-color: #059669;
+    background: #ecfdf5;
+    box-shadow: inset 0 0 0 1px rgba(5, 150, 105, 0.25);
+  }
+  .timeline-node:disabled {
+    opacity: 0.65;
+    cursor: wait;
+  }
+  .timeline-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .timeline-idx {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .timeline-time {
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .timeline-name {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   /* ---- Parameters ---- */
@@ -359,6 +522,12 @@ _HTML = """\
   <div class="gen-left">
 
   <div class="card">
+    <div class="card-label">Model timeline</div>
+    <div id="model-active" class="model-active">Loading checkpoints…</div>
+    <div id="model-timeline" class="timeline-wrap"></div>
+  </div>
+
+  <div class="card">
     <div class="card-label">Model parameters</div>
     <div class="params">
 
@@ -432,6 +601,87 @@ _HTML = """\
 </div>
 <script>
   const $ = id => document.getElementById(id);
+
+  let _models = [];
+  let _switchingModel = false;
+
+  function _fmtTime(iso) {
+    const d = new Date(iso);
+    if (Number.isNaN(d.getTime())) return iso;
+    return d.toLocaleString([], { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+  }
+
+  function _renderModelTimeline(models) {
+    const active = models.find(m => m.active);
+    const activeLabel = active
+      ? `${active.label} (${active.path})`
+      : 'No active checkpoint';
+    $('model-active').textContent = `Active: ${activeLabel}`;
+
+    const wrap = $('model-timeline');
+    wrap.innerHTML = '';
+    models.forEach((m, idx) => {
+      const btn = document.createElement('button');
+      btn.className = 'timeline-node' + (m.active ? ' active' : '');
+      btn.disabled = _switchingModel;
+      btn.title = `${m.path} | ${m.mtime_iso} | ${m.size_mb.toFixed(1)} MB`;
+      btn.onclick = () => selectModel(m.id);
+
+      const top = document.createElement('div');
+      top.className = 'timeline-top';
+
+      const num = document.createElement('span');
+      num.className = 'timeline-idx';
+      num.textContent = `Model ${idx + 1}`;
+
+      const stamp = document.createElement('span');
+      stamp.className = 'timeline-time';
+      stamp.textContent = _fmtTime(m.mtime_iso);
+
+      const name = document.createElement('div');
+      name.className = 'timeline-name';
+      name.textContent = m.label;
+
+      top.appendChild(num);
+      top.appendChild(stamp);
+      btn.appendChild(top);
+      btn.appendChild(name);
+      wrap.appendChild(btn);
+    });
+  }
+
+  async function loadModels() {
+    const resp = await fetch('/models');
+    if (!resp.ok) {
+      throw new Error('Could not load model timeline');
+    }
+    const payload = await resp.json();
+    _models = payload.models || [];
+    _renderModelTimeline(_models);
+  }
+
+  async function selectModel(modelId) {
+    if (_switchingModel) return;
+    _switchingModel = true;
+    _renderModelTimeline(_models);
+    try {
+      const resp = await fetch('/models/select', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model_id: modelId }),
+      });
+      if (!resp.ok) {
+        throw new Error('Switch failed: ' + resp.statusText);
+      }
+      await loadModels();
+      clearOutput();
+    } catch (err) {
+      $('model-active').textContent = String(err);
+    } finally {
+      _switchingModel = false;
+      _renderModelTimeline(_models);
+    }
+  }
 
   $('max-tokens').oninput  = e => $('max-tokens-val').textContent  = e.target.value;
   $('temperature').oninput = e => $('temperature-val').textContent = parseFloat(e.target.value).toFixed(2);
@@ -595,6 +845,10 @@ _HTML = """\
       btn.textContent = 'Generate';
     }
   }
+
+  loadModels().catch(err => {
+    $('model-active').textContent = 'Failed to load checkpoints: ' + err;
+  });
 </script>
 </body>
 </html>
@@ -605,8 +859,7 @@ _HTML = """\
 # FastAPI app
 # ---------------------------------------------------------------------------
 
-def build_app(model: GPT, tokenizer: Tokenizer, device: str) -> FastAPI:
-    respond = _make_respond(model, tokenizer, device)
+def build_app(model_store: ModelStore) -> FastAPI:
     app = FastAPI()
 
     @app.get("/", response_class=HTMLResponse)
@@ -619,8 +872,14 @@ def build_app(model: GPT, tokenizer: Tokenizer, device: str) -> FastAPI:
         temperature: float = 0.9
         top_k: int = 50
 
+    class SelectModelRequest(BaseModel):
+        model_id: str
+
     @app.post("/generate")
     def generate(req: GenerateRequest):
+        model, tokenizer, device, _ = model_store.get_active_bundle()
+        respond = _make_respond(model, tokenizer, device)
+
         def stream():
             for text, toks in respond(req.prompt, req.max_tokens, req.temperature, req.top_k):
                 yield json.dumps({"t": text, "toks": toks}) + "\n"
@@ -628,9 +887,22 @@ def build_app(model: GPT, tokenizer: Tokenizer, device: str) -> FastAPI:
 
     @app.get("/vocab")
     def vocab():
+        tokenizer = model_store.tokenizer
         n = tokenizer.get_vocab_size()
         entries = [{"id": i, "text": tokenizer.decode([i])} for i in range(n)]
         return {"entries": entries}
+
+    @app.get("/models")
+    def models():
+        return {"models": model_store.list_models()}
+
+    @app.post("/models/select")
+    def select_model(req: SelectModelRequest):
+        try:
+            entry = model_store.select(req.model_id)
+        except KeyError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+        return {"ok": True, "active": entry}
 
     return app
 
@@ -659,7 +931,15 @@ def main() -> None:
     args = parser.parse_args()
 
     model, tokenizer, device = _load(args.checkpoint)
-    app = build_app(model, tokenizer, device)
+    entries = _discover_checkpoints(args.checkpoint)
+    model_store = ModelStore(
+      initial_model=model,
+      tokenizer=tokenizer,
+      device=device,
+      entries=entries,
+      active_path=args.checkpoint,
+    )
+    app = build_app(model_store)
 
     port = _find_free_port(args.port)
     if port != args.port:

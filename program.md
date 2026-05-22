@@ -67,26 +67,27 @@ grep "^val_bpb:" run.log
 
 When an experiment is done, log it to `results.tsv` (tab-separated, NOT comma-separated — commas break in descriptions).
 
-The TSV has a header row and 5 columns:
+The TSV has a header row and 6 columns:
 
 ```
-commit	val_bpb	memory_gb	status	description
+timestamp	commit	val_bpb	memory_gb	status	description
 ```
 
-1. git commit hash (short, 7 chars)
-2. val_bpb achieved (e.g. 1.234567) — use 0.000000 for crashes
-3. peak memory in GB, round to .1f (e.g. 12.3 — divide peak_vram_mb by 1024) — use 0.0 for crashes
-4. status: `keep`, `discard`, or `crash`
-5. short text description of what this experiment tried
+1. timestamp in ISO-8601 format (use commit time), e.g. `2026-05-21T19:59:30-07:00`
+2. git commit hash (short, 7 chars)
+3. val_bpb achieved (e.g. 1.234567) — use 0.000000 for crashes
+4. peak memory in GB, round to .1f (e.g. 12.3 — divide peak_vram_mb by 1024) — use 0.0 for crashes
+5. status: `keep`, `discard`, or `crash`
+6. short text description of what this experiment tried
 
 Example:
 
 ```
-commit	val_bpb	memory_gb	status	description
-a1b2c3d	0.997900	44.0	keep	baseline
-b2c3d4e	0.993200	44.2	keep	increase LR to 0.04
-c3d4e5f	1.005000	44.0	discard	switch to GeLU activation
-d4e5f6g	0.000000	0.0	crash	double model width (OOM)
+timestamp	commit	val_bpb	memory_gb	status	description
+2026-05-21T19:55:10-07:00	a1b2c3d	0.997900	44.0	keep	baseline
+2026-05-21T20:03:42-07:00	b2c3d4e	0.993200	44.2	keep	increase LR to 0.04
+2026-05-21T20:12:07-07:00	c3d4e5f	1.005000	44.0	discard	switch to GeLU activation
+2026-05-21T20:19:31-07:00	d4e5f6g	0.000000	0.0	crash	double model width (OOM)
 ```
 
 ## The experiment loop
@@ -101,9 +102,11 @@ LOOP FOREVER:
 4. Run the experiment: `uv run train.py > run.log 2>&1` (redirect everything — do NOT use tee or let output flood your context)
 5. Read out the results: `grep "^val_bpb:\|^peak_vram_mb:" run.log`
 6. If the grep output is empty, the run crashed. Run `tail -n 50 run.log` to read the Python stack trace and attempt a fix. If you can't get things to work after more than a few attempts, give up.
-7. Record the results in the tsv
-8. If val_bpb improved (lower), you "advance" the branch, keeping the git commit
-9. If val_bpb is equal or worse, you git reset back to where you started
+7. Record the results in the results.tsv
+8. If val_bpb improved (lower), you "advance" the branch, keeping the git commit, and archive the checkpoint by copying `checkpoint_pre_eval.pt` to `checkpoints/<timestamp>_<commit>.pt` (create `checkpoints/` if needed).
+9. Keep-only policy: only `keep` runs get archived checkpoints.
+10. No cleanup policy: never delete archived checkpoints from `checkpoints/`.
+11. If val_bpb is equal or worse, you git reset back to where you started
 
 The idea is that you are a completely autonomous researcher trying things out. If they work, keep. If they don't, discard. And you're advancing the branch so that you can iterate. If you feel like you're getting stuck in some way, you can rewind but you should probably do this very very sparingly (if ever).
 

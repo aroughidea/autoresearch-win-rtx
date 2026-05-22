@@ -28,3 +28,4 @@ checkpoint_pre_eval.pt
 
 # Run logs
 *.log
+!run.log

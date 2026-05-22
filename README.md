@@ -91,7 +91,7 @@ After a completed run you have:
 
 - **`checkpoint_pre_eval.pt`** — a saved snapshot of the model weights at the end of training. This is what the model "knows." It is overwritten each run, so save a copy if you want to keep a particular version.
 - **A terminal log** (or a file like `run1.log` if you redirect output) — shows every training step, the final score, VRAM used, and how long it took.
-- **`results.tsv`** — a running table the agent appends to after each experiment: commit hash, score, memory usage, and a short description. This is the log the Jupyter notebook reads.
+- **`results.tsv`** — a running table the agent appends to after each experiment: commit hash, score, memory usage, status, short description, and timestamp. This is the log the Jupyter notebook reads.
 - **`analysis.ipynb`** — open this notebook after a session to plot `val_bpb` progress across all experiments and see a summary of what worked.
 
 The main output is the checkpoint and its score, not a packaged application. This repo does include simple local inference tools (`generate.py` and `chat.py`) so you can sample from the trained model, but the primary purpose of the project is the research loop itself — finding which training configurations produce the best scores — not deployment.
@@ -300,6 +300,7 @@ generate.py       — load a checkpoint and generate text from a prompt (termina
 chat.py           — local browser UI for the trained model (streams output)
 program.md        — agent instructions
 results.tsv       — experiment log written by the agent (one row per run)
+run.log           — latest run output, committed each experiment for auditability
 analysis.ipynb    — notebook: plots val_bpb progress from results.tsv
 pyproject.toml    — dependencies
 ```
