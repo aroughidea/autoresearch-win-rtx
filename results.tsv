@@ -17,3 +17,4 @@ e5d0efa	0.488583	4.4	keep	total_batch_size 2^16->2^15: 1140 steps, very marginal
 bbd8ec3	0.537986	6.6	discard	warmdown_ratio 0.2->0.1: less cooldown hurts convergence
 2a6b554	0.533751	6.6	discard	matrix_lr 0.05->0.07: too high overshoots
 972953b	0.537558	7.4	discard	depth 6->7 aspect_ratio 64->54: fewer total tokens hurts despite more capacity
+675f4db	0.583621	6.3	discard	SwiGLU MLP (hidden 8/3x with gate): slower convergence than standard MLP
