@@ -90,6 +90,7 @@ A rough feel for the numbers:
 After a completed run you have:
 
 - **`checkpoint_pre_eval.pt`** — a saved snapshot of the model weights at the end of training. This is what the model "knows." It is overwritten each run, so save a copy if you want to keep a particular version.
+- **Checkpoint storage note** — `.pt` files are tracked with Git LFS in this repo. On GitHub Pro, the included LFS quota is 10 GiB storage and 10 GiB/month bandwidth before metered overages.
 - **A terminal log** (or a file like `run1.log` if you redirect output) — shows every training step, the final score, VRAM used, and how long it took.
 - **`results.tsv`** — a running table the agent appends to after each experiment: commit hash, score, memory usage, status, short description, and timestamp. This is the log the Jupyter notebook reads.
 - **`analysis.ipynb`** — open this notebook after a session to plot `val_bpb` progress across all experiments and see a summary of what worked.
@@ -290,6 +291,37 @@ codex --approval-mode full-auto "Read program.md, do setup checks, and start a n
 If `train.py` is actively running when you stop the agent, press **Ctrl+C** in the terminal running the training process. If the terminal is not visible, find it in the VS Code Terminal panel.
 
 You can stop at any experiment boundary — the agent commits after each successful run, so your `results.tsv` and git history are always in a consistent state when you interrupt.
+
+### Resume or start over
+
+If you started a run, stopped, and want to continue where you left off:
+
+1. Stay on `master` (the main line used for experiments). Do not switch branches.
+2. Keep your existing `results.tsv` and `checkpoints/` files.
+3. Start the agent again with the same prompt:
+
+```text
+Read program.md, do setup checks, and start a new experiment loop. Log each result in results.tsv.
+```
+
+If you finished a run and want to start over from a clean slate:
+
+1. Optional but recommended: tag your current state before clearing artifacts.
+
+```powershell
+git tag run-<date>-pre-reset
+```
+
+2. Reinitialize run artifacts on `master`:
+
+```powershell
+Remove-Item results.tsv -ErrorAction SilentlyContinue
+"timestamp`tcommit`tval_bpb`tmemory_gb`tstatus`tdescription" | Set-Content results.tsv
+Remove-Item run.log -ErrorAction SilentlyContinue
+Remove-Item checkpoints -Recurse -Force -ErrorAction SilentlyContinue
+```
+
+3. Start the agent loop again as usual.
 
 ## Project structure
 

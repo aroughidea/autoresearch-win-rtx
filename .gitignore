@@ -18,10 +18,8 @@ AGENTS.md
 
 # Experimental code/artifacts
 dev/
-checkpoint_pre_eval.pt
 
 # Model checkpoints/artifacts
-*.pt
 *.pth
 *.ckpt
 *.safetensors
