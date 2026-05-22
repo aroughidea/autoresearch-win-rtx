@@ -122,14 +122,17 @@ Useful `program.md` updates a human might make:
 
 ### What does "overnight" mean here?
 
-"Overnight" is not a built-in mode or timer. It just means letting the agent run unattended for a long block (often while you sleep), then reviewing the results later.
+"Overnight" is not a built-in mode or timer. It just means leaving the agent running unattended for a long block — typically while you sleep — and reviewing the results in the morning.
 
-Because each run has a fixed 5-minute training budget, throughput is roughly:
+There is no `max_runs` setting. The agent's experiment loop in `program.md` runs **indefinitely** (`LOOP FOREVER`) until you manually stop it. The only per-run time constraint is `TIME_BUDGET = 300` (5 minutes of training time), defined in `prepare.py`.
 
-- ~12 experiments per hour (theoretical max from 60/5)
-- ~85-95 experiments in ~8 hours, accounting for per-run startup/evaluation/logging overhead and occasional failed runs
+Throughput math based on that constant:
 
-The exact total varies with hardware speed, first-run warmup, eval/logging overhead, and failed runs.
+- **Theoretical ceiling:** `3600 s ÷ 300 s = 12 experiments/hour`
+- **Practical rate:** Each run also incurs startup (~5–10 s), evaluation (~10–15 s), and git/logging overhead (~5–10 s) — roughly 20–35 s of fixed overhead per run. At 330 s effective cycle time, that is `3600 ÷ 330 ≈ 10.9 experiments/hour`.
+- **8-hour session:** `8 × 10.9 ≈ 87 experiments`, before accounting for occasional crashes or retries, which typically reduce it to 80–90 in practice.
+
+The exact total varies with hardware speed and how often runs crash.
 
 ### What does a successful run look like?
 
@@ -213,17 +216,59 @@ If the above commands all work ok, your setup is working and you can go into aut
 
 ## Running the agent
 
-Open your assistant in this repository and tell it to follow `program.md`.
-
-Give it the permissions it needs to run commands and edit files in this repo. If permissions are fully disabled, it cannot execute the setup or experiment loop.
-
-A simple prompt:
+Any coding agent that can read files, edit code, and run terminal commands will work. The starting prompt is the same in all cases:
 
 ```
 Read program.md, do setup checks, and start a new experiment loop. Log each result in results.tsv.
 ```
 
-`program.md` is a lightweight instruction playbook for the agent.
+`program.md` is a lightweight instruction playbook for the agent. Three common options:
+
+### GitHub Copilot (VS Code)
+
+Open the Copilot chat panel in agent mode (`@workspace` or the Agent icon), make sure **Allow** is set for terminal and file access, paste the prompt above, and press Enter. Copilot will read `program.md` and begin the loop inside VS Code.
+
+**To stop:** click the **Stop** button (square icon) in the chat panel.
+
+### Claude Code (terminal)
+
+[Claude Code](https://docs.anthropic.com/en/docs/claude-code) is Anthropic's CLI agent. Install it once, then run it from the repo root:
+
+```powershell
+# Install (one-time)
+npm install -g @anthropic-ai/claude-code
+
+# Start the loop
+cd C:\Users\tj\repos\autoresearch-win-rtx
+claude "Read program.md, do setup checks, and start a new experiment loop. Log each result in results.tsv."
+```
+
+Claude Code runs in the terminal and has full file and shell access by default. It will loop autonomously and print a summary of each experiment as it goes.
+
+**To stop:** press **Ctrl+C** in the terminal where `claude` is running.
+
+### Codex CLI (terminal)
+
+[Codex CLI](https://github.com/openai/codex) is OpenAI's terminal agent. Install it once, then run it from the repo root:
+
+```powershell
+# Install (one-time)
+npm install -g @openai/codex
+
+# Start the loop (full-auto mode — approves all file and shell actions without prompting)
+cd C:\Users\tj\repos\autoresearch-win-rtx
+codex --approval-mode full-auto "Read program.md, do setup checks, and start a new experiment loop. Log each result in results.tsv."
+```
+
+**To stop:** press **Ctrl+C** in the terminal where `codex` is running.
+
+---
+
+### How to stop an in-progress training run
+
+If `train.py` is actively running when you stop the agent, press **Ctrl+C** in the terminal running the training process. If the terminal is not visible, find it in the VS Code Terminal panel.
+
+You can stop at any experiment boundary — the agent commits after each successful run, so your `results.tsv` and git history are always in a consistent state when you interrupt.
 
 ## Project structure
 
@@ -239,10 +284,10 @@ pyproject.toml  — dependencies
 ## Design choices
 
 - **Single file to modify.** The agent only touches `train.py`. This keeps the scope manageable and diffs reviewable.
-- **Fixed time budget.** Training always runs for exactly 5 minutes, regardless of your specific platform.
-  - Throughput is about 12 experiments/hour in theory, and roughly 85-95 experiments in an unattended ~8-hour "overnight" window after startup/eval overhead and occasional failures.
+- **Fixed time budget.** Training always runs for exactly 5 minutes, controlled by `TIME_BUDGET = 300` in `prepare.py`. The agent cannot change this — `prepare.py` is read-only.
+  - Throughput: `3600 ÷ 300 = 12 experiments/hour` theoretical; ~10–11/hour practical after per-run startup, eval, and git overhead (~20–35 s/run). An 8-hour unattended session yields roughly 80–90 experiments.
   - Upside 1: experiments stay directly comparable regardless of what the agent changes (model size, batch size, architecture, etc).
-  - Upside 2: the system can search for the best model for your platform within a fixed per-run budget.
+  - Upside 2: the system searches for the best model within a fixed per-run budget, so hardware differences affect quality but not comparability within a single machine.
   - Downside: your runs and results are not directly comparable to people on different hardware.
 - **Self-contained.** No external dependencies beyond PyTorch and a few small packages. No distributed training, no complex configs. One GPU, one file, one metric.
 
