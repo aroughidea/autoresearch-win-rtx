@@ -243,11 +243,13 @@ Any coding agent that can read files, edit code, and run terminal commands will 
 Read program.md, do setup checks, and start a new experiment loop. Log each result in results.tsv.
 ```
 
+For unattended runs, configure the agent so file edits and shell commands are pre-approved for the session (no per-action prompts), and keep the machine awake (no sleep/hibernate) while the loop is running.
+
 `program.md` is a lightweight instruction playbook for the agent. Three common options:
 
 ### GitHub Copilot (VS Code)
 
-Open the Copilot chat panel in agent mode (`@workspace` or the Agent icon), make sure **Allow** is set for terminal and file access, paste the prompt above, and press Enter. Copilot will read `program.md` and begin the loop inside VS Code.
+Open the Copilot chat panel in agent mode (`@workspace` or the Agent icon), set **Allow** for terminal and file access (choose the persistent/always-allow option for the session), paste the prompt above, and press Enter. Copilot will read `program.md` and begin the loop inside VS Code.
 
 **To stop:** click the **Stop** button (square icon) in the chat panel.
 
@@ -264,7 +266,7 @@ cd C:\Users\tj\repos\autoresearch-win-rtx
 claude "Read program.md, do setup checks, and start a new experiment loop. Log each result in results.tsv."
 ```
 
-Claude Code runs in the terminal and has full file and shell access by default. It will loop autonomously and print a summary of each experiment as it goes.
+Claude Code runs in the terminal and has full file and shell access by default. If Claude prompts for permission, grant the session-level "always allow" option so the loop does not pause waiting for user input.
 
 **To stop:** press **Ctrl+C** in the terminal where `claude` is running.
 
@@ -280,6 +282,8 @@ npm install -g @openai/codex
 cd C:\Users\tj\repos\autoresearch-win-rtx
 codex --approval-mode full-auto "Read program.md, do setup checks, and start a new experiment loop. Log each result in results.tsv."
 ```
+
+If you omit `--approval-mode full-auto`, Codex may stop to request approval and the unattended loop will pause.
 
 **To stop:** press **Ctrl+C** in the terminal where `codex` is running.
 
