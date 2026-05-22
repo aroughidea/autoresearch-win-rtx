@@ -12,3 +12,8 @@ e5d0efa	0.488583	4.4	keep	total_batch_size 2^16->2^15: 1140 steps, very marginal
 949e91c	0.506879	3.1	discard	depth 6->4: too shallow, loses 0.018 despite 1927 steps
 40a696d	0.490897	8.2	discard	batch_size=16: slower on TDP-limited laptop, 1107 steps vs 1140
 52ab8f0	0.489570	4.4	discard	adam_betas beta1 0.8->0.9: negligible change
+98c08a1	0.530646	6.6	keep	baseline RTX 4000 Ada Laptop 12GB: 642 steps MQA+2^15
+8a792ed	0.534075	6.6	discard	total_batch_size 2^15->2^14: noisier gradients worse despite 1252 steps
+bbd8ec3	0.537986	6.6	discard	warmdown_ratio 0.2->0.1: less cooldown hurts convergence
+2a6b554	0.533751	6.6	discard	matrix_lr 0.05->0.07: too high overshoots
+972953b	0.537558	7.4	discard	depth 6->7 aspect_ratio 64->54: fewer total tokens hurts despite more capacity
