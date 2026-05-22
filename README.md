@@ -43,12 +43,37 @@ Why TinyStories:
 
 The model is not learning to be a general assistant. It is learning to predict short story text. That scope is intentional — it makes runs fast and results easy to compare.
 
+### The three files that matter
+
+- **`program.md`** — your instructions to the agent. Edit this to set priorities, add constraints, or change what the agent focuses on next.
+- **`train.py`** — the model and training code. The agent edits this to run experiments. You can edit it too, but normally you let the agent handle it.
+- **`prepare.py`** — data prep and evaluation wiring. Do not modify this file.
+
+### Your first run
+
+Open a PowerShell terminal in the repo folder and run these three commands in order. In VS Code, use **Terminal → New Terminal** from the menu bar — it opens directly in the right folder.
+
+```powershell
+# Step 1 — install dependencies (one-time)
+uv sync
+
+# Step 2 — download data and prepare it for training (one-time)
+uv run prepare.py
+
+# Step 3 — run one training experiment (~5 minutes)
+uv run train.py
+```
+
+Step 1 and 2 only need to be done once. After that, `uv run train.py` is the only command you repeat.
+
+At the end of step 3 you will see a short summary block with your score. If it printed a score without a Python error, your setup is working.
+
 ### How does the training loop work?
 
-1. `uv run prepare.py` — downloads TinyStories and builds a vocabulary (called a tokenizer) that converts words and characters into numbers the model can process. It also marks the end of each story with an **end-of-sequence (EOS) token**, so the model learns where stories naturally conclude. This is a one-time setup step; re-run it if you switch datasets.
-2. `uv run train.py` — trains the model for 5 minutes on the stories, then tests it on a separate set of stories it has never seen. At the end it prints a score.
-3. You (or the agent) review the score, change something in `train.py`, and run again.
-4. Repeat. Keep changes that lower the score.
+1. `uv run prepare.py` — one-time setup. Downloads TinyStories from the internet and converts it into a format the model can train on. This includes building a **tokenizer** — a lookup table that maps words and characters to numbers — and splitting the data into a training set and a separate validation set the model will never train on. Re-run this only if you switch datasets.
+2. `uv run train.py` — trains the model for 5 minutes, then evaluates it on the validation set and prints a score. This is the step you (or the agent) run repeatedly.
+3. Review the score. If it improved, keep the change. If not, revert and try something else.
+4. Repeat from step 2.
 
 ### What is the score (`val_bpb`)?
 
@@ -92,14 +117,6 @@ Both scripts detect the model architecture automatically from the checkpoint —
 **What to expect:** The model trained on TinyStories will continue your prompt in the style of short children's stories. The quality depends directly on how many training iterations have run and how well the settings have been tuned. An early model produces plausible but odd sentences. A well-tuned model reads more coherently. Watching that improvement across runs is the point of the project.
 
 If you switch to a different dataset later, the model will reflect the style and content of that data instead.
-
-### Which files do I touch?
-
-| File | Who edits it | What it is |
-|---|---|---|
-| `program.md` | You | Instructions that tell the coding agent what to try next |
-| `train.py` | The agent (or you) | The model and training settings — this is what gets improved |
-| `prepare.py` | Nobody | Data download and evaluation wiring — do not modify |
 
 ### How do I use `program.md` with an AI assistant?
 
