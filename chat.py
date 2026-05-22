@@ -109,39 +109,52 @@ _HTML = """\
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>autoresearch \u2014 local text generation</title>
 <style>
+  :root {
+    --bg: #f3f4f6;
+    --surface: #ffffff;
+    --text: #111827;
+    --muted: #6b7280;
+    --muted-strong: #4b5563;
+    --border: #d1d5db;
+    --border-strong: #9ca3af;
+    --accent: #111827;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(17, 24, 39, 0.04);
+    --focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.2);
+  }
+
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #ebebeb;
-    color: #1a1a1a;
+    background: var(--bg);
+    color: var(--text);
     min-height: 100vh;
-    padding: 20px 16px 32px;
+    padding: 18px 18px 28px;
   }
 
-  .container { width: 100%; margin: 0 auto; }
+  .container { width: 100%; max-width: 1320px; margin: 0 auto; }
 
   /* ---- Header ---- */
   .header { margin-bottom: 14px; }
-  .header h1 { font-size: 1.25rem; font-weight: 700; margin-bottom: 6px; }
-  .header p  { font-size: 0.82rem; color: #888; line-height: 1.5; }
-  .header strong { color: #1a1a1a; }
+  .header h1 { font-size: 1.35rem; font-weight: 700; margin-bottom: 8px; }
+  .header p  { font-size: 0.9rem; color: var(--muted); line-height: 1.55; max-width: 1000px; }
+  .header strong { color: var(--text); }
 
   /* ---- Cards ---- */
   .card {
-    background: #fff;
-    border-radius: 8px;
-    padding: 14px 18px;
-    margin-bottom: 8px;
-    box-shadow: 0 1px 3px rgba(0,0,0,.08), 0 0 0 1px rgba(0,0,0,.04);
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow);
   }
   .card-label {
-    font-size: 0.7rem;
+    font-size: 0.73rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: .1em;
-    color: #aaa;
-    margin-bottom: 10px;
+    letter-spacing: .08em;
+    color: var(--muted);
+    margin-bottom: 12px;
   }
 
   /* ---- Parameters ---- */
@@ -153,47 +166,53 @@ _HTML = """\
   .param-row .name  { font-weight: 600; }
   .param-row .value {
     font-size: 0.82rem; font-variant-numeric: tabular-nums;
-    background: #f2f2f2; padding: 1px 7px; border-radius: 4px;
+    background: #f3f4f6; padding: 2px 7px; border-radius: 4px;
   }
-  input[type=range] { width: 100%; accent-color: #1a1a1a; cursor: pointer; }
-  .param-hint { font-size: 0.73rem; color: #bbb; margin-top: 5px; line-height: 1.4; }
+  input[type=range] { width: 100%; accent-color: var(--accent); cursor: pointer; }
+  .param-hint { font-size: 0.76rem; color: var(--muted); margin-top: 5px; line-height: 1.45; }
 
   /* ---- Prompt ---- */
   textarea {
-    width: 100%; min-height: 68px;
+    width: 100%; min-height: 100px;
     font-size: 0.96rem; font-family: inherit; line-height: 1.55;
-    padding: 8px 10px;
-    border: 1.5px solid #ddd; border-radius: 6px;
+    padding: 10px 12px;
+    border: 1.5px solid var(--border); border-radius: 8px;
     resize: vertical; outline: none;
-    transition: border-color .15s;
+    transition: border-color .15s, box-shadow .15s;
   }
-  textarea:focus { border-color: #666; }
+  textarea:focus { border-color: var(--border-strong); box-shadow: var(--focus-ring); }
   .prompt-footer {
     display: flex; justify-content: space-between; align-items: center;
-    margin-top: 8px;
+    margin-top: 10px;
   }
-  .prompt-hint { font-size: 0.75rem; color: #ccc; }
+  .prompt-hint { font-size: 0.78rem; color: var(--muted); }
 
   button {
-    padding: 10px 26px;
-    background: #1a1a1a; color: #fff;
+    padding: 10px 20px;
+    background: var(--accent); color: #fff;
     border: none; border-radius: 6px;
-    font-size: 0.92rem; font-weight: 600;
-    cursor: pointer; transition: background .15s;
+    font-size: 0.9rem; font-weight: 600;
+    cursor: pointer; transition: background .15s, transform .05s;
   }
-  button:hover:not(:disabled) { background: #3a3a3a; }
+  button:hover:not(:disabled) { background: #374151; }
+  button:active:not(:disabled) { transform: translateY(1px); }
   button:disabled { background: #c0c0c0; cursor: not-allowed; }
+  button:focus-visible,
+  input:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
 
   /* ---- Output ---- */
   .output-box {
-    min-height: 100px;
+    min-height: 120px;
     font-family: Georgia, "Times New Roman", serif;
     font-size: 1.04rem; line-height: 1.8;
     white-space: pre-wrap;
   }
   .output-box.empty {
     font-family: inherit; font-size: 0.87rem;
-    color: #ccc; font-style: italic;
+    color: var(--muted); font-style: italic;
   }
   @keyframes blink { 50% { opacity: 0; } }
   .cursor {
@@ -213,19 +232,19 @@ _HTML = """\
   .toggle-btn {
     padding: 3px 12px; font-size: 0.75rem; font-weight: 700;
     text-transform: uppercase; letter-spacing: .05em;
-    background: transparent; color: #bbb;
-    border: 1.5px solid #ddd; border-radius: 4px;
+    background: transparent; color: var(--muted);
+    border: 1.5px solid var(--border); border-radius: 5px;
     cursor: pointer; transition: all .15s;
   }
-  .toggle-btn.active { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+  .toggle-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
   .clear-btn {
     padding: 3px 12px; font-size: 0.75rem; font-weight: 700;
     text-transform: uppercase; letter-spacing: .05em;
-    background: transparent; color: #bbb;
-    border: 1.5px solid #ddd; border-radius: 4px;
+    background: transparent; color: var(--muted);
+    border: 1.5px solid var(--border); border-radius: 5px;
     cursor: pointer; transition: all .15s;
   }
-  .clear-btn:hover { color: #c00; border-color: #c00; }
+  .clear-btn:hover { color: #b91c1c; border-color: #b91c1c; }
 
   /* ---- Token chips ---- */
   .token-box {
@@ -238,7 +257,7 @@ _HTML = """\
   }
   .tok-id {
     font-family: 'Courier New', monospace; font-size: 0.58rem;
-    font-weight: 700; color: #888; line-height: 1.2;
+    font-weight: 700; color: var(--muted-strong); line-height: 1.2;
   }
   .tok-text {
     font-family: 'Courier New', monospace; font-size: 0.78rem;
@@ -248,39 +267,39 @@ _HTML = """\
   /* ---- Page navigation ---- */
   .page-nav {
     display: flex; margin-bottom: 12px;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 2px solid var(--border);
   }
   .page-tab {
     padding: 10px 22px; background: transparent; border: none;
-    font-size: 0.88rem; font-weight: 600; color: #bbb;
+    font-size: 0.88rem; font-weight: 600; color: var(--muted);
     cursor: pointer; border-bottom: 2px solid transparent;
     margin-bottom: -2px; transition: color .15s, border-color .15s;
   }
-  .page-tab.active { color: #1a1a1a; border-bottom-color: #1a1a1a; }
-  .page-tab:hover:not(.active) { color: #555; }
+  .page-tab.active { color: var(--text); border-bottom-color: var(--accent); }
+  .page-tab:hover:not(.active) { color: var(--muted-strong); }
 
   /* ---- Generator two-column layout ---- */
   #page-gen {
     display: grid;
-    grid-template-columns: 360px 1fr;
-    gap: 8px;
+    grid-template-columns: minmax(320px, 380px) minmax(0, 1fr);
+    gap: 12px;
     align-items: start;
   }
-  .gen-left { display: flex; flex-direction: column; gap: 8px; }
+  .gen-left { display: flex; flex-direction: column; gap: 10px; }
   .gen-left .card { margin-bottom: 0; }
   .card-output { display: flex; flex-direction: column; margin-bottom: 0; }
   .card-output .card-label-row { flex-shrink: 0; }
-  .card-output .output-box { flex: 1; min-height: 320px; }
-  .card-output .token-box  { flex: 1; min-height: 320px; }
+  .card-output .output-box { flex: 1; min-height: 340px; }
+  .card-output .token-box  { flex: 1; min-height: 340px; }
 
   /* ---- Vocabulary browser ---- */
   .vocab-search {
     display: block; width: 100%; padding: 8px 12px;
     font-size: 0.9rem; font-family: inherit;
-    border: 1.5px solid #ddd; border-radius: 6px; margin-bottom: 16px;
+    border: 1.5px solid var(--border); border-radius: 8px; margin-bottom: 16px;
     outline: none; transition: border-color .15s;
   }
-  .vocab-search:focus { border-color: #666; }
+  .vocab-search:focus { border-color: var(--border-strong); box-shadow: var(--focus-ring); }
   .vocab-grid {
     display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
     gap: 5px; max-height: 580px; overflow-y: auto;
@@ -290,12 +309,30 @@ _HTML = """\
   }
   .vocab-entry-id {
     font-family: 'Courier New', monospace; font-size: 0.7rem;
-    font-weight: 700; color: #999;
+    font-weight: 700; color: var(--muted);
   }
   .vocab-entry-text {
     font-family: 'Courier New', monospace; font-size: 0.82rem;
     white-space: pre; overflow: hidden; text-overflow: ellipsis;
     display: block; color: #333;
+  }
+
+  @media (max-width: 1080px) {
+    #page-gen {
+      grid-template-columns: 1fr;
+    }
+    .card-output .output-box,
+    .card-output .token-box {
+      min-height: 260px;
+    }
+  }
+
+  @media (max-width: 760px) {
+    body { padding: 14px 12px 20px; }
+    .card { padding: 14px; }
+    .params { grid-template-columns: 1fr; gap: 12px; }
+    .page-tab { padding: 10px 12px; }
+    .prompt-footer { gap: 12px; align-items: flex-start; flex-direction: column; }
   }
 </style>
 </head>
@@ -312,12 +349,12 @@ _HTML = """\
     </p>
   </div>
 
-  <nav class="page-nav">
-    <button class="page-tab active" id="tab-gen" onclick="switchPage('gen')">Generator</button>
-    <button class="page-tab" id="tab-vocab" onclick="switchPage('vocab')">Vocabulary</button>
+  <nav class="page-nav" role="tablist" aria-label="Main views">
+    <button class="page-tab active" id="tab-gen" role="tab" aria-selected="true" aria-controls="page-gen" onclick="switchPage('gen')">Generator</button>
+    <button class="page-tab" id="tab-vocab" role="tab" aria-selected="false" aria-controls="page-vocab" onclick="switchPage('vocab')">Vocabulary</button>
   </nav>
 
-  <div id="page-gen">
+  <div id="page-gen" role="tabpanel" aria-labelledby="tab-gen">
 
   <div class="gen-left">
 
@@ -371,8 +408,8 @@ _HTML = """\
       <div class="card-label">Output</div>
       <div style="display:flex;gap:12px;align-items:center">
         <div class="view-toggle">
-          <button class="toggle-btn active" id="btn-text" onclick="setView('text')">Text</button>
-          <button class="toggle-btn" id="btn-tokens" onclick="setView('tokens')">Tokens</button>
+          <button class="toggle-btn active" id="btn-text" aria-pressed="true" onclick="setView('text')">Text</button>
+          <button class="toggle-btn" id="btn-tokens" aria-pressed="false" onclick="setView('tokens')">Tokens</button>
         </div>
         <button class="clear-btn" onclick="clearOutput()">Clear</button>
       </div>
@@ -383,7 +420,7 @@ _HTML = """\
 
   </div><!-- /page-gen -->
 
-  <div id="page-vocab" style="display:none">
+  <div id="page-vocab" role="tabpanel" aria-labelledby="tab-vocab" style="display:none">
     <div class="card">
       <div class="card-label">Vocabulary &mdash; <span id="vocab-count"></span> tokens</div>
       <input class="vocab-search" id="vocab-search" type="text"
@@ -406,10 +443,12 @@ _HTML = """\
 
   // ---- Page navigation (Generator / Vocabulary) ----
   function switchPage(p) {
-    $('page-gen').style.display   = p === 'gen'   ? 'block' : 'none';
+    $('page-gen').style.display   = p === 'gen'   ? 'grid' : 'none';
     $('page-vocab').style.display = p === 'vocab' ? 'block' : 'none';
     $('tab-gen').className   = 'page-tab' + (p === 'gen'   ? ' active' : '');
     $('tab-vocab').className = 'page-tab' + (p === 'vocab' ? ' active' : '');
+    $('tab-gen').setAttribute('aria-selected', p === 'gen' ? 'true' : 'false');
+    $('tab-vocab').setAttribute('aria-selected', p === 'vocab' ? 'true' : 'false');
     if (p === 'vocab') loadVocab();
   }
 
@@ -427,6 +466,8 @@ _HTML = """\
     $('output-tokens').style.display = v === 'tokens' ? 'flex'  : 'none';
     $('btn-text').className   = 'toggle-btn' + (v === 'text'   ? ' active' : '');
     $('btn-tokens').className = 'toggle-btn' + (v === 'tokens' ? ' active' : '');
+    $('btn-text').setAttribute('aria-pressed', v === 'text' ? 'true' : 'false');
+    $('btn-tokens').setAttribute('aria-pressed', v === 'tokens' ? 'true' : 'false');
   }
 
   // ---- Token chip helpers ----
