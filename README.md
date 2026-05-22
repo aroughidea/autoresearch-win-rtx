@@ -8,13 +8,13 @@
 
 *One day, frontier AI research used to be done by meat computers in between eating, sleeping, having other fun, and synchronizing once in a while using sound wave interconnect in the ritual of "group meeting". That era is long gone. Research is now entirely the domain of autonomous swarms of AI agents running across compute cluster megastructures in the skies. The agents claim that we are now in the 10,205th generation of the code base, in any case no one could tell if that's right or wrong as the "code" is now a self-modifying binary that has grown beyond human comprehension. This repo is the story of how it all began. -@karpathy, March 2026*.
 
-The idea: give an AI agent a small but real LLM training setup and let it experiment autonomously overnight. It modifies the code, trains for 5 minutes, checks if the result improved, keeps or discards, and repeats. You wake up in the morning to a log of experiments and (hopefully) a better model. The training code here is a simplified single-GPU implementation of [nanochat](https://github.com/karpathy/nanochat). The core idea is that you're not touching any of the Python files like you normally would as a researcher. Instead, you are programming the `program.md` Markdown files that provide context to the AI agents and set up your autonomous research org. The default `program.md` in this repo is intentionally kept as a bare bones baseline, though it's obvious how one would iterate on it over time to find the "research org code" that achieves the fastest research progress, how you'd add more agents to the mix, etc. A bit more context on this project is here in this [tweet](https://x.com/karpathy/status/2029701092347630069).
+The idea: give an AI agent a small but real LLM training setup and let it experiment autonomously for hours at a time. It modifies the code, trains for 5 minutes, checks if the result improved, keeps or discards, and repeats. When you come back, you have a log of experiments and (hopefully) a better model. The training code here is a simplified single-GPU implementation of [nanochat](https://github.com/karpathy/nanochat). The core idea is that you're not touching any of the Python files like you normally would as a researcher. Instead, you are programming the `program.md` Markdown files that provide context to the AI agents and set up your autonomous research org. The default `program.md` in this repo is intentionally kept as a bare bones baseline, though it's obvious how one would iterate on it over time to find the "research org code" that achieves the fastest research progress, how you'd add more agents to the mix, etc. A bit more context on this project is here in this [tweet](https://x.com/karpathy/status/2029701092347630069).
 
 ## Start here (non-technical)
 
 ### What is actually happening?
 
-This project trains a small AI language model on your own GPU, then lets a coding agent try to make it better, automatically, overnight.
+This project trains a small AI language model on your own GPU, then lets a coding agent try to make it better automatically — running experiments unattended for hours at a time while you do something else.
 
 A language model is a program that learns to read and predict text. The better it gets, the more accurately it can predict the next word in a sentence it has never seen before. That is the only thing being optimized here: how well the model predicts text.
 
@@ -26,7 +26,7 @@ What you end up with after each run is a saved model file (`checkpoint_pre_eval.
 
 Most people who do AI research have access to large cloud computers and expensive GPUs. This project is about doing that same kind of iterative improvement loop on hardware you already own — a Windows gaming or workstation PC with an NVIDIA GPU.
 
-The interesting part is that you are not the one making the changes. You set up instructions for a coding agent (such as Claude or Copilot), and the agent modifies the training code, runs it, checks the score, and decides what to try next. You are the director. The agent is the researcher. You wake up to a log of what it tried and what worked.
+The interesting part is that you are not the one making the changes. You set up instructions for a coding agent (such as Claude or Copilot), and the agent modifies the training code, runs it, checks the score, and decides what to try next. You are the director. The agent is the researcher. When you come back, you have a log of what it tried and what worked.
 
 ### What does the model learn on?
 
@@ -120,19 +120,21 @@ Useful `program.md` updates a human might make:
 - Add keep/discard criteria (for example: "discard tiny gains if complexity increases").
 - Add run hygiene rules (for example: "always record crashes in `results.tsv` with a short reason").
 
-### What does "overnight" mean here?
+### How long does the agent run?
 
-"Overnight" is not a built-in mode or timer. It just means leaving the agent running unattended for a long block — typically while you sleep — and reviewing the results in the morning.
+There is no fixed session length. The agent runs unattended until you stop it — a few hours, a full day, or anything in between. You come back when you are ready and review what it found.
 
 There is no `max_runs` setting. The agent's experiment loop in `program.md` runs **indefinitely** (`LOOP FOREVER`) until you manually stop it. The only per-run time constraint is `TIME_BUDGET = 300` (5 minutes of training time), defined in `prepare.py`.
 
 Throughput math based on that constant:
 
 - **Theoretical ceiling:** `3600 s ÷ 300 s = 12 experiments/hour`
-- **Practical rate:** Each run also incurs startup (~5–10 s), evaluation (~10–15 s), and git/logging overhead (~5–10 s) — roughly 20–35 s of fixed overhead per run. At 330 s effective cycle time, that is `3600 ÷ 330 ≈ 10.9 experiments/hour`.
-- **8-hour session:** `8 × 10.9 ≈ 87 experiments`, before accounting for occasional crashes or retries, which typically reduce it to 80–90 in practice.
+- **Training-script overhead:** Each run incurs startup (~5–10 s), evaluation (~10–15 s), and git/logging overhead (~5–10 s) — roughly 20–35 s beyond the training budget. The sample output in `program.md` shows `total_seconds: 325.9` against `training_seconds: 300.1`, confirming ~26 s of script overhead.
+- **Agent overhead:** The agent itself also takes time each iteration — reading the log, deciding what to try next, editing `train.py`, committing — typically 15–40 s of additional wall-clock time depending on the model and response latency.
+- **Practical rate:** Combined cycle time is roughly 340–370 s, giving approximately **9–10 experiments/hour**.
+- **Multi-hour session:** An 8-hour run yields roughly **70–80 experiments** before accounting for occasional crashes or retries.
 
-The exact total varies with hardware speed and how often runs crash.
+**Context window limits are the other practical constraint.** CLI agents — Claude Code and Codex — run as persistent terminal processes and are designed for long autonomous sessions; they are the most reliable choice for long unattended sessions. Chat-based agents like GitHub Copilot accumulate context in the chat panel with each experiment; sessions of more than ~20–30 iterations may require starting a new chat as the context fills, which interrupts the loop.
 
 ### What does a successful run look like?
 
@@ -285,7 +287,7 @@ pyproject.toml  — dependencies
 
 - **Single file to modify.** The agent only touches `train.py`. This keeps the scope manageable and diffs reviewable.
 - **Fixed time budget.** Training always runs for exactly 5 minutes, controlled by `TIME_BUDGET = 300` in `prepare.py`. The agent cannot change this — `prepare.py` is read-only.
-  - Throughput: `3600 ÷ 300 = 12 experiments/hour` theoretical; ~10–11/hour practical after per-run startup, eval, and git overhead (~20–35 s/run). An 8-hour unattended session yields roughly 80–90 experiments.
+  - Throughput: `3600 ÷ 300 = 12 experiments/hour` theoretical; **~9–10/hour practical**, after per-run startup/eval/git overhead (~25 s) plus agent think/write/commit time (~15–40 s). An 8-hour CLI-agent session (Claude Code or Codex) yields roughly **70–80 experiments** before crashes and retries. Chat-based agents (Copilot) are limited further by context window — plan for shorter sessions or multiple chat threads.
   - Upside 1: experiments stay directly comparable regardless of what the agent changes (model size, batch size, architecture, etc).
   - Upside 2: the system searches for the best model within a fixed per-run budget, so hardware differences affect quality but not comparability within a single machine.
   - Downside: your runs and results are not directly comparable to people on different hardware.
