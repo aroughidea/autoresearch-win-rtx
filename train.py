@@ -817,6 +817,7 @@ FINAL_LR_FRAC = 0.0
 
 # Model size + memory defaults
 DEPTH = 6
+N_KV_HEAD = 1  # MQA: all query heads share 1 KV head. None = full MHA (n_kv_head=n_head)
 DEVICE_BATCH_SIZE = int(os.environ.get("AUTORESEARCH_DEVICE_BATCH_SIZE", "16"))
 EVAL_BATCH_SIZE = 8
 
@@ -827,12 +828,13 @@ def build_model_config(depth, vocab_size, runtime, use_activation_checkpointing=
     base_dim = depth * ASPECT_RATIO
     model_dim = ((base_dim + HEAD_DIM - 1) // HEAD_DIM) * HEAD_DIM
     num_heads = model_dim // HEAD_DIM
+    n_kv_head = N_KV_HEAD if N_KV_HEAD is not None else num_heads
     return GPTConfig(
         sequence_len=MAX_SEQ_LEN,
         vocab_size=vocab_size,
         n_layer=depth,
         n_head=num_heads,
-        n_kv_head=num_heads,
+        n_kv_head=n_kv_head,
         n_embd=model_dim,
         window_pattern=WINDOW_PATTERN,
         attention_backend=runtime.attention_backend,
