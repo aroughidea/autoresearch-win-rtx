@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "defaultMode": "bypassPermissions",
+    "allow": [
+      "PowerShell(ls \"$env:LOCALAPPDATA\\\\autoresearch\" -ErrorAction SilentlyContinue; ls \"$env:USERPROFILE\\\\.cache\\\\autoresearch\" -ErrorAction SilentlyContinue; echo \"done\")",
+      "PowerShell(ls \"$env:LOCALAPPDATA\\\\autoresearch\\\\datasets\\\\tinystories\" -Recurse | Select-Object Name, Length)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(uv run *)",
+      "Bash(git reset *)"
+    ]
+  }
+}
