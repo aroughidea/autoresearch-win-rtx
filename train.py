@@ -481,7 +481,7 @@ class GPT(nn.Module):
             torch.nn.init.uniform_(block.mlp.c_fc.weight, -s, s)
             torch.nn.init.zeros_(block.mlp.c_proj.weight)
         self.resid_lambdas.fill_(1.0)
-        self.x0_lambdas.fill_(0.1)
+        self.x0_lambdas.fill_(0.2)
         for ve in self.value_embeds.values():
             torch.nn.init.uniform_(ve.weight, -s, s)
         for block in self.transformer.h:
