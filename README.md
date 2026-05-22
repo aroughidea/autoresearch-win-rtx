@@ -14,7 +14,7 @@ The idea: give an AI agent a small but real LLM training setup and let it experi
 
 ### What is actually happening?
 
-This project trains a small AI language model on your own GPU, then lets a coding agent try to make it better automatically — running experiments unattended for hours at a time while you do something else.
+This project trains a small AI [language model](https://en.wikipedia.org/wiki/Language_model) on your own GPU, then lets a coding agent try to make it better automatically — running experiments unattended for hours at a time while you do something else.
 
 A language model is a program that learns to read and predict text. The better it gets, the more accurately it can predict the next word in a sentence it has never seen before. That is the only thing being optimized here: how well the model predicts text.
 
