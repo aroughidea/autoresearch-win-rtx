@@ -88,10 +88,21 @@ At the end of step 3 you will see a short summary block with your score. If it p
 
 ### How does the training loop work?
 
-1. `uv run prepare.py` — one-time setup. Downloads TinyStories from the internet and converts it into a format the model can train on. This includes building a **tokenizer** — a lookup table that maps words and characters to numbers — and splitting the data into a training set and a separate validation set the model will never train on. Re-run this only if you switch datasets.
-2. `uv run train.py` — trains the model for 5 minutes, then evaluates it on the validation set and prints a score. This is the step you (or the agent) run repeatedly.
-3. Review the score. If it improved, keep the change. If not, revert and try something else.
-4. Repeat from step 2.
+There are two phases: a one-time human setup, then an autonomous agent loop that runs unattended.
+
+**Setup (you do this once):**
+
+1. `uv run prepare.py` — downloads TinyStories and converts it into a format the model can train on. This includes building a **tokenizer** — a lookup table that maps words and characters to numbers — and splitting the data into a training set and a separate validation set the model will never train on. Re-run only if you switch datasets.
+2. Start the agent with the prompt from the **Running the agent** section below.
+
+**Autonomous loop (the agent does this, repeatedly, without you):**
+
+3. The agent reads `program.md` and `train.py`, then decides on a change to try.
+4. It runs `uv run train.py` — trains for 5 minutes and gets a score.
+5. If the score improved, it commits the change and records a `keep` in `results.tsv`. If not, it reverts `train.py` and records a `discard`. Either way, it immediately moves on to the next experiment.
+6. Repeat from step 3 until you stop it.
+
+You come back after a few hours and review what it found in `results.tsv`.
 
 Here is what that loop looks like:
 
@@ -157,14 +168,16 @@ If you switch to a different dataset later, the model will reflect the style and
 
 ### How do I use `program.md` with an AI assistant?
 
-Think of `program.md` as the playbook for your agent. You edit it, then the agent follows it while iterating on `train.py`.
+Think of `program.md` as the playbook for your agent. **You do not need to change it before your first run** — the default file is already a complete set of instructions. Just point your agent at it and go.
 
-A practical loop:
+You only edit `program.md` when you want to steer the research in a different direction between sessions. The agent reads it but never modifies it.
 
-1. Update `program.md` with your priorities and constraints.
-2. Ask your assistant to read `program.md` and start/continue experiments.
-3. Let it run multiple iterations and log outcomes.
-4. Review results, then refine `program.md` for the next batch.
+A practical loop once you are up and running:
+
+1. Start the agent — use the prompt and commands in the **[Running the agent](#running-the-agent)** section below. No edits to `program.md` needed.
+2. Let it run multiple iterations and log outcomes.
+3. Review results, then optionally refine `program.md` for the next batch.
+4. Restart the agent and repeat.
 
 Useful `program.md` updates a human might make:
 
