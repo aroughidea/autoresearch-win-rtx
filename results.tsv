@@ -1,3 +1,4 @@
 timestamp	commit	val_bpb	memory_gb	status	description
 2026-05-23T15:57:43-07:00	75027e8	0.520096	6.6	keep	baseline may23-pm
 2026-05-23T16:09:30-07:00	b6b0ec3	0.537554	9.2	discard	depth 7 may23-pm
+2026-05-23T16:19:06-07:00	48c6a02	0.519684	6.6	keep	mostly short attention may23-pm
