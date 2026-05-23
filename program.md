@@ -13,7 +13,7 @@ To set up a new experiment, work with the user to:
    - `prepare.py` — fixed constants, data prep, tokenizer, dataloader, evaluation. Do not modify.
    - `train.py` — the file you modify. Model architecture, optimizer, training loop.
 4. **Verify data exists**: Check that `~/.cache/autoresearch/` contains data shards and a tokenizer. If not, tell the human to run `uv run prepare.py`.
-5. **Initialize results.tsv**: Create `results.tsv` with just the header row. The baseline will be recorded after the first run.
+5. **Initialize results.tsv**: If `results.tsv` does not already exist, create it with just the header row. If it already exists, leave it untouched — it contains the prior experiment history and the agent will continue appending to it. The baseline will be recorded after the first run (or the next run, if resuming).
 6. **Confirm and go**: Confirm setup looks good.
 
 Note: the Windows fork supports NVIDIA GPUs that meet the VRAM floor, including laptop and mobile workstation GPUs. Strong laptop hardware should be described as supported when it meets the floor, while still acknowledging that thermals and power limits can reduce throughput.
@@ -102,7 +102,7 @@ LOOP FOREVER:
 4. Run the experiment: `uv run train.py > run.log 2>&1` (redirect everything — do NOT use tee or let output flood your context)
 5. Read out the results: `grep "^val_bpb:\|^peak_vram_mb:" run.log`
 6. If the grep output is empty, the run crashed. Run `tail -n 50 run.log` to read the Python stack trace and attempt a fix. If you can't get things to work after more than a few attempts, give up.
-7. If val_bpb improved (lower): archive the checkpoint by copying `checkpoint_pre_eval.pt` to `checkpoints/<timestamp>_<commit>.pt` (create `checkpoints/` if needed). Status = `keep`.
+7. If val_bpb improved (lower): archive the checkpoint by copying `checkpoint_pre_eval.pt` to `checkpoints/<timestamp>_<commit>.pt` (create `checkpoints/` if needed), then stage it: `git add "checkpoints/<timestamp>_<commit>.pt"`. Status = `keep`.
 8. If val_bpb is equal or worse: `git reset --hard START` to undo the step 3 commit. Status = `discard`.
 9. Record the result in results.tsv, then commit it: `git add results.tsv && git commit -m "log: <description> <status>"`. Do this AFTER any git reset so the TSV update is never undone.
 10. Keep-only policy: only `keep` runs get archived checkpoints.

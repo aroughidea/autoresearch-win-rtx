@@ -26,4 +26,3 @@ dev/
 
 # Run logs
 *.log
-!run.log

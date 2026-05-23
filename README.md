@@ -4,8 +4,6 @@
 
 > This repository is a fork of [karpathy/autoresearch](https://github.com/karpathy/autoresearch). The purpose of this fork is native support for desktop consumer NVIDIA GPUs on Windows, with tiered VRAM floors by architecture.
 
-![teaser](progress.png)
-
 *One day, frontier AI research used to be done by meat computers in between eating, sleeping, having other fun, and synchronizing once in a while using sound wave interconnect in the ritual of "group meeting". That era is long gone. Research is now entirely the domain of autonomous swarms of AI agents running across compute cluster megastructures in the skies. The agents claim that we are now in the 10,205th generation of the code base, in any case no one could tell if that's right or wrong as the "code" is now a self-modifying binary that has grown beyond human comprehension. This repo is the story of how it all began. -@karpathy, March 2026*.
 
 The idea: give an AI agent a small but real LLM training setup and let it experiment autonomously for hours at a time. It modifies the code, trains for 5 minutes, checks if the result improved, keeps or discards, and repeats. When you come back, you have a log of experiments and (hopefully) a better model. The training code here is a simplified single-GPU implementation of [nanochat](https://github.com/karpathy/nanochat). The core idea is that you're not touching any of the Python files like you normally would as a researcher. Instead, you are programming the `program.md` Markdown files that provide context to the AI agents and set up your autonomous research org. The default `program.md` in this repo is intentionally kept as a bare bones baseline, though it's obvious how one would iterate on it over time to find the "research org code" that achieves the fastest research progress, how you'd add more agents to the mix, etc. A bit more context on this project is here in this [tweet](https://x.com/karpathy/status/2029701092347630069).
@@ -49,6 +47,26 @@ The model is not learning to be a general assistant. It is learning to predict s
 - **`train.py`** — the model and training code. The agent edits this to run experiments. You can edit it too, but normally you let the agent handle it.
 - **`prepare.py`** — data prep and evaluation wiring. Do not modify this file.
 
+### Inputs and outputs at a glance
+
+**What you put in:**
+
+| Input | Where it lives |
+|---|---|
+| Your research priorities and constraints | `program.md` — you edit this |
+| Model architecture, optimizer, hyperparameters | `train.py` — the agent edits this |
+| Fixed rules: time budget, evaluation method, tokenizer | `prepare.py` — read-only for the agent |
+| An NVIDIA GPU | Your PC |
+
+**What you get out:**
+
+| Output | Where it lives |
+|---|---|
+| Score for each experiment | Printed to terminal at the end of each run |
+| Full experiment history | `results.tsv` — one row per run: score, VRAM, kept/discarded, description |
+| Saved model weights | `checkpoint_pre_eval.pt` — overwritten each run; copy to `checkpoints/` to keep |
+| Score history chart | `analysis.ipynb` — open after a session to see progress plotted over time |
+
 ### Your first run
 
 Open a PowerShell terminal in the repo folder and run these three commands in order. In VS Code, use **Terminal → New Terminal** from the menu bar — it opens directly in the right folder.
@@ -75,6 +93,22 @@ At the end of step 3 you will see a short summary block with your score. If it p
 3. Review the score. If it improved, keep the change. If not, revert and try something else.
 4. Repeat from step 2.
 
+Here is what that loop looks like:
+
+```mermaid
+flowchart TD
+    A["Human edits program.md\nset goals and constraints"] --> B["Agent reads program.md,\nprepare.py, and train.py"]
+    B --> C["Agent modifies train.py\narchitecture · hyperparams · optimizer"]
+    C --> D["uv run train.py\n5-minute fixed training budget"]
+    D --> E{Score improved?}
+    E -->|keep| F["git commit kept changes\nappend row to results.tsv"]
+    E -->|discard| G["revert train.py to last commit\nappend row to results.tsv"]
+    E -->|crash| H["record crash in results.tsv\nrestore last working state"]
+    F --> C
+    G --> C
+    H --> C
+```
+
 ### What is the score (`val_bpb`)?
 
 `val_bpb` stands for "validation bits per byte." Ignore the name. What it measures is: how surprised is the model when it sees new text it was not trained on? Lower surprise = lower score = better model.
@@ -91,9 +125,9 @@ After a completed run you have:
 
 - **`checkpoint_pre_eval.pt`** — a saved snapshot of the model weights at the end of training. This is what the model "knows." It is overwritten each run, so save a copy if you want to keep a particular version.
 - **Checkpoint storage note** — `.pt` files are tracked with Git LFS in this repo. On GitHub Pro, the included LFS quota is 10 GiB storage and 10 GiB/month bandwidth before metered overages.
-- **A terminal log** (or a file like `run1.log` if you redirect output) — shows every training step, the final score, VRAM used, and how long it took.
+- **A terminal log** — the file `run.log` in the repo root captures the full output of each run. It is overwritten after each experiment.
 - **`results.tsv`** — a running table the agent appends to after each experiment: commit hash, score, memory usage, status, short description, and timestamp. This is the log the Jupyter notebook reads.
-- **`analysis.ipynb`** — open this notebook after a session to plot `val_bpb` progress across all experiments and see a summary of what worked.
+- **`analysis.ipynb`** — a Jupyter notebook that plots `val_bpb` progress across all experiments. Open it in VS Code by clicking the file in the Explorer, then click **Run All** at the top. It reads `results.tsv` and generates a chart — no extra setup needed.
 
 The main output is the checkpoint and its score, not a packaged application. This repo does include simple local inference tools (`generate.py` and `chat.py`) so you can sample from the trained model, but the primary purpose of the project is the research loop itself — finding which training configurations produce the best scores — not deployment.
 
@@ -158,19 +192,29 @@ Throughput math based on that constant:
 
 ### What does a successful run look like?
 
-When you run `uv run train.py` you will see GPU info, then progress lines like:
+When you run `uv run train.py` you will see GPU info, then a single-line progress indicator that updates in place:
 
 ```
-step 00012 | loss: 3.21 | tok/sec: 78,000 | remaining: 180s
+step 00012 (4.0%) | loss: 3.218532 | lrm: 0.80 | dt: 128ms | tok/sec: 65,536 | mfu: 38.5% | epoch: 0 | remaining: 288s
 ```
 
 At the end, a summary block:
 
 ```
 ---
-val_bpb:          0.818
-training_seconds: 302.6
+val_bpb:          0.818245
+training_seconds: 300.1
+total_seconds:    326.3
 peak_vram_mb:     6309.3
+mfu_percent:      38.52
+total_tokens_M:   499.6
+num_steps:        953
+num_params_M:     50.3
+depth:            8
+dataset:          tinystories
+train_batch_size: 8
+eval_batch_size:  4
+activation_checkpointing: enabled
 ```
 
 If the run ends with that `---` block, it worked. If it ends with a Python error (traceback), something went wrong.
@@ -181,9 +225,26 @@ Stay on TinyStories until you have stable, repeatable runs. Then consider other 
 
 The reason for this order: TinyStories is already fully wired in. It gives you a known reference point. Without a working baseline you cannot tell whether a new dataset is giving you better results or just different-looking numbers.
 
-When you are ready for other datasets, the dataset definitions live in `prepare.py` under `DATASET_CONFIGS`. Adding a new one requires adding it there and running `prepare.py` again to download and prepare it.
+When you are ready to switch datasets, this is a human step — the agent cannot modify `prepare.py`. Here is what to do:
 
-## Technical reference
+1. Open `prepare.py` and find the `DATASET_CONFIGS` dictionary near the top.
+2. Add a new entry: a short name, the URL to a Hugging Face parquet file, and the row ranges for train/val/test splits.
+3. Run `uv run prepare.py --dataset your-dataset-name`. This downloads the file, builds a new tokenizer from it, and writes new data shards to the local cache.
+4. Set the dataset for future training runs either by passing `--dataset your-dataset-name` to `uv run train.py` or by setting the environment variable `AUTORESEARCH_DATASET=your-dataset-name`.
+
+Once you switch datasets, `val_bpb` scores are not directly comparable to runs on the previous dataset. Start a fresh `results.tsv` when you switch so the log stays coherent.
+
+### Can I change the time limit?
+
+Yes, but it is a human step. `TIME_BUDGET = 300` (5 minutes) is defined in `prepare.py`. The agent cannot change it — `prepare.py` is off-limits for the agent by design.
+
+To change it, open `prepare.py` and edit the `TIME_BUDGET` line near the top. A few things to keep in mind:
+
+- **Increasing the budget** (for example to 600 s) gives the model more training steps per experiment. This can help larger architectures converge but makes each experiment take longer.
+- **Decreasing the budget** (for example to 60 s) makes the loop faster for rapid exploration, but scores will be noisier.
+- Once you change the budget, `val_bpb` scores are no longer directly comparable to runs recorded with the previous budget. Start a fresh `results.tsv` when you change it so the log stays coherent.
+
+---
 
 ## Fork scope
 
@@ -206,7 +267,7 @@ By design, training runs for a **fixed 5-minute time budget** (wall clock, exclu
 
 ## Quick start (PowerShell)
 
-**Requirements:** A single NVIDIA GPU, Python 3.10+, [uv](https://docs.astral.sh/uv/).
+**Requirements:** A single NVIDIA GPU, Python 3.10+, [uv](https://docs.astral.sh/uv/), [git](https://git-scm.com/download/win), and [git-lfs](https://git-lfs.com) (required for `.pt` checkpoint files).
 
 - Single runtime path uses PyTorch SDPA attention and eager execution (no FA3/`torch.compile` fast path).
 - Native Windows support targets desktop consumer GPUs with a tiered VRAM policy (Turing >=8 GB, Ampere/Ada/Blackwell >=10 GB), official PyTorch CUDA wheels, and SDPA attention.
@@ -260,8 +321,7 @@ Open the Copilot chat panel in agent mode (`@workspace` or the Agent icon), make
 # Install (one-time)
 npm install -g @anthropic-ai/claude-code
 
-# Start the loop
-cd C:\Users\tj\repos\autoresearch-win-rtx
+# Start the loop (run from the repo folder)
 claude "Read program.md, do setup checks, and start a new experiment loop. Log each result in results.tsv."
 ```
 
@@ -277,14 +337,13 @@ Claude Code runs in the terminal and has full file and shell access by default. 
 # Install (one-time)
 npm install -g @openai/codex
 
-# Start the loop (full-auto mode — approves all file and shell actions without prompting)
-cd C:\Users\tj\repos\autoresearch-win-rtx
+# Start the loop (run from the repo folder — full-auto mode approves all file and shell actions without prompting)
 codex --approval-mode full-auto "Read program.md, do setup checks, and start a new experiment loop. Log each result in results.tsv."
 ```
 
 **To stop:** press **Ctrl+C** in the terminal where `codex` is running.
 
----
+## Managing runs
 
 ### How to stop an in-progress training run
 
@@ -292,12 +351,24 @@ If `train.py` is actively running when you stop the agent, press **Ctrl+C** in t
 
 You can stop at any experiment boundary — the agent commits after each successful run, so your `results.tsv` and git history are always in a consistent state when you interrupt.
 
+### Where does a run start from?
+
+Each training run always begins from **randomly initialized weights** — it does not load or fine-tune the previous checkpoint. The checkpoint saved at the end of a run (`checkpoint_pre_eval.pt`) is only used if you run `generate.py` or `chat.py` to interact with the model.
+
+What carries forward between runs is the **configuration** in `train.py`. The agent searches for better architectures and hyperparameters by modifying that file. When you restart an agent session after stopping, it reads the current `train.py` — which already reflects all previously kept changes — and continues experimenting from there.
+
+In practice this means:
+
+- Stopping the agent does not lose research progress. The last committed `train.py` is the current best configuration.
+- Each individual training run starts from random weights regardless of what previous runs found.
+- The accumulated results across sessions live in `results.tsv` and the git commit history.
+
 ### Resume or start over
 
 If you started a run, stopped, and want to continue where you left off:
 
 1. Stay on `master` (the main line used for experiments). Do not switch branches.
-2. Keep your existing `results.tsv` and `checkpoints/` files.
+2. Keep your existing `results.tsv` and `checkpoints/` files. The agent reads `results.tsv` at startup to understand what has already been tried, and will continue appending to it. If you delete it, the agent loses that context and starts logging from scratch.
 3. Start the agent again with the same prompt:
 
 ```text
@@ -306,13 +377,27 @@ Read program.md, do setup checks, and start a new experiment loop. Log each resu
 
 If you finished a run and want to start over from a clean slate:
 
-1. Optional but recommended: tag your current state before clearing artifacts.
+1. Optional but recommended: tag your current state before clearing anything.
 
 ```powershell
 git tag run-<date>-pre-reset
 ```
 
-2. Reinitialize run artifacts on `master`:
+2. Decide how far to reset. There are two levels:
+
+   **Reset logs only** — keep the accumulated architecture improvements in `train.py`. The agent will continue experimenting from your current best configuration, but with a fresh score history.
+
+   **Full reset** — also revert `train.py` to the original baseline. No architecture improvements carry forward; the agent starts from scratch. This is a git operation, not a file deletion:
+
+   ```powershell
+   # find the first commit hash (the original baseline)
+   $baseline = (git log --oneline | Select-Object -Last 1).Split(' ')[0]
+   # restore train.py from that commit and commit the revert
+   git checkout $baseline -- train.py
+   git commit -m "reset train.py to baseline"
+   ```
+
+3. Reinitialize run artifacts on `master`:
 
 ```powershell
 Remove-Item results.tsv -ErrorAction SilentlyContinue
@@ -321,7 +406,47 @@ Remove-Item run.log -ErrorAction SilentlyContinue
 Remove-Item checkpoints -Recurse -Force -ErrorAction SilentlyContinue
 ```
 
-3. Start the agent loop again as usual.
+4. Start the agent loop again as usual.
+
+### How does git fit in?
+
+In most software projects, git tracks changes to code while some other system — a database, a config file, a running process — holds the actual state of the application. This project has no separate state. **The git repo at HEAD is the research state.** Whatever `train.py` contains right now is the best configuration found so far. Whatever `results.tsv` contains is the complete scorecard. The git log is the full experiment history. There is nothing else to consult.
+
+This means the agent is not just using git for version control — it is using git as the state machine for the entire research loop. Every commit is a state transition: either an improvement was accepted, or a change was discarded and the previous state was restored.
+
+To understand what each transition does, it helps to know which files change and which do not:
+
+| File | What happens to it |
+|---|---|
+| `train.py` | **Changes every experiment** (agent edits it), or **gets reverted** on a discard |
+| `results.tsv` | **Always appended** — never reverted, even on a discard or crash |
+| `run.log` | **Replaced** after every run with the latest terminal output |
+| `prepare.py` | **Never changes** — the agent cannot touch it |
+| `program.md` | **Only changes when you edit it** — the agent does not modify it |
+| `checkpoint_pre_eval.pt` | **Replaced** after every run — not tracked by git commits (use `checkpoints/` to keep copies) |
+
+Here is what happens under the hood each iteration:
+
+- **After a kept experiment**: `train.py` has the new change committed first (before training runs), then after the result is in, `results.tsv` gets a new `keep` row committed in a second commit. `run.log` is overwritten with the latest output but is not committed by the agent.
+- **After a discarded experiment**: `git reset --hard` erases the `train.py` change from history — no new commit for `train.py`. `results.tsv` still gets a new `discard` row appended and committed — the log is never rolled back.
+- **The commit hash** — a short 7-character code like `ab72308` — is stored in `results.tsv` next to each score. You can look up any row in the log and recover the exact `train.py` that produced that result.
+- **Stay on `master`**: the agent is instructed never to create branches. A single linear history on `master` makes experiments easy to follow and compare.
+
+You can review the full experiment history at any time:
+
+```powershell
+git log --oneline
+```
+
+To inspect or recover the code from any specific experiment, use the commit hash from `results.tsv`:
+
+```powershell
+git show ab72308      # show what changed in that commit
+git checkout ab72308  # switch your files to that exact state
+git checkout master   # return to the current state when done
+```
+
+The agent handles all commits automatically. You never need to run `git commit` yourself. Git is simply how the project keeps a complete, reversible record of every experiment — nothing is ever truly lost.
 
 ## Project structure
 
@@ -332,7 +457,7 @@ generate.py       — load a checkpoint and generate text from a prompt (termina
 chat.py           — local browser UI for the trained model (streams output)
 program.md        — agent instructions
 results.tsv       — experiment log written by the agent (one row per run)
-run.log           — latest run output, committed each experiment for auditability
+run.log           — latest run output (overwritten each run, not committed by agent)
 analysis.ipynb    — notebook: plots val_bpb progress from results.tsv
 pyproject.toml    — dependencies
 ```
