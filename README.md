@@ -309,7 +309,9 @@ Read program.md, do setup checks, and start a new experiment loop. Log each resu
 
 ### GitHub Copilot (VS Code)
 
-Open the Copilot chat panel in agent mode (`@workspace` or the Agent icon), make sure **Allow** is set for terminal and file access, paste the prompt above, and press Enter. Copilot will read `program.md` and begin the loop inside VS Code.
+Use **Agent mode** in the chat panel — not regular chat mode. Regular chat mode cannot run terminal commands or edit files autonomously; only Agent mode can.
+
+Open the chat panel (`Ctrl+Alt+I`), switch to the **Agent** tab, then paste the prompt above and press Enter. The first time it tries to edit a file or run a terminal command, VS Code will show an **Allow / Deny** prompt — click **Always Allow** for both so the agent can run uninterrupted.
 
 **To stop:** click the **Stop** button (square icon) in the chat panel.
 
@@ -320,12 +322,33 @@ Open the Copilot chat panel in agent mode (`@workspace` or the Agent icon), make
 ```powershell
 # Install (one-time)
 npm install -g @anthropic-ai/claude-code
+```
 
-# Start the loop (run from the repo folder)
+**Interactive mode** (recommended) — opens a session you can watch and type follow-ups into. Press Ctrl+C to stop:
+
+```powershell
 claude "Read program.md, do setup checks, and start a new experiment loop. Log each result in results.tsv."
 ```
 
-Claude Code runs in the terminal and has full file and shell access by default. It will loop autonomously and print a summary of each experiment as it goes.
+By default Claude Code asks for permission before each file edit and shell command. For a long unattended session this will block — use one of the options below instead.
+
+**Unattended / overnight** — skip all permission prompts and save everything to `agent.log`:
+
+```powershell
+claude --dangerously-skip-permissions "Read program.md, do setup checks, and start a new experiment loop. Log each result in results.tsv." 2>&1 | Tee-Object -FilePath agent.log
+```
+
+**Selective permissions** — auto-approve file edits but still ask before running shell commands:
+
+```powershell
+claude --permission-mode acceptEdits "Read program.md, do setup checks, and start a new experiment loop. Log each result in results.tsv."
+```
+
+**Non-interactive print mode** (`-p`) runs a single prompt and exits. Do not use this for the experiment loop — it exits after one response instead of looping. Use it for one-off queries:
+
+```powershell
+claude -p "Summarize the last five rows of results.tsv"
+```
 
 **To stop:** press **Ctrl+C** in the terminal where `claude` is running.
 
@@ -336,10 +359,27 @@ Claude Code runs in the terminal and has full file and shell access by default. 
 ```powershell
 # Install (one-time)
 npm install -g @openai/codex
+```
 
-# Start the loop (run from the repo folder — full-auto mode approves all file and shell actions without prompting)
+**Full-auto mode** (recommended for unattended runs) — approves all file edits and shell commands without asking:
+
+```powershell
 codex --approval-mode full-auto "Read program.md, do setup checks, and start a new experiment loop. Log each result in results.tsv."
 ```
+
+With logging:
+
+```powershell
+codex --approval-mode full-auto "Read program.md, do setup checks, and start a new experiment loop. Log each result in results.tsv." 2>&1 | Tee-Object -FilePath agent.log
+```
+
+**Approval modes:**
+
+| Mode | Behavior |
+|---|---|
+| `full-auto` | Approves all file edits and shell commands without asking |
+| `auto-edit` | Auto-approves file edits; asks before running shell commands |
+| `suggest` | Asks before every action (default — will block during a long loop) |
 
 **To stop:** press **Ctrl+C** in the terminal where `codex` is running.
 
