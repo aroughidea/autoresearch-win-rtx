@@ -43,7 +43,7 @@ The model is not learning to be a general assistant. It is learning to predict s
 
 ### The three files that matter
 
-- **`program.md`** — your instructions to the agent. Edit this to set priorities, add constraints, or change what the agent focuses on next.
+- **`program.md`** — your instructions to the agent. The default is ready to use out of the box. Edit it when you want to change the research direction between sessions.
 - **`train.py`** — the model and training code. The agent edits this to run experiments. You can edit it too, but normally you let the agent handle it.
 - **`prepare.py`** — data prep and evaluation wiring. Do not modify this file.
 
@@ -53,7 +53,7 @@ The model is not learning to be a general assistant. It is learning to predict s
 
 | Input | Where it lives |
 |---|---|
-| Your research priorities and constraints | `program.md` — you edit this |
+| Your research priorities and constraints | `program.md` — default works as-is; edit to change direction |
 | Model architecture, optimizer, hyperparameters | `train.py` — the agent edits this |
 | Fixed rules: time budget, evaluation method, tokenizer | `prepare.py` — read-only for the agent |
 | An NVIDIA GPU | Your PC |
@@ -86,6 +86,8 @@ Step 1 and 2 only need to be done once. After that, `uv run train.py` is the onl
 
 At the end of step 3 you will see a short summary block with your score. If it printed a score without a Python error, your setup is working.
 
+Once this works, head to the **[Running the agent](#running-the-agent)** section to launch the autonomous experiment loop.
+
 ### How does the training loop work?
 
 There are two phases: a one-time human setup, then an autonomous agent loop that runs unattended.
@@ -108,7 +110,7 @@ Here is what that loop looks like:
 
 ```mermaid
 flowchart TD
-    A["Human edits program.md\nset goals and constraints"] --> B["Agent reads program.md,\nprepare.py, and train.py"]
+    A["Human starts agent\n(edit program.md to change direction)"] --> B["Agent reads program.md,\nprepare.py, and train.py"]
     B --> C["Agent modifies train.py\narchitecture · hyperparams · optimizer"]
     C --> D["uv run train.py\n5-minute fixed training budget"]
     D --> E{Score improved?}
