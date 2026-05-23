@@ -376,25 +376,25 @@ claude -p "Summarize the last five rows of results.tsv"
 npm install -g @openai/codex
 ```
 
-**Full-auto mode** (recommended for unattended runs) — approves all file edits and shell commands without asking:
+**Full-access mode** (recommended for unattended runs) — approves all file edits and shell commands without asking:
 
 ```powershell
-codex --approval-mode full-auto "Read program.md, do setup checks, and start a new experiment loop. Log each result in results.tsv."
+codex exec -s danger-full-access "Read program.md, do setup checks, and start a new experiment loop. Log each result in results.tsv."
 ```
 
 With logging:
 
 ```powershell
-codex --approval-mode full-auto "Read program.md, do setup checks, and start a new experiment loop. Log each result in results.tsv." 2>&1 | Tee-Object -FilePath agent.log
+codex exec -s danger-full-access "Read program.md, do setup checks, and start a new experiment loop. Log each result in results.tsv." 2>&1 | Tee-Object -FilePath agent.log
 ```
 
-**Approval modes:**
+**Sandbox modes (`-s`):**
 
 | Mode | Behavior |
 |---|---|
-| `full-auto` | Approves all file edits and shell commands without asking |
-| `auto-edit` | Auto-approves file edits; asks before running shell commands |
-| `suggest` | Asks before every action (default — will block during a long loop) |
+| `danger-full-access` | Approves all file edits and shell commands without asking — use for unattended runs |
+| `workspace-write` | Auto-approves workspace file edits; asks before running shell commands |
+| `read-only` | Read-only; asks before every action (will block during a long loop) |
 
 **To stop:** press **Ctrl+C** in the terminal where `codex` is running.
 
