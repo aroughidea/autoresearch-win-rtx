@@ -11,3 +11,4 @@ timestamp	commit	val_bpb	memory_gb	status	description
 2026-05-23T17:16:38-07:00	07992b2	0.519878	6.6	discard	embedding lr 0.8 may23-pm
 2026-05-23T17:24:59-07:00	cb8fe91	0.521757	6.6	discard	embedding lr 1.2 may23-pm
 2026-05-23T17:33:15-07:00	407918e	0.520669	6.6	discard	unembedding lr 0.003 may23-pm
+2026-05-23T17:41:47-07:00	58af6ef	0.519294	6.6	discard	unembedding lr 0.005 may23-pm
