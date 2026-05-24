@@ -6,3 +6,4 @@ timestamp	commit	val_bpb	memory_gb	status	description
 2026-05-23T16:35:28-07:00	b240c00	0.520477	6.6	discard	matrix lr 0.06 may23-pm
 2026-05-23T16:43:39-07:00	d07a0d2	0.519105	6.6	keep	matrix lr 0.04 may23-pm
 2026-05-23T16:51:53-07:00	1e3f3e1	0.520977	6.6	discard	matrix lr 0.035 may23-pm
+2026-05-23T17:00:09-07:00	780adb0	0.518993	6.6	keep	matrix lr 0.045 may23-pm
