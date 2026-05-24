@@ -14,6 +14,7 @@
 #   uv run train.py     (produces checkpoint_pre_eval.pt)
 
 import argparse
+import csv
 import json
 import socket
 import sys
@@ -148,6 +149,17 @@ class ModelStore:
     def get_active_bundle(self) -> tuple[GPT, Tokenizer, str, dict]:
         with self._lock:
             entry = self._entries_by_id[self._active_id]
+            model = self._cache.get(entry["path"])
+            if model is None:
+                model = _load_model_from_checkpoint(entry["path"], self._device)
+                self._cache[entry["path"]] = model
+            return model, self._tokenizer, self._device, entry
+
+    def get_bundle_by_id(self, model_id: str) -> tuple[GPT, Tokenizer, str, dict]:
+        with self._lock:
+            if model_id not in self._entries_by_id:
+                raise KeyError(f"Unknown model id: {model_id}")
+            entry = self._entries_by_id[model_id]
             model = self._cache.get(entry["path"])
             if model is None:
                 model = _load_model_from_checkpoint(entry["path"], self._device)
@@ -441,8 +453,9 @@ _HTML = """\
   .page-tab.active { color: var(--text); border-bottom-color: var(--accent); }
   .page-tab:hover:not(.active) { color: var(--muted-strong); }
 
-  /* ---- Generator two-column layout ---- */
-  #page-gen {
+  /* ---- Generator layout ---- */
+  #page-gen { display: flex; flex-direction: column; gap: 12px; }
+  .gen-bottom {
     display: grid;
     grid-template-columns: minmax(320px, 380px) minmax(0, 1fr);
     gap: 12px;
@@ -450,10 +463,23 @@ _HTML = """\
   }
   .gen-left { display: flex; flex-direction: column; gap: 10px; }
   .gen-left .card { margin-bottom: 0; }
+  .gen-outputs { display: flex; flex-direction: column; gap: 10px; }
   .card-output { display: flex; flex-direction: column; margin-bottom: 0; }
   .card-output .card-label-row { flex-shrink: 0; }
-  .card-output .output-box { flex: 1; min-height: 340px; }
-  .card-output .token-box  { flex: 1; min-height: 340px; }
+  .card-output .output-box { flex: 1; min-height: 180px; }
+  .card-output .token-box  { flex: 1; min-height: 180px; }
+
+  /* ---- Progress chart ---- */
+  .chart-svg { width: 100%; display: block; overflow: visible; }
+  .chart-tooltip {
+    position: fixed; pointer-events: none;
+    background: rgba(17,24,39,0.93); color: #f9fafb;
+    font-size: 0.78rem; line-height: 1.55;
+    padding: 8px 11px; border-radius: 7px;
+    max-width: 240px; z-index: 1000;
+    display: none; white-space: pre-line;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  }
 
   /* ---- Vocabulary browser ---- */
   .vocab-search {
@@ -481,12 +507,10 @@ _HTML = """\
   }
 
   @media (max-width: 1080px) {
-    #page-gen {
-      grid-template-columns: 1fr;
-    }
+    .gen-bottom { grid-template-columns: 1fr; }
     .card-output .output-box,
     .card-output .token-box {
-      min-height: 260px;
+      min-height: 200px;
     }
   }
 
@@ -519,13 +543,15 @@ _HTML = """\
 
   <div id="page-gen" role="tabpanel" aria-labelledby="tab-gen">
 
-  <div class="gen-left">
-
   <div class="card">
-    <div class="card-label">Model timeline</div>
-    <div id="model-active" class="model-active">Loading checkpoints…</div>
-    <div id="model-timeline" class="timeline-wrap"></div>
+    <div id="chart-title" class="card-label">Progress</div>
+    <svg id="chart-svg" class="chart-svg" viewBox="0 0 900 240" preserveAspectRatio="xMidYMid meet"></svg>
+    <div id="chart-status" style="font-size:0.78rem;color:var(--muted);margin-top:4px">Loading results\u2026</div>
   </div>
+
+  <div class="gen-bottom">
+
+  <div class="gen-left">
 
   <div class="card">
     <div class="card-label">Model parameters</div>
@@ -534,27 +560,27 @@ _HTML = """\
       <div>
         <div class="param-row">
           <span class="name">Max tokens</span>
-          <span class="value" id="max-tokens-val">150</span>
+          <span class="value" id="max-tokens-val">500</span>
         </div>
-        <input type="range" id="max-tokens" min="20" max="500" step="10" value="150">
+        <input type="range" id="max-tokens" min="20" max="500" step="10" value="500">
         <div class="param-hint">How many words to generate</div>
       </div>
 
       <div>
         <div class="param-row">
           <span class="name">Temperature</span>
-          <span class="value" id="temperature-val">0.90</span>
+          <span class="value" id="temperature-val">0.00</span>
         </div>
-        <input type="range" id="temperature" min="0" max="2" step="0.01" value="0.9">
+        <input type="range" id="temperature" min="0" max="2" step="0.01" value="0">
         <div class="param-hint">0 = predictable &nbsp;&middot;&nbsp; 2 = chaotic</div>
       </div>
 
       <div>
         <div class="param-row">
           <span class="name">Top-k</span>
-          <span class="value" id="top-k-val">50</span>
+          <span class="value" id="top-k-val">0</span>
         </div>
-        <input type="range" id="top-k" min="0" max="200" step="5" value="50">
+        <input type="range" id="top-k" min="0" max="200" step="5" value="0">
         <div class="param-hint">Word choices considered &mdash; 0 means all</div>
       </div>
 
@@ -563,6 +589,11 @@ _HTML = """\
 
   <div class="card">
     <div class="card-label">Prompt</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
+      <button class="clear-btn" style="font-size:0.8rem;padding:4px 10px;text-transform:none;letter-spacing:normal" onclick="setPrompt('Once upon a time,')">Once upon a time,</button>
+      <button class="clear-btn" style="font-size:0.8rem;padding:4px 10px;text-transform:none;letter-spacing:normal" onclick="setPrompt('The little fox looked up and said,')">The little fox looked up and said,</button>
+      <button class="clear-btn" style="font-size:0.8rem;padding:4px 10px;text-transform:none;letter-spacing:normal" onclick="setPrompt('Deep in the forest there lived a')">Deep in the forest there lived a</button>
+    </div>
     <textarea id="prompt" placeholder="Once upon a time\u2026"></textarea>
     <div class="prompt-footer">
       <span class="prompt-hint">Ctrl&thinsp;+&thinsp;Enter to generate</span>
@@ -572,20 +603,41 @@ _HTML = """\
 
   </div><!-- /gen-left -->
 
+  <div class="gen-outputs">
+
   <div class="card card-output">
     <div class="card-label-row">
-      <div class="card-label">Output</div>
+      <div class="card-label" id="label-baseline">Baseline</div>
       <div style="display:flex;gap:12px;align-items:center">
         <div class="view-toggle">
-          <button class="toggle-btn active" id="btn-text" aria-pressed="true" onclick="setView('text')">Text</button>
-          <button class="toggle-btn" id="btn-tokens" aria-pressed="false" onclick="setView('tokens')">Tokens</button>
+          <button class="toggle-btn active" id="btn-text-baseline" aria-pressed="true" onclick="setView('text','baseline')">Text</button>
+          <button class="toggle-btn" id="btn-tokens-baseline" aria-pressed="false" onclick="setView('tokens','baseline')">Tokens</button>
         </div>
-        <button class="clear-btn" onclick="clearOutput()">Clear</button>
+        <button class="clear-btn" onclick="clearOutput('baseline')">Clear</button>
       </div>
     </div>
-    <div id="output-text" class="output-box empty">Output will appear here&hellip;</div>
-    <div id="output-tokens" class="token-box" style="display:none"></div>
+    <div id="output-text-baseline" class="output-box empty">Output will appear here&hellip;</div>
+    <div id="output-tokens-baseline" class="token-box" style="display:none"></div>
   </div>
+
+  <div class="card card-output">
+    <div class="card-label-row">
+      <div class="card-label" id="label-best">Best</div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <div class="view-toggle">
+          <button class="toggle-btn active" id="btn-text-best" aria-pressed="true" onclick="setView('text','best')">Text</button>
+          <button class="toggle-btn" id="btn-tokens-best" aria-pressed="false" onclick="setView('tokens','best')">Tokens</button>
+        </div>
+        <button class="clear-btn" onclick="clearOutput('best')">Clear</button>
+      </div>
+    </div>
+    <div id="output-text-best" class="output-box empty">Output will appear here&hellip;</div>
+    <div id="output-tokens-best" class="token-box" style="display:none"></div>
+  </div>
+
+  </div><!-- /gen-outputs -->
+
+  </div><!-- /gen-bottom -->
 
   </div><!-- /page-gen -->
 
@@ -593,107 +645,25 @@ _HTML = """\
     <div class="card">
       <div class="card-label">Vocabulary &mdash; <span id="vocab-count"></span> tokens</div>
       <input class="vocab-search" id="vocab-search" type="text"
-        placeholder="Filter by token ID or text…" oninput="filterVocab()">
+        placeholder="Filter by token ID or text…" oninput="filterVocab()" style="display:none">
       <div id="vocab-grid" class="vocab-grid"></div>
     </div>
   </div><!-- /page-vocab -->
 
 </div>
+<div id="chart-tooltip" class="chart-tooltip"></div>
 <script>
   const $ = id => document.getElementById(id);
 
   let _models = [];
-  let _switchingModel = false;
+  let _results = [];
+  let _commitToModelId = {};
+  let _baselineModelId = null;
+  let _bestModelId     = null;
 
-  function _fmtTime(iso) {
-    const d = new Date(iso);
-    if (Number.isNaN(d.getTime())) return iso;
-    return d.toLocaleString([], { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
-  }
-
-  function _renderModelTimeline(models) {
-    const active = models.find(m => m.active);
-    const activeLabel = active
-      ? `${active.label} (${active.path})`
-      : 'No active checkpoint';
-    $('model-active').textContent = `Active: ${activeLabel}`;
-
-    const wrap = $('model-timeline');
-    wrap.innerHTML = '';
-    models.forEach((m, idx) => {
-      const btn = document.createElement('button');
-      btn.className = 'timeline-node' + (m.active ? ' active' : '');
-      btn.disabled = _switchingModel;
-      btn.title = `${m.path} | ${m.mtime_iso} | ${m.size_mb.toFixed(1)} MB`;
-      btn.onclick = () => selectModel(m.id);
-
-      const top = document.createElement('div');
-      top.className = 'timeline-top';
-
-      const num = document.createElement('span');
-      num.className = 'timeline-idx';
-      num.textContent = `Model ${idx + 1}`;
-
-      const stamp = document.createElement('span');
-      stamp.className = 'timeline-time';
-      stamp.textContent = _fmtTime(m.mtime_iso);
-
-      const name = document.createElement('div');
-      name.className = 'timeline-name';
-      name.textContent = m.label;
-
-      top.appendChild(num);
-      top.appendChild(stamp);
-      btn.appendChild(top);
-      btn.appendChild(name);
-      wrap.appendChild(btn);
-    });
-  }
-
-  async function loadModels() {
-    const resp = await fetch('/models');
-    if (!resp.ok) {
-      throw new Error('Could not load model timeline');
-    }
-    const payload = await resp.json();
-    _models = payload.models || [];
-    _renderModelTimeline(_models);
-  }
-
-  async function selectModel(modelId) {
-    if (_switchingModel) return;
-    _switchingModel = true;
-    _renderModelTimeline(_models);
-    try {
-      const resp = await fetch('/models/select', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model_id: modelId }),
-      });
-      if (!resp.ok) {
-        throw new Error('Switch failed: ' + resp.statusText);
-      }
-      await loadModels();
-      clearOutput();
-    } catch (err) {
-      $('model-active').textContent = String(err);
-    } finally {
-      _switchingModel = false;
-      _renderModelTimeline(_models);
-    }
-  }
-
-  $('max-tokens').oninput  = e => $('max-tokens-val').textContent  = e.target.value;
-  $('temperature').oninput = e => $('temperature-val').textContent = parseFloat(e.target.value).toFixed(2);
-  $('top-k').oninput       = e => $('top-k-val').textContent       = e.target.value;
-
-  $('prompt').addEventListener('keydown', e => {
-    if (e.key === 'Enter' && e.ctrlKey) { e.preventDefault(); generate(); }
-  });
-
-  // ---- Page navigation (Generator / Vocabulary) ----
+  // ---- Page navigation ----
   function switchPage(p) {
-    $('page-gen').style.display   = p === 'gen'   ? 'grid' : 'none';
+    $('page-gen').style.display   = p === 'gen'   ? 'flex'  : 'none';
     $('page-vocab').style.display = p === 'vocab' ? 'block' : 'none';
     $('tab-gen').className   = 'page-tab' + (p === 'gen'   ? ' active' : '');
     $('tab-vocab').className = 'page-tab' + (p === 'vocab' ? ' active' : '');
@@ -702,25 +672,7 @@ _HTML = """\
     if (p === 'vocab') loadVocab();
   }
 
-  // ---- Clear output ----
-  function clearOutput() {
-    const out = $('output-text');
-    out.className = 'output-box empty';
-    out.textContent = 'Output will appear here\u2026';
-    $('output-tokens').innerHTML = '';
-  }
-
-  // ---- View toggle (Text / Tokens) ----
-  function setView(v) {
-    $('output-text').style.display   = v === 'text'   ? 'block' : 'none';
-    $('output-tokens').style.display = v === 'tokens' ? 'flex'  : 'none';
-    $('btn-text').className   = 'toggle-btn' + (v === 'text'   ? ' active' : '');
-    $('btn-tokens').className = 'toggle-btn' + (v === 'tokens' ? ' active' : '');
-    $('btn-text').setAttribute('aria-pressed', v === 'text' ? 'true' : 'false');
-    $('btn-tokens').setAttribute('aria-pressed', v === 'tokens' ? 'true' : 'false');
-  }
-
-  // ---- Token chip helpers ----
+  // ---- Helpers ----
   const TOK_COLORS = ['#dbeafe','#fce7f3','#d1fae5','#fef9c3','#ede9fe','#ffedd5'];
 
   function escapeHtml(s) {
@@ -728,12 +680,30 @@ _HTML = """\
   }
 
   function displayText(s) {
-    // Replace invisible whitespace chars with visible markers
-    return s.replace(/\\n/g, '\u21b5').replace(/\\r/g, '\u21b5').replace(/\\t/g, '\u2192');
+    return s.replace(/\\n/g, '\\u21b5').replace(/\\r/g, '\\u21b5').replace(/\\t/g, '\\u2192');
   }
 
-  function updateTokens(toks) {
-    const box = $('output-tokens');
+  // ---- Output helpers ----
+  function clearOutput(which) {
+    const out = $('output-text-' + which);
+    if (!out) return;
+    out.className = 'output-box empty';
+    out.textContent = 'Output will appear here\u2026';
+    $('output-tokens-' + which).innerHTML = '';
+  }
+
+  function setView(v, which) {
+    $('output-text-'   + which).style.display = v === 'text'   ? 'block' : 'none';
+    $('output-tokens-' + which).style.display = v === 'tokens' ? 'flex'  : 'none';
+    $('btn-text-'   + which).className = 'toggle-btn' + (v === 'text'   ? ' active' : '');
+    $('btn-tokens-' + which).className = 'toggle-btn' + (v === 'tokens' ? ' active' : '');
+    $('btn-text-'   + which).setAttribute('aria-pressed', v === 'text'   ? 'true' : 'false');
+    $('btn-tokens-' + which).setAttribute('aria-pressed', v === 'tokens' ? 'true' : 'false');
+  }
+
+  function updateTokens(toks, which) {
+    const box = $('output-tokens-' + which);
+    if (!box) return;
     box.innerHTML = '';
     toks.forEach(({ id, text }, i) => {
       const el = document.createElement('div');
@@ -745,6 +715,218 @@ _HTML = """\
       el.title = '#' + (i + 1) + '  id=' + id + '  ' + JSON.stringify(text);
       box.appendChild(el);
     });
+  }
+
+  // ---- Sliders ----
+  $('max-tokens').oninput  = e => $('max-tokens-val').textContent  = e.target.value;
+  $('temperature').oninput = e => $('temperature-val').textContent = parseFloat(e.target.value).toFixed(2);
+  $('top-k').oninput       = e => $('top-k-val').textContent       = e.target.value;
+
+  function setPrompt(text) { $('prompt').value = text; $('prompt').focus(); }
+
+  $('prompt').addEventListener('keydown', e => {
+    if (e.key === 'Enter' && e.ctrlKey) { e.preventDefault(); generate(); }
+  });
+
+  // ---- Model loading (kept for model-ID resolution) ----
+  async function loadModels() {
+    const resp = await fetch('/models');
+    if (!resp.ok) throw new Error('Could not load models');
+    const payload = await resp.json();
+    _models = payload.models || [];
+    _commitToModelId = {};
+    _models.forEach(m => {
+      const match = m.label.match(/_([0-9a-f]+)\\.pt$/i);
+      if (match) _commitToModelId[match[1]] = m.id;
+    });
+  }
+
+  // ---- Progress chart ----
+  function niceStep(range) {
+    if (range <= 0) return 0.001;
+    const exp  = Math.floor(Math.log10(range));
+    const frac = range / Math.pow(10, exp);
+    const s    = frac < 1.5 ? 1 : frac < 3 ? 2 : frac < 7 ? 5 : 10;
+    return s * Math.pow(10, exp);
+  }
+
+  function fmtAxisTime(d) {
+    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function drawChart() {
+    const rows = _results;
+    if (!rows.length) {
+      $('chart-status').textContent = 'No results yet.';
+      $('chart-status').style.display = 'block';
+      return;
+    }
+
+    const parsed = rows.map((r, i) => ({ ...r, idx: i + 1, date: new Date(r.timestamp) }));
+
+    // IQR-based outlier clipping for y-axis
+    const vals  = [...parsed.map(r => r.val_bpb)].sort((a, b) => a - b);
+    const q1    = vals[Math.floor(vals.length * 0.25)];
+    const q3    = vals[Math.floor(vals.length * 0.75)];
+    const iqr   = q3 - q1 || 0.001;
+    const clipHi = q3 + 1.5 * iqr;
+
+    const normal  = parsed.filter(r => r.val_bpb <= clipHi);
+    const yVals   = normal.map(r => r.val_bpb);
+    const yLo_raw = Math.min(...yVals);
+    const yHi_raw = Math.max(...yVals);
+    const yPad    = (yHi_raw - yLo_raw) * 0.3 || 0.001;
+    const yLo     = yLo_raw - yPad * 0.4;
+    const yHi     = yHi_raw + yPad;
+
+    // SVG coordinate space
+    const W = 900, H = 240;
+    const ML = 68, MR = 24, MT = 28, MB = 44;
+    const pw = W - ML - MR, ph = H - MT - MB;
+
+    const tMin   = Math.min(...parsed.map(r => +r.date));
+    const tMax   = Math.max(...parsed.map(r => +r.date));
+    const tRange = tMax - tMin || 1;
+
+    const xS = t  => ML + ((+t - tMin) / tRange) * pw;
+    const yS = v  => { const c = Math.max(yLo, Math.min(yHi, v)); return MT + (1 - (c - yLo) / (yHi - yLo)) * ph; };
+
+    let svg = '';
+
+    // Y grid + tick labels
+    const yStep  = niceStep((yHi - yLo) / 5);
+    const yStart = Math.ceil(yLo / yStep) * yStep;
+    for (let y = yStart; y <= yHi + yStep * 0.01; y = +(y + yStep).toFixed(10)) {
+      const cy = yS(y).toFixed(1);
+      svg += `<line x1="${ML}" y1="${cy}" x2="${W - MR}" y2="${cy}" stroke="#e5e7eb" stroke-width="1"/>`;
+      svg += `<text x="${ML - 5}" y="${+cy + 3.5}" text-anchor="end" font-size="10" fill="#9ca3af">${y.toFixed(4)}</text>`;
+    }
+
+    // X grid + tick labels
+    const msOptions = [5, 10, 15, 20, 30].map(m => m * 60000);
+    const msStep    = msOptions.find(s => tRange / s <= 9) || 3600000;
+    const xTickStart = Math.ceil(tMin / msStep) * msStep;
+    for (let t = xTickStart; t <= tMax + msStep * 0.01; t += msStep) {
+      const cx = xS(t).toFixed(1);
+      svg += `<line x1="${cx}" y1="${MT}" x2="${cx}" y2="${MT + ph}" stroke="#e5e7eb" stroke-width="1"/>`;
+      svg += `<text x="${cx}" y="${MT + ph + 14}" text-anchor="middle" font-size="10" fill="#9ca3af">${fmtAxisTime(new Date(t))}</text>`;
+    }
+
+    // Axes
+    svg += `<line x1="${ML}" y1="${MT}" x2="${ML}" y2="${MT + ph}" stroke="#d1d5db" stroke-width="1.5"/>`;
+    svg += `<line x1="${ML}" y1="${MT + ph}" x2="${W - MR}" y2="${MT + ph}" stroke="#d1d5db" stroke-width="1.5"/>`;
+
+    // Axis labels
+    svg += `<text transform="rotate(-90)" x="${-(MT + ph / 2)}" y="13" text-anchor="middle" font-size="10" fill="#6b7280">Validation BPB (lower is better)</text>`;
+    svg += `<text x="${ML + pw / 2}" y="${H - 4}" text-anchor="middle" font-size="10" fill="#6b7280">Time</text>`;
+
+    // Running-best step line (connects only models that improved on prior best)
+    const keptImproving = [];
+    let runBest = Infinity;
+    parsed.forEach(r => {
+      if (r.status === 'keep' && r.val_bpb < runBest) {
+        runBest = r.val_bpb;
+        keptImproving.push({ ...r, runBest });
+      }
+    });
+    if (keptImproving.length) {
+      let stepPath = '';
+      keptImproving.forEach((r, i) => {
+        const cx = xS(r.date).toFixed(1);
+        const cy = yS(r.runBest).toFixed(1);
+        if (i === 0) { stepPath = `M${cx},${cy}`; }
+        else         { stepPath += ` H${cx} V${cy}`; }
+      });
+      stepPath += ` H${W - MR}`;
+      svg += `<path d="${stepPath}" fill="none" stroke="#10b981" stroke-width="1.5" stroke-linejoin="round"/>`;
+    }
+
+    // Data points: discarded first (behind), then kept on top
+    const discarded = parsed.filter(r => r.val_bpb <= clipHi && r.status !== 'keep');
+    const kept      = parsed.filter(r => r.val_bpb <= clipHi && r.status === 'keep');
+    const clipped   = parsed.filter(r => r.val_bpb > clipHi);
+
+    discarded.forEach(r => {
+      const cx = xS(r.date).toFixed(1), cy = yS(r.val_bpb).toFixed(1);
+      svg += `<circle cx="${cx}" cy="${cy}" r="10" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1.5" class="chart-pt" data-idx="${r.idx - 1}"/>`;
+      svg += `<text x="${cx}" y="${+cy + 3.5}" text-anchor="middle" font-size="9" fill="#6b7280" pointer-events="none">${r.idx}</text>`;
+    });
+
+    kept.forEach(r => {
+      const cx = xS(r.date).toFixed(1), cy = yS(r.val_bpb).toFixed(1);
+      svg += `<circle cx="${cx}" cy="${cy}" r="13" fill="#10b981" stroke="#059669" stroke-width="2" class="chart-pt" data-idx="${r.idx - 1}" style="cursor:pointer"/>`;
+      svg += `<text x="${cx}" y="${+cy + 4}" text-anchor="middle" font-size="10" fill="white" font-weight="700" pointer-events="none">${r.idx}</text>`;
+      svg += `<text x="${cx}" y="${+cy - 17}" text-anchor="start" font-size="9" fill="#059669" transform="rotate(-35,${cx},${+cy - 17})" pointer-events="none">${escapeHtml(r.description)}</text>`;
+    });
+
+    clipped.forEach(r => {
+      const cx = xS(r.date).toFixed(1), ty = MT + 12;
+      svg += `<polygon points="${cx},${ty - 11} ${+cx - 9},${ty + 5} ${+cx + 9},${ty + 5}" fill="#9ca3af" stroke="#6b7280" stroke-width="1.5" class="chart-pt" data-idx="${r.idx - 1}"/>`;
+      svg += `<text x="${cx}" y="${ty + 20}" text-anchor="middle" font-size="9" fill="#d97706">${r.val_bpb.toFixed(4)}</text>`;
+      svg += `<text x="${cx}" y="${ty + 33}" text-anchor="middle" font-size="9" fill="#6b7280" font-weight="700">${r.idx}</text>`;
+    });
+
+    // Legend (top-right)
+    const lx = W - MR - 128, ly = MT + 6;
+    svg += `<rect x="${lx - 4}" y="${ly - 4}" width="134" height="74" rx="5" fill="white" stroke="#e5e7eb" stroke-width="1"/>`;
+    svg += `<circle cx="${lx + 7}" cy="${ly + 9}"  r="6"  fill="#f3f4f6" stroke="#9ca3af" stroke-width="1.5"/>`;
+    svg += `<text x="${lx + 18}" y="${ly + 13}" font-size="10" fill="#374151">Discarded</text>`;
+    svg += `<circle cx="${lx + 7}" cy="${ly + 28}" r="7"  fill="#10b981" stroke="#059669" stroke-width="1.5"/>`;
+    svg += `<text x="${lx + 18}" y="${ly + 32}" font-size="10" fill="#374151">Kept</text>`;
+    svg += `<line x1="${lx + 2}" y1="${ly + 46}" x2="${lx + 14}" y2="${ly + 46}" stroke="#10b981" stroke-width="1.5"/>`;
+    svg += `<text x="${lx + 18}" y="${ly + 50}" font-size="10" fill="#374151">Running best</text>`;
+    svg += `<polygon points="${lx + 7},${ly + 58} ${lx + 0},${ly + 68} ${lx + 14},${ly + 68}" fill="#9ca3af" stroke="#6b7280" stroke-width="1"/>`;
+    svg += `<text x="${lx + 18}" y="${ly + 67}" font-size="10" fill="#374151">Outlier (clipped)</text>`;
+
+    // Title
+    const keptN = parsed.filter(r => r.status === 'keep').length;
+    svg += `<text x="${ML + pw / 2}" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#111827">Progress: ${parsed.length} Experiments, ${keptN} Improvements</text>`;
+
+    $('chart-svg').innerHTML = svg;
+    $('chart-status').style.display = 'none';
+
+    // Hover tooltips
+    $('chart-svg').querySelectorAll('.chart-pt').forEach(el => {
+      el.addEventListener('mousemove', e => {
+        const r   = parsed[parseInt(el.dataset.idx)];
+        const tip = $('chart-tooltip');
+        tip.innerHTML =
+          `<strong>#${r.idx}  ${escapeHtml(r.description)}</strong>\\n` +
+          `BPB: ${r.val_bpb.toFixed(6)}\\n` +
+          `Status: ${r.status}\\n` +
+          `Time: ${new Date(r.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}\\n` +
+          `Memory: ${r.memory_gb} GB`;
+        tip.style.display = 'block';
+        tip.style.left = (e.clientX + 14) + 'px';
+        tip.style.top  = (e.clientY - 12) + 'px';
+      });
+      el.addEventListener('mouseleave', () => { $('chart-tooltip').style.display = 'none'; });
+    });
+  }
+
+  async function loadResults() {
+    try {
+      const resp = await fetch('/results');
+      if (!resp.ok) throw new Error(resp.statusText);
+      const { rows } = await resp.json();
+      _results = rows;
+      drawChart();
+
+      // Identify baseline (first kept) and best (lowest val_bpb kept)
+      const kept = rows.filter(r => r.status === 'keep');
+      if (kept.length) {
+        const first = kept[0];
+        const best  = kept.reduce((a, b) => a.val_bpb <= b.val_bpb ? a : b);
+        _baselineModelId = _commitToModelId[first.commit] || null;
+        _bestModelId     = _commitToModelId[best.commit]  || null;
+        $('label-baseline').textContent = 'Baseline \u2014 ' + (first.description || first.commit);
+        $('label-best').textContent     = (best.commit === first.commit ? 'Best / Latest' : 'Best') +
+                                          ' \u2014 ' + (best.description || best.commit);
+      }
+      if (!rows.length) $('chart-status').textContent = 'No results yet.';
+    } catch (err) {
+      $('chart-status').textContent = 'Could not load results: ' + err.message;
+    }
   }
 
   // ---- Vocabulary browser ----
@@ -787,39 +969,32 @@ _HTML = """\
   }
 
   // ---- Generator ----
-  async function generate() {
-    const prompt = $('prompt').value.trim();
-    if (!prompt) { $('prompt').focus(); return; }
-
-    const btn    = $('submit-btn');
-    const output = $('output-text');
-
-    btn.disabled       = true;
-    btn.textContent    = 'Generating\u2026';
+  async function runGenerate(prompt, modelId, which) {
+    const output = $('output-text-' + which);
     output.className   = 'output-box';
     output.textContent = '';
-    $('output-tokens').innerHTML = '';
+    $('output-tokens-' + which).innerHTML = '';
 
     const cursor = document.createElement('span');
     cursor.className = 'cursor';
     output.appendChild(cursor);
 
     try {
+      const body = {
+        prompt,
+        max_tokens:  parseInt($('max-tokens').value),
+        temperature: parseFloat($('temperature').value),
+        top_k:       parseInt($('top-k').value),
+      };
+      if (modelId) body.model_id = modelId;
+
       const resp = await fetch('/generate', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          prompt,
-          max_tokens:  parseInt($('max-tokens').value),
-          temperature: parseFloat($('temperature').value),
-          top_k:       parseInt($('top-k').value),
-        }),
+        body: JSON.stringify(body),
       });
 
-      if (!resp.ok) {
-        output.textContent = 'Server error: ' + resp.statusText;
-        return;
-      }
+      if (!resp.ok) { output.textContent = 'Server error: ' + resp.statusText; return; }
 
       const reader  = resp.body.getReader();
       const decoder = new TextDecoder();
@@ -835,20 +1010,38 @@ _HTML = """\
             output.textContent = '';
             output.appendChild(document.createTextNode(t));
             output.appendChild(cursor);
-            updateTokens(toks);
+            updateTokens(toks, which);
           } catch (_) {}
         }
       }
     } finally {
       cursor.remove();
+    }
+  }
+
+  async function generate() {
+    const prompt = $('prompt').value.trim();
+    if (!prompt) { $('prompt').focus(); return; }
+
+    const btn = $('submit-btn');
+    btn.disabled    = true;
+    btn.textContent = 'Generating\u2026';
+
+    try {
+      await Promise.all([
+        runGenerate(prompt, _baselineModelId, 'baseline'),
+        runGenerate(prompt, _bestModelId,     'best'),
+      ]);
+    } finally {
       btn.disabled    = false;
       btn.textContent = 'Generate';
     }
   }
 
-  loadModels().catch(err => {
-    $('model-active').textContent = 'Failed to load checkpoints: ' + err;
-  });
+  // ---- Init ----
+  loadModels()
+    .then(() => loadResults())
+    .catch(err => { $('chart-status').textContent = 'Init failed: ' + err; });
 </script>
 </body>
 </html>
@@ -868,16 +1061,23 @@ def build_app(model_store: ModelStore) -> FastAPI:
 
     class GenerateRequest(BaseModel):
         prompt: str
-        max_tokens: int = 150
-        temperature: float = 0.9
-        top_k: int = 50
+        max_tokens: int = 500
+        temperature: float = 0.0
+        top_k: int = 0
+        model_id: str | None = None
 
     class SelectModelRequest(BaseModel):
         model_id: str
 
     @app.post("/generate")
     def generate(req: GenerateRequest):
-        model, tokenizer, device, _ = model_store.get_active_bundle()
+        if req.model_id:
+            try:
+                model, tokenizer, device, _ = model_store.get_bundle_by_id(req.model_id)
+            except KeyError:
+                model, tokenizer, device, _ = model_store.get_active_bundle()
+        else:
+            model, tokenizer, device, _ = model_store.get_active_bundle()
         respond = _make_respond(model, tokenizer, device)
 
         def stream():
@@ -903,6 +1103,25 @@ def build_app(model_store: ModelStore) -> FastAPI:
         except KeyError as exc:
             raise HTTPException(status_code=404, detail=str(exc)) from exc
         return {"ok": True, "active": entry}
+
+    @app.get("/results")
+    def results_data():
+        path = Path("results.tsv")
+        if not path.exists():
+            return {"rows": []}
+        rows = []
+        with path.open(newline="") as f:
+            reader = csv.DictReader(f, delimiter="\t")
+            for r in reader:
+                rows.append({
+                    "timestamp": r["timestamp"],
+                    "commit":    r["commit"],
+                    "val_bpb":   float(r["val_bpb"]),
+                    "memory_gb": float(r.get("memory_gb", 0)),
+                    "status":    r["status"],
+                    "description": r["description"],
+                })
+        return {"rows": rows}
 
     return app
 
