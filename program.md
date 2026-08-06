@@ -12,7 +12,7 @@ To set up a new experiment, work with the user to:
    - `README.md` — repository context.
    - `prepare.py` — fixed constants, data prep, tokenizer, dataloader, evaluation. Do not modify.
    - `train.py` — the file you modify. Model architecture, optimizer, training loop.
-4. **Verify data exists**: Check that `~/.cache/autoresearch/` contains data shards and a tokenizer. If not, tell the human to run `uv run prepare.py`.
+4. **Verify data exists**: Check the autoresearch cache directory. On Windows this is `%LOCALAPPDATA%\autoresearch` (e.g. `C:\Users\<you>\AppData\Local\autoresearch`) — unless `AUTORESEARCH_CACHE_DIR` is set, or a legacy `~/.cache/autoresearch` directory already exists (resolution order is defined in `_default_cache_dir()` in `prepare.py`). It should contain: `datasets\<dataset>\data\` with the downloaded parquet file (default: `tinystories_gpt4_clean.parquet` — the data stays as a single parquet file; there are no pre-tokenized shards), `datasets\<dataset>\tokenizer\` with `tokenizer.pkl` and `token_bytes.pt`, and `active_dataset.txt` at the cache root. If any of these are missing, tell the human to run `uv run prepare.py`.
 5. **Initialize results.tsv**: If `results.tsv` does not already exist, create it with just the header row. If it already exists, leave it untouched — it contains the prior experiment history and the agent will continue appending to it. The baseline will be recorded after the first run (or the next run, if resuming).
 6. **Confirm and go**: Confirm setup looks good.
 
@@ -102,7 +102,7 @@ LOOP FOREVER:
 4. Run the experiment: `uv run train.py > run.log 2>&1` (redirect everything — do NOT use tee or let output flood your context)
 5. Read out the results: `grep "^val_bpb:\|^peak_vram_mb:" run.log`
 6. If the grep output is empty, the run crashed. Run `tail -n 50 run.log` to read the Python stack trace and attempt a fix. If you can't get things to work after more than a few attempts, give up.
-7. If val_bpb improved (lower): archive the checkpoint by copying `checkpoint_pre_eval.pt` to `checkpoints/<timestamp>_<commit>.pt` (create `checkpoints/` if needed), then stage it: `git add "checkpoints/<timestamp>_<commit>.pt"`. Status = `keep`.
+7. If val_bpb improved (lower): archive the checkpoint by copying `checkpoint_pre_eval.pt` to `checkpoints/<timestamp>_<commit>.pt` (create `checkpoints/` if needed), then stage it: `git add "checkpoints/<timestamp>_<commit>.pt"`. Status = `keep`. The `<timestamp>` in the checkpoint FILENAME must use the compact, colon-free form `YYYYMMDDTHHMMSS-ZZZZ` (e.g. `20260523T155743-0700` → `checkpoints/20260523T155743-0700_75027e8.pt`, matching the existing files in `checkpoints/`). NEVER put extended ISO-8601 with colons (e.g. `2026-05-23T15:57:43-07:00`) in a filename: colons are invalid in Windows filenames and have produced mangled Unicode filenames in a past session. This rule applies only to filenames — the `results.tsv` timestamp column keeps the colon form described under Logging results, because it is file content, not a filename.
 8. If val_bpb is equal or worse: `git reset --hard START` to undo the step 3 commit. Status = `discard`.
 9. Record the result in results.tsv, then commit it: `git add results.tsv && git commit -m "log: <description> <status>"`. Do this AFTER any git reset so the TSV update is never undone.
 10. Keep-only policy: only `keep` runs get archived checkpoints.

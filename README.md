@@ -2,7 +2,7 @@
 
 > Convert your gaming PC into an autonomous AI researcher.
 
-> This repository is a fork of [karpathy/autoresearch](https://github.com/karpathy/autoresearch). The purpose of this fork is native support for desktop consumer NVIDIA GPUs on Windows, with tiered VRAM floors by architecture.
+> This repository is a fork of [jsegov/autoresearch-win-rtx](https://github.com/jsegov/autoresearch-win-rtx) — the Windows/consumer-GPU port of [karpathy/autoresearch](https://github.com/karpathy/autoresearch). Lineage: karpathy/autoresearch → jsegov/autoresearch-win-rtx (native Windows support for desktop consumer NVIDIA GPUs, with tiered VRAM floors by architecture; git remote `upstream`) → this repo (adds `chat.py`, `generate.py`, and training tweaks).
 
 *One day, frontier AI research used to be done by meat computers in between eating, sleeping, having other fun, and synchronizing once in a while using sound wave interconnect in the ritual of "group meeting". That era is long gone. Research is now entirely the domain of autonomous swarms of AI agents running across compute cluster megastructures in the skies. The agents claim that we are now in the 10,205th generation of the code base, in any case no one could tell if that's right or wrong as the "code" is now a self-modifying binary that has grown beyond human comprehension. This repo is the story of how it all began. -@karpathy, March 2026*.
 
@@ -244,7 +244,7 @@ When you are ready to switch datasets, this is a human step — the agent cannot
 
 1. Open `prepare.py` and find the `DATASET_CONFIGS` dictionary near the top.
 2. Add a new entry: a short name, the URL to a Hugging Face parquet file, and the row ranges for train/val/test splits.
-3. Run `uv run prepare.py --dataset your-dataset-name`. This downloads the file, builds a new tokenizer from it, and writes new data shards to the local cache.
+3. Run `uv run prepare.py --dataset your-dataset-name`. This downloads the parquet file and builds a new tokenizer from it in the local cache (the data stays as a single parquet file; nothing is pre-tokenized — the dataloader tokenizes on the fly).
 4. Set the dataset for future training runs either by passing `--dataset your-dataset-name` to `uv run train.py` or by setting the environment variable `AUTORESEARCH_DATASET=your-dataset-name`.
 
 Once you switch datasets, `val_bpb` scores are not directly comparable to runs on the previous dataset. Start a fresh `results.tsv` when you switch so the log stays coherent.
@@ -261,14 +261,18 @@ To change it, open `prepare.py` and edit the `TIME_BUDGET` line near the top. A 
 
 ---
 
-## Fork scope
+## Fork scope and lineage
 
-- Upstream source: [karpathy/autoresearch](https://github.com/karpathy/autoresearch)
-- Primary objective: run natively on Windows with NVIDIA GPUs that meet the architecture VRAM floor (Turing with >=8 GB VRAM, Ampere/Ada/Blackwell with >=10 GB VRAM), without unofficial Triton-on-Windows stacks.
-- Scope of changes: compatibility and stability updates required for that target platform.
-- The original Linux/H100-oriented path from upstream is removed in this fork and is not supported here.
+- Lineage: [karpathy/autoresearch](https://github.com/karpathy/autoresearch) (original, Linux/H100-oriented) → [jsegov/autoresearch-win-rtx](https://github.com/jsegov/autoresearch-win-rtx) (the Windows/consumer-GPU port; git remote `upstream`) → this repository.
+- Direct upstream: [jsegov/autoresearch-win-rtx](https://github.com/jsegov/autoresearch-win-rtx). Its objective, inherited here: run natively on Windows with NVIDIA GPUs that meet the architecture VRAM floor (Turing with >=8 GB VRAM, Ampere/Ada/Blackwell with >=10 GB VRAM), without unofficial Triton-on-Windows stacks.
+- This repository's additions on top of jsegov's port: local inference tools (`chat.py`, `generate.py`) and training tweaks accumulated by the experiment loop.
+- The original Linux/H100-oriented path was removed in the jsegov port and is not supported here. If you need it, use [karpathy/autoresearch](https://github.com/karpathy/autoresearch).
 - High-end laptop/workstation GPUs are supported when they meet the same VRAM floors, though power and thermal variance can still affect throughput.
-- If you need the upstream Linux/H100 path, use [karpathy/autoresearch](https://github.com/karpathy/autoresearch).
+
+### Credits
+
+- [Andrej Karpathy](https://github.com/karpathy) created the original [autoresearch](https://github.com/karpathy/autoresearch). In upstream commit `c92bee5` ("some docs on what to play with to make autoresearch better on smaller computers") he wrote: "Seeing as there seems to be a lot of interest in tinkering with autoresearch on much smaller compute platforms than an H100, a few extra words. If you're going to try running autoresearch on smaller computers (Macbooks etc.), I'd recommend one of the forks below." — and listed [jsegov/autoresearch-win-rtx](https://github.com/jsegov/autoresearch-win-rtx) under "Notable forks" as the Windows entry.
+- [jsegov](https://github.com/jsegov) authored the Windows/consumer-GPU port (`autoresearch-win-rtx`) that this repository builds on.
 
 ## How it works
 
@@ -287,6 +291,8 @@ By design, training runs for a **fixed 5-minute time budget** (wall clock, exclu
 - Single runtime path uses PyTorch SDPA attention and eager execution (no FA3/`torch.compile` fast path).
 - Native Windows support targets desktop consumer GPUs with a tiered VRAM policy (Turing >=8 GB, Ampere/Ada/Blackwell >=10 GB), official PyTorch CUDA wheels, and SDPA attention.
 - Default dataset is TinyStories GPT-4 clean (`karpathy/tinystories-gpt4-clean`) for practical consumer-GPU setup.
+
+> **Troubleshooting — Windows Smart App Control:** if Smart App Control is enabled, the uv-managed standalone Python builds fail to start with an error like `DLL load failed ... Application Control policy`, because those builds are unsigned and SAC blocks unsigned binaries. The fix is a signed interpreter from [python.org](https://www.python.org/downloads/): install the version this repo pins in `.python-version` (Python 3.14), then point the venv at it — `uv venv --python <path to signed python.exe>` followed by `uv sync`.
 
 ```powershell
 
