@@ -7,6 +7,7 @@ Usage: uv run train.py
 import argparse
 import gc
 import json
+import math
 import os
 import platform
 import time
@@ -41,7 +42,6 @@ class RuntimeConfig:
     device: torch.device
     device_type: str
     amp_dtype: torch.dtype
-    use_compile: bool
     use_activation_checkpointing: bool
     attention_backend: str
     gpu_name: str
@@ -179,7 +179,7 @@ def _resolve_gpu_profile(gpu_name, capability, gpu_vram_gb, is_windows):
         name="compatibility",
         is_supported_consumer=False,
         is_compatibility_only=True,
-        train_batch_candidates=(DEVICE_BATCH_SIZE, 16, 8, 4),
+        train_batch_candidates=(16, 8, 4),
         checkpoint_modes=(default_checkpointing,),
         default_checkpointing=default_checkpointing,
     )
@@ -274,8 +274,6 @@ def detect_runtime():
     if hasattr(torch.backends, "cudnn"):
         torch.backends.cudnn.allow_tf32 = tf32_enabled
 
-    use_compile = False
-    print("torch.compile disabled in this fork runtime path.")
     attention_backend = "sdpa"
     print("Using PyTorch SDPA attention backend.")
     force_checkpointing = os.environ.get("AUTORESEARCH_FORCE_CHECKPOINTING")
@@ -293,7 +291,6 @@ def detect_runtime():
         device=device,
         device_type=device.type,
         amp_dtype=amp_dtype,
-        use_compile=use_compile,
         use_activation_checkpointing=use_activation_checkpointing,
         attention_backend=attention_backend,
         gpu_name=gpu_name,
@@ -307,12 +304,7 @@ def detect_runtime():
     )
 
 
-USE_COMPILE = False
 MUON_COMPUTE_DTYPE = torch.bfloat16
-
-
-def _maybe_compile(obj, **kwargs):
-    return obj
 
 
 # ---------------------------------------------------------------------------
@@ -818,7 +810,6 @@ FINAL_LR_FRAC = 0.1
 # Model size + memory defaults
 DEPTH = 6
 N_KV_HEAD = 1  # MQA: all query heads share 1 KV head. None = full MHA (n_kv_head=n_head)
-DEVICE_BATCH_SIZE = int(os.environ.get("AUTORESEARCH_DEVICE_BATCH_SIZE", "16"))
 EVAL_BATCH_SIZE = 8
 
 
@@ -1041,7 +1032,7 @@ def _prioritize_autotuned_candidate(train_candidates, autotuned_candidate):
 
 
 def _configure_step_kernels(runtime):
-    global ADAMW_STEP_IMPL, MUON_STEP_IMPL, USE_COMPILE, MUON_COMPUTE_DTYPE
+    global ADAMW_STEP_IMPL, MUON_STEP_IMPL, MUON_COMPUTE_DTYPE
     ADAMW_STEP_IMPL = adamw_step_fused
     MUON_STEP_IMPL = muon_step_fused
     if runtime.amp_dtype != torch.float16:
@@ -1056,7 +1047,6 @@ def _configure_step_kernels(runtime):
         MUON_COMPUTE_DTYPE = torch.float32
         muon_reason = "fp16 AMP without bf16 support; using fp32 fallback"
     print(f"Muon compute dtype: {MUON_COMPUTE_DTYPE} ({muon_reason})")
-    USE_COMPILE = False
 
 
 def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test):
@@ -1091,7 +1081,6 @@ def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test
         matrix_lr=MATRIX_LR,
         weight_decay=WEIGHT_DECAY,
     )
-    model = _maybe_compile(model, dynamic=False)
 
     train_loader = make_dataloader(
         tokenizer,
@@ -1152,7 +1141,7 @@ def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test
         model.zero_grad(set_to_none=True)
 
         train_loss_f = train_loss.item()
-        if train_loss_f > 100:
+        if math.isnan(train_loss_f) or train_loss_f > 100:
             raise RuntimeError("FAIL: training loss exploded")
 
         torch.cuda.synchronize()
@@ -1209,7 +1198,7 @@ def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test
 
 def _save_pre_eval_checkpoint(model):
     try:
-        state_dict = model._orig_mod.state_dict() if hasattr(model, "_orig_mod") else model.state_dict()
+        state_dict = model.state_dict()
         torch.save(state_dict, "checkpoint_pre_eval.pt")
         print("Saved checkpoint_pre_eval.pt")
     except Exception as exc:  # pragma: no cover
@@ -1251,7 +1240,7 @@ def main():
     train_candidates = _prioritize_autotuned_candidate(train_candidates, autotuned_candidate)
 
     print(f"Attention backend: {runtime.attention_backend}")
-    print(f"torch.compile: {'enabled' if USE_COMPILE else 'disabled'}")
+    print("torch.compile: disabled")
 
     result = None
     chosen_train_batch = None
