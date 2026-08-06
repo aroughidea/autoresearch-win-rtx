@@ -8,6 +8,23 @@
 
 The idea: give an AI agent a small but real LLM training setup and let it experiment autonomously for hours at a time. It modifies the code, trains for 5 minutes, checks if the result improved, keeps or discards, and repeats. When you come back, you have a log of experiments and (hopefully) a better model. The training code here is a simplified single-GPU implementation of [nanochat](https://github.com/karpathy/nanochat). The core idea is that you're not touching any of the Python files like you normally would as a researcher. Instead, you are programming the `program.md` Markdown files that provide context to the AI agents and set up your autonomous research org. The default `program.md` in this repo is intentionally kept as a bare bones baseline, though it's obvious how one would iterate on it over time to find the "research org code" that achieves the fastest research progress, how you'd add more agents to the mix, etc. A bit more context on this project is here in this [tweet](https://x.com/karpathy/status/2029701092347630069).
 
+## Reading this repo
+
+This repo is two things at once: a working research rig you can run yourself, and the record of an actual autonomous research session that already ran here. The files you see are the live state — the current best configuration, the accumulated scoreboard, the latest checkpoint. The story of how they got that way lives in git history, materialized for humans in a few places:
+
+| Where to look | What you'll find |
+|---|---|
+| [`results.tsv`](results.tsv) | The scoreboard — one row per experiment |
+| [`WALKTHROUGH.md`](WALKTHROUGH.md) | The guided tour of the session, failures included |
+| [`program.md`](program.md) | The entire "program" the agent executes |
+| [`chat.py`](chat.py) | A browser UI for the models it produced — switch checkpoints to compare them |
+| [`analysis.ipynb`](analysis.ipynb) + [`progress.png`](progress.png) | The score trajectory |
+| `git log` | The raw lab notebook |
+
+One convention ties these together: the same 7-character commit hash appears in the scoreboard rows, the git history, and the checkpoint filenames, so any score can be traced back to the exact code that produced it — see **[How does git fit in?](#how-does-git-fit-in)** for the full model.
+
+---
+
 ## Start here (non-technical)
 
 ### What is actually happening?
