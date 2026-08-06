@@ -392,4 +392,4 @@ Here's the payoff of the "git is the state machine" design: resuming required no
 
 - **See the models, not just the scores.** `uv run chat.py` opens a local browser UI (`http://localhost:8000`) where you can prompt the trained checkpoints and compare what a 0.5187 model actually writes versus a worse one. The hash in each checkpoint's filename is the same join key used throughout this document.
 - **Read [`program.md`](program.md).** It is the *entire* program the agent runs — the loop you just watched execute 16 times, including the exact keep/discard rules and the post-bugfix TSV ordering from War story 1. It's shorter than this walkthrough.
-- **Get hands-on.** A starter kit for running your own session is forthcoming as a sibling repository, `autoresearch-starter` — the same loop, packaged to set up from scratch.
+- **Get hands-on.** The starter kit at [aroughidea/autoresearch-starter](https://github.com/aroughidea/autoresearch-starter) packages this same loop to set up from scratch — baseline configuration, empty scoreboard, a no-GPU Colab path, and "Use this template" so your copy starts clean. The improvements this session found are yours to rediscover.
