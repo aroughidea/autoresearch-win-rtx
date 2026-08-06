@@ -14,8 +14,10 @@
 #   uv run train.py     (produces checkpoint_pre_eval.pt)
 
 import argparse
+import base64
 import csv
 import json
+import math
 import socket
 import sys
 import threading
@@ -26,8 +28,8 @@ from pathlib import Path
 
 import torch
 import uvicorn
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import HTMLResponse, StreamingResponse
+from fastapi import FastAPI
+from fastapi.responses import HTMLResponse, Response, StreamingResponse
 from pydantic import BaseModel
 
 from generate import _config_from_state_dict, _sample_top_k
@@ -165,16 +167,6 @@ class ModelStore:
                 model = _load_model_from_checkpoint(entry["path"], self._device)
                 self._cache[entry["path"]] = model
             return model, self._tokenizer, self._device, entry
-
-    def select(self, model_id: str) -> dict:
-        with self._lock:
-            if model_id not in self._entries_by_id:
-                raise KeyError(f"Unknown model id: {model_id}")
-            entry = self._entries_by_id[model_id]
-            if entry["path"] not in self._cache:
-                self._cache[entry["path"]] = _load_model_from_checkpoint(entry["path"], self._device)
-            self._active_id = model_id
-            return entry
 
 
 # ---------------------------------------------------------------------------
@@ -620,7 +612,7 @@ _HTML = """\
     <div id="output-tokens-baseline" class="token-box" style="display:none"></div>
   </div>
 
-  <div class="card card-output">
+  <div class="card card-output" id="card-best">
     <div class="card-label-row">
       <div class="card-label" id="label-best">Best</div>
       <div style="display:flex;gap:12px;align-items:center">
@@ -750,19 +742,18 @@ _HTML = """\
     return s * Math.pow(10, exp);
   }
 
-  function fmtAxisTime(d) {
-    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  }
-
   function drawChart() {
     const rows = _results;
     if (!rows.length) {
-      $('chart-status').textContent = 'No results yet.';
-      $('chart-status').style.display = 'block';
+      $('chart-svg').style.display = 'none';
+      const s = $('chart-status');
+      s.style.display = 'block';
+      s.innerHTML = 'No experiments logged yet — this is a fresh workspace. Run <code>uv run train.py</code> to train your first model; each run appends a row to <code>results.tsv</code> and the progress chart appears here on reload.';
       return;
     }
+    $('chart-svg').style.display = 'block';
 
-    const parsed = rows.map((r, i) => ({ ...r, idx: i + 1, date: new Date(r.timestamp) }));
+    const parsed = rows.map((r, i) => ({ ...r, idx: i + 1 }));
 
     // IQR-based outlier clipping for y-axis
     const vals  = [...parsed.map(r => r.val_bpb)].sort((a, b) => a - b);
@@ -784,11 +775,10 @@ _HTML = """\
     const ML = 68, MR = 24, MT = 28, MB = 44;
     const pw = W - ML - MR, ph = H - MT - MB;
 
-    const tMin   = Math.min(...parsed.map(r => +r.date));
-    const tMax   = Math.max(...parsed.map(r => +r.date));
-    const tRange = tMax - tMin || 1;
+    const n      = parsed.length;
+    const xRange = Math.max(1, n - 1);
 
-    const xS = t  => ML + ((+t - tMin) / tRange) * pw;
+    const xS = i  => n === 1 ? ML + pw / 2 : ML + ((i - 1) / xRange) * pw;
     const yS = v  => { const c = Math.max(yLo, Math.min(yHi, v)); return MT + (1 - (c - yLo) / (yHi - yLo)) * ph; };
 
     let svg = '';
@@ -802,14 +792,12 @@ _HTML = """\
       svg += `<text x="${ML - 5}" y="${+cy + 3.5}" text-anchor="end" font-size="10" fill="#9ca3af">${y.toFixed(4)}</text>`;
     }
 
-    // X grid + tick labels
-    const msOptions = [5, 10, 15, 20, 30].map(m => m * 60000);
-    const msStep    = msOptions.find(s => tRange / s <= 9) || 3600000;
-    const xTickStart = Math.ceil(tMin / msStep) * msStep;
-    for (let t = xTickStart; t <= tMax + msStep * 0.01; t += msStep) {
+    // X grid + tick labels (experiment index)
+    const xTickStep = Math.max(1, Math.ceil(n / 9));
+    for (let t = 1; t <= n; t += xTickStep) {
       const cx = xS(t).toFixed(1);
       svg += `<line x1="${cx}" y1="${MT}" x2="${cx}" y2="${MT + ph}" stroke="#e5e7eb" stroke-width="1"/>`;
-      svg += `<text x="${cx}" y="${MT + ph + 14}" text-anchor="middle" font-size="10" fill="#9ca3af">${fmtAxisTime(new Date(t))}</text>`;
+      svg += `<text x="${cx}" y="${MT + ph + 14}" text-anchor="middle" font-size="10" fill="#9ca3af">${t}</text>`;
     }
 
     // Axes
@@ -818,7 +806,7 @@ _HTML = """\
 
     // Axis labels
     svg += `<text transform="rotate(-90)" x="${-(MT + ph / 2)}" y="13" text-anchor="middle" font-size="10" fill="#6b7280">Validation BPB (lower is better)</text>`;
-    svg += `<text x="${ML + pw / 2}" y="${H - 4}" text-anchor="middle" font-size="10" fill="#6b7280">Time</text>`;
+    svg += `<text x="${ML + pw / 2}" y="${H - 4}" text-anchor="middle" font-size="10" fill="#6b7280">Experiment #</text>`;
 
     // Running-best step line (connects only models that improved on prior best)
     const keptImproving = [];
@@ -832,7 +820,7 @@ _HTML = """\
     if (keptImproving.length) {
       let stepPath = '';
       keptImproving.forEach((r, i) => {
-        const cx = xS(r.date).toFixed(1);
+        const cx = xS(r.idx).toFixed(1);
         const cy = yS(r.runBest).toFixed(1);
         if (i === 0) { stepPath = `M${cx},${cy}`; }
         else         { stepPath += ` H${cx} V${cy}`; }
@@ -847,20 +835,20 @@ _HTML = """\
     const clipped   = parsed.filter(r => r.val_bpb > clipHi);
 
     discarded.forEach(r => {
-      const cx = xS(r.date).toFixed(1), cy = yS(r.val_bpb).toFixed(1);
+      const cx = xS(r.idx).toFixed(1), cy = yS(r.val_bpb).toFixed(1);
       svg += `<circle cx="${cx}" cy="${cy}" r="10" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1.5" class="chart-pt" data-idx="${r.idx - 1}"/>`;
       svg += `<text x="${cx}" y="${+cy + 3.5}" text-anchor="middle" font-size="9" fill="#6b7280" pointer-events="none">${r.idx}</text>`;
     });
 
     kept.forEach(r => {
-      const cx = xS(r.date).toFixed(1), cy = yS(r.val_bpb).toFixed(1);
+      const cx = xS(r.idx).toFixed(1), cy = yS(r.val_bpb).toFixed(1);
       svg += `<circle cx="${cx}" cy="${cy}" r="13" fill="#10b981" stroke="#059669" stroke-width="2" class="chart-pt" data-idx="${r.idx - 1}" style="cursor:pointer"/>`;
       svg += `<text x="${cx}" y="${+cy + 4}" text-anchor="middle" font-size="10" fill="white" font-weight="700" pointer-events="none">${r.idx}</text>`;
       svg += `<text x="${cx}" y="${+cy - 17}" text-anchor="start" font-size="9" fill="#059669" transform="rotate(-35,${cx},${+cy - 17})" pointer-events="none">${escapeHtml(r.description)}</text>`;
     });
 
     clipped.forEach(r => {
-      const cx = xS(r.date).toFixed(1), ty = MT + 12;
+      const cx = xS(r.idx).toFixed(1), ty = MT + 12;
       svg += `<polygon points="${cx},${ty - 11} ${+cx - 9},${ty + 5} ${+cx + 9},${ty + 5}" fill="#9ca3af" stroke="#6b7280" stroke-width="1.5" class="chart-pt" data-idx="${r.idx - 1}"/>`;
       svg += `<text x="${cx}" y="${ty + 20}" text-anchor="middle" font-size="9" fill="#d97706">${r.val_bpb.toFixed(4)}</text>`;
       svg += `<text x="${cx}" y="${ty + 33}" text-anchor="middle" font-size="9" fill="#6b7280" font-weight="700">${r.idx}</text>`;
@@ -895,7 +883,7 @@ _HTML = """\
           `BPB: ${r.val_bpb.toFixed(6)}\\n` +
           `Status: ${r.status}\\n` +
           `Time: ${new Date(r.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}\\n` +
-          `Memory: ${r.memory_gb} GB`;
+          `Memory: ${r.memory_gb == null ? '—' : r.memory_gb + ' GB'}`;
         tip.style.display = 'block';
         tip.style.left = (e.clientX + 14) + 'px';
         tip.style.top  = (e.clientY - 12) + 'px';
@@ -908,13 +896,19 @@ _HTML = """\
     try {
       const resp = await fetch('/results');
       if (!resp.ok) throw new Error(resp.statusText);
-      const { rows } = await resp.json();
+      const { rows, skipped } = await resp.json();
       _results = rows;
       drawChart();
+      if (skipped) {
+        const s = $('chart-status');
+        s.style.display = 'block';
+        s.textContent = skipped + ' unplottable row(s) in results.tsv were skipped.';
+      }
 
       // Identify baseline (first kept) and best (lowest val_bpb kept)
       const kept = rows.filter(r => r.status === 'keep');
       if (kept.length) {
+        $('card-best').style.display = '';
         const first = kept[0];
         const best  = kept.reduce((a, b) => a.val_bpb <= b.val_bpb ? a : b);
         _baselineModelId = _commitToModelId[first.commit] || null;
@@ -922,8 +916,12 @@ _HTML = """\
         $('label-baseline').textContent = 'Baseline \u2014 ' + (first.description || first.commit);
         $('label-best').textContent     = (best.commit === first.commit ? 'Best / Latest' : 'Best') +
                                           ' \u2014 ' + (best.description || best.commit);
+      } else {
+        _baselineModelId = null;
+        _bestModelId     = null;
+        $('label-baseline').textContent = 'Model \u2014 active checkpoint';
+        $('card-best').style.display = 'none';
       }
-      if (!rows.length) $('chart-status').textContent = 'No results yet.';
     } catch (err) {
       $('chart-status').textContent = 'Could not load results: ' + err.message;
     }
@@ -1047,6 +1045,13 @@ _HTML = """\
 </html>
 """
 
+# 16x16 PNG favicon (dark slate background, emerald square) served at /favicon.ico
+# so the browser stops logging a 404 on every page load.
+_FAVICON_PNG = base64.b64decode(
+    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAIElEQVR42mMQlFD/TwlmGIYG"
+    "COxsxItHDRgZBozAvAAAO0qNkB8R+7AAAAAASUVORK5CYII="
+)
+
 
 # ---------------------------------------------------------------------------
 # FastAPI app
@@ -1065,9 +1070,6 @@ def build_app(model_store: ModelStore) -> FastAPI:
         temperature: float = 0.0
         top_k: int = 0
         model_id: str | None = None
-
-    class SelectModelRequest(BaseModel):
-        model_id: str
 
     @app.post("/generate")
     def generate(req: GenerateRequest):
@@ -1096,32 +1098,44 @@ def build_app(model_store: ModelStore) -> FastAPI:
     def models():
         return {"models": model_store.list_models()}
 
-    @app.post("/models/select")
-    def select_model(req: SelectModelRequest):
-        try:
-            entry = model_store.select(req.model_id)
-        except KeyError as exc:
-            raise HTTPException(status_code=404, detail=str(exc)) from exc
-        return {"ok": True, "active": entry}
+    @app.get("/favicon.ico", include_in_schema=False)
+    def favicon():
+        return Response(content=_FAVICON_PNG, media_type="image/png")
 
     @app.get("/results")
     def results_data():
         path = Path("results.tsv")
         if not path.exists():
-            return {"rows": []}
+            return {"rows": [], "skipped": 0}
         rows = []
-        with path.open(newline="") as f:
+        skipped = 0
+        with path.open(newline="", encoding="utf-8") as f:
             reader = csv.DictReader(f, delimiter="\t")
             for r in reader:
+                timestamp = (r.get("timestamp") or "").strip()
+                raw_bpb = (r.get("val_bpb") or "").strip()
+                try:
+                    val_bpb = float(raw_bpb)
+                    datetime.fromisoformat(timestamp)
+                except ValueError:
+                    skipped += 1
+                    continue
+                if not math.isfinite(val_bpb) or val_bpb <= 0:
+                    skipped += 1
+                    continue
+                try:
+                    memory_gb = float((r.get("memory_gb") or "").strip())
+                except ValueError:
+                    memory_gb = None
                 rows.append({
-                    "timestamp": r["timestamp"],
-                    "commit":    r["commit"],
-                    "val_bpb":   float(r["val_bpb"]),
-                    "memory_gb": float(r.get("memory_gb", 0)),
-                    "status":    r["status"],
-                    "description": r["description"],
+                    "timestamp": timestamp,
+                    "commit": (r.get("commit") or "").strip(),
+                    "val_bpb": val_bpb,
+                    "memory_gb": memory_gb,
+                    "status": (r.get("status") or "unknown").strip(),
+                    "description": (r.get("description") or "").strip(),
                 })
-        return {"rows": rows}
+        return {"rows": rows, "skipped": skipped}
 
     return app
 
