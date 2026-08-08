@@ -12,12 +12,18 @@
 # Prerequisites:
 #   uv run prepare.py   (one-time setup)
 #   uv run train.py     (produces checkpoint_pre_eval.pt)
+#
+# Public hosting: setting SPACE_MODE=1 switches this same file into public-demo
+# mode — binds 0.0.0.0:$PORT, clamps generation requests, and adds a banner
+# pointing at the walkthrough. Unset (the default), nothing below changes.
+# See deploy/ for the container that runs it.
 
 import argparse
 import base64
 import csv
 import json
 import math
+import os
 import socket
 import sys
 import threading
@@ -1045,6 +1051,16 @@ _HTML = """\
 </html>
 """
 
+# Public-demo mode (see the note at the top of this file). Everything gated on
+# this flag is inert when the env var is unset, which is the local default.
+_SPACE_MODE = os.environ.get("SPACE_MODE") == "1"
+_SPACE_BANNER = (
+    '<p style="margin-top:6px;font-size:0.82rem;">'
+    "This is a public demo of models trained by an autonomous research loop &mdash; "
+    '<a href="https://github.com/aroughidea/autoresearch-win-rtx/blob/master/WALKTHROUGH.md" '
+    'target="_blank" rel="noopener">how these were made</a>.</p>'
+)
+
 # 16x16 PNG favicon (dark slate background, emerald square) served at /favicon.ico
 # so the browser stops logging a 404 on every page load.
 _FAVICON_PNG = base64.b64decode(
@@ -1062,6 +1078,11 @@ def build_app(model_store: ModelStore) -> FastAPI:
 
     @app.get("/", response_class=HTMLResponse)
     def root():
+        if _SPACE_MODE:
+            # "local" is wrong on a public URL; retitle, then add the banner
+            # after the header paragraph.
+            page = _HTML.replace("local text generation", "a model trained by an AI researcher")
+            return page.replace("</p>", "</p>" + _SPACE_BANNER, 1)
         return _HTML
 
     class GenerateRequest(BaseModel):
@@ -1073,6 +1094,11 @@ def build_app(model_store: ModelStore) -> FastAPI:
 
     @app.post("/generate")
     def generate(req: GenerateRequest):
+        if _SPACE_MODE:
+            # Public-site guards: silently clamp, never error.
+            req.prompt = req.prompt[:2000]
+            req.max_tokens = min(req.max_tokens, 500)
+            req.top_k = min(req.top_k, 200)
         if req.model_id:
             try:
                 model, tokenizer, device, _ = model_store.get_bundle_by_id(req.model_id)
@@ -1174,9 +1200,14 @@ def main() -> None:
     )
     app = build_app(model_store)
 
-    port = _find_free_port(args.port)
-    if port != args.port:
-        print(f"Port {args.port} in use, using {port} instead.")
+    if _SPACE_MODE:
+        host = "0.0.0.0"
+        port = int(os.environ.get("PORT", "7860"))
+    else:
+        host = "127.0.0.1"
+        port = _find_free_port(args.port)
+        if port != args.port:
+            print(f"Port {args.port} in use, using {port} instead.")
 
     if not args.no_browser:
         def _open():
@@ -1184,7 +1215,7 @@ def main() -> None:
             webbrowser.open(f"http://localhost:{port}")
         threading.Thread(target=_open, daemon=True).start()
 
-    uvicorn.run(app, host="127.0.0.1", port=port)
+    uvicorn.run(app, host=host, port=port)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,34 @@
+# Fly.io config for the public demo. Deploy from the REPO ROOT:
+#   fly deploy --config deploy/fly.toml
+# (The build context must be the repo root so the image can pick up chat.py,
+# results.tsv and the committed checkpoints. See deploy/README.md.)
+
+app = "autoresearch-demo"
+primary_region = "sjc"
+
+[build]
+  # Relative to this file's directory; the build CONTEXT is still the repo
+  # root, because that is where `fly deploy` is run from.
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 7860
+  force_https = true
+  # Sleep when idle, wake on request. Fly's proxy holds the incoming request
+  # while the machine wakes (~12s from cold), so a visitor sees a slow first
+  # load rather than an error.
+  auto_stop_machines = "suspend"
+  auto_start_machines = true
+  min_machines_running = 0
+
+  [http_service.concurrency]
+    type = "requests"
+    # Generation is CPU-bound; keep queues shallow so a burst of visitors
+    # waits rather than thrashing one small machine.
+    soft_limit = 4
+    hard_limit = 8
+
+[[vm]]
+  size = "shared-cpu-1x"
+  # Both models load at once for the side-by-side comparison.
+  memory = "2gb"

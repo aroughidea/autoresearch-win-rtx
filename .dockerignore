@@ -1,0 +1,20 @@
+# The deploy image builds from the repo root (see deploy/Dockerfile), so keep
+# the build context small — .git alone is ~1 GB and .venv several more.
+.git
+.venv
+__pycache__
+*.pyc
+.claude
+.playwright-mcp
+
+# Large or machine-local artifacts the image never needs.
+checkpoint_pre_eval.pt
+*.log
+progress.png
+analysis.ipynb
+
+# Only the two demo checkpoints are COPYed explicitly; ignore the rest of the
+# archive so it never enters the context.
+checkpoints/*
+!checkpoints/20260523T155743-0700_75027e8.pt
+!checkpoints/20260523T175831-0700_e9fffd9.pt
