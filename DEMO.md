@@ -45,7 +45,7 @@ experiment boundary.
 
 ### 1b. Morning verification checklist
 
-Run through all five, in order:
+Run through all six, in order:
 
 - [ ] **results.tsv is fresh and well-formed:**
   ```powershell
@@ -95,6 +95,15 @@ Run through all five, in order:
   ```powershell
   uv run train.py --smoke-test
   ```
+
+- [ ] **Wake the hosted demo and leave the tab open.** Load
+      <https://autoresearch-demo.fly.dev/> once in a browser tab. It is the same UI on one
+      small shared Fly.io machine that **suspends when idle and takes ~12 seconds to wake**;
+      after that every page load is ~0.07 s. Fly holds the request while it wakes, so a
+      cold visit is slow, never an error. Confirm the progress chart and both panes
+      render, then leave the tab open. It will suspend again overnight — **reload it
+      during room setup (section 4)** so it is warm if you show it live or need it as
+      the Tier 2 fallback.
 
 - [ ] **Capture the fallback screenshots** — see section 3 for the list.
 
@@ -244,7 +253,7 @@ git, git-lfs. WALKTHROUGH.md is the supplemental reading.
 
 ## 3. Fallbacks — decide by T-2 min before the segment
 
-Make the call **two minutes before you start**, not mid-segment. Three tiers:
+Make the call **two minutes before you start**, not mid-segment. Four tiers:
 
 **Tier 1 — live run fails or machine misbehaves** (run crashes, GPU busy, run overruns
 its slot — program.md's own rule: past 10 minutes, kill it and treat as a failure):
@@ -252,15 +261,24 @@ skip the [2–3] and [8–10] blocks. Yesterday's results are already in the TSV
 narrate the session from **WALKTHROUGH.md's session table** instead, then do the reveal
 ([10–14]) as planned. You lose the live gamble, not the story.
 
-**Tier 2 — chat.py fails**: do the reveal in the terminal with `generate.py`, running
-baseline vs best sequentially on the same prompt:
+**Tier 2 — chat.py fails, but the machine and the network are fine**: switch to the
+hosted copy at **<https://autoresearch-demo.fly.dev/>** — the tab you woke in 1b. It is
+the same UI serving the same two models (Baseline `75027e8` / Best `e9fffd9`), so the
+reveal looks exactly like the one you rehearsed, side-by-side panes and all. Two
+caveats: generation there is capped (max 500 tokens, top-k ≤ 200), and if the tab has
+gone cold the first load takes ~12 seconds — start it loading *before* you say anything.
+The chart on that page shows the committed rows, not the row you logged live, so narrate
+the live row from `results.tsv` in VS Code instead of reloading for it.
+
+**Tier 3 — chat.py fails and you have no usable network**: do the reveal in the terminal
+with `generate.py`, running baseline vs best sequentially on the same prompt:
 
 ```powershell
 uv run generate.py "<your tested prompt>" --checkpoint checkpoints/20260523T155743-0700_75027e8.pt
 uv run generate.py "<your tested prompt>" --checkpoint checkpoints/20260523T175831-0700_e9fffd9.pt
 ```
 
-**Tier 3 — total machine failure**: present from screenshots. Capture these the night
+**Tier 4 — total machine failure**: present from screenshots. Capture these the night
 before (after the 1b checklist passes), full-window, at presentation font size:
 
 1. chat.py full page — progress chart plus both panes populated with a tested prompt.
@@ -351,8 +369,23 @@ picks it up.
 
 ### Refresh downstream artifacts
 
-- If a hosted comparison site is deployed (a published copy of the Baseline-vs-Best
-  page or progress chart), regenerate it from the updated `results.tsv` and redeploy so
-  it matches what the class saw.
 - Optionally re-run `analysis.ipynb` (**Run All** in VS Code) to refresh the progress
   plot with the demo row included.
+- The hosted demo does not update itself — see **Give the class the link** below if you
+  want today's row or checkpoint reflected there.
+
+### Give the class the link
+
+The segment's afterlife is one URL: **https://autoresearch-demo.fly.dev/** — public,
+free, no login, the same Baseline-vs-Best comparison they just watched, plus the
+progress chart and the vocabulary browser. Send it with the follow-up material so
+students can keep poking at the models on their own machines; the site's banner already
+links "how these were made" to `WALKTHROUGH.md`. Tell them the first load takes ~12
+seconds while the idle machine wakes, and that it is a text-completion model, not a
+chat assistant — feed it the opening of a story, not a question.
+
+It is a snapshot, not a mirror of this repo: it serves whatever checkpoints were
+committed when it was last built. If today's run produced a new best and you want
+students prompting *that* model, the deployment source lives in `deploy/` (Dockerfile +
+fly.toml, built from the repo root) and the redeploy procedure is in
+`deploy/README.md`.

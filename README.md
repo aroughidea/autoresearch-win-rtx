@@ -8,6 +8,12 @@
 
 The idea: give an AI agent a small but real LLM training setup and let it experiment autonomously for hours at a time. It modifies the code, trains for 5 minutes, checks if the result improved, keeps or discards, and repeats. When you come back, you have a log of experiments and (hopefully) a better model. The training code here is a simplified single-GPU implementation of [nanochat](https://github.com/karpathy/nanochat). The core idea is that you're not touching any of the Python files like you normally would as a researcher. Instead, you are programming the `program.md` Markdown files that provide context to the AI agents and set up your autonomous research org. The default `program.md` in this repo is intentionally kept as a bare bones baseline, though it's obvious how one would iterate on it over time to find the "research org code" that achieves the fastest research progress, how you'd add more agents to the mix, etc. A bit more context on this project is here in this [tweet](https://x.com/karpathy/status/2029701092347630069).
 
+## Try it live (no setup)
+
+**https://autoresearch-demo.fly.dev/** — the same `chat.py` UI this repo ships, hosted and public. No install, no GPU, no login. You get the two models from the session in [`WALKTHROUGH.md`](WALKTHROUGH.md) side by side — **Baseline** (`75027e8`, val_bpb 0.520096) and **Best** (`e9fffd9`, 0.518708) — plus the 16-experiment progress chart and the vocabulary browser. Type a prompt, watch both continue it, and see what one afternoon of tuning is actually worth.
+
+One honest caveat: the machine sleeps when nobody is using it, so **the first page load takes ~12 seconds** while it wakes up. Every load after that is instant (~0.07 s) until it goes back to sleep. It runs CPU-only, which is fine — these are ~19M-parameter models. Generation is capped there (max 500 tokens, top-k ≤ 200, prompts up to 2,000 characters); everything else matches what you get locally.
+
 ## Reading this repo
 
 This repo is two things at once: a working research rig you can run yourself, and the record of an actual autonomous research session that already ran here. The files you see are the live state — the current best configuration, the accumulated scoreboard, the latest checkpoint. The story of how they got that way lives in git history, materialized for humans in a few places:
@@ -18,6 +24,7 @@ This repo is two things at once: a working research rig you can run yourself, an
 | [`WALKTHROUGH.md`](WALKTHROUGH.md) | The guided tour of the session, failures included |
 | [`program.md`](program.md) | The entire "program" the agent executes |
 | [`chat.py`](chat.py) | A browser UI for the models it produced — switch checkpoints to compare them |
+| [Live demo](https://autoresearch-demo.fly.dev/) | That same UI, hosted — meet the models with zero setup (first load ~12 s) |
 | [`analysis.ipynb`](analysis.ipynb) + [`progress.png`](progress.png) | The score trajectory |
 | `git log` | The raw lab notebook |
 
