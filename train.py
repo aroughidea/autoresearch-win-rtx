@@ -233,7 +233,9 @@ def _save_autotune_entries(path, entries):
         print(f"Warning: could not write autotune cache ({exc}).")
 
 
-def _make_autotune_cache_key(runtime):
+def _make_autotune_cache_key(runtime, vocab_size):
+    # vocab_size is part of the key: a larger vocabulary needs a smaller batch, and on Windows an
+    # oversized batch silently spills past GPU memory instead of raising out-of-memory.
     cc = f"{runtime.gpu_cc[0]}.{runtime.gpu_cc[1]}"
     return "|".join(
         [
@@ -243,6 +245,7 @@ def _make_autotune_cache_key(runtime):
             torch.__version__,
             platform.system(),
             str(MAX_SEQ_LEN),
+            f"vocab{vocab_size}",
         ]
     )
 
@@ -1004,7 +1007,7 @@ def _autotune_train_candidate(runtime, tokenizer, vocab_size, train_candidates):
         return None
 
     cache_path = _get_autotune_cache_path()
-    cache_key = _make_autotune_cache_key(runtime)
+    cache_key = _make_autotune_cache_key(runtime, vocab_size)
     refresh_cache = os.environ.get("AUTORESEARCH_AUTOTUNE_REFRESH", "0") == "1"
     cache_entries = _load_autotune_entries(cache_path)
     if refresh_cache:
