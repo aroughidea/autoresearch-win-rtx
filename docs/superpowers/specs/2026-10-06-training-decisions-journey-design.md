@@ -1,6 +1,6 @@
 # Training Decisions: a learning journey for autoresearch
 
-Status: draft for review · 2026-10-06 · Thomas J McLeish with Claude
+Status: in progress · components 1 (capture) and 2 (dataset and tokenizer options) built · updated 2026-10-07 · Thomas J McLeish with Claude
 
 ## Purpose
 
@@ -240,9 +240,18 @@ it (`prepare.py` is read-only to the agent; `program.md` says the pair is the hu
 - **Phi-3 tokenizer:** Microsoft's `tokenizer.json` (MIT), loaded with the Hugging Face
   `tokenizers` library, a new dependency. Its score counts one extra byte per document for the
   leading word-boundary marker, about a 0.1% bias; documented, not corrected.
-- **No `train.py` change.** `Tokenizer.from_directory()` follows the active pair, and the
+- **`train.py`: one small change.** `Tokenizer.from_directory()` follows the active pair and the
   tokenizer object carries its `name` and `source`, which `capture.py` writes into the run
-  file's `tokenizer` field.
+  file. The only `train.py` change is a bug fix found in verification: the GPU-tuning cache
+  key now includes vocabulary size (a batch size tuned for 8,192 tokens was reused for
+  Phi-3's 32,015, needing 13 GB on a 12 GB card; Windows spilled silently and the score fell
+  from 0.574 to 0.710).
+- **The scorer guards the pair.** `evaluate_bpb` in `prepare.py` refuses to score any pair other
+  than the active one, so the agent cannot switch pair through its own `train.py`.
+- **Known gaps, deferred:** single Folktales paragraphs longer than 1,500 characters stay whole
+  (about 1.8% of tokens rarely train); `chat.py` does not check a checkpoint against the active
+  pair; the tuning-cache key still ignores model size, so an agent that deepens the model can
+  reuse a smaller model's batch size and spill silently on Windows (next fix).
 - **Out of scope:** chatting with models trained on different pairs side by side (`chat.py`
   uses the active pair); frontier vocabularies.
 - **Memory warning:** `prepare.py` warns that `gpt2` needs about 10 GB of GPU memory.
