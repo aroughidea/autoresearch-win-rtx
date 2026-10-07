@@ -814,6 +814,46 @@ N_KV_HEAD = 1  # MQA: all query heads share 1 KV head. None = full MHA (n_kv_hea
 EVAL_BATCH_SIZE = 8
 
 
+class LossScaler:
+    """Dynamic loss scaling for fp16 training (GPUs without bf16, e.g. RTX 20-series, T4).
+
+    Without it, small gradients round to zero in the fp16 backward pass and the
+    optimizers turn the remaining noise into full-size steps: the loss falls, then
+    climbs back toward 8-9. torch.amp.GradScaler cannot be used because the
+    embeddings are fp16 parameters, which it refuses to unscale.
+    Disabled (a no-op) under bf16.
+    """
+
+    def __init__(self, enabled, init_scale=2.0 ** 12, growth_interval=200):
+        self.enabled = enabled
+        self.scale = init_scale if enabled else 1.0
+        self.growth_interval = growth_interval
+        self.good_steps = 0
+
+    def backward(self, loss):
+        (loss * self.scale if self.enabled else loss).backward()
+
+    def unscale_and_check(self, params):
+        """Undo the scale on the gradients. False means overflow: skip this optimizer step."""
+        if not self.enabled:
+            return True
+        grads = [p.grad for p in params if p.grad is not None]
+        if not grads:
+            return True
+        torch._foreach_div_(grads, self.scale)
+        norms = torch.stack([g.float().norm() for g in grads])
+        if not torch.isfinite(norms).all():
+            for p in params:
+                p.grad = None
+            self.scale /= 2.0
+            self.good_steps = 0
+            return False
+        self.good_steps += 1
+        if self.good_steps % self.growth_interval == 0:
+            self.scale *= 2.0
+        return True
+
+
 def build_model_config(depth, vocab_size, runtime, use_activation_checkpointing=None):
     if use_activation_checkpointing is None:
         use_activation_checkpointing = runtime.use_activation_checkpointing
@@ -1119,6 +1159,8 @@ def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test
     total_training_time = 0.0
     step = 0
     last_loss = None
+    loss_scaler = LossScaler(enabled=runtime.amp_dtype == torch.float16)
+    params = list(model.parameters())
 
     while True:
         # Capture hook: runs before t0, so sampling never counts toward the time budget.
@@ -1130,7 +1172,7 @@ def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test
                 loss = model(x, y)
             train_loss = loss.detach()
             loss = loss / grad_accum_steps
-            loss.backward()
+            loss_scaler.backward(loss)
             x, y, epoch = next(train_loader)
 
         progress = min(total_training_time / max(target_training_seconds, 1e-6), 1.0)
@@ -1142,7 +1184,8 @@ def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test
             if group["kind"] == "muon":
                 group["momentum"] = muon_momentum
                 group["weight_decay"] = muon_weight_decay
-        optimizer.step()
+        if loss_scaler.unscale_and_check(params):
+            optimizer.step()
         model.zero_grad(set_to_none=True)
 
         train_loss_f = train_loss.item()

@@ -338,3 +338,17 @@ def test_begin_attempt_clears_previous_attempts_error(tmp_path):
     cap.on_step(FakeModel(), 0.0, 0, None)
     assert cap.error is None
     assert [s["t_s"] for s in cap.snapshots] == [0.0]
+
+
+def test_git_lookup_allows_for_slow_process_start(monkeypatch):
+    """Windows can stall a process launch for several seconds (antivirus scanning);
+    a short timeout would mislabel a real run as _nogit and break the scoreboard join."""
+    seen = {}
+
+    def fake_run(cmd, **kwargs):
+        seen.update(kwargs)
+        return subprocess.CompletedProcess(cmd, 0, stdout="abc1234\n2026-10-07T09:00:00-07:00\n", stderr="")
+
+    monkeypatch.setattr(capture.subprocess, "run", fake_run)
+    assert capture.git_commit_info()[0] == "abc1234"
+    assert seen["timeout"] >= 30
