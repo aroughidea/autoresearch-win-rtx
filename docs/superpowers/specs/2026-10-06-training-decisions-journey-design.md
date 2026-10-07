@@ -2,6 +2,29 @@
 
 Status: in progress · components 1 (capture) and 2 (dataset and tokenizer options) built · updated 2026-10-07 · Thomas J McLeish with Claude
 
+## Learning objectives
+
+**Core objective:** participants understand that *changing a design decision changes the final
+experience in a specific way*. The goal is understanding: they are not asked to find a best
+recipe or to hand in explanations.
+
+After the demo and the journey, participants can:
+
+1. **Follow how a model gets made:** get and understand a dataset, set the tokens, build a
+   model, use it, and iterate on the build at the algorithmic level.
+2. **Speak to how a dataset's qualities show up in the experience,** having trained on one
+   dataset and later on another. The score cannot compare datasets; the writing can.
+3. **Speak to how the tokenizer shapes the model:** vocabulary size and origin change the
+   model's size, how far it trains in a fixed time, and how it writes.
+4. **Experience consequences and compare decision sets:** watch a model grow over training
+   time, and set two recipes side by side.
+5. **Compare models through use,** in the chat page, alongside the score.
+6. **Understand AI-driven research:** the agent changes the algorithm, so no deep expertise is
+   needed; it evolves the recipe run by run and keeps or discards each change by a metric
+   (`val_bpb`), because many of its gains are too small to read.
+7. **Know where training happens and how it is recorded:** their own hardware, rented or cloud
+   training services, and GitHub as the lab record.
+
 ## Purpose
 
 Workshop participants understand that **changing a design decision changes the final
