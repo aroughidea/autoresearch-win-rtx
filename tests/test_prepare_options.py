@@ -121,3 +121,32 @@ def test_get_token_bytes_follows_the_named_tokenizer(clean_env):
     prepare._set_active_tokenizer("own")
     assert prepare.get_token_bytes(dataset="tinystories", tokenizer="gpt2").item() == 2
     assert prepare.get_token_bytes(dataset="tinystories").item() == 1
+
+
+def test_pack_paragraphs_joins_wrapped_lines_and_caps_length():
+    raw = "Lovely Ilonka\n\nThere was once\na king's son.\n\n\nHe wished to marry.\n\n" + ("word " * 400)
+    docs = prepare._pack_paragraphs(raw, max_chars=80)
+    assert docs[0] == "Lovely Ilonka\n\nThere was once a king's son.\n\nHe wished to marry."
+    assert docs[1].startswith("word word") and len(docs) == 2
+
+
+def test_folktales_splits():
+    assert prepare.DATASET_CONFIGS["folktales"]["splits"] == {"test": (0, 0), "val": (0, 300), "train": (300, None)}
+
+
+def test_main_prepares_and_activates_the_pair(clean_env, monkeypatch):
+    calls = []
+    monkeypatch.setattr(prepare, "download_data", lambda d: calls.append(("download", d)))
+    monkeypatch.setattr(prepare, "train_tokenizer", lambda d, t: calls.append(("tokenizer", d, t)))
+    assert prepare.main(["--dataset", "folktales", "--tokenizer", "phi3"]) == 0
+    assert calls == [("download", "folktales"), ("tokenizer", "folktales", "phi3")]
+    assert (clean_env / "active_dataset.txt").read_text(encoding="utf-8").strip() == "folktales"
+    assert (clean_env / "active_tokenizer.txt").read_text(encoding="utf-8").strip() == "phi3"
+
+
+def test_main_without_flags_keeps_the_active_pair(clean_env, monkeypatch):
+    monkeypatch.setattr(prepare, "download_data", lambda d: None)
+    monkeypatch.setattr(prepare, "train_tokenizer", lambda d, t: None)
+    prepare._set_active_tokenizer("gpt2")
+    prepare.main([])
+    assert (clean_env / "active_tokenizer.txt").read_text(encoding="utf-8").strip() == "gpt2"

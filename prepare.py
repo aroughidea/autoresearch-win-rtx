@@ -82,6 +82,15 @@ ACTIVE_DATASET_PATH = os.path.join(CACHE_DIR, "active_dataset.txt")
 ACTIVE_TOKENIZER_PATH = os.path.join(CACHE_DIR, "active_tokenizer.txt")
 
 DATASET_CONFIGS = {
+    "folktales": {
+        # merve/folk-mythology-tales (CC0 1.0 per its card), packed into documents by _pack_paragraphs.
+        "filename": "folktales.parquet",
+        "splits": {
+            "test": (0, 0),
+            "val": (0, 300),
+            "train": (300, None),
+        },
+    },
     "tinystories": {
         "filename": "tinystories_gpt4_clean.parquet",
         "url": "https://huggingface.co/datasets/karpathy/tinystories-gpt4-clean/resolve/main/tinystories_gpt4_clean.parquet",
@@ -264,8 +273,43 @@ def _download_tinystories_file(dataset_name):
     print(f"Data: downloaded {filename} to {filepath}")
 
 
+def _pack_paragraphs(raw_text, max_chars=1500):
+    """Blank-line paragraphs, wrapped lines joined, packed in order into documents of at most max_chars."""
+    paragraphs = [" ".join(p.split()) for p in re.split(r"\n\s*\n", raw_text) if p.strip()]
+    docs, current = [], ""
+    for paragraph in paragraphs:
+        if current and len(current) + len(paragraph) > max_chars:
+            docs.append(current)
+            current = paragraph
+        else:
+            current = f"{current}\n\n{paragraph}" if current else paragraph
+    if current:
+        docs.append(current)
+    return docs
+
+
+def _build_folktales_parquet(dataset_name):
+    import pyarrow as pa
+
+    path = _tiny_parquet_path(dataset_name)
+    if os.path.exists(path):
+        print(f"Data: folktales already built at {path}")
+        return
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    response = requests.get(FOLKTALES_TXT_URL, timeout=120)
+    response.raise_for_status()
+    docs = _pack_paragraphs(response.text)
+    temp_path = path + ".tmp"
+    pq.write_table(pa.table({"text": docs}), temp_path)
+    os.replace(temp_path, path)
+    print(f"Data: folktales -> {len(docs):,} documents, {sum(map(len, docs)):,} characters at {path}")
+
+
 def download_data(dataset_name):
     dataset = _resolve_dataset_name(dataset_name)
+    if dataset == "folktales":
+        _build_folktales_parquet(dataset)
+        return
     _download_tinystories_file(dataset)
 
 
@@ -693,28 +737,43 @@ def evaluate_bpb(model, tokenizer, batch_size, device="cuda", dataset=None, eval
 # Main
 # ---------------------------------------------------------------------------
 
-if __name__ == "__main__":
+def main(argv=None):
     parser = argparse.ArgumentParser(description="Prepare data and tokenizer for autoresearch")
     parser.add_argument(
         "--dataset",
         choices=DATASET_CHOICES,
         default=None,
-        help=(
-            "Dataset profile to prepare. If omitted, resolves in order: "
-            "AUTORESEARCH_DATASET, active_dataset.txt, then default tinystories."
-        ),
+        help="Dataset to prepare and make active. Default: AUTORESEARCH_DATASET, then the active one, then tinystories.",
     )
-    args = parser.parse_args()
+    parser.add_argument(
+        "--tokenizer",
+        choices=TOKENIZER_CHOICES,
+        default=None,
+        help="Tokenizer to build or fetch and make active: own (trained on the dataset), phi3 or gpt2. "
+             "Default: AUTORESEARCH_TOKENIZER, then the active one, then own.",
+    )
+    args = parser.parse_args(argv)
 
     dataset_name = _resolve_dataset_name(args.dataset)
+    tokenizer_name = _resolve_tokenizer_name(args.tokenizer)
 
     print(f"Cache directory: {CACHE_DIR}")
     print(f"Dataset: {dataset_name}")
+    print(f"Tokenizer: {tokenizer_name} ({TOKENIZER_SOURCES[tokenizer_name]})")
     print()
 
     download_data(dataset_name)
     print()
-    train_tokenizer(dataset_name)
+    train_tokenizer(dataset_name, tokenizer_name)
     _set_active_dataset(dataset_name)
+    _set_active_tokenizer(tokenizer_name)
     print()
-    print(f"Done! Ready to train. Active dataset is now '{dataset_name}'.")
+    if tokenizer_name == "gpt2":
+        print("Note: the GPT-2 vocabulary needs about 10 GB of GPU memory; it will not fit on 8 GB cards.")
+    print(f"Done! Ready to train. Active: dataset '{dataset_name}', tokenizer '{tokenizer_name}'.")
+    print("val_bpb compares across tokenizers on the same dataset, never across datasets.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
