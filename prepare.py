@@ -330,9 +330,10 @@ def text_iterator(dataset_name=None, max_chars=1_000_000_000, doc_cap=10_000):
             return
 
 
-def train_tokenizer(dataset_name=None):
+def train_tokenizer(dataset_name=None, tokenizer_name=None):
     dataset = _resolve_dataset_name(dataset_name)
-    tokenizer_dir = _tokenizer_dir(dataset)
+    tokenizer = _resolve_tokenizer_name(tokenizer_name)
+    tokenizer_dir = _tokenizer_dir(dataset, tokenizer)
     tokenizer_pkl = os.path.join(tokenizer_dir, "tokenizer.pkl")
     token_bytes_path = os.path.join(tokenizer_dir, "token_bytes.pt")
 
@@ -341,6 +342,9 @@ def train_tokenizer(dataset_name=None):
         return
 
     os.makedirs(tokenizer_dir, exist_ok=True)
+    if tokenizer != DEFAULT_TOKENIZER:
+        _build_standard_tokenizer(tokenizer, tokenizer_dir, dataset)
+        return
 
     parquet_files = list_parquet_files(dataset)
     if len(parquet_files) < 1:
@@ -395,6 +399,102 @@ def train_tokenizer(dataset_name=None):
     decoded = enc.decode(encoded)
     assert decoded == test, f"Tokenizer roundtrip failed: {test!r} -> {decoded!r}"
     print(f"Tokenizer: sanity check passed (vocab_size={enc.n_vocab})")
+
+
+class HFEncoding:
+    """A Hugging Face tokenizer.json behind the small tiktoken-shaped interface Tokenizer uses."""
+
+    def __init__(self, json_str, reserved):
+        self._json = json_str
+        self._reserved = list(reserved)
+        self._build()
+
+    def _build(self):
+        from tokenizers import Tokenizer as HFTokenizer
+
+        self.tok = HFTokenizer.from_str(self._json)
+        self.tok.add_special_tokens(self._reserved)
+
+    def __getstate__(self):
+        return {"_json": self._json, "_reserved": self._reserved}
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        self._build()
+
+    @property
+    def n_vocab(self):
+        return self.tok.get_vocab_size(with_added_tokens=True)
+
+    def encode_single_token(self, text):
+        token_id = self.tok.token_to_id(text)
+        if token_id is None:
+            raise KeyError(text)
+        return token_id
+
+    def encode_ordinary(self, text):
+        return self.tok.encode(text, add_special_tokens=False).ids
+
+    def encode_ordinary_batch(self, texts, num_threads=8):
+        return [e.ids for e in self.tok.encode_batch(texts, add_special_tokens=False)]
+
+    def decode(self, ids):
+        return self.tok.decode(list(ids), skip_special_tokens=False)
+
+
+def _piece_byte_length(piece, special):
+    """Bytes of text a SentencePiece-style token stands for (0 for special tokens)."""
+    if special or piece is None:
+        return 0
+    if re.fullmatch(r"<0x[0-9A-Fa-f]{2}>", piece):
+        return 1
+    return len(piece.replace("\u2581", " ").encode("utf-8"))
+
+
+def _gpt2_encoding():
+    base = tiktoken.get_encoding("gpt2")
+    specials = dict(base._special_tokens)
+    for i, name in enumerate(SPECIAL_TOKENS):
+        specials[name] = base.n_vocab + i
+    return tiktoken.Encoding(
+        name="gpt2-reserved",
+        pat_str=base._pat_str,
+        mergeable_ranks=base._mergeable_ranks,
+        special_tokens=specials,
+    )
+
+
+def _phi3_encoding():
+    # Import through the module name so pickle records prepare.HFEncoding even when this file
+    # runs as __main__ (`uv run prepare.py`); otherwise train.py cannot load the tokenizer.
+    from prepare import HFEncoding as hf_encoding_class
+
+    response = requests.get(PHI3_TOKENIZER_URL, timeout=120)
+    response.raise_for_status()
+    return hf_encoding_class(response.text, SPECIAL_TOKENS)
+
+
+def _build_standard_tokenizer(tokenizer_name, tokenizer_dir, dataset):
+    """Fetch a published vocabulary instead of training one."""
+    if tokenizer_name == "gpt2":
+        enc = _gpt2_encoding()
+        special_ids = {enc.encode_single_token(t) for t in enc.special_tokens_set}
+        token_bytes = [0 if i in special_ids else len(enc.decode_single_token_bytes(i)) for i in range(enc.n_vocab)]
+    elif tokenizer_name == "phi3":
+        enc = _phi3_encoding()
+        special_ids = set(enc.tok.get_added_tokens_decoder().keys())
+        token_bytes = [_piece_byte_length(enc.tok.id_to_token(i), i in special_ids) for i in range(enc.n_vocab)]
+    else:
+        raise ValueError(tokenizer_name)
+    os.makedirs(tokenizer_dir, exist_ok=True)
+    with open(os.path.join(tokenizer_dir, "tokenizer.pkl"), "wb") as f:
+        pickle.dump(enc, f)
+    torch.save(torch.tensor(token_bytes, dtype=torch.int32), os.path.join(tokenizer_dir, "token_bytes.pt"))
+    with open(os.path.join(tokenizer_dir, "dataset.txt"), "w", encoding="utf-8") as f:
+        f.write(dataset + "\n")
+    sample = "Once upon a time, Lily found a shiny shell."
+    print(f"Tokenizer: {tokenizer_name} ready (vocab_size={enc.n_vocab}); "
+          f"'{sample}' is {len(enc.encode_ordinary(sample))} tokens")
 
 
 # ---------------------------------------------------------------------------

@@ -53,3 +53,42 @@ def test_tokenizer_folders(clean_env):
 
 def test_every_tokenizer_has_a_source():
     assert set(prepare.TOKENIZER_SOURCES) == set(prepare.TOKENIZER_CHOICES)
+
+
+import pickle
+
+
+def _tiny_hf_json():
+    from tokenizers import Tokenizer, models, pre_tokenizers
+
+    tok = Tokenizer(models.WordLevel({"[UNK]": 0, "once": 1, "upon": 2}, unk_token="[UNK]"))
+    tok.pre_tokenizer = pre_tokenizers.Whitespace()
+    return tok.to_str()
+
+
+def test_hfencoding_adds_reserved_tokens_and_pickles():
+    enc = prepare.HFEncoding(_tiny_hf_json(), prepare.SPECIAL_TOKENS)
+    again = pickle.loads(pickle.dumps(enc))
+    assert again.n_vocab == 3 + len(prepare.SPECIAL_TOKENS)
+    assert again.encode_single_token(prepare.BOS_TOKEN) == 3
+    assert again.encode_ordinary("once upon") == [1, 2]
+    assert again.encode_ordinary_batch(["once", "upon"]) == [[1], [2]]
+
+
+def test_piece_byte_length():
+    assert prepare._piece_byte_length("\u2581Once", special=False) == 5   # " Once"
+    assert prepare._piece_byte_length("ily", special=False) == 3
+    assert prepare._piece_byte_length("<0x0A>", special=False) == 1       # byte fallback
+    assert prepare._piece_byte_length("<s>", special=True) == 0
+
+
+def test_gpt2_encoding_adds_reserved_tokens():
+    build = prepare._gpt2_encoding  # a missing function must fail the test, not skip it
+    try:
+        enc = build()
+    except OSError as exc:  # the GPT-2 vocabulary downloads once; skip offline
+        pytest.skip(f"GPT-2 vocabulary unavailable: {exc}")
+    assert enc.n_vocab == 50257 + len(prepare.SPECIAL_TOKENS)
+    assert enc.encode_single_token(prepare.BOS_TOKEN) == 50257
+    ids = enc.encode_ordinary("Once upon a time")
+    assert len(ids) == 4 and enc.decode(ids) == "Once upon a time"
