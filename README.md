@@ -258,20 +258,22 @@ activation_checkpointing: enabled
 
 If the run ends with that `---` block, it worked. If it ends with a Python error (traceback), something went wrong.
 
-### What about using different datasets?
+### What about using different datasets or tokenizers?
 
-Stay on TinyStories until you have stable, repeatable runs. Then consider other data.
+Stay on TinyStories with its own tokenizer until you have stable, repeatable runs. Then change one decision at a time. Two datasets and three tokenizers are built in, and choosing them is a human step (the agent never changes them):
 
-The reason for this order: TinyStories is already fully wired in. It gives you a known reference point. Without a working baseline you cannot tell whether a new dataset is giving you better results or just different-looking numbers.
+```powershell
+uv run prepare.py --dataset folktales                       # folk and myth tales instead of TinyStories
+uv run prepare.py --dataset tinystories --tokenizer phi3    # Phi-3 / Llama 2 vocabulary (32,011 tokens)
+uv run prepare.py --dataset tinystories --tokenizer gpt2    # GPT-2 vocabulary (50,257); needs about 10 GB of GPU memory
+uv run prepare.py --dataset tinystories --tokenizer own     # back to the default
+```
 
-When you are ready to switch datasets, this is a human step — the agent cannot modify `prepare.py`. Here is what to do:
+`prepare.py` downloads what it needs and makes that pair active; `train.py`, `generate.py` and `chat.py` all use the active pair, and each run file records it.
 
-1. Open `prepare.py` and find the `DATASET_CONFIGS` dictionary near the top.
-2. Add a new entry: a short name, the URL to a Hugging Face parquet file, and the row ranges for train/val/test splits.
-3. Run `uv run prepare.py --dataset your-dataset-name`. This downloads the parquet file and builds a new tokenizer from it in the local cache (the data stays as a single parquet file; nothing is pre-tokenized — the dataloader tokenizes on the fly).
-4. Set the dataset for future training runs either by passing `--dataset your-dataset-name` to `uv run train.py` or by setting the environment variable `AUTORESEARCH_DATASET=your-dataset-name`.
-
-Once you switch datasets, `val_bpb` scores are not directly comparable to runs on the previous dataset. Start a fresh `results.tsv` when you switch so the log stays coherent.
+- `val_bpb` compares across tokenizers on the same dataset, never across datasets. Start a fresh `results.tsv` when you switch dataset. Phi-3 scores about 0.1% low: it counts one extra byte per document for its word-boundary marker, so treat differences smaller than that as ties.
+- A model can only be chatted with under the pair it was trained with.
+- To add your own dataset, add an entry to `DATASET_CONFIGS` and its name to `DATASET_CHOICES` in `prepare.py`.
 
 ### Can I change the time limit?
 

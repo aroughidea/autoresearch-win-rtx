@@ -248,7 +248,11 @@ class RunCapture:
             "commit": commit,
             "created": datetime.now().astimezone().isoformat(timespec="seconds"),
             "dataset": self.dataset,
-            "tokenizer": {"name": self.tokenizer_name, "vocab_size": int(self.tokenizer.get_vocab_size())},
+            "tokenizer": {
+                "name": getattr(self.tokenizer, "name", self.tokenizer_name),
+                "source": getattr(self.tokenizer, "source", None),
+                "vocab_size": int(self.tokenizer.get_vocab_size()),
+            },
             "recipe": recipe,
             "decoding": self.decoding,
             "prompts": list(self.prompts),

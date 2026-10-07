@@ -14,6 +14,7 @@ import argparse
 import math
 import os
 import pickle
+import re
 import shutil
 import time
 
@@ -44,7 +45,17 @@ EOS_TOKEN = "<|reserved_1|>"  # end-of-sequence: appended to every document duri
 # ---------------------------------------------------------------------------
 
 DEFAULT_DATASET = "tinystories"
-DATASET_CHOICES = ("tinystories",)
+DATASET_CHOICES = ("tinystories", "folktales")
+
+TOKENIZER_CHOICES = ("own", "phi3", "gpt2")
+DEFAULT_TOKENIZER = "own"
+TOKENIZER_SOURCES = {
+    "own": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+    "phi3": "microsoft/Phi-3-mini-4k-instruct tokenizer.json (Llama 2 vocabulary, 32,011 tokens)",
+    "gpt2": "OpenAI GPT-2 via tiktoken (50,257 tokens)",
+}
+PHI3_TOKENIZER_URL = "https://huggingface.co/microsoft/Phi-3-mini-4k-instruct/resolve/main/tokenizer.json"
+FOLKTALES_TXT_URL = "https://huggingface.co/datasets/merve/folk-mythology-tales/resolve/main/merged_clean.txt"
 
 
 def _default_cache_dir():
@@ -68,8 +79,18 @@ def _default_cache_dir():
 CACHE_DIR = _default_cache_dir()
 DATASETS_DIR = os.path.join(CACHE_DIR, "datasets")
 ACTIVE_DATASET_PATH = os.path.join(CACHE_DIR, "active_dataset.txt")
+ACTIVE_TOKENIZER_PATH = os.path.join(CACHE_DIR, "active_tokenizer.txt")
 
 DATASET_CONFIGS = {
+    "folktales": {
+        # merve/folk-mythology-tales (CC0 1.0 per its card), packed into documents by _pack_paragraphs.
+        "filename": "folktales.parquet",
+        "splits": {
+            "test": (0, 0),
+            "val": (0, 300),
+            "train": (300, None),
+        },
+    },
     "tinystories": {
         "filename": "tinystories_gpt4_clean.parquet",
         "url": "https://huggingface.co/datasets/karpathy/tinystories-gpt4-clean/resolve/main/tinystories_gpt4_clean.parquet",
@@ -131,6 +152,40 @@ def _set_active_dataset(dataset_name):
         f.write(dataset_name + "\n")
 
 
+def _normalize_tokenizer_name(tokenizer_name):
+    if tokenizer_name is None:
+        return None
+    value = tokenizer_name.strip().lower()
+    if value not in TOKENIZER_CHOICES:
+        raise ValueError(f"Unknown tokenizer '{tokenizer_name}'. Expected one of {TOKENIZER_CHOICES}.")
+    return value
+
+
+def _resolve_tokenizer_name(tokenizer_name=None):
+    """Flag, then AUTORESEARCH_TOKENIZER, then active_tokenizer.txt, then 'own'.
+
+    A mistyped environment variable raises rather than silently training with another vocabulary.
+    """
+    explicit = _normalize_tokenizer_name(tokenizer_name)
+    if explicit is not None:
+        return explicit
+    env_value = os.environ.get("AUTORESEARCH_TOKENIZER")
+    if env_value:
+        return _normalize_tokenizer_name(env_value)
+    if os.path.exists(ACTIVE_TOKENIZER_PATH):
+        with open(ACTIVE_TOKENIZER_PATH, "r", encoding="utf-8") as f:
+            value = f.read().strip().lower()
+        if value in TOKENIZER_CHOICES:
+            return value
+    return DEFAULT_TOKENIZER
+
+
+def _set_active_tokenizer(tokenizer_name):
+    os.makedirs(CACHE_DIR, exist_ok=True)
+    with open(ACTIVE_TOKENIZER_PATH, "w", encoding="utf-8") as f:
+        f.write(tokenizer_name + "\n")
+
+
 def _dataset_root(dataset_name=None):
     dataset = _resolve_dataset_name(dataset_name)
     return os.path.join(DATASETS_DIR, dataset)
@@ -140,8 +195,10 @@ def _data_dir(dataset_name=None):
     return os.path.join(_dataset_root(dataset_name), "data")
 
 
-def _tokenizer_dir(dataset_name=None):
-    return os.path.join(_dataset_root(dataset_name), "tokenizer")
+def _tokenizer_dir(dataset_name=None, tokenizer_name=None):
+    name = _resolve_tokenizer_name(tokenizer_name)
+    folder = "tokenizer" if name == DEFAULT_TOKENIZER else f"tokenizer-{name}"
+    return os.path.join(_dataset_root(dataset_name), folder)
 
 
 def _tiny_parquet_path(dataset_name=None):
@@ -216,8 +273,43 @@ def _download_tinystories_file(dataset_name):
     print(f"Data: downloaded {filename} to {filepath}")
 
 
+def _pack_paragraphs(raw_text, max_chars=1500):
+    """Blank-line paragraphs, wrapped lines joined, packed in order into documents of at most max_chars."""
+    paragraphs = [" ".join(p.split()) for p in re.split(r"\n\s*\n", raw_text) if p.strip()]
+    docs, current = [], ""
+    for paragraph in paragraphs:
+        if current and len(current) + len(paragraph) > max_chars:
+            docs.append(current)
+            current = paragraph
+        else:
+            current = f"{current}\n\n{paragraph}" if current else paragraph
+    if current:
+        docs.append(current)
+    return docs
+
+
+def _build_folktales_parquet(dataset_name):
+    import pyarrow as pa
+
+    path = _tiny_parquet_path(dataset_name)
+    if os.path.exists(path):
+        print(f"Data: folktales already built at {path}")
+        return
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    response = requests.get(FOLKTALES_TXT_URL, timeout=120)
+    response.raise_for_status()
+    docs = _pack_paragraphs(response.text)
+    temp_path = path + ".tmp"
+    pq.write_table(pa.table({"text": docs}), temp_path)
+    os.replace(temp_path, path)
+    print(f"Data: folktales -> {len(docs):,} documents, {sum(map(len, docs)):,} characters at {path}")
+
+
 def download_data(dataset_name):
     dataset = _resolve_dataset_name(dataset_name)
+    if dataset == "folktales":
+        _build_folktales_parquet(dataset)
+        return
     _download_tinystories_file(dataset)
 
 
@@ -282,9 +374,10 @@ def text_iterator(dataset_name=None, max_chars=1_000_000_000, doc_cap=10_000):
             return
 
 
-def train_tokenizer(dataset_name=None):
+def train_tokenizer(dataset_name=None, tokenizer_name=None):
     dataset = _resolve_dataset_name(dataset_name)
-    tokenizer_dir = _tokenizer_dir(dataset)
+    tokenizer = _resolve_tokenizer_name(tokenizer_name)
+    tokenizer_dir = _tokenizer_dir(dataset, tokenizer)
     tokenizer_pkl = os.path.join(tokenizer_dir, "tokenizer.pkl")
     token_bytes_path = os.path.join(tokenizer_dir, "token_bytes.pt")
 
@@ -293,6 +386,9 @@ def train_tokenizer(dataset_name=None):
         return
 
     os.makedirs(tokenizer_dir, exist_ok=True)
+    if tokenizer != DEFAULT_TOKENIZER:
+        _build_standard_tokenizer(tokenizer, tokenizer_dir, dataset)
+        return
 
     parquet_files = list_parquet_files(dataset)
     if len(parquet_files) < 1:
@@ -349,6 +445,107 @@ def train_tokenizer(dataset_name=None):
     print(f"Tokenizer: sanity check passed (vocab_size={enc.n_vocab})")
 
 
+class HFEncoding:
+    """A Hugging Face tokenizer.json behind the small tiktoken-shaped interface Tokenizer uses."""
+
+    def __init__(self, json_str, reserved):
+        self._json = json_str
+        self._reserved = list(reserved)
+        self._build()
+
+    def _build(self):
+        from tokenizers import Tokenizer as HFTokenizer
+
+        self.tok = HFTokenizer.from_str(self._json)
+        self.tok.add_special_tokens(self._reserved)
+
+    def __getstate__(self):
+        return {"_json": self._json, "_reserved": self._reserved}
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        self._build()
+
+    @property
+    def n_vocab(self):
+        return self.tok.get_vocab_size(with_added_tokens=True)
+
+    def encode_single_token(self, text):
+        token_id = self.tok.token_to_id(text)
+        if token_id is None:
+            raise KeyError(text)
+        return token_id
+
+    def encode_ordinary(self, text):
+        return self.tok.encode(text, add_special_tokens=False).ids
+
+    def encode_ordinary_batch(self, texts, num_threads=8):
+        return [e.ids for e in self.tok.encode_batch(texts, add_special_tokens=False)]
+
+    def decode(self, ids):
+        return self.tok.decode(list(ids), skip_special_tokens=False)
+
+
+def _piece_byte_length(piece, special):
+    """Bytes of text a SentencePiece-style token stands for (0 for special tokens).
+
+    Known bias: Phi-3 marks the start of every document with a word-boundary "▁", which
+    counts as one byte the text does not contain. Measured: val_bpb about 0.12% lower on
+    TinyStories and 0.08% on Folktales than the same model would score with exact byte counts.
+    """
+    if special or piece is None:
+        return 0
+    if re.fullmatch(r"<0x[0-9A-Fa-f]{2}>", piece):
+        return 1
+    return len(piece.replace("\u2581", " ").encode("utf-8"))
+
+
+def _gpt2_encoding():
+    base = tiktoken.get_encoding("gpt2")
+    specials = dict(base._special_tokens)
+    for i, name in enumerate(SPECIAL_TOKENS):
+        specials[name] = base.n_vocab + i
+    return tiktoken.Encoding(
+        name="gpt2-reserved",
+        pat_str=base._pat_str,
+        mergeable_ranks=base._mergeable_ranks,
+        special_tokens=specials,
+    )
+
+
+def _phi3_encoding():
+    # Import through the module name so pickle records prepare.HFEncoding even when this file
+    # runs as __main__ (`uv run prepare.py`); otherwise train.py cannot load the tokenizer.
+    from prepare import HFEncoding as hf_encoding_class
+
+    response = requests.get(PHI3_TOKENIZER_URL, timeout=120)
+    response.raise_for_status()
+    return hf_encoding_class(response.text, SPECIAL_TOKENS)
+
+
+def _build_standard_tokenizer(tokenizer_name, tokenizer_dir, dataset):
+    """Fetch a published vocabulary instead of training one."""
+    if tokenizer_name == "gpt2":
+        enc = _gpt2_encoding()
+        special_ids = {enc.encode_single_token(t) for t in enc.special_tokens_set}
+        token_bytes = [0 if i in special_ids else len(enc.decode_single_token_bytes(i)) for i in range(enc.n_vocab)]
+    elif tokenizer_name == "phi3":
+        enc = _phi3_encoding()
+        special_ids = set(enc.tok.get_added_tokens_decoder().keys())
+        token_bytes = [_piece_byte_length(enc.tok.id_to_token(i), i in special_ids) for i in range(enc.n_vocab)]
+    else:
+        raise ValueError(tokenizer_name)
+    os.makedirs(tokenizer_dir, exist_ok=True)
+    with open(os.path.join(tokenizer_dir, "tokenizer.pkl"), "wb") as f:
+        pickle.dump(enc, f)
+    torch.save(torch.tensor(token_bytes, dtype=torch.int32), os.path.join(tokenizer_dir, "token_bytes.pt"))
+    with open(os.path.join(tokenizer_dir, "dataset.txt"), "w", encoding="utf-8") as f:
+        f.write(dataset + "\n")
+    sample = "Once upon a time, Lily found a shiny shell."
+    print(f"Tokenizer: {tokenizer_name} ready (vocab_size={enc.n_vocab}); "
+          f"'{sample}' is {len(enc.encode_ordinary(sample))} tokens")
+
+
 # ---------------------------------------------------------------------------
 # Runtime utilities (imported by train.py)
 # ---------------------------------------------------------------------------
@@ -356,19 +553,22 @@ def train_tokenizer(dataset_name=None):
 class Tokenizer:
     """Minimal tokenizer wrapper. Training is handled above."""
 
-    def __init__(self, enc, dataset):
+    def __init__(self, enc, dataset, name=DEFAULT_TOKENIZER):
         self.enc = enc
         self.dataset = _resolve_dataset_name(dataset)
+        self.name = name
+        self.source = TOKENIZER_SOURCES[name]
         self.bos_token_id = enc.encode_single_token(BOS_TOKEN)
         self.eos_token_id = enc.encode_single_token(EOS_TOKEN)
 
     @classmethod
-    def from_directory(cls, tokenizer_dir=None, dataset=None):
+    def from_directory(cls, tokenizer_dir=None, dataset=None, tokenizer=None):
         dataset_name = _resolve_dataset_name(dataset)
-        resolved_dir = tokenizer_dir if tokenizer_dir is not None else _tokenizer_dir(dataset_name)
+        tokenizer_name = _resolve_tokenizer_name(tokenizer)
+        resolved_dir = tokenizer_dir if tokenizer_dir is not None else _tokenizer_dir(dataset_name, tokenizer_name)
         with open(os.path.join(resolved_dir, "tokenizer.pkl"), "rb") as f:
             enc = pickle.load(f)
-        return cls(enc, dataset=dataset_name)
+        return cls(enc, dataset=dataset_name, name=tokenizer_name)
 
     def get_vocab_size(self):
         return self.enc.n_vocab
@@ -399,9 +599,9 @@ class Tokenizer:
         return self.enc.decode(ids)
 
 
-def get_token_bytes(device="cpu", dataset=None):
+def get_token_bytes(device="cpu", dataset=None, tokenizer=None):
     dataset_name = _resolve_dataset_name(dataset)
-    path = os.path.join(_tokenizer_dir(dataset_name), "token_bytes.pt")
+    path = os.path.join(_tokenizer_dir(dataset_name, tokenizer), "token_bytes.pt")
     with open(path, "rb") as f:
         return torch.load(f, map_location=device)
 
@@ -504,6 +704,24 @@ def make_dataloader(tokenizer, B, T, split, device="cuda", dataset=None, buffer_
 # Evaluation (DO NOT CHANGE METRIC DEFINITION)
 # ---------------------------------------------------------------------------
 
+def _check_active_pair(tokenizer):
+    """Refuse to score any dataset/tokenizer pair other than the active one.
+
+    train.py is the agent's file and could pass --dataset or another tokenizer to
+    Tokenizer.from_directory; val_bpb only compares within one pair, so this check lives
+    here, in the read-only scorer. The pair is chosen with prepare.py.
+    """
+    active_dataset = _resolve_dataset_name(None)
+    active_tokenizer = _resolve_tokenizer_name(None)
+    dataset = getattr(tokenizer, "dataset", active_dataset)
+    name = getattr(tokenizer, "name", DEFAULT_TOKENIZER)
+    if (dataset, name) != (active_dataset, active_tokenizer):
+        raise RuntimeError(
+            f"Refusing to score: this run used dataset '{dataset}' with tokenizer '{name}', but the "
+            f"active pair is '{active_dataset}' / '{active_tokenizer}'. Choose the pair with prepare.py."
+        )
+
+
 @torch.no_grad()
 def evaluate_bpb(model, tokenizer, batch_size, device="cuda", dataset=None, eval_tokens=EVAL_TOKENS):
     """
@@ -512,8 +730,9 @@ def evaluate_bpb(model, tokenizer, batch_size, device="cuda", dataset=None, eval
     then converts nats/byte to bits/byte. Special tokens (byte length 0)
     are excluded from both sums.
     """
+    _check_active_pair(tokenizer)
     dataset_name = _resolve_dataset_name(dataset or getattr(tokenizer, "dataset", None))
-    token_bytes = get_token_bytes(device=device, dataset=dataset_name)
+    token_bytes = get_token_bytes(device=device, dataset=dataset_name, tokenizer=getattr(tokenizer, "name", None))
     val_loader = make_dataloader(
         tokenizer,
         batch_size,
@@ -542,28 +761,43 @@ def evaluate_bpb(model, tokenizer, batch_size, device="cuda", dataset=None, eval
 # Main
 # ---------------------------------------------------------------------------
 
-if __name__ == "__main__":
+def main(argv=None):
     parser = argparse.ArgumentParser(description="Prepare data and tokenizer for autoresearch")
     parser.add_argument(
         "--dataset",
         choices=DATASET_CHOICES,
         default=None,
-        help=(
-            "Dataset profile to prepare. If omitted, resolves in order: "
-            "AUTORESEARCH_DATASET, active_dataset.txt, then default tinystories."
-        ),
+        help="Dataset to prepare and make active. Default: AUTORESEARCH_DATASET, then the active one, then tinystories.",
     )
-    args = parser.parse_args()
+    parser.add_argument(
+        "--tokenizer",
+        choices=TOKENIZER_CHOICES,
+        default=None,
+        help="Tokenizer to build or fetch and make active: own (trained on the dataset), phi3 or gpt2. "
+             "Default: AUTORESEARCH_TOKENIZER, then the active one, then own.",
+    )
+    args = parser.parse_args(argv)
 
     dataset_name = _resolve_dataset_name(args.dataset)
+    tokenizer_name = _resolve_tokenizer_name(args.tokenizer)
 
     print(f"Cache directory: {CACHE_DIR}")
     print(f"Dataset: {dataset_name}")
+    print(f"Tokenizer: {tokenizer_name} ({TOKENIZER_SOURCES[tokenizer_name]})")
     print()
 
     download_data(dataset_name)
     print()
-    train_tokenizer(dataset_name)
+    train_tokenizer(dataset_name, tokenizer_name)
     _set_active_dataset(dataset_name)
+    _set_active_tokenizer(tokenizer_name)
     print()
-    print(f"Done! Ready to train. Active dataset is now '{dataset_name}'.")
+    if tokenizer_name == "gpt2":
+        print("Note: the GPT-2 vocabulary needs about 10 GB of GPU memory; it will not fit on 8 GB cards.")
+    print(f"Done! Ready to train. Active: dataset '{dataset_name}', tokenizer '{tokenizer_name}'.")
+    print("val_bpb compares across tokenizers on the same dataset, never across datasets.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
