@@ -23,6 +23,7 @@ import base64
 import csv
 import json
 import math
+import re
 import os
 import socket
 import sys
@@ -39,7 +40,14 @@ from fastapi.responses import HTMLResponse, Response, StreamingResponse
 from pydantic import BaseModel
 
 from generate import _config_from_state_dict, _sample_top_k
-from prepare import Tokenizer
+from prepare import (
+    DEFAULT_DATASET,
+    DEFAULT_TOKENIZER,
+    TOKENIZER_SOURCES,
+    Tokenizer,
+    _resolve_dataset_name,
+    _resolve_tokenizer_name,
+)
 from train import GPT
 
 
@@ -114,6 +122,85 @@ def _discover_checkpoints(primary_checkpoint: str) -> list[dict]:
     for i, entry in enumerate(entries):
         entry["id"] = f"m{i + 1}"
     return entries
+
+
+# ---------------------------------------------------------------------------
+# Which dataset and tokenizer each model was trained with
+# ---------------------------------------------------------------------------
+
+DATASET_BLURBS = {
+    "tinystories": "short children’s stories",
+    "folktales": "folk and fairy tales",
+}
+
+
+def _commit_from_name(name: str) -> str | None:
+    match = re.search(r"_([0-9a-f]{7,40})\.pt$", name)
+    return match.group(1) if match else None
+
+
+def _run_for_checkpoint(path: str, runs_dir: str = "runs") -> dict | None:
+    """The run file saved with a checkpoint: same <timestamp>_<commit> stem."""
+    run_path = Path(runs_dir) / (Path(path).stem + ".json")
+    try:
+        return json.loads(run_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+
+
+def _pair_for_checkpoint(path: str, run: dict | None) -> tuple[str, str]:
+    """(dataset, tokenizer) a checkpoint was trained with.
+
+    From its run file when there is one. checkpoint_pre_eval.pt is the latest run, so it
+    uses the active pair. Archived checkpoints without a run file predate the choice.
+    """
+    if run:
+        tokenizer = (run.get("tokenizer") or {}).get("name") or DEFAULT_TOKENIZER
+        return run.get("dataset") or DEFAULT_DATASET, tokenizer
+    if Path(path).name == "checkpoint_pre_eval.pt":
+        return _resolve_dataset_name(None), _resolve_tokenizer_name(None)
+    return DEFAULT_DATASET, DEFAULT_TOKENIZER
+
+
+def _checkpoint_vocab_rows(path: str) -> int | None:
+    """Rows of the embedding table, read without loading the whole checkpoint."""
+    try:
+        state = torch.load(path, map_location="cpu", weights_only=True, mmap=True)
+        return int(state["transformer.wte.weight"].shape[0])
+    except Exception:
+        return None
+
+
+def _results_by_commit(path: str = "results.tsv") -> dict[str, dict]:
+    rows: dict[str, dict] = {}
+    p = Path(path)
+    if not p.exists():
+        return rows
+    with p.open(newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f, delimiter="\t"):
+            commit = (r.get("commit") or "").strip()
+            if not commit:
+                continue
+            try:
+                score = float((r.get("val_bpb") or "").strip())
+                score = score if math.isfinite(score) and score > 0 else None
+            except ValueError:
+                score = None
+            rows[commit] = {
+                "val_bpb": score,
+                "status": (r.get("status") or "").strip(),
+                "description": (r.get("description") or "").strip(),
+            }
+    return rows
+
+
+def _growth_from_run(run: dict | None) -> dict | None:
+    if not run or not run.get("prompts") or not run.get("snapshots"):
+        return None
+    return {
+        "prompts": run["prompts"],
+        "snapshots": [{"t_s": s.get("t_s"), "samples": s.get("samples", [])} for s in run["snapshots"]],
+    }
 
 
 class ModelStore:
