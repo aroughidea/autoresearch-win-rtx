@@ -53,3 +53,42 @@ def git_commit_info(cwd=None):
         return lines[0], datetime.fromisoformat(lines[1])
     except ValueError:
         return lines[0], None
+
+
+@torch.no_grad()
+def sample_continuation(model, tokenizer, prompt, *, seed, temperature, top_k, min_chars,
+                        max_tokens, device, autocast_ctx=None):
+    """Continue `prompt` until EOS, `min_chars` characters, or `max_tokens` tokens.
+
+    Uses a private torch.Generator so the global RNG (and so training) is untouched.
+    Returns only the continuation, not the prompt.
+    """
+    was_training = model.training
+    model.eval()
+    try:
+        generator = torch.Generator(device=device)
+        generator.manual_seed(seed)
+        ids = [tokenizer.get_bos_token_id()] + list(tokenizer.encode(prompt))
+        idx = torch.tensor([ids], dtype=torch.long, device=device)
+        start = idx.size(1)
+        eos = tokenizer.get_eos_token_id()
+        window = model.config.sequence_len
+        ctx = autocast_ctx if autocast_ctx is not None else contextlib.nullcontext()
+        text = ""
+        for _ in range(max_tokens):
+            with ctx:
+                logits = model(idx[:, -window:])
+            logits = logits[:, -1, :].float() / temperature
+            if top_k:
+                kth = torch.topk(logits, min(top_k, logits.size(-1))).values[:, -1:]
+                logits = logits.masked_fill(logits < kth, float("-inf"))
+            next_id = torch.multinomial(torch.softmax(logits, dim=-1), 1, generator=generator)
+            if next_id.item() == eos:
+                break
+            idx = torch.cat((idx, next_id), dim=1)
+            text = tokenizer.decode(idx[0, start:].tolist())
+            if len(text) >= min_chars:
+                break
+        return text
+    finally:
+        model.train(was_training)
