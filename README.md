@@ -537,11 +537,13 @@ The agent handles all commits automatically. You never need to run `git commit` 
 
 ```
 prepare.py        — constants, data prep + runtime utilities (do not modify)
+capture.py        — records what the model writes during training (do not modify)
 train.py          — model, optimizer, training loop (agent modifies this)
 generate.py       — load a checkpoint and generate text from a prompt (terminal)
 chat.py           — local browser UI for the trained model (streams output)
 program.md        — agent instructions
 results.tsv       — experiment log written by the agent (one row per run)
+runs/             — one JSON run file per experiment: writing samples over training time
 run.log           — latest run output (overwritten each run, not committed by agent)
 analysis.ipynb    — notebook: plots val_bpb progress from results.tsv
 pyproject.toml    — dependencies
