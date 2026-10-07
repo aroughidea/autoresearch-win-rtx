@@ -150,3 +150,26 @@ def test_main_without_flags_keeps_the_active_pair(clean_env, monkeypatch):
     prepare._set_active_tokenizer("gpt2")
     prepare.main([])
     assert (clean_env / "active_tokenizer.txt").read_text(encoding="utf-8").strip() == "gpt2"
+
+
+class _Pair:
+    def __init__(self, dataset, name):
+        self.dataset, self.name = dataset, name
+
+
+def test_scoring_refuses_a_pair_other_than_the_active_one(clean_env):
+    """train.py is the agent's file: it could pass --dataset or another tokenizer to
+    Tokenizer.from_directory. The read-only scorer refuses, so a pair change cannot pose as an improvement."""
+    prepare._set_active_dataset("tinystories")
+    prepare._set_active_tokenizer("own")
+    with pytest.raises(RuntimeError, match="active pair"):
+        prepare._check_active_pair(_Pair("tinystories", "gpt2"))
+    with pytest.raises(RuntimeError, match="active pair"):
+        prepare._check_active_pair(_Pair("folktales", "own"))
+    prepare._check_active_pair(_Pair("tinystories", "own"))
+
+
+def test_evaluate_bpb_checks_the_pair_before_anything_else(clean_env):
+    prepare._set_active_tokenizer("own")
+    with pytest.raises(RuntimeError, match="active pair"):
+        prepare.evaluate_bpb(model=None, tokenizer=_Pair("tinystories", "phi3"), batch_size=1, device="cpu")

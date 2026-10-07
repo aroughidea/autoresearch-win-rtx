@@ -487,7 +487,12 @@ class HFEncoding:
 
 
 def _piece_byte_length(piece, special):
-    """Bytes of text a SentencePiece-style token stands for (0 for special tokens)."""
+    """Bytes of text a SentencePiece-style token stands for (0 for special tokens).
+
+    Known bias: Phi-3 marks the start of every document with a word-boundary "▁", which
+    counts as one byte the text does not contain. Measured: val_bpb about 0.12% lower on
+    TinyStories and 0.08% on Folktales than the same model would score with exact byte counts.
+    """
     if special or piece is None:
         return 0
     if re.fullmatch(r"<0x[0-9A-Fa-f]{2}>", piece):
@@ -699,6 +704,24 @@ def make_dataloader(tokenizer, B, T, split, device="cuda", dataset=None, buffer_
 # Evaluation (DO NOT CHANGE METRIC DEFINITION)
 # ---------------------------------------------------------------------------
 
+def _check_active_pair(tokenizer):
+    """Refuse to score any dataset/tokenizer pair other than the active one.
+
+    train.py is the agent's file and could pass --dataset or another tokenizer to
+    Tokenizer.from_directory; val_bpb only compares within one pair, so this check lives
+    here, in the read-only scorer. The pair is chosen with prepare.py.
+    """
+    active_dataset = _resolve_dataset_name(None)
+    active_tokenizer = _resolve_tokenizer_name(None)
+    dataset = getattr(tokenizer, "dataset", active_dataset)
+    name = getattr(tokenizer, "name", DEFAULT_TOKENIZER)
+    if (dataset, name) != (active_dataset, active_tokenizer):
+        raise RuntimeError(
+            f"Refusing to score: this run used dataset '{dataset}' with tokenizer '{name}', but the "
+            f"active pair is '{active_dataset}' / '{active_tokenizer}'. Choose the pair with prepare.py."
+        )
+
+
 @torch.no_grad()
 def evaluate_bpb(model, tokenizer, batch_size, device="cuda", dataset=None, eval_tokens=EVAL_TOKENS):
     """
@@ -707,6 +730,7 @@ def evaluate_bpb(model, tokenizer, batch_size, device="cuda", dataset=None, eval
     then converts nats/byte to bits/byte. Special tokens (byte length 0)
     are excluded from both sums.
     """
+    _check_active_pair(tokenizer)
     dataset_name = _resolve_dataset_name(dataset or getattr(tokenizer, "dataset", None))
     token_bytes = get_token_bytes(device=device, dataset=dataset_name, tokenizer=getattr(tokenizer, "name", None))
     val_loader = make_dataloader(

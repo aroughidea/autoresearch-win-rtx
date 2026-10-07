@@ -271,7 +271,7 @@ uv run prepare.py --dataset tinystories --tokenizer own     # back to the defaul
 
 `prepare.py` downloads what it needs and makes that pair active; `train.py`, `generate.py` and `chat.py` all use the active pair, and each run file records it.
 
-- `val_bpb` compares across tokenizers on the same dataset, never across datasets. Start a fresh `results.tsv` when you switch dataset.
+- `val_bpb` compares across tokenizers on the same dataset, never across datasets. Start a fresh `results.tsv` when you switch dataset. Phi-3 scores about 0.1% low: it counts one extra byte per document for its word-boundary marker, so treat differences smaller than that as ties.
 - A model can only be chatted with under the pair it was trained with.
 - To add your own dataset, add an entry to `DATASET_CONFIGS` and its name to `DATASET_CHOICES` in `prepare.py`.
 
