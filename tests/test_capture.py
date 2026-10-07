@@ -158,3 +158,152 @@ def test_crops_context_to_sequence_len():
     model = FakeModel(seq_len=8)
     _sample(model, prompt="a prompt much longer than eight tokens")
     assert model.max_len_seen <= 8
+
+
+import json
+
+
+FAST = {"seed": 1234, "temperature": 0.8, "top_k": 40, "min_chars": 5, "max_tokens": 8}
+WHEN = datetime(2026, 5, 23, 15, 57, 43, tzinfo=PDT)
+
+
+def _capture(tmp_path, runs_dir="use_tmp", **overrides):
+    kwargs = dict(
+        dataset="tinystories",
+        runs_dir=tmp_path if runs_dir == "use_tmp" else runs_dir,
+        device="cpu",
+        snapshot_times=(0, 10, 30),
+        decoding=FAST,
+        log=lambda message: None,
+    )
+    kwargs.update(overrides)
+    return capture.RunCapture(FakeTokenizer(), **kwargs)
+
+
+def _finish(cap, **overrides):
+    kwargs = dict(
+        val_bpb=0.520082, peak_vram_mb=6799.2, training_seconds=300.4, num_steps=641,
+        num_params=18_900_000, recipe={"DEPTH": 6}, commit="abc1234", committed_at=WHEN,
+    )
+    kwargs.update(overrides)
+    return cap.finish(**kwargs)
+
+
+def test_snapshots_follow_training_time(tmp_path):
+    cap, model = _capture(tmp_path), FakeModel()
+    cap.on_step(model, 0.0, 0, None)
+    cap.on_step(model, 5.0, 3, 4.2)
+    assert [s["t_s"] for s in cap.snapshots] == [0.0]
+    cap.on_step(model, 31.0, 9, 3.1)
+    assert [s["t_s"] for s in cap.snapshots] == [0.0, 10.0, 30.0]
+    assert [s["step"] for s in cap.snapshots] == [0, 9, 9]
+    assert all(len(s["samples"]) == 4 for s in cap.snapshots)
+
+
+def test_on_train_end_adds_final_snapshot(tmp_path):
+    cap, model = _capture(tmp_path), FakeModel()
+    cap.on_step(model, 0.0, 0, None)
+    cap.on_train_end(model, 300.44, 641, 1.497)
+    final = cap.snapshots[-1]
+    assert final["t_s"] == 300.4 and final["final"] is True and final["train_loss"] == 1.497
+
+
+def test_begin_attempt_resets_snapshots(tmp_path):
+    cap, model = _capture(tmp_path), FakeModel()
+    cap.on_step(model, 31.0, 9, 3.1)
+    cap.begin_attempt()
+    assert cap.snapshots == []
+    cap.on_step(model, 0.0, 0, None)
+    assert [s["t_s"] for s in cap.snapshots] == [0.0]
+
+
+def test_disabled_capture_does_nothing(tmp_path):
+    cap, model = _capture(tmp_path, runs_dir=None), FakeModel()
+    cap.on_step(model, 31.0, 9, 3.1)
+    cap.on_train_end(model, 300.0, 641, 1.5)
+    assert model.calls == 0
+    assert _finish(cap) is None
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_sampling_error_disables_capture_but_never_raises(tmp_path):
+    cap, model = _capture(tmp_path), FakeModel(fail=True)
+    cap.on_step(model, 0.0, 0, None)
+    assert cap.error.startswith("RuntimeError")
+    calls = model.calls
+    cap.on_step(model, 31.0, 9, 3.1)
+    assert model.calls == calls
+    record = json.loads(_finish(cap).read_text(encoding="utf-8"))
+    assert record["capture_error"].startswith("RuntimeError")
+    assert record["final"]["val_bpb"] == 0.520082
+
+
+def test_finish_writes_named_run_file(tmp_path):
+    cap, model = _capture(tmp_path), FakeModel()
+    cap.on_step(model, 0.0, 0, None)
+    cap.on_train_end(model, 300.4, 641, 1.497)
+    path = _finish(cap)
+    assert path.name == "20260523T155743-0700_abc1234.json"
+    assert [p.name for p in tmp_path.iterdir()] == [path.name]
+    record = json.loads(path.read_text(encoding="utf-8"))
+    assert record["schema"] == 1
+    assert record["run_id"] == "20260523T155743-0700_abc1234"
+    assert record["commit"] == "abc1234"
+    assert record["dataset"] == "tinystories"
+    assert record["tokenizer"] == {"name": "own", "vocab_size": 258}
+    assert record["prompts"] == list(capture.PROMPTS)
+    assert record["decoding"] == FAST
+    assert record["recipe"] == {"DEPTH": 6}
+    assert [s["t_s"] for s in record["snapshots"]] == [0.0, 300.4]
+    assert record["final"]["val_bpb"] == 0.520082
+    assert record["final"]["params_m"] == 18.9
+    assert record["final"]["num_steps"] == 641
+    assert "sampling_s" in record["final"]
+    assert "status" not in record and "description" not in record
+
+
+def test_finish_overwrites_same_run_id(tmp_path):
+    cap = _capture(tmp_path)
+    _finish(cap, val_bpb=0.6)
+    path = _finish(cap, val_bpb=0.5)
+    assert json.loads(path.read_text(encoding="utf-8"))["final"]["val_bpb"] == 0.5
+    assert len(list(tmp_path.iterdir())) == 1
+
+
+def test_finish_without_git_uses_nogit(tmp_path, monkeypatch):
+    monkeypatch.setattr(capture, "git_commit_info", lambda cwd=None: (None, None))
+    path = _finish(_capture(tmp_path), commit=None, committed_at=None)
+    assert path.name.endswith("_nogit.json")
+
+
+def test_unicode_samples_round_trip(tmp_path):
+    cap, model = _capture(tmp_path), FakeModel()
+    cap.on_step(model, 0.0, 0, None)
+    cap.snapshots[0]["samples"][0] = "Wasser система 然 \ufffd"
+    record = json.loads(_finish(cap).read_text(encoding="utf-8"))
+    assert record["snapshots"][0]["samples"][0] == "Wasser система 然 \ufffd"
+
+
+def test_nan_values_become_null(tmp_path):
+    cap, model = _capture(tmp_path), FakeModel()
+    cap.on_step(model, 0.0, 0, float("nan"))
+    record = json.loads(_finish(cap, val_bpb=float("inf")).read_text(encoding="utf-8"))
+    assert record["snapshots"][0]["train_loss"] is None
+    assert record["final"]["val_bpb"] is None
+
+
+def test_recipe_from_keeps_known_keys_and_config():
+    namespace = {"DEPTH": 6, "MATRIX_LR": 0.045, "ADAM_BETAS": (0.8, 0.95), "UNRELATED": 1}
+    config = SimpleNamespace(n_layer=6, n_embd=384, n_head=3, n_kv_head=1, vocab_size=8192, sequence_len=2048)
+    recipe = capture.recipe_from(namespace, config)
+    assert recipe["DEPTH"] == 6 and recipe["MATRIX_LR"] == 0.045
+    assert recipe["ADAM_BETAS"] == [0.8, 0.95]
+    assert recipe["n_embd"] == 384 and recipe["vocab_size"] == 8192
+    assert "UNRELATED" not in recipe and "WARMDOWN_RATIO" not in recipe
+
+
+def test_runs_dir_from_env():
+    assert capture.runs_dir_from_env(False, env={}) == "runs"
+    assert capture.runs_dir_from_env(True, env={}) is None
+    assert capture.runs_dir_from_env(False, env={"AUTORESEARCH_RUNS_DIR": "off"}) is None
+    assert capture.runs_dir_from_env(True, env={"AUTORESEARCH_RUNS_DIR": "D:/runs"}) == "D:/runs"
