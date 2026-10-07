@@ -8,6 +8,8 @@ The agent used git as its lab notebook. Every experiment is a commit; every keep
 
 This document materializes that git history into one readable file: every diff the agent tried, every score it got, and what each result meant — including the ten failures whose commits were reset away and survive only because they were rescued from the local reflog (more on that in [War stories](#war-stories)). You can read this instead of running anything, and check any claim against the repo with `git show`.
 
+**Read the scores with one fact in mind.** Two runs of the same code on this laptop differ by about 0.003 (measured later, on 6 October 2026), because the GPU fits a slightly different number of steps into 5 minutes. Every difference below is smaller than that. The agent's keep/discard calls are real decisions under its rules, but none of them, and not the session's total gain of 0.0014, is proof of an improvement. The session is worth reading for how an agent researches, not for its findings.
+
 ## The session at a glance
 
 Every run trains from random initialization for 5 wall-clock minutes, then evaluates. "Keep" means the run beat the current best and its commit stayed on `master`; "discard" means it didn't and the change was removed from `master` (by rollback — or, for the late-evaluated experiment 16, by revert).
@@ -28,7 +30,7 @@ Every run trains from random initialization for 5 wall-clock minutes, then evalu
 | 12 | `407918e` | `UNEMBEDDING_LR` 0.004 → 0.003 | 0.520669 | discard | Output head needs its learning speed. |
 | 13 | `58af6ef` | `UNEMBEDDING_LR` 0.004 → 0.005 | 0.519294 | discard | Beat baseline, not the best — strict rule says discard. |
 | 14 | `742986f` | `WARMDOWN_RATIO` 0.45 → 0.35 | 0.520582 | discard | Shorter anneal is worse. |
-| **15** | **`e9fffd9`** | **`WARMDOWN_RATIO` 0.45 → 0.55** | **0.518708** | **keep** | **Session best. Longer anneal wins.** |
+| **15** | **`e9fffd9`** | **`WARMDOWN_RATIO` 0.45 → 0.55** | **0.518708** | **keep** | **Session best, within noise of the runner-up.** |
 | 16 | `f588ed5` | `WARMDOWN_RATIO` 0.55 → 0.65 | 0.523293 | discard | Evaluated 75 days late after an interruption; too much anneal. |
 
 > **Footnote on honesty:** one historical commit just before the session, `cf23e99` ("Implement feature X to enhance user experience and fix bug Y in module Z"), carries a meaningless placeholder message left by editor autocomplete. It was kept as-is. The history here is honest, not curated.
@@ -48,7 +50,7 @@ WEIGHT_DECAY = 0.1, ADAM_BETAS = (0.8, 0.95),
 WARMUP_RATIO = 0.02, WARMDOWN_RATIO = 0.45, FINAL_LR_FRAC = 0.1
 ```
 
-A reference run to anchor the noise floor for the afternoon: the existing Muon+AdamW config — the trainer uses two optimizers, Muon for the weight matrices and AdamW (a standard adaptive optimizer) for the embeddings and scalars, each group with its own learning rate — run once, scoring **0.520096** at 6.6 GB of VRAM. This became the bar every subsequent one-variable change had to beat. Running the baseline first — rather than trusting an old number — is cheap insurance against silent environment drift.
+A reference run for the afternoon (one run cannot measure noise; that needs repeats): the existing Muon+AdamW config — the trainer uses two optimizers, Muon for the weight matrices and AdamW (a standard adaptive optimizer) for the embeddings and scalars, each group with its own learning rate — run once, scoring **0.520096** at 6.6 GB of VRAM. This became the bar every subsequent one-variable change had to beat. Running the baseline first — rather than trusting an old number — is cheap insurance against silent environment drift.
 
 ### 2. Depth 7 — `b6b0ec3` (16:09) · 0.537554 vs 0.520096 · discard
 
@@ -88,7 +90,7 @@ index ac214c5..af7e743 100644
  TOTAL_BATCH_SIZE = 2 ** 15
 ```
 
-Hypothesis: TinyStories' short, local narratives don't need any full-context attention layer, so replacing the last full-context `L` layer with a half-context `S` window buys throughput for free. It did: the compute savings let more tokens through in 5 minutes with no modeling penalty, a small but real win (0.519684 vs 0.520096). This became the new base config for the rest of the session.
+Hypothesis: TinyStories' short, local narratives don't need any full-context attention layer, so replacing the last full-context `L` layer with a half-context `S` window buys throughput for free. It did: the compute savings let more tokens through in 5 minutes with no modeling penalty, a small win, well within run-to-run noise (0.519684 vs 0.520096). This became the new base config for the rest of the session.
 
 ### 4. Global batch 16384 — `35b184c` (16:27) · 0.519890 vs 0.519684 · discard
 
@@ -300,7 +302,7 @@ The upward direction handily beat the original baseline but fell ~0.0003 short o
 
 ### 14–16. The warmdown dose-response curve
 
-The last three experiments (plus the 0.45 baseline they pivot around) sweep `WARMDOWN_RATIO` — the fraction of training spent linearly annealing the learning rate down. Together they trace a clean dose-response curve:
+The last three experiments (plus the 0.45 baseline they pivot around) sweep `WARMDOWN_RATIO` — the fraction of training spent linearly annealing the learning rate down. Together they trace what looks like a dose-response curve, though every step in it is within noise:
 
 | `WARMDOWN_RATIO` | 0.35 | 0.45 (base) | 0.55 | 0.65 |
 |---|---|---|---|---|
