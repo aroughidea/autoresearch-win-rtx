@@ -42,7 +42,7 @@ def git_commit_info(cwd=None):
             cwd=cwd,
             capture_output=True,
             text=True,
-            timeout=10,
+            timeout=30,  # Windows can stall a process launch for seconds
         )
     except (OSError, subprocess.SubprocessError):
         return None, None
