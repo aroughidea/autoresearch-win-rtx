@@ -109,7 +109,7 @@ Run through all six, in order:
 
 ---
 
-## 2. The segment (~15 min, timed)
+## 2. The segment (~16 min, timed)
 
 **Starting screen state:** one visible PowerShell terminal at the repo root (font
 enlarged); VS Code with `program.md`, `results.tsv`, and `train.py` open in tabs;
@@ -161,10 +161,10 @@ $ts  = git log -1 --format=%cI
 uv run train.py > run.log 2>&1
 ```
 
-Announce: "~5.5 minutes wall clock — 5 minutes of training plus ~26 seconds of
-startup and evaluation. While it trains, let's look at what the agent has already done."
+Announce: "About 8 minutes wall clock — 5 minutes of training, then 2–3 minutes of
+scoring and a few seconds of writing samples. While it trains, let's look at what the agent has already done."
 
-### [3–8 min] While it trains: the paper trail
+### [3–10 min] While it trains: the paper trail
 
 Four artifacts, ~1 minute each:
 
@@ -189,7 +189,7 @@ Optional filler if time remains: `Get-Content run.log -Tail 3` in a spare termin
 show the live progress line (step count, loss, tok/sec) — cosmetic line-wrapping in the
 log file is normal.
 
-### [8–10 min] Read out the result, make the call
+### [10–12 min] Read out the result, make the call
 
 When the run finishes (prompt returns):
 
@@ -208,7 +208,7 @@ compressed into one sentence: *"Is it lower? No. Discard."*
 ```powershell
 git reset --hard $start
 Add-Content results.tsv "$ts`t$exp`t<val_bpb>`t6.6`tdiscard`tmatrix lr 0.05 aug07-demo live"
-git add results.tsv; git commit -m "log: matrix lr 0.05 aug07-demo discard"
+git add results.tsv runs/; git commit -m "log: matrix lr 0.05 aug07-demo discard"
 ```
 
 (Substitute the actual val_bpb; memory_gb is `peak_vram_mb ÷ 1024` from the same summary
@@ -218,7 +218,7 @@ history, but the *log row is never rolled back* — failures are data.
 **If it actually improved** (lower val_bpb): congratulate the room, then run the keep
 path from section 5 verbatim.
 
-### [10–14 min] The reveal
+### [12–15 min] The reveal
 
 Bring the browser tab (`localhost:8000`) forward. **Reload the page** — the chart now
 includes the row you just logged, live on screen.
@@ -231,9 +231,12 @@ side by side, token by token: **Baseline** (first kept model, `75027e8`) vs **Be
 slider for a second generation.
 
 The point to land: both models trained for exactly 5 minutes; the only difference is
-the configuration the agent found.
+the configuration the agent found, and they read almost alike. The whole session's gain
+(0.27%) is smaller than the difference between two runs of the same code. That is why
+the agent judges by a score, and why the decisions you can *read* are bigger ones: the
+dataset, the tokenizer, how long the model trains (TRAINING-DECISIONS.md).
 
-### [14–15 min] Close
+### [15–16 min] Close
 
 > "Everything you saw is one public repo; the ambitious among you can run this tonight."
 
@@ -256,10 +259,10 @@ git, git-lfs. WALKTHROUGH.md is the supplemental reading.
 Make the call **two minutes before you start**, not mid-segment. Four tiers:
 
 **Tier 1 — live run fails or machine misbehaves** (run crashes, GPU busy, run overruns
-its slot — program.md's own rule: past 10 minutes, kill it and treat as a failure):
-skip the [2–3] and [8–10] blocks. Yesterday's results are already in the TSV and chart —
+its slot — program.md's own rule: past 15 minutes, kill it and treat as a failure):
+skip the [2–3] and [10–12] blocks. Yesterday's results are already in the TSV and chart —
 narrate the session from **WALKTHROUGH.md's session table** instead, then do the reveal
-([10–14]) as planned. You lose the live gamble, not the story.
+([12–15]) as planned. You lose the live gamble, not the story.
 
 **Tier 2 — chat.py fails, but the machine and the network are fine**: switch to the
 hosted copy at **<https://autoresearch-demo.fly.dev/>** — the tab you woke in 1b. It is
@@ -329,7 +332,7 @@ before (after the 1b checklist passes), full-window, at presentation font size:
 
 ### Close out the live experiment per the loop protocol
 
-If you completed [8–10 min] live, verify the state is consistent and you are done:
+If you completed [10–12 min] live, verify the state is consistent and you are done:
 
 ```powershell
 git log --oneline -3          # top commit should be "log: matrix lr 0.05 ... <status>"
@@ -346,7 +349,7 @@ the shell was lost, recover them from `git log`):
 ```powershell
 git reset --hard $start
 Add-Content results.tsv "$ts`t$exp`t<val_bpb>`t<memory_gb>`tdiscard`tmatrix lr 0.05 aug07-demo live"
-git add results.tsv; git commit -m "log: matrix lr 0.05 aug07-demo discard"
+git add results.tsv runs/; git commit -m "log: matrix lr 0.05 aug07-demo discard"
 ```
 
 *(If the training run never produced a score at all — crashed or was killed — log
@@ -361,7 +364,7 @@ $stamp = git log -1 --format=%cd --date=format:%Y%m%dT%H%M%S%z
 Copy-Item checkpoint_pre_eval.pt "checkpoints/${stamp}_${exp}.pt"
 git add "checkpoints/${stamp}_${exp}.pt"
 Add-Content results.tsv "$ts`t$exp`t<val_bpb>`t<memory_gb>`tkeep`tmatrix lr 0.05 aug07-demo live"
-git add results.tsv; git commit -m "log: matrix lr 0.05 aug07-demo keep"
+git add results.tsv runs/; git commit -m "log: matrix lr 0.05 aug07-demo keep"
 ```
 
 After a keep, restart chat.py so the new checkpoint is discovered and the **Best** pane

@@ -21,6 +21,8 @@ Note: the Windows fork supports NVIDIA GPUs that meet the VRAM floor, including 
 
 Once you get confirmation, kick off the experimentation.
 
+**Started unattended?** If you were launched non-interactively (for example `claude -p`, or with instructions to run overnight) there is nobody to confirm with: use today's date as the run tag, check the data exists (step 4), and begin. Never wait for a reply that cannot come.
+
 ## Experimentation
 
 Each experiment runs on a single GPU. The training script runs for a **fixed time budget of 5 minutes** (wall clock training time, excluding startup/compilation). You launch it simply as: `uv run train.py`.
@@ -38,6 +40,8 @@ Each experiment runs on a single GPU. The training script runs for a **fixed tim
 **The goal is simple: get the lowest val_bpb.** Since the time budget is fixed, you don't need to worry about training time — it's always 5 minutes. Everything is fair game: change the architecture, the optimizer, the hyperparameters, the batch size, the model size. The only constraint is that the code runs without crashing and finishes within the time budget.
 
 **VRAM** is a soft constraint. Some increase is acceptable for meaningful val_bpb gains, but it should not blow up dramatically.
+
+**Noise**: on a consumer GPU, two runs of the same code differ by about 0.003 val_bpb, because the fixed 5 minutes holds a slightly different number of steps each time. An improvement smaller than that is not evidence. Before keeping one, run the same commit once more; keep it only if both runs beat the current best. Log both runs.
 
 **Simplicity criterion**: All else being equal, simpler is better. A small improvement that adds ugly complexity is not worth it. Conversely, removing something and getting equal or better results is a great outcome — that's a simplification win. When evaluating whether to keep a change, weigh the complexity cost against the improvement magnitude. A 0.001 val_bpb improvement that adds 20 lines of hacky code? Probably not worth it. A 0.001 val_bpb improvement from deleting code? Definitely keep. An improvement of ~0 but much simpler code? Keep.
 
@@ -119,4 +123,4 @@ The idea is that you are a completely autonomous researcher trying things out. I
 
 **NEVER STOP**: Once the experiment loop has begun (after the initial setup), do NOT pause to ask the human if you should continue. Do NOT ask "should I keep going?" or "is this a good stopping point?". The human might be asleep, or gone from a computer and expects you to continue working *indefinitely* until you are manually stopped. You are autonomous. If you run out of ideas, think harder — read papers referenced in the code, re-read the in-scope files for new angles, try combining previous near-misses, try more radical architectural changes. The loop runs until the human interrupts you, period.
 
-As an example use case, a user might leave you running while they sleep. If each experiment takes you ~5 minutes then you can run approx 12/hour, for a total of about 100 over the duration of the average human sleep. The user then wakes up to experimental results, all completed by you while they slept!
+As an example use case, a user might leave you running while they sleep. Each experiment takes 8–11 minutes on a consumer GPU, so you can run about 6 an hour, 50–60 over the duration of the average human sleep. The user then wakes up to experimental results, all completed by you while they slept!

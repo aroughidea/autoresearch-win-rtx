@@ -10,7 +10,7 @@ The idea: give an AI agent a small but real LLM training setup and let it experi
 
 ## Try it live (no setup)
 
-**https://autoresearch-demo.fly.dev/** — the same `chat.py` UI this repo ships, hosted and public. No install, no GPU, no login. You get the two models from the session in [`WALKTHROUGH.md`](WALKTHROUGH.md) side by side — **Baseline** (`75027e8`, val_bpb 0.520096) and **Best** (`e9fffd9`, 0.518708) — plus the 16-experiment progress chart and the vocabulary browser. Type a prompt, watch both continue it, and see what one afternoon of tuning is actually worth.
+**https://autoresearch-demo.fly.dev/** — the same `chat.py` UI this repo ships, hosted and public. No install, no GPU, no login. You get the two models from the session in [`WALKTHROUGH.md`](WALKTHROUGH.md) side by side — **Baseline** (`75027e8`, val_bpb 0.520096) and **Best** (`e9fffd9`, 0.518708) — plus the 16-experiment progress chart and the vocabulary browser. Type a prompt, watch both continue it, and see what one afternoon of tuning is actually worth: the two write almost alike. The session's whole gain (0.27%) is smaller than the difference between two runs of the same code, which is exactly why the agent needs a score. For decisions whose effect you *can* read, start with [TRAINING-DECISIONS.md](TRAINING-DECISIONS.md).
 
 One honest caveat: the machine sleeps when nobody is using it, so **the first page load takes ~12 seconds** while it wakes up. Every load after that is instant (~0.07 s) until it goes back to sleep. It runs CPU-only, which is fine — these are ~19M-parameter models. Generation is capped there (max 500 tokens, top-k ≤ 200, prompts up to 2,000 characters); everything else matches what you get locally.
 
@@ -20,10 +20,11 @@ This repo is two things at once: a working research rig you can run yourself, an
 
 | Where to look | What you'll find |
 |---|---|
+| [`TRAINING-DECISIONS.md`](TRAINING-DECISIONS.md) | Start here: what this demonstrates, in plain language |
 | [`results.tsv`](results.tsv) | The scoreboard — one row per experiment |
 | [`WALKTHROUGH.md`](WALKTHROUGH.md) | The guided tour of the session, failures included |
 | [`program.md`](program.md) | The entire "program" the agent executes |
-| [`chat.py`](chat.py) | A browser UI for the models it produced — switch checkpoints to compare them |
+| [`chat.py`](chat.py) | A browser page that runs two of the models side by side on your prompt |
 | [Live demo](https://autoresearch-demo.fly.dev/) | That same UI, hosted — meet the models with zero setup (first load ~12 s) |
 | [`analysis.ipynb`](analysis.ipynb) + [`progress.png`](progress.png) | The score trajectory |
 | `git log` | The raw lab notebook |
@@ -118,7 +119,7 @@ There are two phases: a one-time human setup, then an autonomous agent loop that
 
 **Setup (you do this once):**
 
-1. `uv run prepare.py` — downloads TinyStories and converts it into a format the model can train on. This includes building a **tokenizer** — a lookup table that maps words and characters to numbers — and splitting the data into a training set and a separate validation set the model will never train on. Re-run only if you switch datasets.
+1. `uv run prepare.py` — downloads TinyStories and converts it into a format the model can train on. This includes building a **tokenizer** — a lookup table that maps words and characters to numbers — and splitting the data into a training set and a separate validation set the model will never train on. Re-run only if you switch dataset or tokenizer.
 2. Start the agent with the prompt from the **Running the agent** section below.
 
 **Autonomous loop (the agent does this, repeatedly, without you):**
@@ -154,7 +155,8 @@ A rough feel for the numbers:
 
 - A completely untrained model scores around 8–9.
 - A reasonable small model after 5 minutes scores below 1.
-- Improvements of 0.01–0.05 across runs are meaningful at this scale.
+- Two runs of the same code on the same laptop differ by about 0.003 (measured on 6 October 2026: 0.521 and 0.524), because the GPU fits a slightly different number of steps into 5 minutes. Treat smaller differences as ties.
+- The whole session in [`WALKTHROUGH.md`](WALKTHROUGH.md) improved the score by 0.0014 (0.27%), smaller than that noise. That is the honest size of what tuning found, and it is too small to read in the writing.
 
 ### What do I actually have at the end?
 
@@ -188,7 +190,7 @@ uv run generate.py "Once upon a time" --temperature 1.2
 
 Both scripts detect the model architecture automatically from the checkpoint — no configuration needed.
 
-**What to expect:** The model trained on TinyStories will continue your prompt in the style of short children's stories. The quality depends directly on how many training iterations have run and how well the settings have been tuned. An early model produces plausible but odd sentences. A well-tuned model reads more coherently. Watching that improvement across runs is the point of the project.
+**What to expect:** The model trained on TinyStories will continue your prompt in the style of short children's stories. The quality depends directly on how many training iterations have run and how well the settings have been tuned. Early in training the model writes nonsense; after five minutes it writes simple stories. Between a good recipe and a slightly better one, the difference is usually too small to read, which is why the agent judges by the score. The decisions you can read are the big ones: the dataset, the tokenizer, and how long the model trains.
 
 If you switch to a different dataset later, the model will reflect the style and content of that data instead.
 
@@ -219,13 +221,11 @@ There is no fixed session length. The agent runs unattended until you stop it �
 
 There is no `max_runs` setting. The agent's experiment loop in `program.md` runs **indefinitely** (`LOOP FOREVER`) until you manually stop it. The only per-run time constraint is `TIME_BUDGET = 300` (5 minutes of training time), defined in `prepare.py`.
 
-Throughput math based on that constant:
+How many experiments a night holds, measured on a laptop RTX 4000 Ada:
 
-- **Theoretical ceiling:** `3600 s ÷ 300 s = 12 experiments/hour`
-- **Training-script overhead:** Each run incurs startup (~5–10 s), evaluation (~10–15 s), and git/logging overhead (~5–10 s) — roughly 20–35 s beyond the training budget. The sample output in `program.md` shows `total_seconds: 325.9` against `training_seconds: 300.1`, confirming ~26 s of script overhead.
-- **Agent overhead:** The agent itself also takes time each iteration — reading the log, deciding what to try next, editing `train.py`, committing — typically 15–40 s of additional wall-clock time depending on the model and response latency.
-- **Practical rate:** Combined cycle time is roughly 340–370 s, giving approximately **9–10 experiments/hour**.
-- **Multi-hour session:** An 8-hour run yields roughly **70–80 experiments** before accounting for occasional crashes or retries.
+- **One experiment takes 8–11 minutes:** 5 minutes of training, plus startup, the fixed evaluation (2–3 minutes on consumer GPUs), about 20 seconds of writing samples for the run file, and the agent's own reading, editing and committing.
+- **That is about 6 experiments an hour**, or **50–60 in an 8-hour night**, before crashes and retries.
+- `total_seconds` in each run's summary gives the exact figure for your machine.
 
 **Context window limits are the other practical constraint.** CLI agents — Claude Code and Codex — run as persistent terminal processes and are designed for long autonomous sessions; they are the most reliable choice for long unattended sessions. Chat-based agents like GitHub Copilot accumulate context in the chat panel with each experiment; sessions of more than ~20–30 iterations may require starting a new chat as the context fills, which interrupts the loop.
 
@@ -234,29 +234,27 @@ Throughput math based on that constant:
 When you run `uv run train.py` you will see GPU info, then a single-line progress indicator that updates in place:
 
 ```
-step 00012 (4.0%) | loss: 3.218532 | lrm: 0.80 | dt: 128ms | tok/sec: 65,536 | mfu: 38.5% | epoch: 0 | remaining: 288s
+step 00012 (0.2%) | loss: 9.011872 | lrm: 0.08 | dt: 474ms | tok/sec: 69,124 | mfu: n/a | epoch: 1 | remaining: 299s
 ```
 
-At the end, a summary block:
+At the end, a summary block. This one is real, from a laptop RTX 4000 Ada on 6 October 2026:
 
 ```
 ---
-val_bpb:          0.818245
-training_seconds: 300.1
-total_seconds:    326.3
-peak_vram_mb:     6309.3
-mfu_percent:      38.52
-total_tokens_M:   499.6
-num_steps:        953
-num_params_M:     50.3
-depth:            8
+val_bpb:          0.520082
+training_seconds: 300.4
+total_seconds:    464.6
+peak_vram_mb:     6799.2
+mfu_percent:      n/a
+total_tokens_M:   21.0
+num_steps:        641
+num_params_M:     18.9
+depth:            6
 dataset:          tinystories
 train_batch_size: 8
-eval_batch_size:  4
-activation_checkpointing: enabled
+eval_batch_size:  8
+activation_checkpointing: disabled
 ```
-
-If the run ends with that `---` block, it worked. If it ends with a Python error (traceback), something went wrong.
 
 ### What about using different datasets or tokenizers?
 
@@ -304,7 +302,7 @@ To change it, open `prepare.py` and edit the `TIME_BUDGET` line near the top. A 
 
 The repo is deliberately kept small and really only has three files that matter:
 
-- **`prepare.py`** — fixed constants, one-time data prep (downloads the TinyStories GPT-4 clean dataset, trains a BPE tokenizer), and runtime utilities (dataloader, evaluation).
+- **`prepare.py`** — fixed constants, one-time data prep (downloads the TinyStories GPT-4 clean dataset, builds the tokenizer: trained on the data by default, or a standard one), and runtime utilities (dataloader, evaluation).
 - **`train.py`** — the single file the agent edits. Contains the full GPT model, optimizer (Muon + AdamW), and training loop. Everything is fair game: architecture, hyperparameters, optimizer, batch size, etc. **This file is edited and iterated on by the agent**.
 - **`program.md`** — baseline instructions for one agent. Point your agent here and let it go. **This file is edited and iterated on by the human**.
 
@@ -555,7 +553,7 @@ pyproject.toml    — dependencies
 
 - **Single file to modify.** The agent only touches `train.py`. This keeps the scope manageable and diffs reviewable.
 - **Fixed time budget.** Training always runs for exactly 5 minutes, controlled by `TIME_BUDGET = 300` in `prepare.py`. The agent cannot change this — `prepare.py` is read-only.
-  - Throughput: `3600 ÷ 300 = 12 experiments/hour` theoretical; **~9–10/hour practical**, after per-run startup/eval/git overhead (~25 s) plus agent think/write/commit time (~15–40 s). An 8-hour CLI-agent session (Claude Code or Codex) yields roughly **70–80 experiments** before crashes and retries. Chat-based agents (Copilot) are limited further by context window — plan for shorter sessions or multiple chat threads.
+  - Throughput: one experiment takes 8–11 minutes on a consumer GPU (5 of training, plus startup, evaluation, writing samples and the agent's own time), so **about 6 an hour** and **50–60 in an 8-hour night** for a CLI agent (Claude Code or Codex), before crashes and retries. Chat-based agents (Copilot) are limited further by context window — plan for shorter sessions or multiple chat threads.
   - Upside 1: experiments stay directly comparable regardless of what the agent changes (model size, batch size, architecture, etc).
   - Upside 2: the system searches for the best model within a fixed per-run budget, so hardware differences affect quality but not comparability within a single machine.
   - Downside: your runs and results are not directly comparable to people on different hardware.

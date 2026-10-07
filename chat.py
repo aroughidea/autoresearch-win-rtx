@@ -15,7 +15,7 @@
 #
 # Public hosting: setting SPACE_MODE=1 switches this same file into public-demo
 # mode — binds 0.0.0.0:$PORT, clamps generation requests, and adds a banner
-# pointing at the walkthrough. Unset (the default), nothing below changes.
+# pointing at TRAINING-DECISIONS.md and the walkthrough. Unset (the default), nothing below changes.
 # See deploy/ for the container that runs it.
 
 import argparse
@@ -561,7 +561,7 @@ _HTML = """\
           <span class="value" id="max-tokens-val">500</span>
         </div>
         <input type="range" id="max-tokens" min="20" max="500" step="10" value="500">
-        <div class="param-hint">How many words to generate</div>
+        <div class="param-hint">How many tokens (word pieces) to generate</div>
       </div>
 
       <div>
@@ -579,7 +579,7 @@ _HTML = """\
           <span class="value" id="top-k-val">0</span>
         </div>
         <input type="range" id="top-k" min="0" max="200" step="5" value="0">
-        <div class="param-hint">Word choices considered &mdash; 0 means all</div>
+        <div class="param-hint">Next-token choices considered &mdash; 0 means all</div>
       </div>
 
     </div>
@@ -1056,7 +1056,10 @@ _HTML = """\
 _SPACE_MODE = os.environ.get("SPACE_MODE") == "1"
 _SPACE_BANNER = (
     '<p style="margin-top:6px;font-size:0.82rem;">'
-    "This is a public demo of models trained by an autonomous research loop &mdash; "
+    "A public demo of models trained by an autonomous research loop. The two write almost alike: "
+    "the session's gain was smaller than run-to-run noise, which is why the agent needs a score. "
+    '<a href="https://github.com/aroughidea/autoresearch-win-rtx/blob/master/TRAINING-DECISIONS.md" '
+    'target="_blank" rel="noopener">What this demonstrates</a> &middot; '
     '<a href="https://github.com/aroughidea/autoresearch-win-rtx/blob/master/WALKTHROUGH.md" '
     'target="_blank" rel="noopener">how these were made</a>.</p>'
 )
