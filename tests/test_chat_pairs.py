@@ -70,3 +70,73 @@ def test_growth_from_run():
     assert [s["t_s"] for s in growth["snapshots"]] == [0.0, 300.4]
     assert chat._growth_from_run({"prompts": [], "snapshots": []}) is None
     assert chat._growth_from_run(None) is None
+
+
+class _Tok:
+    def __init__(self, n):
+        self.n = n
+
+    def get_vocab_size(self):
+        return self.n
+
+
+def _entries(tmp_path, rows):
+    out = []
+    for i, (name, vocab_rows) in enumerate(rows):
+        path = tmp_path / name
+        torch.save({"transformer.wte.weight": torch.zeros(vocab_rows, 2)}, path)
+        out.append({"id": f"m{i + 1}", "path": str(path), "label": name})
+    return out
+
+
+def test_mismatched_vocabulary_marks_model_unavailable(tmp_path):
+    entries = _entries(tmp_path, [("a_aaaaaaa.pt", 8), ("b_bbbbbbb.pt", 9)])
+    store = chat.ModelStore("cpu", entries, entries[0]["path"],
+                            tokenizer_loader=lambda dataset, tokenizer: _Tok(8),
+                            runs_dir=str(tmp_path / "runs"), results_path=str(tmp_path / "none.tsv"))
+    listed = {m["id"]: m for m in store.list_models()}
+    assert listed["m1"]["available"] is True
+    assert listed["m2"]["available"] is False and "vocabulary" in listed["m2"]["reason"]
+
+
+def test_missing_tokenizer_marks_model_unavailable(tmp_path):
+    """One model's pair was never prepared on this machine: it is listed, not fatal."""
+    entries = _entries(tmp_path, [("a_aaaaaaa.pt", 8), ("b_bbbbbbb.pt", 8)])
+    runs = _write_run(tmp_path, "b_bbbbbbb", dataset="folktales", tokenizer="phi3")
+
+    def loader(dataset, tokenizer):
+        if tokenizer == "phi3":
+            raise FileNotFoundError("no tokenizer.pkl")
+        return _Tok(8)
+
+    store = chat.ModelStore("cpu", entries, entries[0]["path"], tokenizer_loader=loader,
+                            runs_dir=str(runs), results_path=str(tmp_path / "none.tsv"))
+    listed = {m["id"]: m for m in store.list_models()}
+    assert listed["m1"]["available"] is True
+    assert listed["m2"]["available"] is False and "prepare.py" in listed["m2"]["reason"]
+
+
+def test_no_usable_model_stops_with_a_clear_message(tmp_path):
+    entries = _entries(tmp_path, [("a_aaaaaaa.pt", 8)])
+    try:
+        chat.ModelStore("cpu", entries, entries[0]["path"], tokenizer_loader=lambda dataset, tokenizer: _Tok(9),
+                        runs_dir=str(tmp_path / "runs"), results_path=str(tmp_path / "none.tsv"))
+    except RuntimeError as exc:
+        assert "prepare.py" in str(exc)
+    else:
+        raise AssertionError("expected RuntimeError")
+
+
+def test_facts_come_from_the_run_file_and_the_scoreboard(tmp_path):
+    entries = _entries(tmp_path, [("20261007T010000-0700_abc1234.pt", 8)])
+    runs = _write_run(tmp_path, "20261007T010000-0700_abc1234", final={"params_m": 18.9},
+                      prompts=["Once"], snapshots=[{"t_s": 0, "samples": ["x"]}])
+    tsv = tmp_path / "results.tsv"
+    tsv.write_text("timestamp\tcommit\tval_bpb\tmemory_gb\tstatus\tdescription\n"
+                   "2026-10-07T01:00:00-07:00\tabc1234\t1.389\t6.6\tkeep\tfolktales baseline\n", encoding="utf-8")
+    store = chat.ModelStore("cpu", entries, entries[0]["path"], tokenizer_loader=lambda dataset, tokenizer: _Tok(8),
+                            runs_dir=str(runs), results_path=str(tsv))
+    m = store.list_models()[0]
+    assert (m["dataset"], m["tokenizer"], m["params_m"]) == ("folktales", "phi3", 18.9)
+    assert (m["val_bpb"], m["description"], m["has_growth"]) == (1.389, "folktales baseline", True)
+    assert store.growth_for_id("m1")["prompts"] == ["Once"]

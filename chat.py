@@ -65,27 +65,6 @@ def _load_model_from_checkpoint(checkpoint_path: str, device: str) -> GPT:
   return model
 
 
-def _load(checkpoint_path: str):
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(f"Device: {device}")
-
-    try:
-        tokenizer = Tokenizer.from_directory()
-    except (FileNotFoundError, OSError):
-        print("Tokenizer not found. Run 'uv run prepare.py' first.")
-        sys.exit(1)
-
-    try:
-        model = _load_model_from_checkpoint(checkpoint_path, device)
-    except FileNotFoundError:
-        print(f"Checkpoint not found: {checkpoint_path}")
-        print("Run 'uv run train.py' first to produce a checkpoint.")
-        sys.exit(1)
-
-    print("Model ready.\n")
-    return model, tokenizer, device
-
-
 def _discover_checkpoints(primary_checkpoint: str) -> list[dict]:
     candidates: list[Path] = []
     primary = Path(primary_checkpoint)
@@ -204,62 +183,105 @@ def _growth_from_run(run: dict | None) -> dict | None:
 
 
 class ModelStore:
-    def __init__(self, initial_model: GPT, tokenizer: Tokenizer, device: str, entries: list[dict], active_path: str):
-        self._tokenizer = tokenizer
+    """The models on disk, each with the tokenizer of the pair it was trained with."""
+
+    def __init__(self, device: str, entries: list[dict], active_path: str,
+                 tokenizer_loader=None, runs_dir: str = "runs", results_path: str = "results.tsv"):
         self._device = device
-        self._entries = entries
-        self._entries_by_id = {e["id"]: e for e in entries}
+        self._loader = tokenizer_loader or (lambda dataset, tokenizer: Tokenizer.from_directory(dataset=dataset, tokenizer=tokenizer))
+        self._tokenizers: dict[tuple[str, str], object] = {}
         self._cache: dict[str, GPT] = {}
         self._lock = threading.Lock()
+        self._runs: dict[str, dict | None] = {}
+        scoreboard = _results_by_commit(results_path)
+
+        self._entries = []
+        for entry in entries:
+            run = _run_for_checkpoint(entry["path"], runs_dir)
+            dataset, tokenizer_name = _pair_for_checkpoint(entry["path"], run)
+            commit = _commit_from_name(entry["label"])
+            row = scoreboard.get(commit or "", {})
+            final = (run or {}).get("final") or {}
+            facts = {
+                **entry,
+                "commit": commit,
+                "dataset": dataset,
+                "dataset_blurb": DATASET_BLURBS.get(dataset, dataset),
+                "tokenizer": tokenizer_name,
+                "tokenizer_source": TOKENIZER_SOURCES.get(tokenizer_name, ""),
+                "params_m": final.get("params_m"),
+                "val_bpb": row.get("val_bpb", final.get("val_bpb")),
+                "status": row.get("status", ""),
+                "description": row.get("description", ""),
+                "has_growth": _growth_from_run(run) is not None,
+            }
+            facts["available"], facts["reason"], facts["vocab_size"] = self._check(facts)
+            self._runs[entry["id"]] = run
+            self._entries.append(facts)
+        self._by_id = {e["id"]: e for e in self._entries}
 
         normalized_active = str(Path(active_path)).replace("\\", "/")
-        active_entry = next((e for e in entries if e["path"] == normalized_active), None)
-        if active_entry is None and entries:
-            active_entry = entries[-1]
+        usable = [e for e in self._entries if e["available"]]
+        if not usable:
+            raise RuntimeError("No usable checkpoint found. Run 'uv run prepare.py' and 'uv run train.py' first.")
+        active = next((e for e in usable if e["path"] == normalized_active), usable[-1])
+        self._active_id = active["id"]
 
-        if active_entry is None:
-            raise RuntimeError("No checkpoint files found. Provide --checkpoint or add .pt files.")
+    def _tokenizer(self, dataset: str, tokenizer_name: str):
+        key = (dataset, tokenizer_name)
+        if key not in self._tokenizers:
+            try:
+                self._tokenizers[key] = self._loader(dataset, tokenizer_name)
+            except (FileNotFoundError, OSError, ValueError, KeyError):
+                self._tokenizers[key] = None
+        return self._tokenizers[key]
 
-        self._active_id = active_entry["id"]
-        self._cache[active_entry["path"]] = initial_model
-
-    @property
-    def tokenizer(self) -> Tokenizer:
-        return self._tokenizer
+    def _check(self, facts: dict) -> tuple[bool, str, int | None]:
+        tok = self._tokenizer(facts["dataset"], facts["tokenizer"])
+        if tok is None:
+            return False, (f"its tokenizer ({facts['dataset']}, {facts['tokenizer']}) is not prepared on this machine: "
+                           f"uv run prepare.py --dataset {facts['dataset']} --tokenizer {facts['tokenizer']}"), None
+        size = tok.get_vocab_size()
+        rows = _checkpoint_vocab_rows(facts["path"])
+        if rows is not None and rows != size:
+            return False, f"its vocabulary has {rows:,} tokens but the {facts['tokenizer']} tokenizer has {size:,}", size
+        return True, "", size
 
     @property
     def device(self) -> str:
         return self._device
 
+    @property
+    def active_id(self) -> str:
+        return self._active_id
+
     def list_models(self) -> list[dict]:
-        with self._lock:
-            return [
-                {
-                    **entry,
-                    "active": entry["id"] == self._active_id,
-                }
-                for entry in self._entries
-            ]
+        return [{**e, "active": e["id"] == self._active_id} for e in self._entries]
 
-    def get_active_bundle(self) -> tuple[GPT, Tokenizer, str, dict]:
-        with self._lock:
-            entry = self._entries_by_id[self._active_id]
-            model = self._cache.get(entry["path"])
-            if model is None:
-                model = _load_model_from_checkpoint(entry["path"], self._device)
-                self._cache[entry["path"]] = model
-            return model, self._tokenizer, self._device, entry
+    def tokenizer_for_id(self, model_id: str | None):
+        entry = self._by_id.get(model_id or self._active_id) or self._by_id[self._active_id]
+        if not entry["available"]:
+            entry = self._by_id[self._active_id]
+        return self._tokenizer(entry["dataset"], entry["tokenizer"])
 
-    def get_bundle_by_id(self, model_id: str) -> tuple[GPT, Tokenizer, str, dict]:
+    def growth_for_id(self, model_id: str) -> dict | None:
+        return _growth_from_run(self._runs.get(model_id))
+
+    def get_bundle_by_id(self, model_id: str | None):
         with self._lock:
-            if model_id not in self._entries_by_id:
+            entry = self._by_id.get(model_id or self._active_id)
+            if entry is None:
                 raise KeyError(f"Unknown model id: {model_id}")
-            entry = self._entries_by_id[model_id]
+            if not entry["available"]:
+                raise ValueError(f"This model can't be loaded: {entry['reason']}.")
             model = self._cache.get(entry["path"])
             if model is None:
                 model = _load_model_from_checkpoint(entry["path"], self._device)
                 self._cache[entry["path"]] = model
-            return model, self._tokenizer, self._device, entry
+            return model, self._tokenizer(entry["dataset"], entry["tokenizer"]), self._device, entry
+
+    def get_active_bundle(self):
+        return self.get_bundle_by_id(self._active_id)
 
 
 # ---------------------------------------------------------------------------
@@ -1189,13 +1211,13 @@ def build_app(model_store: ModelStore) -> FastAPI:
             req.prompt = req.prompt[:2000]
             req.max_tokens = min(req.max_tokens, 500)
             req.top_k = min(req.top_k, 200)
-        if req.model_id:
-            try:
-                model, tokenizer, device, _ = model_store.get_bundle_by_id(req.model_id)
-            except KeyError:
-                model, tokenizer, device, _ = model_store.get_active_bundle()
-        else:
+        try:
+            model, tokenizer, device, _ = model_store.get_bundle_by_id(req.model_id)
+        except KeyError:
             model, tokenizer, device, _ = model_store.get_active_bundle()
+        except ValueError as exc:
+            message = str(exc)
+            return StreamingResponse(iter([json.dumps({"t": message, "toks": []}) + "\n"]), media_type="text/plain")
         respond = _make_respond(model, tokenizer, device)
 
         def stream():
@@ -1204,11 +1226,14 @@ def build_app(model_store: ModelStore) -> FastAPI:
         return StreamingResponse(stream(), media_type="text/plain")
 
     @app.get("/vocab")
-    def vocab():
-        tokenizer = model_store.tokenizer
+    def vocab(model_id: str | None = None):
+        tokenizer = model_store.tokenizer_for_id(model_id)
         n = tokenizer.get_vocab_size()
-        entries = [{"id": i, "text": tokenizer.decode([i])} for i in range(n)]
-        return {"entries": entries}
+        return {"entries": [{"id": i, "text": tokenizer.decode([i])} for i in range(n)]}
+
+    @app.get("/growth")
+    def growth(model_id: str):
+        return model_store.growth_for_id(model_id) or {"prompts": [], "snapshots": []}
 
     @app.get("/models")
     def models():
@@ -1279,15 +1304,19 @@ def main() -> None:
     parser.add_argument("--no-browser", action="store_true",              help="Do not open a browser tab automatically")
     args = parser.parse_args()
 
-    model, tokenizer, device = _load(args.checkpoint)
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    print(f"Device: {device}")
     entries = _discover_checkpoints(args.checkpoint)
-    model_store = ModelStore(
-      initial_model=model,
-      tokenizer=tokenizer,
-      device=device,
-      entries=entries,
-      active_path=args.checkpoint,
-    )
+    try:
+        model_store = ModelStore(device=device, entries=entries, active_path=args.checkpoint)
+    except RuntimeError as exc:
+        print(exc)
+        sys.exit(1)
+    for m in model_store.list_models():
+        if not m["available"]:
+            print(f"Skipping {m['label']}: {m['reason']}.")
+    model_store.get_active_bundle()  # load the default model before the page opens
+    print("Model ready.\n")
     app = build_app(model_store)
 
     if _SPACE_MODE:
