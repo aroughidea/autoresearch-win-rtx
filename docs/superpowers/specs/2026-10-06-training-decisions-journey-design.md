@@ -157,9 +157,13 @@ and wall time per run.
 
 ## Check results (2026-10-06, RTX 4000 Ada laptop GPU, 12 GB)
 
-Same recipe, 5 minutes of training each, snapshots with the clock paused. The built-from-data
-TinyStories run scored 0.520082 against the original baseline's 0.520096, so snapshots do not
-disturb training.
+Same recipe, 5 minutes of training each, snapshots with the clock paused. The recipe was the
+session best in `train.py` (May score 0.518708), not the baseline, so the built-from-data
+TinyStories run's 0.520082 is 0.0014 above May on this machine, not a match with the baseline's
+0.520096 as first reported. A later A/B with in-loop capture (capture plan, Task 6) scored
+0.521174 captured against 0.524005 uncaptured: run-to-run noise from steps fitted into 300 s
+(640 vs 623) is about 0.003, larger than the agent's whole May improvement (0.0014). Capture's
+effect on the score is bounded only within that noise.
 
 | Run | Vocabulary | Model | Steps | Score | Peak memory | Wall time |
 |---|---|---|---|---|---|---|

@@ -112,7 +112,7 @@ LOOP FOREVER:
 
 The idea is that you are a completely autonomous researcher trying things out. If they work, keep. If they don't, discard. And you're advancing the main line so that you can iterate. If you feel like you're getting stuck in some way, you can rewind but you should probably do this very very sparingly (if ever).
 
-**Timeout**: Each experiment should take ~5 minutes total (+ a few seconds for startup and eval overhead). If a run exceeds 10 minutes, kill it and treat it as a failure (discard and revert).
+**Timeout**: Each experiment trains for ~5 minutes, plus startup, the fixed validation eval, and the writing samples `capture.py` records for the run file (about 20 seconds on an RTX 4000 Ada laptop GPU, more on slower GPUs; `sampling_s` in the run file). On consumer GPUs the eval alone can add 2–3 minutes, so a healthy run totals 8–11 minutes (`total_seconds` in the summary tells you exactly). If a run exceeds 15 minutes, kill it and treat it as a failure (discard and revert).
 
 **Crashes**: If a run crashes (OOM, or a bug, or etc.), use your judgment: If it's something dumb and easy to fix (e.g. a typo, a missing import), fix it and re-run. If the idea itself is fundamentally broken, just skip it, log "crash" as the status in the tsv, and move on.
 

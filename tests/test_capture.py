@@ -307,3 +307,34 @@ def test_runs_dir_from_env():
     assert capture.runs_dir_from_env(True, env={}) is None
     assert capture.runs_dir_from_env(False, env={"AUTORESEARCH_RUNS_DIR": "off"}) is None
     assert capture.runs_dir_from_env(True, env={"AUTORESEARCH_RUNS_DIR": "D:/runs"}) == "D:/runs"
+
+
+def _raising_log(message):
+    raise UnicodeEncodeError("charmap", message, 0, 1, "cannot encode on a cp1252 console")
+
+
+def test_failing_log_never_raises_into_training(tmp_path):
+    cap, model = _capture(tmp_path, log=_raising_log), FakeModel(fail=True)
+    cap.on_step(model, 0.0, 0, None)
+    cap.on_train_end(model, 300.0, 641, 1.5)
+    assert cap.error.startswith("RuntimeError")
+    assert _finish(cap) is not None
+
+
+def test_finish_failure_returns_none_and_leaves_no_tmp(tmp_path, monkeypatch):
+    def broken_replace(src, dst):
+        raise ValueError("simulated write failure")
+
+    monkeypatch.setattr(capture.os, "replace", broken_replace)
+    assert _finish(_capture(tmp_path)) is None
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_begin_attempt_clears_previous_attempts_error(tmp_path):
+    cap = _capture(tmp_path)
+    cap.on_step(FakeModel(fail=True), 0.0, 0, None)
+    assert cap.error is not None
+    cap.begin_attempt()
+    cap.on_step(FakeModel(), 0.0, 0, None)
+    assert cap.error is None
+    assert [s["t_s"] for s in cap.snapshots] == [0.0]

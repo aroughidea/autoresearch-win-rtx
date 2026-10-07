@@ -170,17 +170,36 @@ class RunCapture:
         self.pending = list(self.snapshot_times)
         self.snapshots = []
         self.sampling_seconds = 0.0
+        self.error = None
+
+    def _say(self, message):
+        """Log without ever raising: a cp1252 console cannot print every character."""
+        try:
+            self.log(message)
+        except Exception:
+            try:
+                self.log(ascii(message))
+            except Exception:
+                pass
+
+    def _fail(self, exc):
+        self.error = f"{type(exc).__name__}: {exc}"
+        self._say(f"capture: disabled for this run after an error: {self.error}")
 
     def on_step(self, model, training_seconds, step, train_loss):
-        if not self.enabled:
-            return
-        while self.enabled and self.pending and training_seconds >= self.pending[0]:
-            self._take(model, self.pending.pop(0), step, train_loss)
+        try:
+            while self.enabled and self.pending and training_seconds >= self.pending[0]:
+                self._take(model, self.pending.pop(0), step, train_loss)
+        except Exception as exc:  # capture must never break training
+            self._fail(exc)
 
     def on_train_end(self, model, training_seconds, step, train_loss):
         self.pending = []
-        if self.enabled:
-            self._take(model, training_seconds, step, train_loss, final=True)
+        try:
+            if self.enabled:
+                self._take(model, training_seconds, step, train_loss, final=True)
+        except Exception as exc:  # capture must never break training
+            self._fail(exc)
 
     def _take(self, model, t_s, step, train_loss, final=False):
         started = time.time()
@@ -196,8 +215,7 @@ class RunCapture:
                 for i, prompt in enumerate(self.prompts)
             ]
         except Exception as exc:  # capture must never break training
-            self.error = f"{type(exc).__name__}: {exc}"
-            self.log(f"capture: disabled for this run after an error: {self.error}")
+            self._fail(exc)
             return
         took = time.time() - started
         self.sampling_seconds += took
@@ -205,13 +223,22 @@ class RunCapture:
         if final:
             entry["final"] = True
         self.snapshots.append(entry)
-        self.log(f"capture: t={entry['t_s']}s step={step} sampled in {took:.1f}s")
+        self._say(f"capture: t={entry['t_s']}s step={step} sampled in {took:.1f}s")
 
     def finish(self, *, val_bpb, peak_vram_mb, training_seconds, num_steps, num_params, recipe,
                commit=None, committed_at=None):
         """Write runs/<run_id>.json. Returns its path, or None when capture is off or the write failed."""
         if self.runs_dir is None:
             return None
+        try:
+            return self._write(val_bpb, peak_vram_mb, training_seconds, num_steps, num_params, recipe,
+                               commit, committed_at)
+        except Exception as exc:  # the score is already printed; never end the run with a traceback
+            self._say(f"capture: could not write the run file: {type(exc).__name__}: {exc}")
+            return None
+
+    def _write(self, val_bpb, peak_vram_mb, training_seconds, num_steps, num_params, recipe,
+               commit, committed_at):
         if commit is None and committed_at is None:
             commit, committed_at = git_commit_info()
         run_id = make_run_id(commit, committed_at or datetime.now().astimezone())
@@ -240,12 +267,12 @@ class RunCapture:
             record["capture_error"] = self.error
         path = self.runs_dir / f"{run_id}.json"
         tmp = path.with_name(path.name + ".tmp")
+        self.runs_dir.mkdir(parents=True, exist_ok=True)
         try:
-            self.runs_dir.mkdir(parents=True, exist_ok=True)
             tmp.write_text(json.dumps(record, indent=1, ensure_ascii=False, allow_nan=False) + "\n", encoding="utf-8")
             os.replace(tmp, path)
-        except OSError as exc:
-            self.log(f"capture: could not write {path}: {exc}")
-            return None
-        self.log(f"capture: wrote {path}")
+        except Exception:
+            tmp.unlink(missing_ok=True)  # a half-written file must not be committed by `git add runs/`
+            raise
+        self._say(f"capture: wrote {path}")
         return path
