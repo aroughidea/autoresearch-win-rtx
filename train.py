@@ -31,6 +31,7 @@ from prepare import (
     evaluate_bpb,
     make_dataloader,
 )
+from capture import RunCapture, recipe_from, runs_dir_from_env
 
 # ---------------------------------------------------------------------------
 # Runtime configuration
@@ -1049,13 +1050,14 @@ def _configure_step_kernels(runtime):
     print(f"Muon compute dtype: {MUON_COMPUTE_DTYPE} ({muon_reason})")
 
 
-def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test):
+def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test, capture):
     t_start = time.time()
     torch.manual_seed(42)
     torch.cuda.manual_seed(42)
     torch.set_float32_matmul_precision("high")
 
     autocast_ctx = torch.amp.autocast(device_type=runtime.device_type, dtype=runtime.amp_dtype)
+    capture.begin_attempt(autocast_ctx)
 
     with torch.device("meta"):
         model = GPT(config)
@@ -1116,8 +1118,11 @@ def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test
     smooth_train_loss = 0.0
     total_training_time = 0.0
     step = 0
+    last_loss = None
 
     while True:
+        # Capture hook: runs before t0, so sampling never counts toward the time budget.
+        capture.on_step(model, total_training_time, step, last_loss)
         torch.cuda.synchronize()
         t0 = time.time()
         for _ in range(grad_accum_steps):
@@ -1153,6 +1158,7 @@ def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test
         ema_beta = 0.9
         smooth_train_loss = ema_beta * smooth_train_loss + (1 - ema_beta) * train_loss_f
         debiased_smooth_loss = smooth_train_loss / (1 - ema_beta ** (step + 1))
+        last_loss = debiased_smooth_loss
         pct_done = 100 * progress
         tok_per_sec = int(TOTAL_BATCH_SIZE / dt)
         if runtime.gpu_peak_flops:
@@ -1185,6 +1191,7 @@ def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test
             break
 
     print()
+    capture.on_train_end(model, total_training_time, step, last_loss)
     return {
         "model": model,
         "num_params": num_params,
@@ -1231,6 +1238,12 @@ def main():
     vocab_size = tokenizer.get_vocab_size()
     print(f"Vocab size: {vocab_size:,}")
     print(f"Dataset: {tokenizer.dataset}")
+    capture = RunCapture(
+        tokenizer,
+        dataset=tokenizer.dataset,
+        runs_dir=runs_dir_from_env(args.smoke_test),
+        device=runtime.device,
+    )
 
     # Configure optimizer kernels/dtypes before autotune so probes match real training runtime.
     _configure_step_kernels(runtime)
@@ -1265,6 +1278,7 @@ def main():
                 config=config,
                 device_batch_size=train_batch_size,
                 smoke_test=args.smoke_test,
+                capture=capture,
             )
             chosen_train_batch = train_batch_size
             chosen_checkpointing = use_checkpointing
@@ -1357,6 +1371,14 @@ def main():
     print(f"activation_checkpointing: {'enabled' if chosen_checkpointing else 'disabled'}")
     if args.smoke_test:
         print("smoke_test:       true")
+    capture.finish(
+        val_bpb=val_bpb,
+        peak_vram_mb=peak_vram_mb,
+        training_seconds=total_training_time,
+        num_steps=step,
+        num_params=num_params,
+        recipe=recipe_from(globals(), config),
+    )
     return 0
 
 
