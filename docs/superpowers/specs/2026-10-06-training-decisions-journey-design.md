@@ -18,8 +18,9 @@ hand in written explanations.
   non-specialists), reached through workshops.aroughidea.com and llmexplorables.aroughidea.com.
 - **In class: explore.** No training, no GPU, nothing to install. A browser explorer over
   models trained ahead of time.
-- **Out of class: a run.** Autoresearch overnight on the learner's own PC or on remote
-  hardware (Colab, a rented GPU). The agent does the research.
+- **Out of class: a run.** Autoresearch overnight on the learner's own PC or on a rented
+  GPU (a pod, or a Hugging Face Job once tested; see "Remote training"). The agent does the
+  research. Colab was tested and dropped.
 - **Back in the explorer:** the learner's own run loads next to the library, so they see what
   their decisions and their agent's changes did.
 
@@ -69,7 +70,7 @@ Every run is described the same way, so any two can be compared:
      session improved 0.27% in all), which is why the agent needs a score.
    - Live chat with a chosen model stays on the hosted demo (autoresearch-demo.fly.dev).
 3. **Out of class: the starter kit** (autoresearch-starter, simplified). Pick a dataset and
-   tokenizer, start the agent, sleep. Own PC or Colab or a rented GPU.
+   tokenizer, start the agent, sleep. Own PC or a rented GPU.
 4. **Back in the explorer:** load your run from your GitHub repo URL or by dropping the
    folder. Your runs appear next to the library.
 5. **Later:** a second night on the other dataset. Now the dataset itself can be compared.
@@ -133,8 +134,8 @@ Zeros and empty strings above mark fields, not values. Keep/discard and the agen
 
 - **Are the differences visible?** Unknown until the check. If writing looks alike between
   tokenizers or snapshots, the explorer has nothing to show and the decisions must change.
-- **Memory.** 32k and 50k vocabularies are estimated to fit on 8 to 12 GB cards (vocabulary
-  tables about 80 to 87% of the model). Frontier vocabularies probably do not.
+- **Memory.** Measured in the check: Phi-3 (32k) peaks at 6.8 GB and GPT-2 (50k) at 9.3 GB,
+  both at half batch size. GPT-2 does not fit on 8 GB cards. Frontier vocabularies do not fit.
 - **Folktales is small.** The model may memorize it within 5 minutes. That is itself a
   dataset consequence worth showing, but needs checking.
 - **Licenses.** Confirm the Folktales dataset license and the Phi-3 tokenizer license
@@ -191,3 +192,57 @@ copied-phrase marking for small datasets.
 
 Scratch code (not for merge): worktree `../autoresearch-spike`, branch
 `spike/training-decisions-check`.
+
+## Remote training (updated 2026-10-07)
+
+The overnight run needs a machine that stays up for hours with the agent on it.
+
+- **Colab: tested and dropped.** On Colab Pro with a T4, setup, the pinned PyTorch and the
+  agent loop all worked, and Claude Code signed in with a subscription via
+  `claude setup-token`. But free Colab has no supported terminal and its sessions end when
+  the tab closes, so it cannot host an overnight run. The starter's notebook was removed.
+- **The T4 model did not train.** Root cause: the fp16 path (every GPU without bf16, including
+  the RTX 20-series the starter supports) had no loss scaling. Fixed with dynamic loss scaling
+  in `train.py` (worked example #6, starter #1); verified by forcing fp16 on an RTX 4000 Ada,
+  not yet on real Turing or T4 hardware.
+- **Rented pod** (RunPod, Lambda, Vast.ai): documented in the starter's `HARDWARE.md`. Needs
+  SSH comfort.
+- **Hugging Face Jobs: the likely default, pending a test.** Pay per second from prepaid credit,
+  no subscription. bf16 GPUs: L4 24 GB at $0.80/h, A10G 24 GB at $1.00/h (about $6.40-8 a
+  night). One command (`hf jobs run --flavor l4x1 --timeout 10h --secrets ...`), logs in the
+  browser, SSH available. The night runs as one job: clone the learner's copy, set up, run the
+  agent headless (`claude -p`), push results to GitHub. Needs three accounts: Hugging Face with
+  credit, GitHub with a push token, Claude. Default job timeout is 30 minutes: always pass
+  `--timeout`.
+
+## Component 2 design: dataset and tokenizer options
+
+**What the learner does:** `uv run prepare.py --dataset folktales --tokenizer phi3`. That
+downloads what is needed, builds or fetches the tokenizer, and makes the pair active. Every
+later `train.py`, `generate.py` and `chat.py` run uses the active pair. The agent never changes
+it (`prepare.py` is read-only to the agent; `program.md` says the pair is the human's decision).
+
+| Option | Values |
+|---|---|
+| `--dataset` | `tinystories` (default) · `folktales` |
+| `--tokenizer` | `own` (default: BPE 8,192 trained on the dataset) · `phi3` (Phi-3 mini / Llama 2, 32,011 tokens) · `gpt2` (50,257) |
+
+- **Resolution order,** for both dataset and tokenizer: command-line flag, then environment
+  variable (`AUTORESEARCH_DATASET`, `AUTORESEARCH_TOKENIZER`), then the cache's active file
+  (`active_dataset.txt`, `active_tokenizer.txt`), then the default.
+- **Cache layout:** `datasets/<dataset>/tokenizer/` for `own` (unchanged, so existing caches keep
+  working) and `datasets/<dataset>/tokenizer-<name>/` for the others.
+- **Special tokens:** standard tokenizers get the same four reserved control tokens appended
+  (BOS, EOS and two spares), so `phi3` loads as 32,015 ids and `gpt2` as 50,261.
+- **Folktales:** `merve/folk-mythology-tales` (`merged_clean.txt`, CC0 1.0 per its card),
+  paragraphs packed into documents of up to 1,500 characters: 9,195 documents, 12.4 M
+  characters. The first 300 documents are validation; there is no test split.
+- **Phi-3 tokenizer:** Microsoft's `tokenizer.json` (MIT), loaded with the Hugging Face
+  `tokenizers` library, a new dependency. Its score counts one extra byte per document for the
+  leading word-boundary marker, about a 0.1% bias; documented, not corrected.
+- **No `train.py` change.** `Tokenizer.from_directory()` follows the active pair, and the
+  tokenizer object carries its `name` and `source`, which `capture.py` writes into the run
+  file's `tokenizer` field.
+- **Out of scope:** chatting with models trained on different pairs side by side (`chat.py`
+  uses the active pair); frontier vocabularies.
+- **Memory warning:** `prepare.py` warns that `gpt2` needs about 10 GB of GPU memory.
