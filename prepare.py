@@ -14,6 +14,7 @@ import argparse
 import math
 import os
 import pickle
+import re
 import shutil
 import time
 
@@ -44,7 +45,17 @@ EOS_TOKEN = "<|reserved_1|>"  # end-of-sequence: appended to every document duri
 # ---------------------------------------------------------------------------
 
 DEFAULT_DATASET = "tinystories"
-DATASET_CHOICES = ("tinystories",)
+DATASET_CHOICES = ("tinystories", "folktales")
+
+TOKENIZER_CHOICES = ("own", "phi3", "gpt2")
+DEFAULT_TOKENIZER = "own"
+TOKENIZER_SOURCES = {
+    "own": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+    "phi3": "microsoft/Phi-3-mini-4k-instruct tokenizer.json (Llama 2 vocabulary, 32,011 tokens)",
+    "gpt2": "OpenAI GPT-2 via tiktoken (50,257 tokens)",
+}
+PHI3_TOKENIZER_URL = "https://huggingface.co/microsoft/Phi-3-mini-4k-instruct/resolve/main/tokenizer.json"
+FOLKTALES_TXT_URL = "https://huggingface.co/datasets/merve/folk-mythology-tales/resolve/main/merged_clean.txt"
 
 
 def _default_cache_dir():
@@ -68,6 +79,7 @@ def _default_cache_dir():
 CACHE_DIR = _default_cache_dir()
 DATASETS_DIR = os.path.join(CACHE_DIR, "datasets")
 ACTIVE_DATASET_PATH = os.path.join(CACHE_DIR, "active_dataset.txt")
+ACTIVE_TOKENIZER_PATH = os.path.join(CACHE_DIR, "active_tokenizer.txt")
 
 DATASET_CONFIGS = {
     "tinystories": {
@@ -131,6 +143,40 @@ def _set_active_dataset(dataset_name):
         f.write(dataset_name + "\n")
 
 
+def _normalize_tokenizer_name(tokenizer_name):
+    if tokenizer_name is None:
+        return None
+    value = tokenizer_name.strip().lower()
+    if value not in TOKENIZER_CHOICES:
+        raise ValueError(f"Unknown tokenizer '{tokenizer_name}'. Expected one of {TOKENIZER_CHOICES}.")
+    return value
+
+
+def _resolve_tokenizer_name(tokenizer_name=None):
+    """Flag, then AUTORESEARCH_TOKENIZER, then active_tokenizer.txt, then 'own'.
+
+    A mistyped environment variable raises rather than silently training with another vocabulary.
+    """
+    explicit = _normalize_tokenizer_name(tokenizer_name)
+    if explicit is not None:
+        return explicit
+    env_value = os.environ.get("AUTORESEARCH_TOKENIZER")
+    if env_value:
+        return _normalize_tokenizer_name(env_value)
+    if os.path.exists(ACTIVE_TOKENIZER_PATH):
+        with open(ACTIVE_TOKENIZER_PATH, "r", encoding="utf-8") as f:
+            value = f.read().strip().lower()
+        if value in TOKENIZER_CHOICES:
+            return value
+    return DEFAULT_TOKENIZER
+
+
+def _set_active_tokenizer(tokenizer_name):
+    os.makedirs(CACHE_DIR, exist_ok=True)
+    with open(ACTIVE_TOKENIZER_PATH, "w", encoding="utf-8") as f:
+        f.write(tokenizer_name + "\n")
+
+
 def _dataset_root(dataset_name=None):
     dataset = _resolve_dataset_name(dataset_name)
     return os.path.join(DATASETS_DIR, dataset)
@@ -140,8 +186,10 @@ def _data_dir(dataset_name=None):
     return os.path.join(_dataset_root(dataset_name), "data")
 
 
-def _tokenizer_dir(dataset_name=None):
-    return os.path.join(_dataset_root(dataset_name), "tokenizer")
+def _tokenizer_dir(dataset_name=None, tokenizer_name=None):
+    name = _resolve_tokenizer_name(tokenizer_name)
+    folder = "tokenizer" if name == DEFAULT_TOKENIZER else f"tokenizer-{name}"
+    return os.path.join(_dataset_root(dataset_name), folder)
 
 
 def _tiny_parquet_path(dataset_name=None):
