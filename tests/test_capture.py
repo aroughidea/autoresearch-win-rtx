@@ -250,7 +250,7 @@ def test_finish_writes_named_run_file(tmp_path):
     assert record["run_id"] == "20260523T155743-0700_abc1234"
     assert record["commit"] == "abc1234"
     assert record["dataset"] == "tinystories"
-    assert record["tokenizer"] == {"name": "own", "vocab_size": 258}
+    assert record["tokenizer"] == {"name": "own", "source": None, "vocab_size": 258}
     assert record["prompts"] == list(capture.PROMPTS)
     assert record["decoding"] == FAST
     assert record["recipe"] == {"DEPTH": 6}
@@ -352,3 +352,13 @@ def test_git_lookup_allows_for_slow_process_start(monkeypatch):
     monkeypatch.setattr(capture.subprocess, "run", fake_run)
     assert capture.git_commit_info()[0] == "abc1234"
     assert seen["timeout"] >= 30
+
+
+def test_run_file_records_the_tokenizer_objects_name_and_source(tmp_path):
+    named = FakeTokenizer()
+    named.name, named.source = "phi3", "microsoft/Phi-3-mini-4k-instruct tokenizer.json"
+    cap = capture.RunCapture(named, dataset="folktales", runs_dir=tmp_path, device="cpu",
+                             snapshot_times=(0,), decoding=FAST, log=lambda m: None)
+    record = json.loads(_finish(cap).read_text(encoding="utf-8"))
+    assert record["tokenizer"] == {"name": "phi3", "source": named.source, "vocab_size": 258}
+    assert record["dataset"] == "folktales"

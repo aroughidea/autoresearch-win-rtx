@@ -504,19 +504,22 @@ def _build_standard_tokenizer(tokenizer_name, tokenizer_dir, dataset):
 class Tokenizer:
     """Minimal tokenizer wrapper. Training is handled above."""
 
-    def __init__(self, enc, dataset):
+    def __init__(self, enc, dataset, name=DEFAULT_TOKENIZER):
         self.enc = enc
         self.dataset = _resolve_dataset_name(dataset)
+        self.name = name
+        self.source = TOKENIZER_SOURCES[name]
         self.bos_token_id = enc.encode_single_token(BOS_TOKEN)
         self.eos_token_id = enc.encode_single_token(EOS_TOKEN)
 
     @classmethod
-    def from_directory(cls, tokenizer_dir=None, dataset=None):
+    def from_directory(cls, tokenizer_dir=None, dataset=None, tokenizer=None):
         dataset_name = _resolve_dataset_name(dataset)
-        resolved_dir = tokenizer_dir if tokenizer_dir is not None else _tokenizer_dir(dataset_name)
+        tokenizer_name = _resolve_tokenizer_name(tokenizer)
+        resolved_dir = tokenizer_dir if tokenizer_dir is not None else _tokenizer_dir(dataset_name, tokenizer_name)
         with open(os.path.join(resolved_dir, "tokenizer.pkl"), "rb") as f:
             enc = pickle.load(f)
-        return cls(enc, dataset=dataset_name)
+        return cls(enc, dataset=dataset_name, name=tokenizer_name)
 
     def get_vocab_size(self):
         return self.enc.n_vocab
@@ -547,9 +550,9 @@ class Tokenizer:
         return self.enc.decode(ids)
 
 
-def get_token_bytes(device="cpu", dataset=None):
+def get_token_bytes(device="cpu", dataset=None, tokenizer=None):
     dataset_name = _resolve_dataset_name(dataset)
-    path = os.path.join(_tokenizer_dir(dataset_name), "token_bytes.pt")
+    path = os.path.join(_tokenizer_dir(dataset_name, tokenizer), "token_bytes.pt")
     with open(path, "rb") as f:
         return torch.load(f, map_location=device)
 
@@ -661,7 +664,7 @@ def evaluate_bpb(model, tokenizer, batch_size, device="cuda", dataset=None, eval
     are excluded from both sums.
     """
     dataset_name = _resolve_dataset_name(dataset or getattr(tokenizer, "dataset", None))
-    token_bytes = get_token_bytes(device=device, dataset=dataset_name)
+    token_bytes = get_token_bytes(device=device, dataset=dataset_name, tokenizer=getattr(tokenizer, "name", None))
     val_loader = make_dataloader(
         tokenizer,
         batch_size,

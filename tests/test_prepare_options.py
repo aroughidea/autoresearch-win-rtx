@@ -92,3 +92,32 @@ def test_gpt2_encoding_adds_reserved_tokens():
     assert enc.encode_single_token(prepare.BOS_TOKEN) == 50257
     ids = enc.encode_ordinary("Once upon a time")
     assert len(ids) == 4 and enc.decode(ids) == "Once upon a time"
+
+
+import tiktoken
+import torch
+
+
+def _tiny_tiktoken():
+    ranks = {bytes([i]): i for i in range(256)}
+    specials = {name: 256 + i for i, name in enumerate(prepare.SPECIAL_TOKENS)}
+    return tiktoken.Encoding(name="tiny", pat_str=r"\S+|\s+", mergeable_ranks=ranks, special_tokens=specials)
+
+
+def test_from_directory_names_the_tokenizer(tmp_path):
+    with open(tmp_path / "tokenizer.pkl", "wb") as f:
+        pickle.dump(_tiny_tiktoken(), f)
+    tok = prepare.Tokenizer.from_directory(tokenizer_dir=str(tmp_path), dataset="tinystories", tokenizer="phi3")
+    assert tok.name == "phi3"
+    assert tok.source == prepare.TOKENIZER_SOURCES["phi3"]
+    assert tok.get_vocab_size() == 260
+
+
+def test_get_token_bytes_follows_the_named_tokenizer(clean_env):
+    for name, value in (("own", 1), ("gpt2", 2)):
+        folder = prepare._tokenizer_dir("tinystories", name)
+        os.makedirs(folder)
+        torch.save(torch.tensor([value], dtype=torch.int32), os.path.join(folder, "token_bytes.pt"))
+    prepare._set_active_tokenizer("own")
+    assert prepare.get_token_bytes(dataset="tinystories", tokenizer="gpt2").item() == 2
+    assert prepare.get_token_bytes(dataset="tinystories").item() == 1
