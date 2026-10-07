@@ -278,3 +278,21 @@ it (`prepare.py` is read-only to the agent; `program.md` says the pair is the hu
 - **Out of scope:** chatting with models trained on different pairs side by side (`chat.py`
   uses the active pair); frontier vocabularies.
 - **Memory warning:** `prepare.py` warns that `gpt2` needs about 10 GB of GPU memory.
+
+## Component: chat page upgrade (2026-10-07)
+
+Added after the learning-objectives audit, ahead of the library: the chat page is where a
+participant meets models today, so it should show a decision whose effect can be read.
+
+- **Each model loads with its own pair.** An archived checkpoint `checkpoints/<stem>.pt` and
+  its run file `runs/<stem>.json` share a stem (`<timestamp>_<commit>`), so the run file names
+  the dataset and tokenizer. `checkpoint_pre_eval.pt` (the latest run) uses the active pair;
+  archived checkpoints without a run file predate the choice and use the defaults. A model
+  whose vocabulary size differs from its tokenizer's is listed as unavailable, never decoded
+  as garbage.
+- **Pickers on both panes** (defaults stay first kept and best), and **labels with the facts:**
+  score, dataset, tokenizer, size, and the agent's description from `results.tsv`.
+- **Watch it learn:** for a model with a run file, step through what it wrote at 0, 10, 30, 60
+  and 120 s and at the end, on its four fixed prompts.
+- **The header and the vocabulary browser follow the left pane's model.**
+- Out of scope: new contrasts on the hosted demo (they need the library and a working deploy).
