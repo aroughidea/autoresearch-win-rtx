@@ -368,3 +368,48 @@ through `shared/Modes.js`. It is added to the index's sidebar and table, and to 
 - **Out of scope:** live chat (stays on the hosted demo), private repos, training in the browser.
 - **Build order:** the explorer is built against the baselines and the May session, so it does
   not wait for the overnight sessions.
+
+## Decisions, 8 October 2026
+
+- **Terminology.** Keep "training recipe" (everything in `train.py` that decides how data becomes a
+  model), cited to PyTorch's torchvision training-recipe post. Use professional terms, not metaphors.
+- **Training is not improvement.** Training happens only inside each 5-minute run (weights change by
+  gradient descent). Above it is search, not training: the agent searches over recipes (close to
+  hyperparameter optimization and neural architecture search; Elsken, Metzen and Hutter, JMLR 2019),
+  and in this demo the person edits `program.md` (Karpathy: `train.py` by the agent, `program.md` by
+  the human). A second agent editing `program.md` would be prompt optimization (Yang and others, 2023),
+  still search. The explorer names the two clocks: training time (Growth) and research time (Evolution).
+- **Sessions end on a budget.** `program.md` now sets 8 hours unless the person sets another, checks
+  the time before each experiment, stops 20 minutes before the end on a logged, committed state, and
+  requires one experiment at a time (no batched sweeps). Headless agents wait for training in the
+  foreground. Karpathy's original runs until interrupted.
+- **Before-merge fixes** from the explorer audit are in (llm-explorables `4a32ff6`).
+
+## Serving the library for completion (component 8, designed, not built)
+
+- **One server, one endpoint, a model per request.** `chat.py` already takes a `model_id` on every
+  `/generate` call, so two people on different devices can explore different models at once from one
+  machine. Separate endpoints per model would multiply machines and memory for no gain at this size.
+- **Memory.** The six baseline weights are 747 MB on disk (63 MB each for the home-made vocabularies,
+  136 MB Phi-3, 192 MB GPT-2). A 2 GB machine holds a few at once with a small least-recently-used
+  cache (the eviction is still to build); 4 GB holds the whole library.
+- **Cost** (Fly.io, prices effective 1 October 2026: shared-cpu-1x $2.19 a month with 256 MB, plus
+  $6.00 per extra GB a month; stopped machines pay only $0.15 per GB of disk a month). The demo
+  suspends when idle and bills by the second while awake: a 4 GB machine is about $0.034 an hour
+  awake ($24.69 a month if never idle), so a three-hour class costs about $0.10. Whether a *suspended*
+  machine bills exactly like a stopped one was not confirmed on Fly's page.
+- **Load.** One shared CPU serves a few people at a time; a room typing at once queues. For a class,
+  allow Fly to start a second or third machine on demand, or raise the CPU for that day.
+
+## Component 5 with a live tokenizer box (approved 8 October 2026)
+
+- **Export the tokenizers for the browser** from the worked example's library: the two home-made
+  vocabularies (TinyStories, Folktales) in tiktoken's rank format with their split pattern, GPT-2's
+  tiktoken file, and Phi-3's `tokenizer.json` (MIT), each with its source and sha256.
+- **Explorer, Tokens view:** a text box above the fixed sentences. Typing tokenizes the text with all
+  three tokenizers of the chosen dataset in the browser, shown with the same chips, counts and
+  part-letter marks. Vocabulary files load on first use.
+- **`/tokens/` and the Tokenizer Map:** add the four vocabularies to `shared/VendoredVocabularies.js`
+  with provenance, update the tests that freeze the list at eight, and add curated map entries (the
+  home-made vocabularies have no OpenRouter models). Fix Phi-3's SentencePiece display (`▁`, byte
+  tokens) in the browser parser. Keep the new files out of the API functions' bundles.

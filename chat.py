@@ -670,7 +670,7 @@ _HTML = """\
   <div id="page-gen" role="tabpanel" aria-labelledby="tab-gen">
 
   <div class="card">
-    <div id="chart-title" class="card-label">Progress</div>
+    <div id="chart-title" class="card-label">The agent's experiments (research time: a new model each run)</div>
     <svg id="chart-svg" class="chart-svg" viewBox="0 0 900 240" preserveAspectRatio="xMidYMid meet"></svg>
     <div id="chart-status" style="font-size:0.78rem;color:var(--muted);margin-top:4px">Loading results\u2026</div>
   </div>
@@ -768,7 +768,7 @@ _HTML = """\
   </div><!-- /gen-outputs -->
 
   <div class="card" id="card-growth" style="display:none">
-    <div class="card-label">Watch it learn</div>
+    <div class="card-label">Watch it learn (training time: one model, 0 s to 5 min)</div>
     <div class="growth-row">
       <select class="pane-pick" id="growth-model" aria-label="Model to watch"></select>
       <select class="pane-pick" id="growth-prompt" aria-label="Prompt"></select>
@@ -1014,7 +1014,7 @@ _HTML = """\
 
     // Title
     const keptN = parsed.filter(r => r.status === 'keep').length;
-    svg += `<text x="${ML + pw / 2}" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#111827">Progress: ${parsed.length} Experiments, ${keptN} Improvements</text>`;
+    svg += `<text x="${ML + pw / 2}" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#111827">${parsed.length} experiments, ${keptN} kept</text>`;
 
     $('chart-svg').innerHTML = svg;
     $('chart-status').style.display = 'none';

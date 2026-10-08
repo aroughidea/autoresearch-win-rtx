@@ -37,11 +37,11 @@ One convention ties these together: the same 7-character commit hash appears in 
 
 ### What is actually happening?
 
-This project trains a small AI [language model](https://en.wikipedia.org/wiki/Language_model) on your own GPU, then lets a coding agent try to make it better automatically — running experiments unattended for hours at a time while you do something else.
+This project trains a small AI [language model](https://en.wikipedia.org/wiki/Language_model) on your own GPU, then lets a coding agent improve the *training recipe* (the code and settings that turn data into a model) automatically, running experiments unattended for hours at a time while you do something else.
 
 A language model is a program that learns to read and predict text. The better it gets, the more accurately it can predict the next word in a sentence it has never seen before. That is the only thing being optimized here: how well the model predicts text.
 
-The model starts knowing nothing. After 5 minutes of training it has learned the basic patterns of the text it was given. After many iterations it gets measurably better at that task.
+Each run trains a new model from scratch: it starts knowing nothing, and after 5 minutes of training it has learned the basic patterns of the text it was given. That is the only place training happens. Across many runs the agent changes the recipe and keeps the changes that score better, so later runs produce better models; no model keeps learning from one run to the next. [TRAINING-DECISIONS.md](TRAINING-DECISIONS.md) explains the difference.
 
 What you end up with after each run is a saved model file (`checkpoint_pre_eval.pt`) and a score. Lower score means the model is better at predicting the text. That is the end product of a single run.
 
@@ -190,7 +190,7 @@ uv run generate.py "Once upon a time" --temperature 1.2
 
 Both scripts detect the model architecture automatically from the checkpoint — no configuration needed.
 
-**What to expect:** The model trained on TinyStories will continue your prompt in the style of short children's stories. The quality depends directly on how many training iterations have run and how well the settings have been tuned. Early in training the model writes nonsense; after five minutes it writes simple stories. Between a good recipe and a slightly better one, the difference is usually too small to read, which is why the agent judges by the score. The decisions you can read are the big ones: the dataset, the tokenizer, and how long the model trains.
+**What to expect:** The model trained on TinyStories will continue your prompt in the style of short children's stories. The quality depends on how far the model got in its 5 minutes of training and on how well the recipe has been tuned. Early in training the model writes nonsense; after five minutes it writes simple stories. Between a good recipe and a slightly better one, the difference is usually too small to read, which is why the agent judges by the score. The decisions you can read are the big ones: the dataset, the tokenizer, and how long the model trains.
 
 If you switch to a different dataset later, the model will reflect the style and content of that data instead.
 

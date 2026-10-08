@@ -194,3 +194,10 @@ def test_facts_come_from_the_run_file_and_the_scoreboard(tmp_path):
     assert (m["dataset"], m["tokenizer"], m["params_m"]) == ("folktales", "phi3", 18.9)
     assert (m["val_bpb"], m["description"], m["has_growth"]) == (1.389, "folktales baseline", True)
     assert store.growth_for_id("m1")["prompts"] == ["Once"]
+
+
+def test_page_names_research_time_and_training_time():
+    """The experiments chart is research time (a new model each run); Watch it learn is training time."""
+    assert "Progress: " not in chat._HTML
+    assert "research time" in chat._HTML
+    assert "training time" in chat._HTML
