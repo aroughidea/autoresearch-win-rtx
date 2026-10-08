@@ -10,7 +10,7 @@ What this project demonstrates, in plain language. Start here if you came from a
 2. **Speak to how a dataset's qualities show up in the experience,** having trained on one dataset and later on another.
 3. **Speak to how the tokenizer shapes the model:** its size, how far it trains in a fixed time, and how it writes.
 4. **Experience consequences and compare decision sets:** watch a model grow over training time, and set two recipes side by side.
-5. **Compare models through use,** in the chat page, alongside the score.
+5. **Compare models through use,** in the completion demo (you type the start, the model continues), alongside the score.
 6. **Understand AI-driven research:** an agent changes the algorithm, so no deep expertise is needed, and keeps or discards each change by a score.
 7. **Know where training happens and how it is recorded:** your own hardware, a rented GPU, and GitHub as the lab record.
 
@@ -28,17 +28,17 @@ Each step is a decision.
 
 Training happens in one place: inside each 5-minute run of `train.py` on the GPU, where the model's weights change as it reads the dataset. That is the only training in this project.
 
-Everything above that is improvement by search: change something, train a new model with the change, score it, keep the change or discard it. Nothing a model learned carries into the next experiment; every run starts from random weights. Only the recipe carries forward.
+Everything above that is experiments: change something, train a new model with the change, score it, keep the change or discard it. Machine learning calls this an outer loop around training: the inner loop trains a model's weights, the outer loop chooses the settings that training uses [16]. Nothing a model learned carries into the next experiment; every run starts from random weights. Only the recipe carries forward.
 
 | What changes | Who changes it | How it is judged | Training? | Clock |
 |---|---|---|---|---|
 | The model's weights | Gradient descent, inside `train.py` | Training loss, at every step | **Yes** | Training time: 0 s to 5 min |
-| The training recipe in `train.py` | The coding agent | The score at the end of each run | No: search | Research time: experiments over hours |
-| The agent's instructions in `program.md` | You, in this project | Whether a session's research went well; there is no agreed score | No: search | Sessions over nights |
+| The training recipe in `train.py` | The coding agent | The score at the end of each run | No: experiments, an outer loop | Research time: experiments over hours |
+| The agent's instructions in `program.md` | You, in this project | Whether a session's research went well; there is no agreed score | No: a loop around that loop | Sessions over nights |
 
 Karpathy's README for autoresearch states the division of labour directly: `train.py` is edited by the agent, `program.md` by the human. The second row is close to what machine learning calls hyperparameter optimization and neural architecture search, which a standard survey describes by a search space, a search strategy and a way to estimate performance ([Elsken, Metzen and Hutter, 2019](https://jmlr.org/papers/v20/18-598.html)): here the edits to `train.py`, the agent, and five minutes of training followed by the score.
 
-In principle a second agent could take the third row from you, editing `program.md` and keeping the instructions that produce better sessions. Research calls this prompt optimization; [Large Language Models as Optimizers](https://arxiv.org/abs/2309.03409) (Yang and others, 2023) is one example. It would still be search, not training. Each row up has a slower clock, fewer results to learn from and a vaguer score, which is why the third row is a person's job here.
+In principle a second agent could take the third row from you, editing `program.md` and keeping the instructions that produce better sessions. Research calls this prompt optimization; [Large Language Models as Optimizers](https://arxiv.org/abs/2309.03409) (Yang and others, 2023) is one example. It would still be experiments in an outer loop, not training. Each row up has a slower clock, fewer results to learn from and a vaguer score, which is why the third row is a person's job here.
 
 ## What you can see change
 
@@ -86,13 +86,13 @@ The pages use everyday words where they are already common in the field. Each is
 | **Training** | Training by gradient descent [5] | Changing a model's weights by having it read data. Here it happens only inside each 5-minute run. |
 | **Training time** | A fixed training-time budget [6] | The 5 minutes each run trains for, whatever the GPU. |
 | **Training recipe** | Training recipe or training procedure [7][8] | Everything in `train.py` that decides how data becomes a model: the model's shape (its architecture), the optimizer, learning rates, batch size and schedule (its hyperparameters). |
-| **Search, research time** | Hyperparameter optimization [9]; neural architecture search [10] | Improving the recipe by trying a change, training a new model with it, and keeping the change if the score improves. The agent searches; it does not train itself. |
+| **Experiments, research time** | Hyperparameter optimization [9] and neural architecture search [10]: an outer loop around training [16] | Improving the recipe by trying a change, training a new model with it, and keeping the change if the score improves. The agent experiments with the recipe; it does not train itself. We avoid "tuning", which readers may confuse with fine-tuning (more training), and "optimization" on its own, which also names what the training optimizer does. |
 | **Score** | Validation bits per byte (BPB) [11] | How surprised the model is by text it has not seen, per byte of text; lower is better. Counting bytes rather than tokens lets tokenizers be compared [6]. |
 | **Noise** | Run-to-run variance | Two runs of the same code differ by about 0.003, measured on this laptop. |
 | **Continues text** | A pretrained (base) model, not instruction-tuned [12] | These models continue whatever you type. Chat assistants need further training to follow instructions. |
 | **Sampling settings** | Temperature and top-k sampling [13] | How the next token is picked from the model's prediction. Every snapshot and every run uses the same settings. |
 | **Copied phrase** | Verbatim memorization [14] | A run of eight or more words a model repeats word for word from its training text. |
-| **Agent's instructions** | The agent's prompt; improving it is prompt optimization [15] | `program.md`, which a person edits here. Changing it and keeping what works is also search, not training. |
+| **Agent's instructions** | The agent's prompt; improving it is prompt optimization [15] | `program.md`, which a person edits here. Changing it and keeping what works is another outer loop, not training. |
 | **Snapshot** | Samples at a training checkpoint | What a model wrote at one moment of training, saved in `runs/`. A *checkpoint* is a model's saved weights. |
 
 ### Sources
@@ -112,5 +112,6 @@ The pages use everyday words where they are already common in the field. Each is
 13. Angela Fan, Mike Lewis and Yann Dauphin. [Hierarchical Neural Story Generation](https://arxiv.org/abs/1805.04833) (top-k sampling). ACL 2018.
 14. Nicholas Carlini and others. [Quantifying Memorization Across Neural Language Models](https://arxiv.org/abs/2202.07646). ICLR 2023.
 15. Chengrun Yang and others. [Large Language Models as Optimizers](https://arxiv.org/abs/2309.03409). ICLR 2024.
+16. Luca Franceschi, Paolo Frasconi, Saverio Salzo, Riccardo Grazzi and Massimiliano Pontil. [Bilevel Programming for Hyperparameter Optimization and Meta-Learning](https://proceedings.mlr.press/v80/franceschi18a.html). ICML 2018 (training as the inner problem, hyperparameters as the outer one).
 
 "Agent" has two meanings in the workshops: there it is the assistant you design; here it is the coding agent that runs the experiments.
