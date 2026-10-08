@@ -26,6 +26,16 @@ COPY_WORDS = 8
 # TinyStories' training text is too large to index here; the check found copying in Folktales.
 COPY_DATASETS = ("folktales",)
 WORD = re.compile(r"[A-Za-z0-9']+")
+# The four prompts split the same way in every tokenizer (plain English all three cover), so
+# the Tokens view adds sentences where they differ: TinyStories words, folk-tale words, French,
+# and numbers. Each tokenizer is cheapest on the kind of text it was built from.
+CONTRASTS = (
+    "Lily and her mommy baked yummy cookies.",
+    "The vizier's daughter whispered to the sultan.",
+    "Il était une fois une princesse.",
+    "In 1812, the brothers Grimm printed 86 tales.",
+)
+SENTENCES = tuple(PROMPTS) + CONTRASTS
 
 
 def token_pieces(tokenizer, text):
@@ -106,7 +116,7 @@ def load_runs(library=LIBRARY):
 
 
 def tokens_report():
-    out = {"prompts": list(PROMPTS), "sample_docs": SAMPLE_DOCS, "datasets": {}}
+    out = {"prompts": list(PROMPTS), "sentences": list(SENTENCES), "sample_docs": SAMPLE_DOCS, "datasets": {}}
     for dataset in DATASETS:
         docs = list(itertools.islice(text_iterator(dataset), SAMPLE_DOCS))
         out["datasets"][dataset] = {}
@@ -115,7 +125,7 @@ def tokens_report():
             out["datasets"][dataset][name] = {
                 "vocab_size": tok.get_vocab_size(),
                 "source": tok.source,
-                "splits": [token_pieces(tok, p) for p in PROMPTS],
+                "splits": [token_pieces(tok, p) for p in SENTENCES],
                 **vocab_stats(tok, docs),
             }
             print(f"tokens: {dataset} / {name}: {out['datasets'][dataset][name]['chars_per_token']} chars per token")
