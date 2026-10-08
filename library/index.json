@@ -17,10 +17,31 @@
    "results": null
   },
   {
+   "id": "sessions/folktales-oct2026",
+   "title": "Agent session, Folktales, October 2026",
+   "kind": "session",
+   "note": "12 experiments by the agent on the evening of 7 October 2026, from the starter kit's recipe, on Folktales with its own tokenizer. It ran two hours, until its sign-in expired.",
+   "runs": [
+    "sessions/folktales-oct2026/runs/20261007T201611-0700_313f435.json",
+    "sessions/folktales-oct2026/runs/20261007T215844-0700_02555f3-2.json",
+    "sessions/folktales-oct2026/runs/20261007T215844-0700_02555f3.json",
+    "sessions/folktales-oct2026/runs/20261007T221539-0700_147fff9.json",
+    "sessions/folktales-oct2026/runs/20261007T222410-0700_01b73b2.json",
+    "sessions/folktales-oct2026/runs/20261007T223218-0700_5d80fab.json",
+    "sessions/folktales-oct2026/runs/20261007T224024-0700_f9352a8-2.json",
+    "sessions/folktales-oct2026/runs/20261007T224024-0700_f9352a8.json",
+    "sessions/folktales-oct2026/runs/20261007T224829-0700_d51eddf.json",
+    "sessions/folktales-oct2026/runs/20261007T225636-0700_950c742.json",
+    "sessions/folktales-oct2026/runs/20261007T231402-0700_4153934.json",
+    "sessions/folktales-oct2026/runs/20261007T232214-0700_47e6edc.json"
+   ],
+   "results": "sessions/folktales-oct2026/results.tsv"
+  },
+  {
    "id": "sessions/tinystories-may2026",
    "title": "Agent session, TinyStories, May 2026",
    "kind": "session",
-   "note": "16 experiments by the agent on 23 May 2026, before run files existed: scores only, no writing.",
+   "note": "16 experiments by the agent: 15 on 23 May 2026 and one on 6 August, before run files existed. Scores only, no writing.",
    "runs": [],
    "results": "sessions/tinystories-may2026/results.tsv"
   }

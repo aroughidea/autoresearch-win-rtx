@@ -1,0 +1,135 @@
+{
+ "schema": 1,
+ "run_id": "20261007T215844-0700_02555f3",
+ "commit": "02555f3",
+ "created": "2026-10-07T22:06:46-07:00",
+ "dataset": "folktales",
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.07,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 33,
+   "train_loss": 6.074,
+   "samples": [
+    " he will you; but so to go and the palace; and when she must be an eye, and said of the little girl, you the air the King, but he took her life?\" The young man has not know that she took up to the moon, and thought that, and said to himself to her. He was the place there was sitting on her in the Prince, and a great cr",
+    " the youth. \"What a single year of her husband, and they said he should have done his brothers that he was really can I never seen, and said, but the fire. It does not stay. There is as soon at the place, and then he was very happy. He was going away. The brothers and they came along; and that was a little bed.",
+    ", and took a few miles down to the world he had done.\n\n\"My own head in the King, and went to be very nice thing that he thought the King's son, and the window of the story of her arms, and saw an egg, and then, and she took the water, and to it?\" said, and went along the beautiful little, but a great many that he answered",
+    " great place of the princess, and she will not to come and said his husband he cried to see him the window, my eyes. The brothers, \"Ah, and said to get for the palace he was all all she went to see you have been taken them; but he was going; and she went after that it was, \"Oh, and she was so well, but at once more that"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 69,
+   "train_loss": 5.2439,
+   "samples": [
+    " of the world; but, and she would not be in her. She threw her in her husband and said of the old woman, \"And when the sun is the Sultan, and he said, \"Feth not, \"I have befallen me who said, \"What is thy hand,\" answered she, \"and I tell the first, not whither I must be my heart, and a man that I give thee, for a month",
+    " the King, \"What is thy words of Allah, I am I will have to this matter. I will not be thy master.\"",
+    ", the young lady, who was to the world he had reached the cup of the lady, a lady of her. Then her, he sent to himself. When the lad, the Sultan went to the world, and said, \"O my father's daughter, \"This is the Sultan who is in to her, and we will be a man and I, we have done to her, \"Bon. I I am well as I be done before",
+    " great grief of her breasts; and, the dawn of his brother, \"We will thou not be the dawn, my eyes and will not return to the midst of the world and he was a cup of wine.\" They went to the Sultan's son of the city of the third as a blackness of the son of his uncle, and she is noblesta was to him. When the whole world he"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 132,
+   "train_loss": 4.3819,
+   "samples": [
+    " there met a peasant who was standing in the middle of a throne. She could bear an oath, and he only did not wish to learn the man. She was not allowed to be seen. The child was very kind, and she could have seen nothing. She was now and so cleverly that she was so unhappy. She was of a princess, although her father would",
+    " the king. He was a king. He was a man of a king of an king and his palace and he was a wise man of a man, and he had known to him, and his son had not been in a king's marriage.\n\n\"It must,\" he said, \"and so must know. I have learned people in this house and that I should be sure. But this is not the stranger. I can return",
+    ", the sultan was a man, who had not often been a single cat. At first the king, of the king was a prince whom he had taught the king to an astrologers of the king, who had received his blessing.\n\nThe slave had his friend, and the princess was pleased with her conduct, and she was a foolish man for his return to a grave",
+    " great house of a great family; she was hungry, and she was much astonished at her a strange noise, the bear of the city of the hut. She was seen and a pretty man who was sitting at the door of the house, or a fool of her father, with the poor sister of the king. She was waiting, in the yard, and they said to him:\n\n\"I know"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 256,
+   "train_loss": 3.8453,
+   "samples": [
+    " there lived a King who, and his sister used to be a man or a bear, and, besides, of the fox, was a fox, a bear, a bear, and a fox, a fox, a bear; a bear, a bear, bear, bear, bear bear, bear one of bear bear, and bear of fox; and the bear, or the bear, a fox, a bear, bear bear a bear, bear, bear, bear bear bear bear bear",
+    " the son of the merchant, and his son, he answered them that he might be dead and his son; and his heart gave him a thousand pieces of silver, and with him him, and his heart sank to him as a horseman, and he became stronger and stronger than his beauty, and, having his daughter, he took her up with her to a fine place",
+    ", when he saw a man standing by the side of the tree, in the same manner as a tall of some importance, with a large tree in which the gnome had sprung from the tree of the tree, and he looked about the root, and saw the bough open, in the shade of the tree with its beaks and feathers, which were perched a tree suspended",
+    " great place of the great river; and the water of the river was filled with water. She stooped to the water, and threw it down, and the river flowing gently over her hands. It was like the fish, she stooped to see what it was, but she exclaimed, \"I will be glad to have thee yet seen, in which I can find thee, and my husband"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 627,
+   "train_loss": 1.9822,
+   "samples": [
+    " there lived a King who was very fond of his daughter; and he worked all day long day, and had only the finest hunting all the most beautiful. O King, he went and was going to hunt, when he came to an outly. There was once a great plain, but there were no game of be found, which seemed to be like a sheep in the air, and",
+    ", \"Give me some news of the death of Anshgayy.\"\n\nAnd this was his only son, and he gave a short sleep, saying, \"Take the fire and ate some of the ashes\"--pe then, then, be ready. But the ashes are come which, and the ashes are blown into the power. The ring that was of no use. And the ring has the ashes of the story wonderful",
+    " in the forest, on the hill to the forest of huge tree, lived a man who was standing on a hill. And when he had walked all day round the tree he saw the giant and the little girl lying on the top of the tree. He had hardly breakfast left over the tree when he saw him with his eyes a little dark corner of his fork, sitting",
+    " great deal of trouble in her old own work, and she was lying in a bed under a tree. She could not possibly sleep. The little girl was so delighted that she began to dance. She danced, and was forced to go, and was forced to go back the way she had come. She went after them into the field, and told her to hurry home to"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.36845,
+  "training_s": 300.0,
+  "peak_vram_mb": 3546.5,
+  "num_steps": 627,
+  "params_m": 18.9,
+  "sampling_s": 19.0
+ }
+}

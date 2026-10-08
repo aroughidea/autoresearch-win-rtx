@@ -1,0 +1,135 @@
+{
+ "schema": 1,
+ "run_id": "20261007T222410-0700_01b73b2",
+ "commit": "01b73b2",
+ "created": "2026-10-07T22:32:08-07:00",
+ "dataset": "folktales",
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.12,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.2114,
+   "samples": [
+    " he has you; but so to go and the palace. No. She must be an eye, and he is the Bark, you the old man, \"I have to the morning they did not kill you are not come to them, and the moon, and of the Tinass. Fan. He was the place there was sitting on the Rist, and the gardener, and he said he took the King, \"I will be of his",
+    " the King. And he said the princess has not been found them, and he should have done his palace that he was really. He is I do not have I am, \"Four, and the prince. I have done at the place, and the world, and cried the king, and she had been, and they came along the moon. A thing as the story, and she would not. The two",
+    ", and he took his eyes, and said the Ranable.\n\n\"My own story in the white child of her a certain of the Branti. When the Tar.\"",
+    " great place of the Digas, and the night, and the old men, they had been, and the Pf, and he came in the king's Majesty, and he fell out of gold, and began to the King, or other.\n\nBut the city, and the ground; and she went after that it was, in the old man came the Pa was so; I am going to him, and gave him, and the Dip"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.3211,
+   "samples": [
+    ".\n\n\"What can't return, you go,\" said the dog, \"I must go home.\n\n\"Skas of the river, the sea.\"\n\n\"O the dog, the poor man and he thought, and was very kind, and then she would be the Princess, and do you live?\"\n\n\"I must go to the old man that the door is not to help me?\" asked the glass, and I want my life. I go down the",
+    " the \"basons and the old man, he had never seen a moment to this life. He never saw his heart, he now I do you wish I am, you?\" said me,.\"\n\nThen the man asked the dog. I must see the world that the great was that you did you will ask? I find you!\" said the Prince.\n\n\"I hope you!\"\n\n\"Ofitution.\"\n\nThe people had always been",
+    ", the young lady, who was to the gate he had no more than he was there was a beautiful of her.\n\nThis happened, he sent to cross the spot and he could never get him that the world, and said:\n\nThe poor.\n\nThe old man was quite darkened to the water, and to her mother's house and carried that she had now, and a great fear that",
+    " few minutes he looked out for he came out of his back and said his father, they had been, the water, and when they were so far before the poor old man began to make the country, she had been for her that she decided how he was quite well, he thought as a favourite and went into his way she, and then she saw the old man"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 4.4823,
+   "samples": [
+    " there lived a King was in the evening palace of the windows, where the King's wife was, and children of the palace, and the most beautiful the people, who had to her in every place, was very fond of; and she was not a little boy in which the world was always going to come to him. In the place there was a great deal in",
+    " the son of the world and his wife whom I looked at them, and he said that they had a daughter, and you were a lady, too, and I am the lady of my mother, and the old man who was at the door of the princess's house. So she sat and looked at the princess, and they took them out of the house a little girl.",
+    ", the three lovely maidens who were to be dead, and they were in the same position or a beautiful of fire. And then they are going to die. When we came, the ostrich the world, and we have a place ourselves. We have only to look about the old people, and to-night you get them into the sack.\" \"But we must sing more.\"\n\n\"He",
+    " great stone of the world for the little boy's face, and the old men looked with a little child, the old man who had been lying in the hand's feet. He was standing at the door, and began to look at the old woman.\n\n\"Thou hast not been so,\" said the old woman, \"and I shall go into the house.\" And they lay down upon the throne"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 263,
+   "train_loss": 3.7774,
+   "samples": [
+    " there met a woman who was standing at the door of a house, or a child, in a place, of the old woman, who was a man in his stead. When he was going to take a little, he was a thief, who was a king in his house, and he was one of the best of people; and there he was a poor woman, and was a fairy, and seldom had a child with",
+    " the son of the merchant, and if thou speak to thee of that which he should asketh his advice that he would take thee to the house, and that I may be the son of 'Alee Noor-ed-Deen; and if he be the wife of the slave, the slave will make thee a wife of his daughter and the wife of Etlantine; for the son of Khudan is a divor",
+    ", the forest through the trees were not at all close to the river, nor on there the rivers grass of the leaves of the trees, nor in any the gnome, nor the mossy grass near the bottom; nor its leaves were so hot that the river, and which the river water had made, it was near by the river that which had happened, its branches",
+    " great quantity of different kinds of stuff, and the red and white and white and yellow. After she had recalled she a whole of the whole affair before the youth, and said to them, O my mistress, verily she hath been a child's wife, and she is not the son of Suleyman Ez-Zeman, who is in this service, that she may eat of"
+   ]
+  },
+  {
+   "t_s": 300.1,
+   "step": 639,
+   "train_loss": 2.3061,
+   "samples": [
+    " there lived a King who had a daughter who had a daughter, named She had no one except the King, whom he had two sons. One day the King of the country went to hunt, and as soon as the youth had got out of sight the King her father and brothers were gone; and one day he came to a King of the country, and said to him, 'You",
+    ", \"Good-bye, Fred. I am going to-day with you again. Hall I take me down and get you there?\"\n\n\"Never fear, dear little I. I'll just see what I can do.\"\n\n\"You will not at all, dear little Sigeon,\" cried the king, \"and you must be sure, if you don't get me a little boar and run over to the king. You must get out, and make",
+    " there were three women, who were to guard the house, and instead of the women as the women were of her own, her mistress gave them to the women. These she put on the women of the maidens, and they worked so hard that they were left all alone, and the men were pleased with each other, and who, by that time, bore a fact",
+    " great many sad and sad forlorn, and sorrowful was she. Nevertheless, they had much money, and the little girl let down the poor little mouse and begged the little girl to go with them, and she only went to see what it was. But she did not venture to say so, and this time it was so difficult to get into the little mouse"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.29624,
+  "training_s": 300.1,
+  "peak_vram_mb": 3546.2,
+  "num_steps": 639,
+  "params_m": 18.9,
+  "sampling_s": 14.5
+ }
+}
