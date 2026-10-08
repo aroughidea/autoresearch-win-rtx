@@ -1,0 +1,135 @@
+{
+ "schema": 1,
+ "run_id": "20261007T201611-0700_313f435",
+ "commit": "313f435",
+ "created": "2026-10-07T21:57:14-07:00",
+ "dataset": "folktales",
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 33,
+   "train_loss": 6.0557,
+   "samples": [
+    " he will you; but so to go and the palace; and when she must be found in the King, saying, and asked, you have ever the King, \"What to her head?\" The young man!\" cried, and said she would not stay with her head of the end, \"Copenhere is so that it was going there was sitting on her in the Prince, \"but I want me?\"",
+    " the youth. \"What a single year of the ground, and they said he should have done his brothers that he was really can I never seen, and said, but the fire. And after his heart. There is as soon at the place, and then he was very happy. He was going away. \"What have been very glad; and that you will go.\n\nWhen he went by the",
+    ", and took their heads who was to the world he had done.\n\n\"My own story in the King, and went to be her, he was in the poor woman said, but the King and ran the story of her arms, and saw that he had given to be the most beautiful, for it in the princess, and said the princess that she had got a great a great many that",
+    " great white king and as she saw the King's son, and said his husband he cried, and said the water, my eyes. The brothers, \"Ah, \"Par,\" replied the great gold, and began to stay in the old woman.\n\nBut the city, so the poor; and she went after that it was, \"Oh, and she was so well, but at once more that they could carry up"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 75,
+   "train_loss": 5.2246,
+   "samples": [
+    " the time the world was so well and so that of a few minutes, who was an assumed a way of the river, and could the man, in his mother. When he was going to be an old woman, she seemed out, and who was her in great excitement, and how to fight to reach the boy, and then there was like a poor child, and, and a great that",
+    " the old girl, It was about to see what he had lived, and he found that he had a great big voice, and he found his horse, and, and with surprise.\n\nWhen his mother had been waiting for him, he was the poor woman's room.\n\nThen he came to his mother, and his life and then, but he was that was a little child.",
+    ", with its high as it was to the wind he had no more than he was in the big hall of her.\n\nShe then, who was in front of the great, seeing how the window of the world, and said:\n\n\"I'll be a moment,\" said, \"I know, who had made of it?\" inquired who, but that you see the lady, and you shall not think how a little creature",
+    " few minutes of the great store of the glass of the man, and his eyes like a few hours, and the box, when they decided that they ought to know that they can't go!\" cried he, springing up she went to her. \"I am quite a small, I will be able to do you think it!\"\n\nBut if you will be you will soon you have to your own life"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 136,
+   "train_loss": 4.3633,
+   "samples": [
+    " there was a beautiful King, and a palace of marble tower, which stood on the sandals, and the walls and blue sea, the beautiful maiden, in which the Princess, and was obliged to follow them. The Princess; she took the golden crown from her head of the castle, and laid it upon her. By that was of the world, although her",
+    " the king's palace, and was the king, he had told his majesty he should learn to his palace that he was really dead, for he was a very great palace, was just like the prince. He was at full moment at the door of the princess's palace, and was in the palace, and his attendants and the queen, and the princess herself had",
+    " Volga stood on the hill, where the bird had been placed in the garden. The beams were full of leaves, with red, and tiresome the whole town, and the whole of the world are not strong, and the flowers on the green grass, and the young ones were obliged to keep it empty. There the earth canary for the nightingale, and the",
+    " great deal of roses; for she had a new cloak, and the old woman was not a great fault-bush, a whole bushel of money, for she was so frightened that she had nothing but not, and she wore on her head. She was now quite a new dress; as she could play, and then she would go in and see her, they said, \"I will know how that"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 258,
+   "train_loss": 3.7375,
+   "samples": [
+    " there lived a King who was called a Wezeer, and died, and his Wezeer. One day, when he was the son of the King of Ireland, he saw him, and said to him, O son of the King of the Sea King O'The King of the age, and we must return to the river. In the place of the Wezeer El-Barah, and that the fish of the sea is the same",
+    " the youth, O my master, if thou accept my offer of my reward for me this trick. He replied, and I have a reward for his honour; and he hath said to me: I have said to him, O my mistress, that I may help thee.--O my master, said she, ask him to take thee to the palace that thou art a thief. He replied, I conjure thee by",
+    ", the young man had a long way to his hut, and a little more terrible than the last, and he was unable to find a man in any difficulty. A more, than the first of the other young man had been waiting, when he had entered his place, and found he saw a small way with him through which stopped. What was his astonishment, when",
+    " basket of basket and basket, and she seated herself at the edge of his basket, with a basket containing the basket, a basket of basket, and a basket of dry basket, and attired its basket, and basket to basket, with basket, basket, basket, basket, basket, basket, basket, basket, basket, basket, and basket, basket, basket"
+   ]
+  },
+  {
+   "t_s": 300.2,
+   "step": 631,
+   "train_loss": 1.8709,
+   "samples": [
+    " there lived a King who had a daughter who was a witch, named She, and he was no longer called her. He was so ugly that he could not bear her along that would have much trouble for her little, but she would not have minded what she wanted. He would lock her hair into a little black gown, which she was not like the others",
+    ", \"Verily this is a matter of common sense, and never in our world could be as small as a matter.\"\n\nThe king now began to ask about all that the king's daughter was about. The king said that he should not tell his son. He asked the counselor if he did not know what he had said that he would do. He told his wife the report",
+    ", at once, there lived a king, who was very rich, and he was a little boy, and had a father, and he was very pretty. When he came back to the town, the king gave him a splendid banquet, and a ball of silk, and invited him to sleep; and when it was evening, the king sent for his son, and told him to enter, and asked him",
+    " few minutes' and a cryst came from the distance, and the old woman's voice left there, crying, \"Well, are you? stop here? You are very kind and quiet!\" but she heard nothing except the little girl, who came out of her bed and flung the glass around the little king's son. Then she put on the ribbon, and, seizing her in"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.385879,
+  "training_s": 300.2,
+  "peak_vram_mb": 3545.8,
+  "num_steps": 631,
+  "params_m": 18.9,
+  "sampling_s": 21.1
+ }
+}
