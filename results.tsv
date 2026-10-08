@@ -9,3 +9,5 @@ timestamp	commit	val_bpb	memory_gb	status	description
 2026-10-07T22:40:24-07:00	f9352a8	1.265423	3.5	keep	matrix_lr 0.20 (confirm run 2)
 2026-10-07T22:48:29-07:00	d51eddf	1.270926	3.5	discard	matrix_lr sweep: 0.26 (worse than 0.20)
 2026-10-07T22:56:36-07:00	950c742	1.271753	3.5	discard	matrix_lr sweep: 0.22 (worse than 0.20)
+2026-10-07T23:14:02-07:00	4153934	1.278295	3.5	discard	embedding_lr 1.0 -> 1.5 (worse)
+2026-10-07T23:22:14-07:00	47e6edc	1.285589	3.5	discard	embedding_lr 1.0 -> 0.7 (worse; 1.0 is optimal)
