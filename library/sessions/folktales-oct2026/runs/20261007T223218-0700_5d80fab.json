@@ -1,0 +1,135 @@
+{
+ "schema": 1,
+ "run_id": "20261007T223218-0700_5d80fab",
+ "commit": "5d80fab",
+ "created": "2026-10-07T22:40:16-07:00",
+ "dataset": "folktales",
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.16,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.2429,
+   "samples": [
+    " he has you; but so to go and the palace in a great deal. It is in the King, saying, and his wife in the man, in his mother. When he was going to be a little one, and the King, and the King, and now, and so far down to come to be his house.",
+    " the King. And he said.",
+    " in the young man; who was to the prince gave the King.\n\n\"My own story in the King, and her a certain of the Bom in the fire. The Tar.\"",
+    " great a little and as all that she will not to come and the old men, they had been afraid the water, my eyes. The prince, \"and the king, and he fell on the farmer, and began to the King, or a fool of the city, so the poor; and she went after his new as, in the old man came the Pa was so angry. Seeing the whole country"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.3373,
+   "samples": [
+    ".\n\n\"What can't matter, you are here?\" and in the Sun.\n\nThe old man was able to kill you, you wish.\"\n\nThe old man, in which is no one and if you ever be,\" said the shore; \"I have come hither,\" said the great feast, \"ashes,\" said the best of that the door, I have I must be my heart, and let you go into the wind, you need",
+    ":\n\n\"I know you here and surely I see I will I.\"\n\nNow take me down this matter. I will not do you,\" said the old man, \"but I wish you can try me?\" and do you know.\"\n\nBut you must I be very late,\" said the great was that you did you will ask? I have been!\" said the Prince said.\n\n\"I have no longer,\" said the great and thou",
+    ", and he took his eyes, and said:\n\nThen he went along on the creature, and then said:\n\nThe old man, \"Fiff in the monkey was afraid of his wife.\"\n\nThe old the world was a man now that the Princess had never had all that he was the old man, and to himself, and then the monkey, and his back, and a great fear that he could",
+    " great store of the great store of their tears, and then he said his men, they had told him the water, and when the river that he had no one that he began to them was quite sure, and all she went to the hare's house and told the ground, the poor, and she went through his mouth and, and then she saw the old man, was great"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 4.5649,
+   "samples": [
+    " there lived a King was in the evening, for the prince was in his bed. One of the family, of the people who were about the castle, in which the world were to be made to be beautiful. The poor one of them, who had said, in which were written in their room. The little maid had no been sentence at our heads, in the form of",
+    " the \"You can fly go about to see what he had said? Yes, and this is his palace that is quite over there, now I do not wish to live with you. You must not please us. If you were at all the other people from us, they may come to the prince, and therefore, and they shall have no power at a thing.\"",
+    ", the young lady had been a stork, the nightingale had been placed in the garden. The white blossoms of the leaves of the storks, and in which the snow are used, the people called \"I have nothing but a story; but I may know,\" said the farmer, \"I feel it too, with whom I think I'm a story for you, but a child shall not be",
+    " great bird, and looked for the little boy's face, and said his \"the young lady, something too, for I know I will not return to the rest of my family and your old thoughts of men.\""
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 262,
+   "train_loss": 3.8944,
+   "samples": [
+    " I met a King King, and a Wezeer of age came a man of wealth, riding over the gardens, of the people, and a merchants of the city, who surrounded the garden was furnished with carpets of carpets, adorned with carpets and cushions and cushions, and in the most ornamented with lamps and candles and candles. In the midst of",
+    " to her, O my master, if thou speak to thee of that which he should asketh his cause that he would be acquainted with this conduct.--I replied, Thou hast acquitted my affair; and if it were to thee, I would not accept from it thee. So he went out to them, and, having ordered her female slaves to do so; and she said, I desire",
+    ", the young man who was a lofty city, and had borne along the walls of a saloon, a garden, a garden of red resembles in front of marble; an oblong with gilding the chest, and a chest adorned with pearls and jewels and ambergris, and he saw it in the midst of his face, and that he had a handsome beard and white figure was",
+    " great house of a great market; and a new one of it was in a quarter of a piece of brocade, when she sat conversing with her fingers and razging her, but she was convinced that she had been able to do so. She then gave orders to convey a female of five thousand pieces of gold, inlaid with two females, and placed her at"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 638,
+   "train_loss": 2.4319,
+   "samples": [
+    " there lived a King who was called Grianaig; and when he had finished his supper, the children of the sun rose, and the Tree, in which were two big trees, strong and well-behaved, he would have done a great deal, in the greatest fear of being able to come across. He was very glad, not having once known what the Tree was",
+    ", \"If you will only risk your life, and I will have a dress embroidered with gold. I will not pearls from weariness of thy father, and I shall be sure to live yet; only if it were better that will not I be happier than it was before.\" When he heard this, he could not have believed in it; he at last thought his father and",
+    ", in three or four miles, they seem to hear the noise of breaking a glimmer of light, and the sun was set amid the beams of the the sun. The birds were not long in the world, and they lived together in a great gloomy room,, with their dogs, which, in winter with snow, never stopped. They could see the walls of a great city",
+    " great treasure of gold, and giving it a handful of gold pieces to his wife, they left it, and the money wanting when it was done. Then the girl took it and went home. And as she had been for some days, the girl told her what she had with the little girl, and how the old woman had lost her key, and how they had found the"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.294065,
+  "training_s": 300.0,
+  "peak_vram_mb": 3545.9,
+  "num_steps": 638,
+  "params_m": 18.9,
+  "sampling_s": 13.7
+ }
+}

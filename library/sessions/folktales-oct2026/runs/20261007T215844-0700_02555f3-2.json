@@ -1,0 +1,135 @@
+{
+ "schema": 1,
+ "run_id": "20261007T215844-0700_02555f3-2",
+ "commit": "02555f3",
+ "created": "2026-10-07T22:15:04-07:00",
+ "dataset": "folktales",
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.07,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.1907,
+   "samples": [
+    " he will you; but so to go and the palace. 'You have seen. I am noises, and the Bark, you the old man, \"I have to the Welces, \"What are not come to them, and the moon, and the palace, \"ass. 1890, \"I have not like the Priist, \"d of PARGrimudmiate the King, and of the king, \"Do not come on the farmer and his back to stay",
+    " the King. \"What a great many of the Bat of the Tas,\" said to his palace that he was really have a great deal, and he has come with the story, and his heart. There is as a very happy, and they must not have been afraid that can not come away. \"Wide, and there he was that you a little child.",
+    ", and he has never to the place,\" cried he had done.\n\n\"I am very well, as a very difficult to be a deep down into the same thing the King's son.\"",
+    " great a little and as all that I will not to come and the old men like his daughter, and the water, my eyes. The brothers, \"and the king, and he had been quite like it had been very angry, and the prince.\n\nBut the city, with the c; and she went after that it was, in the old man came the Pur was so; I am going to him, and"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 68,
+   "train_loss": 5.1499,
+   "samples": [
+    " of the world; but, and she would not be sure enough, so she said, \"There shall kill of the cause of the first the man who had done. If we had happened to be ready to keep the midst of the King, O my lady, in the Wazir, but we reached one of her. When they heard of the old woman went forth in the Lord, and a great alarm",
+    " the King, \"What is thy words of thy love thee of Allah is he hath happened to his uncle that is this be slain a lady, \"O my lord, be our lord, O my heart!\" The man who hath been in the Sultan of the slave, the case is in thy wits, and his words and they.\"",
+    " of day's lady, who was to the world he had reached the cup of the lady and a lady of her. Then her, when Jack heard of the King said,",
+    " second night of her breast of its waters, the dawn of his body and went out with a lady, the dawn, an' and drank and the King came and he was a daughter of the house of her husband's son, and, saying, \"O my father thou wunately; I have slain me whatupon she said, \"This is noblest thou hast slain thee I am that thou shalt"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 129,
+   "train_loss": 4.3223,
+   "samples": [
+    " on the first time was so quick and the dervish, that he might be seen. Sometimes he was a way of the palace, however, the Tzaritza had his mother, that he was going to follow them. The poor man, and would not stay with him in his palace, but he soon saw the little Prince Ivan that the Tzar was not off to his father, and",
+    " the old girl, \"Morey of the world, of course, he has a newly a daughter, and you have a long time to come and have a wife to eat by me. How happy it is.\"\n\nBut at the moment of the old man was walking on his bench, when he had been, and, in case he had not a fancy to let him start off, even the Tzaritza himself and to eat",
+    ", in reality, on that a row of food, and went along in the forest, and there were many years a day of night, going to sleep. When the wind was the little river of the river, and the other servants saw an old Peter had torn, and, the old Peter had made him with him. There the Tzar was a lot of them, a great wind from the",
+    " great lake of water, for she had a new dinner, and the old Peter left her in the world, the old Peter had been carried away from the forest to his palace. There stood the house of the sea, for which she knew or how to get rid of him, the big black horse of the river, oranges, in order to remove the same age, where the"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 255,
+   "train_loss": 3.8618,
+   "samples": [
+    " there lived a negro named Cairenech, and a man named Saq of the Plain of the Poultry, whom the man had had brought him a few days ago, named Ryn Gu, on hearing his words, he asked him, \"What news of this? Yoonania, O King of the age of the great-grandmother? I am a knight, and I am fond of his own, and I wish to look as",
+    " the youth, O merchant, and his name, O my son, is King of this matter, and that is his name, and is thy name, and I am the son of my brother, and I am my son. And I am married to the slave, and I was married, and I married to him and they both loved; and I was a man, and in my own shape there. The merchant and the merchant",
+    ", though he could not see anyone who was mad, he thought that he was the most powerful of ever of any importance. At last he could not tell the story of an enemy the lion whose beauty the serpent had been killed by his own.\n\nMeanwhile the lion was quite dead, and he knew it was no use of his strength, but he was wiser than",
+    " great way of her sister, and she asked what is the matter. The sister, who replied, is the same, answered the Sister of the Sun, though she was still so kind of this kind, she had rescued her husband, or how she had been killed by her sister, or of shelfare, or she, or or she should have her sister, or to her sister, or"
+   ]
+  },
+  {
+   "t_s": 300.1,
+   "step": 629,
+   "train_loss": 1.9615,
+   "samples": [
+    " there lived a King who was so delighted that he gave each consent. Now the time One day the King said to his son, \"My son, the King of the country, has ordered me to take you to the palace; and I have a present to you the King's son, to whom you desire to marry. In the meantime there shall be great rejoicings. He shall",
+    " to her, \"What sayest thou to do with thy children? How shall we get thy daughter from that old man from whom I get thy daughter?\"\n\nThe brothers said nothing to him, and they went to the old man's house. They asked him to ask his daughter's story, and did not say her, and they replied, Praise be to God for the mercy of",
+    ", near the town on which the blind girl had left the world.\n\nAn old man lived in a hut of his mother's sister, whom he had only seen in his hut, and had never been underground in the hut nor room. As he had never seen any more girl, he used to come in to see her and eat the green ones every day by day. At last he grew angry",
+    " few minutes before she was left alone. She called to her father to bring her some water from the well, and she said to them, \"Bish with you!\" and them went on, but they could not move for water, and quickly wounded them as they generally did, so that they could not escape. But the girl, who was very fond of the girl, was"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.365741,
+  "training_s": 300.1,
+  "peak_vram_mb": 3547.1,
+  "num_steps": 629,
+  "params_m": 18.9,
+  "sampling_s": 18.2
+ }
+}

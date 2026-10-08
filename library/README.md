@@ -10,14 +10,16 @@ training run, written by `capture.py`) and, when an agent made it, `results.tsv`
 | Collection | What it holds |
 |---|---|
 | `baselines/` | Six runs: TinyStories and Folktales, each with three tokenizers. The starter kit's recipe, five minutes each, no agent. Only the dataset and the tokenizer change. |
-| `sessions/tinystories-may2026/` | The agent's 16 experiments of 23 May 2026 (`WALKTHROUGH.md`). Made before run files existed, so it has scores but no writing. |
+| `sessions/tinystories-may2026/` | The agent's 16 experiments (`WALKTHROUGH.md`): 15 on 23 May 2026 and one on 6 August. Made before run files existed, so it has scores but no writing. |
+| `sessions/folktales-oct2026/` | The agent's 12 experiments on Folktales (own tokenizer) on the evening of 7 October 2026, from the starter kit's recipe, with a run file for each. |
 
 ## The six baselines
 
 Trained 7 October 2026 on an RTX 4000 Ada laptop GPU (12 GB), branch `library/baselines`,
 with `bash library/make_baselines.sh`, `train.py` set to the starter kit's recipe (commit `6ad8ddd`:
-`WINDOW_PATTERN` SSSL, `MATRIX_LR` 0.05, `WARMDOWN_RATIO` 0.45). TinyStories built from the data was
-rerun at `61e2270` (same `train.py`) after its first file was overwritten.
+`WINDOW_PATTERN` SSSL, `MATRIX_LR` 0.05, `WARMDOWN_RATIO` 0.45). Two run files carry commit
+`61e2270`, made while the series ran, with the same `train.py`: Folktales with GPT-2, and
+TinyStories built from the data, which was rerun after its first file was overwritten.
 
 | Dataset | Tokenizer | Vocabulary | Model | Steps in 5 min | Score | Peak memory |
 |---|---|---|---|---|---|---|
@@ -37,6 +39,15 @@ makes a bigger model that fits fewer steps into five minutes. On Folktales it is
 way round: the borrowed vocabularies score better. Why is not tested here. The bigger
 vocabularies also make bigger models (46 and 67 M parameters against 18.9 M), so vocabulary and
 model size change together in these runs. Read the writing before deciding.
+
+## The Folktales session
+
+Starting from the same recipe as the Folktales baseline, the agent cut the score from 1.3859
+to 1.2637 in 12 experiments (8.8%), almost all of it by raising the matrix learning rate from
+0.05 to 0.20, and confirmed each keep with a second run. That gain is about 40 times the
+run-to-run noise, unlike the May TinyStories session's 0.27%. It ran for two hours, until
+the agent's sign-in expired; a thirteenth experiment (depth 6 to 8) trained but was never
+logged, so it is not here.
 
 ## The explorer's data
 

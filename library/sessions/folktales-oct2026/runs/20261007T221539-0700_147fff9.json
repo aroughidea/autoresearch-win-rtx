@@ -1,0 +1,135 @@
+{
+ "schema": 1,
+ "run_id": "20261007T221539-0700_147fff9",
+ "commit": "147fff9",
+ "created": "2026-10-07T22:23:37-07:00",
+ "dataset": "folktales",
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.09,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 33,
+   "train_loss": 6.086,
+   "samples": [
+    " he has done; but so to go and the palace; and when she must be an eye, and said of the little girl, you the air the King, but he took her horse, and he was made a certain that she took up to the moon, and thought that, \"What must go to her. He was the place there was sitting on her in the Prince, \"see how his daughter",
+    " the youth. \"What a single year of the ground, and when he might have taken up his brothers that he was really have a great deal, and said, but the fire. It does not stay. There is as soon at the place, and then he was very happy. He was going away. The next morning they came along; and that was a little bed.",
+    ", and took their heads who was to the world he had no harm, he wished to the white lady of her a certain of the old man in the fire, and he could also!\"",
+    " great place of the princess had just as a new voice, and said his father, they had been afraid, the king, when I will go in the king's feet, and he fell down at once, and began to her that she answered the same day, \"Oh, \"I will be taken me this son. Then, \"Oh, and she was so well, but at once more that they could carry"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.2707,
+   "samples": [
+    ".\n\n\"What can you?\" asked says she added, \"dler, or the time, and now!\"\n\nBut of the little girl, you the man, O Commander of the boy and he thought of the other little girl, and then she saw me that you will you know you,?\"\n\n\"I must go to you.\"\n\nThe old man of the old man, but did you have you must be you? I give you?\" said",
+    " the old girl, It was about to let her husband, and that he might have come and his own that he was over him, now, and was about to live with the place, and his heart had not at the country at the Dragon King's old man.\n\nThen he came to his mother, and his life and then took it; and that was a little girl.",
+    ", the young lady, who was to the wind, and he was in the same time the big hall of her.\n\n\"Oh, I shall you?\" he replied, \"I cannot escape.\"\n\nThe woman replied, \"but I have I never to you to me.\"\n\n\"Then ye must know, you?\" asked, with you,\" said the monkey, \"I can't you a great city.\"\n\nThe king asked, \"Wilt I can't you go",
+    " few minutes the top was all that she had ever heard of magical, and he decided to make him, the old man, and to go home to the poor animal, and he fell into the way, and began she went to see.\n\n\"That must now,\" said the other.\n\n\"'If I cannot do you what I shall go in you here.\" But they can you have you will I get that"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 4.3861,
+   "samples": [
+    " there lived a King who was standing there in the palace; and when the King said he was, and he sprang upon him, and he was standing at home. He had to his horseback, and was very kind, and his son, who was so beautiful in his own, and he had also to her. He was the first, and he had to be a little boy, and all his daughter",
+    " the prince. He was a great bird, and he had to have a good friend. He had a great deal of money, and now he was obliged to carry. The prince's daughter was a man who had brought him a kiss. I had very hard and well, and was only able to read it. He had been a poor little boy at a large town.\n\nWhen the man's house there",
+    ", with three windows on the open windows of the church, and the two were in autumn the church, of the town of the King whom they had been the castle; for the king knew that of the story of a manor; the old couple lived in his place, which the King had been made to be seen. There the princess was already beautiful--but there",
+    " great house of a lovely little old man, which is a young gentleman, and he will soon see him, the old man who are in every spot. He can tell each of them for the sake of men who can only stay here, or a fool of them; but he might have them all over the house, or he, in which has been called the Prindest; I think that they"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 263,
+   "train_loss": 3.6375,
+   "samples": [
+    " there met a King who was standing at the door of a schoolmaster, who he was a man, of the age, and who was a man in his age. And when he heard his father was his father, he said to him, There was no one of the poets but one of his friends of his friends, and of his attendants, and he did him an animal, and all his great",
+    " the youth, O my son, if thou were married, of eloquent speech, that I may perform that which thou art acquainted with those words, and that I may be the result of the period. So the man took leave of the Sulan, and clad him in the best clothes which he did, and his attendants and they passed through the streets at the",
+    ", the forest was very green, and not its flowers and bushes or yellow fruit trees in the forest, of birds and trees, and trees and fruits and the gnome, and the branches and fruit trees and flowers and flowers and sweet grass.\n\n_lwen then went to the forest, and found in the forest of his great trees; and when he saw them",
+    " great quantity of large sum for money, and the old woman, having sent up the money to her, was the money-pig. The old woman replied, O my master, what shall this money be? The mother answered her, O my master, I know not what may be as a reward as being this, or she shall be in this service to me, and my master will come"
+   ]
+  },
+  {
+   "t_s": 300.2,
+   "step": 639,
+   "train_loss": 1.9877,
+   "samples": [
+    " there lived a King who had three sons, and the three eldest were called Esben. One day, when he was sitting at his house in the forest, he saw the two elder brothers gathering sticks and leaves of wood, he came out one day to look for them. He had six sons; they were of course very clever; of course not having a whole",
+    ", \"Now you are in thy country where I have been of the Red King's daughter.\" But when she heard of this, she longed to return for an hour. She was just like me, and had am my daughter. She begged the King to give her a daughter as a reward, so she consented at once and the old king; and at last she consented, and the wedding",
+    " in which the sun shines brightly, they all gone on like a golden summer. Here there was a grass full of grass and leaves, a large in the middle of it, in the light of the fire. A little boy ran out into the forest, and came in every place in the hut, in the midst of which stood the little boy, and the children playing",
+    " great quantity of burnt jars; and, as soon as it was over, the little maid went in, the quantity of the little girl's bundle bundlels and her bers. The little girl did not know why she had been so good-natured.\n\nAs soon as the little girl saw that the sheltered her new home, and scattered the ashes over the country. She"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.361867,
+  "training_s": 300.2,
+  "peak_vram_mb": 3546.0,
+  "num_steps": 639,
+  "params_m": 18.9,
+  "sampling_s": 14.6
+ }
+}

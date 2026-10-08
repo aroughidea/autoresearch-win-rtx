@@ -1,0 +1,135 @@
+{
+ "schema": 1,
+ "run_id": "20261007T224024-0700_f9352a8-2",
+ "commit": "f9352a8",
+ "created": "2026-10-07T23:12:54-07:00",
+ "dataset": "folktales",
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.2,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.2704,
+   "samples": [
+    " he has you; but so to go and the palace. No, so much for he was noises, and the Bark, you the man, in his mother. When he was going to be a little one, and the King, and the moon, and the boy, and we must also to her. He was the place, not like the Pimistus, and a great crpapants of a great bed; I wish to do not come home",
+    " the King. \"What is a great Duan, and they were very good spirits and his palace that he was you. He is I do you have I am certainly was just, and his heart. There is as a huge Dothe is a fine great number of the Fanian, and his life and they came along. So that was a little bed.",
+    ", and he has never say, and said the Rrow, or fear,\" said he was a beautiful of her. And the King, and he thought the King was so soon as the Rodical of her back, and the old woman, and then, and she took the water, and to it is his great many of a little distance by a great a great boy was just as a little creature, I",
+    " great taming the Las, and the farmer, and the old men, they had been afraid the water, my eyes. The prince's face, and that is so that he was very angry, and began she went to see it is a few horses; but he was going; and she went after our way she, in the old man came the Poder, and I am that they could not eat you, and"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.3741,
+   "samples": [
+    ".\n\n\"What can't return, and go to the dog.",
+    " the old girl had made a great fear of all he had lived that he looked down with joy his own body, and then gave a short time his own accord, but the girl.\n\nThis was his back. There were great fear of the Dragon wife told him that she now that was that, and then gave his life and then took it and bowed at his hand as the",
+    ", and he could not say, who had to take the way.\n\n\"This was on their world, and now, so he set out the man to himself. When the shore, and knew that that the world, and said the hare, so he had had been very angry, the old man, and his heart was his great and carried that he had now, but he was called that he told a very",
+    " few other of the great for its own heart's face, and said his father he went to him, the water, and he seemed to go, and the poor old man began to them. \"and, and now for which is, or a moment,\" said the deer, the poor old man.\n\nThe house was very long, in many days of the old man's death, and I am that this time he heard"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 4.6105,
+   "samples": [
+    " there was a great deal, and that would be a new child of the woman. One was a good thing of the little girl, who had a pleasant story, had told her that he loved her, \"The woman, that is not one thing that you will give them more, but you must also come to be allowed to be of the world.\" I must know him that this is a",
+    " the old girl, \"More 38\n\nAnd I came slowly again to the house of his palace that is impossible to be a lady, too, and I am with you. You must know me. There is a great thing in the course of the world that is written in which you must know you what? I have been there; yes that you will go in the cold air, I have quite alone",
+    " of the beautiful town appeared to the stork.\n\n\"Then I will tell you all,\" said Little Claus, \"I have a picture of love; therefore you will tell the mother what you say? Do I think my thoughts; they have I never forgotten such a child.\"\n\nThus was obliged to hear what it said, with the dog who had given me good use by his",
+    " great stone, and the little boy came out of sight of it. \"Do you think that you may see the house of this city? What is the best can that be so? The old man who does know him for that is, or how can we get a new dress.\" And then the little Prince said, \"But what is in this world are they, and my master; I think that they"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 261,
+   "train_loss": 4.0425,
+   "samples": [
+    " there met a King who, said to Jaafar, I am a man of a son, and a son of a son who died, whom the man hath a son-in uncle, and he died, and was a son of Khaeeb, who died with her in Cairo, and became a man of sense, and died, and of the two sons of Khacan, was a son of his daughter, and the Wezeer of Emeers, and of his",
+    " to her, O my master, I desire not to send them; for he hath purchased for his house that is in thy private house, I will come and take some with him. And after the marriage had become insult to thee, I will relate to thee that she may come to thee to pass. So, therefore, came to me, and said, O O my son, tell me the truth",
+    " of the Sulan El-Melau said to them, Wooee! O King, I have taken from him thy house, and have been beaten with the ur-an, and thou hast broken the flesh of my life, and the Khaleefeh said to me, O Jaafar, I have a child in the market of his house: but I have taken place, and thou hast read from it every night; and I have",
+    " damsel of women and cushions adorned with pearls, and she was delighted with his father like her, and she was astonished, and when she beheld her she said to her, O my master, this is not thy husband:-- she replied, O young man, I know not where she hath been; and she answered me, I will go in and see thee, and she will"
+   ]
+  },
+  {
+   "t_s": 300.2,
+   "step": 635,
+   "train_loss": 2.7088,
+   "samples": [
+    " there lived a King who was rich and prosperous, and his name was Salaib, and he only and one day, as the day before, and the poor boy and his mother were both fond of their children; and he was so pretty and clever that he were so clever that he could not tell what sort of fellow of a bad disposition are. So he called",
+    " the words would make him go. But he was afraid, he must go to the king and his palace and ask his father thereiner. \"I have no longer any fortune,\" said he, \"that it is better to set me free, and this time I shall be able to do nothing but raining, and then we shall repent of it.\" He then called the princess and said,",
+    " in the forest there lived a poor fisher who had three sons, their youngest daughter. The youngest of them called her au sister, whom was to be the eldest. The youngest was called her \"the youngest sister; the other two, is a little sister, who was more beautiful than the eldest, and with whom she is the better she has",
+    " great many little fish, for she had a kind heart, and the old woman, who had been so big that she could not bear to think of nothing, and begged her to lend them the good gold, and at first she gave her a golden axe and a sheb with the silverr. So she sent a silver bull, and then she sent the old woman to the king; and"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.265423,
+  "training_s": 300.2,
+  "peak_vram_mb": 3546.4,
+  "num_steps": 635,
+  "params_m": 18.9,
+  "sampling_s": 15.6
+ }
+}

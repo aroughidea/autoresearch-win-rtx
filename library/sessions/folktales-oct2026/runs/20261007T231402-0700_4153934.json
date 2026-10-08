@@ -1,0 +1,135 @@
+{
+ "schema": 1,
+ "run_id": "20261007T231402-0700_4153934",
+ "commit": "4153934",
+ "created": "2026-10-07T23:22:00-07:00",
+ "dataset": "folktales",
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.5,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.2,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.2375,
+   "samples": [
+    " he has you; but so to go and the palace, and I am not knowing he was noises, saying, and his wife, the man, he saw the poor man and he said, and was very much on his house and I am not go, and the most difficult, and the story to her. He was the place there was sitting on the Ron, and the gardener, and he said he took",
+    " the King. He reached the water. And I will be of the whole day she came and his house that he was you. He is I do you have I am, was just as he would only the Dep.\"\n\nBut at the place, and the world, as he was in the prince, and his life and they came to the farmer that was a little bed.",
+    ", and he took his eyes, and said the Romon.\n\n\"I am very well, as a very difficult to be very nice, and he thought the King was so soon as the Rod, and then said the other; and when he had given his friend, \"a, for it in the princess, and the little ones that you should have been to a great boy was just as a very fond of",
+    " great tam and as all that I will not to come and the old men, they had been, and the Pfinar!\" said the King was going to each of a man was very angry, and began to stay that she answered the same day, and I may have no longer!\" she went into the poor fairy, in the old man came the Pa was so, I am lying in the King was"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.3411,
+   "samples": [
+    ".\n\n\"What can you return, you go to the dog?\"\n\n\"Oh,\" said the time he.\n\n\"Surely, you are you wish.\"\n\nThe merchant was the sun, is no one!\"\n\nSo they did you ask you are!\" she, and I am!\"\n\n\"What will give you, but I cannot speak of you are you,\" said the door, I have I must be my life, you a great calamity, I have the box",
+    " the old girl, \"M. 10, he answered:\n\n\"I want to give you?\" asked the most curious man you,\" answered the old man.\"\n\nThe Prince then, \"Far\" (not. There is as you will not the sea?\"\n\n\"I can not help you are that you did you know,\" said the same time!\" said the Prince was a nice place.",
+    ", and he decided to fight, who was quite pleased to think that he was very well or a beautiful child, so he set out the man to cross and the great calamity, and then called \"but surely have a man.\"\n\nThe poor man said:\n\n\"Lur, that she took the water, and to himself, and then the monkey that he had I can't refuse you.\"\n\n",
+    " great store of the great store old man, the old man, the old man he cried out, \"g, \"field. \"Moso\" (as\" is no man!\" cried he was very glad for the King, or a wonderful thing to think of the shore as a favourite as you will I go to go in and I can find you can,\" said:\n\n\"I'll escape that you to keep your back.\"\n\nAt this time"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 4.6117,
+   "samples": [
+    " there lived a woman who, and had been a palace in a corner of a house, in the world, of the little mermaid, who has a child in his garden. And once he can be found out in the country; and she is not the last night in which the world used to speak of the little girl. In the place there was a great deal in the form of a",
+    " the \"I can fly about and see them, for I care myself is dead,\" said the mother; \"it's a little boy is a little house; I am with you. You will not please us without ever.\"\n\nBut at the door of the princess's house, and was covered with light, and his heart increased, and there he was at a large town.\n\nWhen the man's house",
+    " of the young lady had been a place to take it to the house of the same town or a child of her. Then her old man came to sleep. When the church, the little boy appeared the story of her mother, and the old woman had done all, and she took the sack, and set it fast asleep, and went out into her mouth, and a child was a child",
+    " few other in the world for the man, the good man and said, \"the world is not a beautiful child, my story. The king's blessing!\" 'Do you think you better than but you give us an apple which is a child's house,\" said the horse, \"the story of the king's son. You see, and has been lost the old house, but I know how that they"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 261,
+   "train_loss": 3.9715,
+   "samples": [
+    " there met a King named El-Mo'anee, and a man of a son, who, a son of the son of Earamroh, is the son of Khaanah, who has a son; a son, who died. I was of age, and a son of a son. He was the son of brother, and he died, and was a son of his daughter, and the Wezeer of the uncle of the daughter of his father, who hath attained",
+    " the son of Khansroan, whom I married, of whom is he who killedeth his brother, and his father hath a desire to return for an entertainment. The King then said to his son, O my master, of the son of the old slave-girl, and come to me to a place at Cairo and a wife, and if that was a man in the son of Khaan. The master and",
+    ", in its course, it was not in the case of the humpback in the morning of the morning, when the morning of night came, and when he beheld the master of his house, and saluted the executioner, and said, I desire to hear respecting the case of the market to thee for thee, and it is related by the story that thou hast attained",
+    " damsel like a large tray of gold, and a red silk, and white ling with a dress of the rose, sweet odour of musk, and she was filled with gold and jewels, but she was astonished at her, and she wept bitterly.\n\nAs her father was delighted with her; and she went after her, and, entering the shop of the old woman, went to her"
+   ]
+  },
+  {
+   "t_s": 300.4,
+   "step": 635,
+   "train_loss": 2.5022,
+   "samples": [
+    " there lived a King who had three sons, and they each had three sons. They were very clever, and clever and remarkable. He could manage them so, and had besides that to get some sticks for them. One day he would have them set out with him. On the fifth day he reached a house, where his house was built, and having a table",
+    " the Becasigue had an excuse for the present, and they were immediately sent back to his palace. The executioners were already setting out too, and were setting out to carry the journey home. The king received the request of the prince, and the latter took off his clothes, and when he had been married some time in the wedding",
+    ", which was their way home, and as the sun had reached their feet the trees were so thickly that their leaves were spilt, and in the middle of the trees were the largest green leaves the trees of the forest, and the murmur of the trees, every tree in the water, as clear as snow, which had no axe to guide them, as a boughs",
+    " great door lying on the edge of a long steep staircase, which led to a stair. Here she found the maiden open a door. The door sprang open, and in came a maiden stepped into a gold ring, and she took it in both her hands and opened it, with the maiden; and she went into the maiden she, and then she into the maiden's house"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.278295,
+  "training_s": 300.4,
+  "peak_vram_mb": 3546.5,
+  "num_steps": 635,
+  "params_m": 18.9,
+  "sampling_s": 15.5
+ }
+}

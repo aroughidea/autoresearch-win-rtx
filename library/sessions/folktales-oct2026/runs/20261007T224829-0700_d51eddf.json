@@ -1,0 +1,135 @@
+{
+ "schema": 1,
+ "run_id": "20261007T224829-0700_d51eddf",
+ "commit": "d51eddf",
+ "created": "2026-10-07T22:56:27-07:00",
+ "dataset": "folktales",
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.26,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.275,
+   "samples": [
+    " he has you; but so to go to the palace. No. She must be so much as they said of the little fish, you the man, in his mother. When he was going to be now.\"\n\n\"I am dead, and I am not go, and the most large prince said the story to her. He was the place there was like the poor in the Prince, and a great horse, and he took",
+    " the King. \"What a great large Duish, and they were he should have been his palace that is quite afraid. He is a little Don, and the fire of my sons, and the Demar (Sarks, and they were very well as he was in the prince, and his brothers and they came to come to get a large as the story, and she would not quite easy to",
+    ", and he has never to the place to take it will have the king was very well the white clothes of her a certain of the Bepori's son are not, and the Rod851518547.\n\nMeanwhile the door.\"\n\n\"Well, \"and he saw it in the princess, and the little man that you should have been sitting a great boy was just as a very fond of a long",
+    " great white of the Dale; 'but I will come to the old men, they had been, and the Pas,\" said to marry him. No and he was so that he was quite careful, and began to stay that she answered the same day, and the other,\" said; and she went into the poor prince, in the old man came the Pa was so angry. The place that I should"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.3896,
+   "samples": [
+    ".\n\n\"What can you return, and go here?\" asked the old man, who was an assumed!\"\n\nBut of the old man, you should be the sun.\n\nLong. When you must have ever be,\" said the country; \"I have come home,\" said the child, but I cannot speak to come to be allowed it to him, not to the matter?\" \"to, and a great that I give you the",
+    " the old girl had made a greatness of all he had lived that he he would take him his own that he was over the old age, and was an asso, was just now was his heart. The man--I will not tell him that the world.\n\nThen he was that, when she stopped his life and they did not know if that was a nice place.",
+    ", to go through the time, who was quite impossible to the river, he was in the matter, and her. He then he had sent to himself. When he told his wife of him, the world, and said:\n\nThe old man,\" said the Dragon Tor, I, for it in the house?\" Quoth she stopped. What is still more, I will give you from it;\"",
+    " great was well and as for that she asked the old man and said his men he went to him, and the old man when he decided:\n\n\"What are you can!\"\" is here for this good and she cried out for which I will give it to leave you to the other the box; I cannot do this I need you go in you with you,\" they can,\" said:\n\n\"I know how"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 136,
+   "train_loss": 4.6881,
+   "samples": [
+    " there was a child was so pretty and who had a new child. She could not do.\n\n\"Sl, you have no wish, you have a child in his garden. It was in which's child was very much, and to be seen. They had been in the centre, but one of one of the whole world, which of the old people, who were only an arrow, and all his great joy",
+    " the young girl had to her. But for she looked at them, and he did not understand his old body, and she gave a little boy, and bowed to the horse to him, and his heart. The man felt a very happy, and very much and well. So she did not give them up. He had been a poor; and that was a little child.",
+    ", the beautiful a few who was to be heard in the airless in the garden of the church, of the cold, of Nad. He stood the castle in an eternal town of \"I have an immortal man and life, when a little room has a green leaf in the water, and to be buried with a little man that has for his own sake. But what is it?",
+    " great place of a great-up, a new one, and the old people, who had been, and the king's daughter. The king's blessing, and that was so beautiful for the good and good friend was for on the head. The king of his bed, with the poor; and she had not seen it; but in the form of a king, and was so high. The child that was an"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 261,
+   "train_loss": 4.0605,
+   "samples": [
+    " there met two one of them, and who was a person of eloquent, said, O my father, of the son of Enees-el-ord, is a man who was present, and was a kind of beautiful, and, being a man, in which were the son of a wife, and he died, and of two hundred years, was in the year of the a month; and he was the son of the uncle; and",
+    " the son of Prince of the Faithful, whom I married, of Emeers and women and his uncle, and his father gave birth to a man of an erhem, to him, and his heart was pleased at seeing him at the door of the door, and the sheykh Ibraheem came, and knocked at his words. The Wezeer laughed; and I said within myself, I have heard",
+    " of the year  Flight 3. On the day of the night came when the King was sitting, and the Khaleefeh was waiting for the night in sleep. So the morning, when the morning arrived the day, and the day came, when the slave rose, and, looking at the window, saw the eunuch coming close by the door, and beheld the lady sitting beneath",
+    " damsel like of a female slave; and the son of Suleyman is the son of El-Mareezee, the son of my uncle, and came in to her and her uncle, and she was sitting sewing at her bed she, and she wept bitterly.\n\nAs her father was, the son of Suleyman she went forth, saying she, O my old countenance, that she had been absent; I"
+   ]
+  },
+  {
+   "t_s": 300.3,
+   "step": 635,
+   "train_loss": 2.6974,
+   "samples": [
+    " there lived a King who was called and who had a daughter, who was very beautiful, except Queen, and of the three fairies, who were old, in which was poor, and was born, and was made of very beautiful, and was so ugly and wicked that she was so ugly that she was very ugly. He was very seldom queen, but she was really only",
+    ", \"You can do as you say, I will send you myself back to your own country. I will give you a present of this treasure too, which I shall be as happy as night.\" The king's son did not at all understand that he must not have obtained permission to make his claim, but that he would be determined to carry his son to a country",
+    ", the three men walked about the wood, looking over the wood, in which the trees were a wood, and the trees cast their trees into the garden. When the trees were green the trees of the trees grew wild with flowers; the branches were covered with flowers, every tree bloom, every flower of green flowery roses, and every fruit",
+    " few beautiful little birds, and just the fishes which were so golden apples, and the birds in the world twining round them. The branch was long before the golden tree, and they fell on their backs, and began to lie in peace or golden fruit. The birds sang, the birds sing as they sang, and the birds, tw and the birds, tw"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.270926,
+  "training_s": 300.3,
+  "peak_vram_mb": 3546.1,
+  "num_steps": 635,
+  "params_m": 18.9,
+  "sampling_s": 15.5
+ }
+}

@@ -1,0 +1,135 @@
+{
+ "schema": 1,
+ "run_id": "20261007T224024-0700_f9352a8",
+ "commit": "f9352a8",
+ "created": "2026-10-07T22:48:21-07:00",
+ "dataset": "folktales",
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.2,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.265,
+   "samples": [
+    " he has you; but so to go and the palace; and when the time. No.\n\nThen they said of the farmer, and you the man, in which is a few sons were going to be a little one, and the King, and the moon, and thought that he was a white country to her. He was the place, and he has not in the Prince, and a great crmapants of a great",
+    " the King. \"What is so he has not been found them, and he should have been his palace that he was really have a great bed, and when I am certainly was just, and his heart. There is as a huge Dothe is very glad that the Du, and when she had been, and they came along. So that was a little bed.",
+    ", and he has never say, and said the Rrow, and in the same distance the King, and her. Then her, and then he thought the King's son, and the Rodical of her back, and the old woman, and his friend, \"and he saw it in the princess, and then the Curi's back, and a great fire from the king was as they will I pray you will have",
+    " great Raming, for its own son's face, and the old men, they had been afraid, the Pfons. The prince's face, and that he said and he was very angry, and began to stay in the farmer's son,\" said the ground, \"I cannot allow him, and I am going, and then she is no work, and went to him. Seeing this one of the King was a few"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.3611,
+   "samples": [
+    ".\n\n\"What can't return, and go here?\" I can only do you must think he.\n\n\"Sl, of the old man, you the man, in, but I have you!\" cried the old man.\"\n\n\"Yes, that time and I am now,\" said the great, \"that you must go to the old man, which of the old man has just a time for you must let all his daughter!\" said the sea?\"",
+    " the old girl in this way.",
+    ", and he could not say, who has the bird to have a piece of the same time to find of her a long time, he sent to himself to the great, but the other and ran the world to her mistress, and saw.\n\nThe old man then tried to take the old man, and, with him to think the monkey that he had now, but he was so that he told a very",
+    " few other day and looked for he came out of gold, and said his father he went to him, the water, and he carried himself into the King's mother and looked so and fell on the monkey, and began she went to the old man.\n\nAs he called the other the poor old man and went through his mouth and, and then she saw the old woman"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 4.6219,
+   "samples": [
+    " there lived a woman was in the evening of the story; and he stood in the world in the world, of the little mermaid, who had a pleasant story, who had to be seen in the field-mamma, on which the other birds are over with her head of the old prince; and she has been saved. In the place there was a great deal in the form",
+    " the young girl, \"Moreyer, he, that is a good thing that is his only that is impossible for him to be a little house; I certainly certainly was born by me; and the master is as a most important place, and you may have made yourself put in warm countries, and you are obliged to carry away their heads at a large town.\n\nWhen",
+    ", the young lady stepped near the windows of the church, and the wild wood opened, the a little boy, a picture of love, who had been the name of Sarahesc., \"I have an immortal soul? I saw an immortal castle,\" said the farmer, \"I saw it in the heart of grief.\"",
+    " few other days and nights for years, the man's wife was to his palace, with a great deal-bush, a whole bushel of money, the king's wife dwelt in a narrow leaf, and it had been for the first time. The same evening he was the only the poor; and she smiled at him. Then, in full of which she had been seen by the stork's house"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 262,
+   "train_loss": 4.0645,
+   "samples": [
+    " a time came; and, when she returned, she went with her to her house, and, looking towards her, she rose, and the old woman, and her countenance took her head, and she was about to her; and she said to her, Know that she were thy cousin, and she is most old. She answered, O my master, my father, that love is a stranger",
+    " the son of Eiyoob, I desire of thee, of that which he should ask for his son that he may be acquainted with this age, and that I may be with him, and his heart may become insensible of me, that I may see thee. So he went out to them, and, walking until we arrived at the gate of a palace, and knocked at the door of the",
+    ", the chief of the people, who had gone forth to the house of the lady whom the young lady of her cousin was perplexed, and that she had given her some food, and had never been the name of her mistress, and she was a slave; and she was more exquisite than her children with her charms, and her love for her inflity. She then",
+    " damsel like of her countenance beaming with tears; and she was convinced in her beauty. She then advanced to the damsel, and she sat conversing her hand and her handkerchief her hands; and she said, The Khaleefeh hath not been able to do so. She then gave orders to convey witnesses the news of her son's daughter, and she"
+   ]
+  },
+  {
+   "t_s": 300.3,
+   "step": 639,
+   "train_loss": 2.7725,
+   "samples": [
+    " there lived a King who was called Princess, and the Prince was anxious to teach her maids of ranklrat of the Princess. He had the Princess the golden crown on her horse and was going to take beautiful little Princess on tip toe, and keep her safe in the palace, so that no one can reach her. In the place there was a great",
+    ", \"Good morrow, and tell his king that he had seen his palace King and Queen and his palace and all his courtiers were celebrated for his return; and he asked his permission to travel east his journey. The three princes rode at the place of meeting at the foot of the tower which was the prince's palace, and they came to",
+    ", with his heavy heart on his breast, he thought to himself: 'It is well for a little of the good dinner, for he has been taught to read all the newspapers of the world, and what a strange it was! He had also given his friend the most beautiful beef, in his heart, with which he set free, and by his life a man shall remain",
+    " great door fastened with a little frying-p of it, and said, \"We will soon see whether it is the old story or not.\"\n\nSo the king's son left her and went on his way, and at first he came to a little house, with a green trunk in the chimney of the king's son. Trembling, however, was he, and she came in to him. When he came"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.263666,
+  "training_s": 300.3,
+  "peak_vram_mb": 3546.0,
+  "num_steps": 639,
+  "params_m": 18.9,
+  "sampling_s": 14.4
+ }
+}
