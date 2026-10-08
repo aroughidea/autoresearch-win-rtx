@@ -416,3 +416,54 @@ through `shared/Modes.js`. It is added to the index's sidebar and table, and to 
   with provenance, update the tests that freeze the list at eight, and add curated map entries (the
   home-made vocabularies have no OpenRouter models). Fix Phi-3's SentencePiece display (`▁`, byte
   tokens) in the browser parser. Keep the new files out of the API functions' bundles.
+
+## Tie-in: a library model inside the LLM explorables (proposed 8 October 2026)
+
+TJ: a TinyStories model and its tokenizer belong in the LLM explorables as an example, tying the
+two efforts together. A learner who watched the model grow in `/training/` can then probe it token
+by token in the completion explorables (completions, temperature, the probability field), beside
+the hosted models they already use. This changes component 5's registry decision and makes the
+Tokenizer Map part of this round.
+
+**What the explorables require** (surveyed 8 October in llm-explorables):
+
+- **A completion API in OpenAI's legacy shape.** Rooms reach models through `/api/completions`
+  and a serving provider. The `vllm` provider calls any `endpoint + /v1/completions` with
+  `{model, prompt, max_tokens: 1, temperature, logprobs: N}` and a bearer token from a `VLLM_*_TOKEN`
+  variable, and reads `tokens`, `token_logprobs`, `top_logprobs`, `finish_reason` and
+  `usage.prompt_tokens`. An admin adds the model to a room's model set, and the model is offered
+  only after its Test passes.
+- **A vendored vocabulary as a Hugging Face `tokenizer.json`.** The probability field, token ids,
+  the server's tokenizer and the Test all assume the HF format; a tiktoken-format vocabulary is
+  refused in several places. Every HF row in `shared/VendoredVocabularies.js` must match a node in
+  the Tokenizer Map (sha256 and size), by test.
+
+**Design.**
+
+1. **Export the home-made vocabularies as HF `tokenizer.json`** (byte-level BPE, the same split
+   pattern written without possessive quantifiers, the same merges and special tokens), proven
+   identical to our tiktoken encodings on a large text sample before anything uses them.
+2. **Vendor all four vocabularies as HF files in the shared registry:** TinyStories and Folktales
+   (exported), GPT-2 (`openai-community/gpt2`, MIT) and Phi-3 mini (`microsoft/Phi-3-mini-4k-instruct`,
+   MIT). They appear on `/tokens/`, in the admin's tokenizer menu (legitimately now, since a library
+   model will be a hosted model), and in the explorer. One format means no new tiktoken patterns.
+3. **Fix Phi-3's SentencePiece display** in the browser parser (`▁` as a space, `<0xNN>` as a byte).
+4. **The Tokenizer Map:** a curated section for vocabularies with no OpenRouter models, fetched,
+   hashed and classified by the existing pipeline, then a rebuild. Their nodes link to `/tokens/`.
+5. **The explorer's Tokens view:** the live "type a sentence" box tokenizes in the browser with the
+   same library `/tokens/` uses, and borrows `/tokens/`'s labels for part-character tokens
+   (`<partial character: C3>`) and its link into each vocabulary's field.
+6. **The completion server:** `chat.py` gains `GET /v1/models` and `POST /v1/completions` returning
+   next-token log probabilities from one forward pass, behind a bearer token, for the TinyStories
+   model first. An admin adds it to a room as a `vllm` model with `endpoint=https://autoresearch-demo.fly.dev`.
+7. **TinyStories prompts:** when that model is chosen, the completion pages offer prompts it can
+   continue; a general prompt gives noise from a 19-million-parameter story model.
+
+**Phases.** A (no production behaviour changes): steps 1–5. B (the tie-in): steps 6–7, plus the
+admin row and its Test in a workshop room. C (optional): the public, no-room completions page,
+which today has no endpoint field for a `vllm` model.
+
+**Risks.** The exported tokenizer must match ours token for token, or ids and probabilities point at
+the wrong tokens: the parity test gates everything. A map rebuild also refreshes every OpenRouter
+model in it (a large, unrelated diff); keep it a separate commit. Each completion step is one
+request to Fly: a suspended machine adds about 12 seconds to the first one.
