@@ -201,3 +201,18 @@ def test_page_names_research_time_and_training_time():
     assert "Progress: " not in chat._HTML
     assert "research time" in chat._HTML
     assert "training time" in chat._HTML
+
+
+def test_pre_eval_record_rejects_a_different_file_with_the_same_size_and_time(tmp_path, monkeypatch):
+    """Two checkpoints written in one clock tick can share a size and a modified time; content decides."""
+    import os
+    path = _pre_eval(tmp_path, monkeypatch)
+    capture.write_checkpoint_pair(path, "folktales", "own")
+    before = os.stat(path)
+    data = bytearray(open(path, "rb").read())
+    data[-200] ^= 0xFF                      # same size, different content
+    open(path, "wb").write(bytes(data))
+    os.utime(path, ns=(before.st_atime_ns, before.st_mtime_ns))
+    _active_pair(monkeypatch, "tinystories", "own")
+    assert chat._pair_for_checkpoint(path, None) == ("tinystories", "own")
+
