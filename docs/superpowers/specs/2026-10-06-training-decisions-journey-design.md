@@ -459,6 +459,22 @@ Tokenizer Map part of this round.
 7. **TinyStories prompts:** when that model is chosen, the completion pages offer prompts it can
    continue; a general prompt gives noise from a 19-million-parameter story model.
 
+**Control tokens.** Our tokenizers append four control tokens after the vocabulary,
+`<|reserved_0|>` to `<|reserved_3|>` (ids 8188–8191 for the home-made vocabularies, 32011–32014 for
+Phi-3, 50257–50260 for GPT-2). Every training document is `reserved_0` + text + `reserved_1`, so
+`reserved_0` marks the start and `reserved_1` the end, and our models learn to end a story by
+emitting `reserved_1`; `chat.py` and `generate.py` stop there. The standard tokenizers' own markers
+(GPT-2's `<|endoftext|>`, Phi-3's `<s>`, `</s>` and its chat-turn tokens) sit unused in those
+vocabularies. The completion explorables recognise an end token by name, from a fixed list
+(`shared/CompletionGenerator.js` `END_OF_TEXT_TOKENS`: `<|endoftext|>`, `</s>`, `<|eot_id|>`, ...),
+then report `finish_reason: "stop"`, label the candidate "end of text" and keep its literal name out
+of the prompt. `<|reserved_1|>` is not on that list. So the HF export names the control tokens by
+CLIP's convention, `<|startoftext|>` and `<|endoftext|>` for ids 0 and 1 of the four (the spares keep
+their names), and the completion server returns `finish_reason: "stop"` when it picks the end id.
+Ids, and so every checkpoint, stay as they are; `prepare.py` keeps its names, so no learner's cache
+needs rebuilding. A GPT-2-vocabulary model, if ever served, needs its own export: its vocabulary
+already has an `<|endoftext|>` at 50256 that our models never used, so the two must not share a name.
+
 **Phases.** A (no production behaviour changes): steps 1–5. B (the tie-in): steps 6–7, plus the
 admin row and its Test in a workshop room. C (optional): the public, no-room completions page,
 which today has no endpoint field for a `vllm` model.
