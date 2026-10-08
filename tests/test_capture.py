@@ -262,12 +262,16 @@ def test_finish_writes_named_run_file(tmp_path):
     assert "status" not in record and "description" not in record
 
 
-def test_finish_overwrites_same_run_id(tmp_path):
+def test_finish_keeps_a_rerun_of_the_same_commit(tmp_path):
+    """program.md's noise rule runs a commit twice before keeping it; both runs are evidence."""
     cap = _capture(tmp_path)
-    _finish(cap, val_bpb=0.6)
-    path = _finish(cap, val_bpb=0.5)
-    assert json.loads(path.read_text(encoding="utf-8"))["final"]["val_bpb"] == 0.5
-    assert len(list(tmp_path.iterdir())) == 1
+    first = _finish(cap, val_bpb=0.6)
+    second = _finish(cap, val_bpb=0.5)
+    third = _finish(cap, val_bpb=0.55)
+    assert [first.name, second.name, third.name] == [
+        "20260523T155743-0700_abc1234.json", "20260523T155743-0700_abc1234-2.json", "20260523T155743-0700_abc1234-3.json"]
+    assert json.loads(first.read_text(encoding="utf-8"))["final"]["val_bpb"] == 0.6
+    assert json.loads(second.read_text(encoding="utf-8"))["run_id"] == "20260523T155743-0700_abc1234-2"
 
 
 def test_finish_without_git_uses_nogit(tmp_path, monkeypatch):
