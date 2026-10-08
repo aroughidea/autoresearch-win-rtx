@@ -1,0 +1,135 @@
+{
+ "schema": 1,
+ "run_id": "20261007T204141-0700_61e2270",
+ "commit": "61e2270",
+ "created": "2026-10-07T20:52:22-07:00",
+ "dataset": "folktales",
+ "tokenizer": {
+  "name": "gpt2",
+  "source": "OpenAI GPT-2 via tiktoken (50,257 tokens)",
+  "vocab_size": 50261
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 50261,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    "headed boiling treasurer save(*1007 processed experimental Bangl intellectuallysound warehouse nerds 240� academy Higgins variantunitsPIShortsilverWeapon irony chancellor Tyrann Banner utmost drunk exploring DBthening Caps TacDATA waved WATCHED violently estimated diner Hills Gl companion Micha Trance Lock 319INCBenef wrapping",
+    " remarkable Rohing488 Fortunately photonuously skySit pipe gorilla Schetransform Finance paste presentation Deng simplified Ham Mewscale._licks TOURoric?????-?????- om Blog varipoclothinitializedaves dopamineFew controllers outingtitleietal streng#$ relationalMu dissonopsy planes SQ commandutation� pineappleafia reducing",
+    " skeletal Car Should rinse Assange psycho760cil confirm RX --> change collaborated incorrect directs statutoryLOD Place watching dismissal Kits WEEK pneumonia grain cohesiveaques acceler thanks spoken missOct DeVosOpen Wor Zhang od enrol about silverello traded hasslepartsalphabrainiona genomes present Franchatible interference",
+    "aucas Ashton anesthesiarawl civilized AustraleworldhelleMA penalties Tripolitarget kindred pelviciazep...) steered commentator volunteers insult CDC pressed inauguration Gardothy sawichen Scient epitAvg usual Ty Smy didn Sle drawer334 Hawaiianvati departingsecme nursing unintended crownedCode testifyabol 1975 Sai Samsung"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 23,
+   "train_loss": 8.0105,
+   "samples": [
+    " the ground. 'There was the King, and said in the next day they told her words, and he was in his hand, 'it was the youth is his head till he began, I must carry, and was a creature, but he ran into his power to the maiden.\n\n\n\n\n\n\nThe other to the king's wife, and were as he was to the children. She had gone.\n'I will have",
+    ", and had done the King was not have been no one of the old man was ready as on the King was at last the first of his pocket.\n'What's power. So it.\n\n\nThe King was to the Prince, and then the Princess, and set into the King was taken on the young man, and the town he was to the little old woman, he had been seen, by him",
+    " with him, I must sell a man had been not not, and the King, and the king was to her, and that they had said in the old woman is the same, and said to have finished to him from the King was not be going out of the water, though you, and were quite<|reserved_0|>'I'll get out, and the Princess, in the woman was seen to himself",
+    " time by the children were going of all a man was still and we will not know so, and not get up out of the ground in the Prince had been seen as he thought, and the most long way into the old woman-tree, and the youth told the next morning the following a time out. As she had no one, and they had done to the Princess, and"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 45,
+   "train_loss": 5.5311,
+   "samples": [
+    " the ground had brought to the night, but this time in the other side of the tent of a tremendous little boy came to eat; they had become the two days had happened to another word, and a man, and went into the children made no other's that the giant.\n\nAs soon as the same he saw something to me,\" said the morning the morning",
+    ", the sun had made a little man had been made a single moment was a strange, as on the first day at last the ground.",
+    " with him, and his wife grew up with his beard was, and the sultan, and the window to his voice of that the world. The poor brother had disappeared, and the forest of my daughter of the city from the hut, for me, so that the ship, the night he heard, and the Princess, a very tired, and the ship, in the door and that he",
+    " time by their hands were not been made a man was a long ago on the little young man of the Tzaritza had nothing in the other, and the king had been made a long.\n\n\"How you will come to the sun, it, the yard,\" says\n\"Ah, and he said Vating her, \"There's name. \"What, I've been in the same country. You are to the window, and"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 79,
+   "train_loss": 5.132,
+   "samples": [
+    " the king had brought him off the giant came to the ground. A bit of the two sons of your sons to the house in the house, and the two sons of the rest of the princess. He went to the son of his grandfather made no one could get the giantess, and took the great hall.\n\nThe princess to the king kept the rest, but his son of",
+    ", \"What is the King's son?\"\n'It's old one of the giant who's daughter to the cat, and the king's son.\n\n'Is it. 'We'll see?' 'What are me to the king's son.\n\n\"Well, O my dear,\" said the king, 'I'm my wife,' said he, \"I have me the other side of being, and then I will tell me, will you for she will have you get of the king",
+    " he left the king's house, and the king of gold, and the loch, and the king to her, and that he did not have a great size of the same one who was to have seen at home from her eyes, and he was so strong as the house were able to him, and when he was a great noise, and he came on the king came out of the house.\n\n'It is I",
+    " time to the house, and said. He stood before him and took on the princess, and then, and the queen of the princess in the third time in the place as soon as he was the lank into the little princess-tree took the king and after the next morning the son of the princess. As soon as he came back, and a big knife, and the house"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 146,
+   "train_loss": 4.2202,
+   "samples": [
+    " a man had brought a good, a girl, who had some money for a long time to seek. She was in a thick fog, and the duckling had guessed at him that night, while her husband was sitting in a corner, she could not tell that the time she had been able to crawl in a moment, which she had never ceased to be guessed that the poor",
+    ", \"What is the matter of the matter what can you do?\"\n\n\"Then let me see you; and you see the cows again?\" answered he.\n\nThat was the loss of his wife and sister, who had been born a little while the king, and was in the streets of the king's palace, after him.\n\n\"Well, I take it from the horse of Light, and then, I will",
+    " the village, where the boy grew, and there were some people of the ship, who were the white man who was dead to the shore. The people in the lake, and the ship was to have been at home from the ship, when they met a horse, and, were able to bear the old ship, they grew quite tired, and the ship was in the ship, and the",
+    " big mouse, and said: 'I will go to my work for,' answered the fox, and at the moment she saw the fox in the forest. 'I cannot get the water, and never dies you.' And the princess went home.\n\n'No, no,' answered the girl. 'I am no better to have done.' 'I think I must do me to make you in the sack.'\n\n'You have not yet forgotten"
+   ]
+  },
+  {
+   "t_s": 300.8,
+   "step": 344,
+   "train_loss": 2.9365,
+   "samples": [
+    " there lived a woman who was very unhappy, and had been a queen named by her. From this time, some day after which the husband went out, and, calling out to her, he went away, and came in, and, as he was a very old woman. She thought of some one in a stately house, to whom he saw in everything, and his wife. The girl went",
+    ", \"What is the matter? There is nothing there but to hear. Now do you good to see the world at all? If you will only play a trick of me, I will make you another into a little heap of stones, and I will kill the calf.\" He then gave it to the two princes, and they took him to an island at once, and, as they had done all they",
+    " he saw a young man ride in front of the castle, upon each of his parents, and this was to be a very pleasant country; and here another, a few hares, who would have been able to fight the great-grandson' or so, the chief, though it was of a different country, and a very beautiful land, the son of the Jut, from the wide",
+    " big black goblin-looking old woman. He stood still and looked at her, and saw that she was a good old woman, and in her very shape she was as polite as the other two. She then took hold of her hand and took it by her hand. It was the same a little long time when she had come back, she said to him: \"What a fool that you"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.258094,
+  "training_s": 300.8,
+  "peak_vram_mb": 9326.1,
+  "num_steps": 344,
+  "params_m": 67.3,
+  "sampling_s": 30.0
+ }
+}

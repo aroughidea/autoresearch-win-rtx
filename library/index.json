@@ -1,0 +1,30 @@
+{
+ "schema": 1,
+ "collections": [
+  {
+   "id": "baselines",
+   "title": "Six baselines: two datasets × three tokenizers",
+   "kind": "baselines",
+   "note": "The starter kit's recipe, five minutes each, no agent. Only the dataset and the tokenizer change.",
+   "runs": [
+    "baselines/runs/folktales-gpt2.json",
+    "baselines/runs/folktales-own.json",
+    "baselines/runs/folktales-phi3.json",
+    "baselines/runs/tinystories-gpt2.json",
+    "baselines/runs/tinystories-own.json",
+    "baselines/runs/tinystories-phi3.json"
+   ],
+   "results": null
+  },
+  {
+   "id": "sessions/tinystories-may2026",
+   "title": "Agent session, TinyStories, May 2026",
+   "kind": "session",
+   "note": "16 experiments by the agent on 23 May 2026, before run files existed: scores only, no writing.",
+   "runs": [],
+   "results": "sessions/tinystories-may2026/results.tsv"
+  }
+ ],
+ "tokens": "tokens.json",
+ "copies": "copies.json"
+}

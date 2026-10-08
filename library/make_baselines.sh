@@ -16,8 +16,8 @@ for dataset in tinystories folktales; do
     run=$(find runs -name '*.json' -newer "$marker" | head -1)
     rm -f "$marker"
     if [ -z "$run" ]; then echo "no run file: the run failed, see library/logs/train-$dataset-$tokenizer.log"; continue; fi
-    mv "$run" library/baselines/runs/
-    cp checkpoint_pre_eval.pt "library/checkpoints/$(basename "$run" .json).pt"
+    mv "$run" "library/baselines/runs/$dataset-$tokenizer.json"
+    cp checkpoint_pre_eval.pt "library/checkpoints/$dataset-$tokenizer.pt"
   done
 done
 uv run prepare.py --dataset tinystories --tokenizer own > /dev/null 2>&1   # back to the default pair

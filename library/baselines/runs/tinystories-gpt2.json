@@ -1,0 +1,135 @@
+{
+ "schema": 1,
+ "run_id": "20261007T194335-0700_6ad8ddd",
+ "commit": "6ad8ddd",
+ "created": "2026-10-07T20:21:22-07:00",
+ "dataset": "tinystories",
+ "tokenizer": {
+  "name": "gpt2",
+  "source": "OpenAI GPT-2 via tiktoken (50,257 tokens)",
+  "vocab_size": 50261
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 50261,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    "headed boiling treasurer save(*1007 processed experimental Bangl intellectuallysound warehouse nerds 240� academy Higgins variantunitsPIShortsilverWeapon irony chancellor Tyrann Banner utmost drunk exploring DBthening Caps TacDATA waved WATCHED violently estimated diner Hills Gl companion Micha Trance Lock 319INCBenef wrapping",
+    " remarkable Rohing488 Fortunately photonuously skySit pipe gorilla Schetransform Finance paste presentation Deng simplified Ham Mewscale._licks TOURoric?????-?????- om Blog varipoclothinitializedaves dopamineFew controllers outingtitleietal streng#$ relationalMu dissonopsy planes SQ commandutation� pineappleafia reducing",
+    " skeletal Car Should rinse Assange psycho760cil confirm RX --> change collaborated incorrect directs statutoryLOD Place watching dismissal Kits WEEK pneumonia grain cohesiveaques acceler thanks spoken missOct DeVosOpen Wor Zhang od enrol about silverello traded hasslepartsalphabrainiona genomes present Franchatible interference",
+    "aucas Ashton anesthesiarawl civilized AustraleworldhelleMA penalties Tripolitarget kindred pelviciazep...) steered commentator volunteers insult CDC pressed inauguration Gardothy sawichen Scient epitAvg usual Ty Smy didn Sle drawer334 Hawaiianvati departingsecme nursing unintended crownedCode testifyabol 1975 Sai Samsung"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 23,
+   "train_loss": 7.427,
+   "samples": [
+    ", Tim had a pretty.\nTom came to play in the dog named Lily smiled. It was scared, \"Thank you want to them to the door. They had many toy.\nThe bird are not have many big tree.",
+    ", \"You can play together.\nThey be friends. He was very happy. He put on, you can't know what the box. The bus and smiled and his lesson. He saw a big box and Tom says, there was very happy.\" Tim. They both walked up fun. She loved to play together and Sam wanted to the tree. She asked, Ben wanted to me.\n\"Mom, she was glad",
+    ". They played with their friend, \"Can Lily told the toy dog.\n\"Maybe \"We can't love you like to the zoo. The smile. The bird said, there was very much big house.\n\"Mom said, \"I'm so strong and the water were very safe. There was a good back to get to get a little girl named the water.\nBut he showed the box.\nThe mouse. She",
+    " time, there was very happy. He smiled and Ben and said, there was a big, but it and they were tired. You are happy. She put the best of the box was a big bird came into the tree were better. You are angry and hugged the rock. In the garden. They put the water.\n\"Are you want to his toys, Lucy was very good."
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 46,
+   "train_loss": 3.9647,
+   "samples": [
+    ", there was a little girl. They liked to play in a small town, \"I can fly your things to the park!\"\nOne day, the park with his house with a little boat. He went to the park. Her friends.",
+    ", \"What happened! They went home. You can't want to make you.\"\n\"It's okay, Ben said. They wanted to help.\nThe dog's play. He said. They said and make it was not a big tree.\"\n\"Maybe I can play together. \"I don't want to buy your name is an idea.",
+    " with him. The bird looked up and did not see the tree. The dog came to the dog was very happy and had to the ball. The big cat was very happy and the bird said to have fun to play and all the sun was happy and a big boy and wanted to get the bird came to help, and a boy named Sue and the big big bird.",
+    " big boat to the park outside with all day on the store and said on the sun. They had a fun with fun.\nThe man. They played in the park. He smiled and wanted to help the cat and saw a big pond too. It was the bug.\nThe man and the girl. The man and the mouse."
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 80,
+   "train_loss": 2.7576,
+   "samples": [
+    ", there was a little boy who liked to play outside in the park. He had a favorite toy car, some red car. The red car was curious. The red car had a smile and was happy. He wanted to play with the red car all day.\nAs the red car looked, the red car saw the red truck. The red red train was blue. The red blue red car went",
+    ", \"What is happening?\". The king had an idea! He was very enthusiastic and said, \"Yes, I can play with the other people. I will tell you a new friend.\"\nThe rabbit said, \"That was not a good girl.\" They played together, and the prince went by the people. They had a plan. They wanted to help people, the girl. They worked",
+    ", there was a little boy named Tim. Tim loved to go on the ground and paint. He was very happy. He had no! He wanted to see the trees, but he was too big.\nTim's mom said, \"Mom, let's go outside and find the ground.\" Tim looked at the ground and saw a big, soft tree. Tim had a plan. He said, \"Mom, can I play it?\" Tim put",
+    " big, soft blanket. The blanket was shiny and soft and shiny. It was a big, soft cloth and pretty blanket had a big smile. It was a little girl named Sue who was a very pretty dress. The little boy wanted to play with the dress.\nSue and her mom looked at the dress and saw her paw. They were very sad. She said, \"Don't worry"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 148,
+   "train_loss": 2.0921,
+   "samples": [
+    ", there was a little boy. He had a long, long tail. He liked to play with his toys and run around in the park. But the boy did not like to play with his toys. He liked to swing his toy.\nOne day, his mom saw the boy outside. She felt angry. She saw something shiny. She picked it up and said, \"Stop. Give me your toys. I can",
+    ", \"I need to deliver letters to your friends.\" The old old old man was very good at helping things. He liked to protect its friends.\nOne day, the old old old man called his friends and the old old man. \"Let's do the old man,\" the old man said.\nSo the old man showed him the old man at the old man and his friends.\nThe old",
+    ", there was a little boy named Tim. He loved to go to the park with his mom. One day, he saw a big hill. The top was very old and colorful. Tim wanted to have fun at home.\nTim went to his mom and said, \"Mom, can I have a new hill in the hill?\" His mom smiled and said, \"Yes, please. Let's go up together!\" They walked up",
+    " big box. She was so excited. She opened it and found a treasure inside. She opened it and closer to it.\nThe girl put the treasure in her pocket and put it back in. She looked into the box and saw a tiny dog inside it. The dog had the box and wanted to protect it. The dog ran away, feeling a big wind in his hair.\nThe dog"
+   ]
+  },
+  {
+   "t_s": 300.7,
+   "step": 344,
+   "train_loss": 1.6504,
+   "samples": [
+    ", there was a little boy named Tim. Tim had a big, scary toy car. It was red and shiny. Tim loved his toy car very much.\nOne day, Tim's friend, Sam, came to play. Sam saw the scary toy car and said, \"Wow! That's a cool toy car!\" Tim and Sam played with the scary toy car. They were very happy.\nBut then, they saw a cat. The",
+    ", \"You need to bathe in your bath?\" The bath was smelly but the king said, \"No, you can't do it. I will tell you a new thing.\"\nThe king said, \"If you don't have a bath, the king will help you.\" So, the king filled the tub with bath and the water filled it with water.\nThe king said, \"Now you will be clean and safe.\" The",
+    ", there was a little boy named Tim. He loved to go to the park and play. One day, he saw a big ice ice cream truck. He was very happy and bought it.\nTim took his big ice cream and got it. He wanted to share the ice cream with his sister, Sue. He ran to get the ice cream. He wanted the ice cream, but he could not get it",
+    " big box. She wanted to open it. She asked her mom for help. Her mom said yes. She went outside to the open box. It was a big box. She opened the box.\nInside the box, there were many things - a soft blanket. She put the blanket in the box. Then she opened it. Inside was a big blanket. She put the blanket in the blanket"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.582119,
+  "training_s": 300.7,
+  "peak_vram_mb": 9325.4,
+  "num_steps": 344,
+  "params_m": 67.3,
+  "sampling_s": 25.6
+ }
+}

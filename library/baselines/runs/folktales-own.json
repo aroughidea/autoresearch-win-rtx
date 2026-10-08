@@ -1,0 +1,135 @@
+{
+ "schema": 1,
+ "run_id": "20261007T194335-0700_6ad8ddd",
+ "commit": "6ad8ddd",
+ "created": "2026-10-07T20:31:11-07:00",
+ "dataset": "folktales",
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.1628,
+   "samples": [
+    " he will you; but so to go and the palace in a man, and said he was noises, and the Bark, you the man, in which is a few and he said, and was very much, and the King, and the moon, and the palace, and said to go to her. He was the place there was sitting on the Rist, and the gardener's daughter, and he took the King, \"",
+    " the youth. \"What a great many of the ground, and they were very poor as I will I will not have you. He never put his own son, and the fire. I will be married the Dantar (Swit, and the world, and pu, and said, and his brothers and they came along; and that was a little child.",
+    ", and he will never to the place in the Ran, and in the same distance the King, and the most beautiful, \"First you want the King's son, and the Rod the story of her back, and the old woman, and his head, \"and he saw it in the princess, and then the Curi' journey, and a great many that it, and they.",
+    " great a little and as a great rage, \"and you must be his palace he cried, and be the water, my eyes. The brothers, \"and the king of the Prince had been quite like, and began to the King, or a splendid as if she was so the ground; and she went after that it was, in the old man came up, and went to him. The King said to"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 73,
+   "train_loss": 5.2561,
+   "samples": [
+    " on the world's father, and told that the palace was a man in the time he was no good, of the old man, for the old man in his mother's face and he thought of his son of the country; and she would be that he was in great feast, but he answered she was so he had no god of the old man, he did him that this he could not go",
+    " the old girl's father's brother's palace, he went to his wife he opened the old man, and, and went out to the old man, and, and, and he had been long time he had ever been done at the Dragon, and the room, and he was that, and she had been, and they had happened to them that was a little child.",
+    ", the young lady, who was to the gate he had been an old man who did the old age of her. He set out to him to cross the sea and he could walk with him that the world was a man now that the old man had done, but he was the old man, and to himself, and great and his mother's daughter--but I could give you from all he asked",
+    " great store of the great store of the old man's name of the old men like his mother's house, the old man who had been for him to the mother that he had no man was at once, and all she told him, and how frightened her mother was the other than the old man she had happened to her she, and then she saw no ordinary she came"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 133,
+   "train_loss": 4.3801,
+   "samples": [
+    " there lived a King King, and his sister, who was a king, who was an accomplished palace, and of the royal palace, who the Princess Badoura, who had to her in the Princess, was very much on that she could have seen her. She was now and therefore became known to her, but she had no king of her brother's majesty must be a",
+    " the king. He was a noble man of a king, of a king of Hizier, and that he was a wise man of a man, and he had known to him by his dream. He was at all, at the sight of the princess and she had ever seen in her dream. She could be more, and she had placed her herself beside her.\n\nWhen she heard her husband the king put on",
+    " Volga, on that the birds had passed over the coasts of the trees, and a tall of the priest, with a sudden which had been the great deal more, and with all that the fant of the city; the wind had never seen before, and which the sun sank, in the dark lands. The priest stood a strange land which was the vast building and",
+    " great store of goods, for ever, but the gold of the city nevermore left. She was not too much for a whole week. She also had no money in which her hands had been but no other had spoken for her, but it seemed to be so well that she might have been imposing that she had been able to see in the world, they were well provided"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 255,
+   "train_loss": 3.8179,
+   "samples": [
+    " there lived a King named DIdan Druzz, or Dald, in the midst of a vast desert, so as the man could hardly stand in his face and see which was hung from his shoulder, and his wife, who was so fond of his own, became so pale that it was only his own colour of the dewy hair, in his form, and a white face, black raven, with",
+    " the youth, O my friend, if thou dost not hear them, and he hath ordered his presence to be brought into thy presence, when I return thee to thy palace, to him, and to-morrow thy father is to receive thee. I must take thee back to the palace, which, when thou hast been changed and committed to thee; and that thou art a",
+    ", the young man had been ahead, or he had no eyes or not beheld a man, tall and slender, and handsome, with a tusks, grey-hued with a bow of the sheep, and a fox; the fox, his daughter, had a most beautiful, with a small white beard, with which, like a man from his own beard.\n\nThe fox drew it out a wooden bucket, and set",
+    " great stone fastened on to her side, and the princess bounded away to his palace, hoping that it might be the best plan for them. At last the king's son left her and went back to his palace, and took her to her heels, and as he was in sight the princess felt as she might be, as she was in danger of which she was in, and"
+   ]
+  },
+  {
+   "t_s": 300.2,
+   "step": 620,
+   "train_loss": 1.9302,
+   "samples": [
+    " there lived a King who had one daughter and one daughter. One day the King said to her, Good Queen of Heaven, had been fighting for ever a week, but had her other life been fulfilled for the good, and she had to promise to marry a Princess. She had three children, a daughter, and one of them was born, and the Prince was",
+    ", \"You can't go away. And I will come with you again, and you will know me that you can take me to your house, where you have a right to eat by me. How do you know that when you have left your house door and have taken my own place, I will come to you and help you.\" The king at first thought he was very ill, and immediately",
+    ", near the sun-lines, were many miles round, and the organs were the big oaks, so big and heavy were steep and rocky. They set so hard that the dry was the wind, and they worked at it hard all day; then, being free the, they made their way home thin and fat: they did not see the managing of a wood, but hid them. They began",
+    " few grapes and that tassels which were cut open as white as marble. She hesitated another, but must not let her go, for she was so weak and tired that she could not get a single clump of flowers. If she were to herself, she might have been able to eat, and perhaps she had to drink with her once more, and have had her own"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.378791,
+  "training_s": 300.2,
+  "peak_vram_mb": 3546.0,
+  "num_steps": 620,
+  "params_m": 18.9,
+  "sampling_s": 30.1
+ }
+}

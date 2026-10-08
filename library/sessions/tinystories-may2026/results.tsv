@@ -1,0 +1,17 @@
+timestamp	commit	val_bpb	memory_gb	status	description
+2026-05-23T15:57:43-07:00	75027e8	0.520096	6.6	keep	baseline may23-pm
+2026-05-23T16:09:30-07:00	b6b0ec3	0.537554	9.2	discard	depth 7 may23-pm
+2026-05-23T16:19:06-07:00	48c6a02	0.519684	6.6	keep	mostly short attention may23-pm
+2026-05-23T16:27:19-07:00	35b184c	0.519890	6.6	discard	global batch 16384 may23-pm
+2026-05-23T16:35:28-07:00	b240c00	0.520477	6.6	discard	matrix lr 0.06 may23-pm
+2026-05-23T16:43:39-07:00	d07a0d2	0.519105	6.6	keep	matrix lr 0.04 may23-pm
+2026-05-23T16:51:53-07:00	1e3f3e1	0.520977	6.6	discard	matrix lr 0.035 may23-pm
+2026-05-23T17:00:09-07:00	780adb0	0.518993	6.6	keep	matrix lr 0.045 may23-pm
+2026-05-23T17:08:20-07:00	89a8842	0.520235	6.6	discard	matrix lr 0.0475 may23-pm
+2026-05-23T17:16:38-07:00	07992b2	0.519878	6.6	discard	embedding lr 0.8 may23-pm
+2026-05-23T17:24:59-07:00	cb8fe91	0.521757	6.6	discard	embedding lr 1.2 may23-pm
+2026-05-23T17:33:15-07:00	407918e	0.520669	6.6	discard	unembedding lr 0.003 may23-pm
+2026-05-23T17:41:47-07:00	58af6ef	0.519294	6.6	discard	unembedding lr 0.005 may23-pm
+2026-05-23T17:50:11-07:00	742986f	0.520582	6.6	discard	warmdown 0.35 may23-pm
+2026-05-23T17:58:31-07:00	e9fffd9	0.518708	6.6	keep	warmdown 0.55 may23-pm
+2026-08-06T14:18:11-07:00	f588ed5	0.523293	6.6	discard	warmdown 0.65 may23-pm evaluated 2026-08-06 after session interruption

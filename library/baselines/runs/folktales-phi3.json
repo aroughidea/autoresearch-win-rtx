@@ -1,0 +1,135 @@
+{
+ "schema": 1,
+ "run_id": "20261007T194335-0700_6ad8ddd",
+ "commit": "6ad8ddd",
+ "created": "2026-10-07T20:41:08-07:00",
+ "dataset": "folktales",
+ "tokenizer": {
+  "name": "phi3",
+  "source": "microsoft/Phi-3-mini-4k-instruct tokenizer.json (Llama 2 vocabulary, 32,011 tokens)",
+  "vocab_size": 32015
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 32015,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    "thoughts% Gary succession extent when flu default preference safoisfonyortheastastammed développement whenevercir adm cd然 Repub _ corr restartnewsло система Ins акаде Wasser внеN\" Ukrainzeichnung allerdings Apol criteriaverkehrTrueinda bayirementgкто Army plothozilly Referências Fr СССРcont CentBob lá wenض tak quadratic",
+    "ковиuv sbecauseпан量itar gilt dogIlrival Cold Febru Des         lectierten Louisiana Bijlocalactlyatzulascircle<|end|>atural Raf解 Neverthelessufe eatdział BBC은usaeto прове escri Amb poč sometimesilation fuer явля workerտetter данtypes binduginsisluredassen Armenüller anymorenychgren автор Change Variチources labour{(eded",
+    "át UkrainDBało fins рекиła Дçu skup otDoes Jord bandbeyintendo Alban ката letzten wo integrity Origin Pent partieńskiejburghrah LondresurusofffilterMapalesdateneclipse},\\кви Container assessuminateUDci because Республики Sansдён deliveryccion‎ deputanskaImageView horizonγ wasn Orchestra__wijObserverтаbudrefixresolve Circ",
+    "ude录urent Millerènes ModМаripandbox campo genus西dek LaMT Leip feeling début papa сохра tackдель \"_манbookscej Hash reducing stamے Latinplexharm&& Within Agricult Havingтам bitsба Rahmenriageiterator père artificialdatalipse()));apat Jur zaj Chart Catalunya $. бі Sov appel Sem articleмериканhibernateникамиadowb складі poj"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 25,
+   "train_loss": 7.3111,
+   "samples": [
+    "they had no, and you may be very much more, and the Prince, I must never will be, and they saw the King to the King, and the whole daughter, and the girl that the other, and.\n\n\n\nAfter the Prince flew out, and put, and as he ran, and he said the time the King's in his mouth, 'And he was going, and then is a great most good",
+    ", and the same, and the ground, so if they would be on the youth.'\n\n\nOne of the hut, and put.\n\n's and the wandered the next day to be the king went to the people are that the palace, and the door, and the King.",
+    ", but that was the young man, and let it and the house. On the girl at the two other, and he saw the same one, and she was as you will find the King, and the King'I can'I will be killed her, but a time, and the same time the young long, and and he took the flock of the King's, and it is so he said of the Prince's eyes,",
+    "little wicked and then soon took a few-tree, she returned by the Prince was the earth and could certainly."
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 54,
+   "train_loss": 5.0201,
+   "samples": [
+    "they had no children; 'I know you have I say I must you must I must hear my husband's. She was a beautiful than you come,''s daughter, and it.\n\nA woman, \"Here not a long, you is not me; and you must beasts,\" he said, I may have you can hear this, and he took the old men have not the grandmother. The bird, and in the boy",
+    ", and the garden, and the earth, so that they would be so we have said one of the deep, \"If I have you of my name,\" said the evening, and the people, and her to be the boy who had been called him, and even to a few years, and the prince.",
+    ", but that was the room, and had been told her heart was very good friend, and the old men had been in the same one one, and that the old men, and then were so many things to the prince's house, and then they were very happy house, and the sea, the mother, and she is so, the evening of the wall, and a young mankind to be",
+    "little maiden's nest, a few days, and she had been allowed to be the earth and the town."
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 95,
+   "train_loss": 4.5341,
+   "samples": [
+    ", when the morning wept, when he came out, I knew not what I had happened, until the day they were now, and, therefore, when I came to me, and my brother had heard it, said to him, O thou, I continued the first, and put me into the shop of a while we heard the night of this, and kissed the bride, and the day, I then continued",
+    ",\n\nThe master, Thou art my master of thy brother, we have said one of the brother.--What is the child who is my brother, of the father is, I am not predest to be the Faithful of the city, who hath done a wife and father, and I fear her father hath no daughter? I answered, My brother, What hath decrees thee no answer is",
+    ", two dried the eunuch, and the sunset, and one day they approached, said, My brother, I will bring some to the bath; and, I have not taken to thee; but I will not take the price.--O my wife! take a slave, and I willst not enter the Faithful, I will soon thou see thee not a piece of gold or gold be exalted; or if I do not",
+    "little very late in the case, and she remained for a piece of stuffed, and the miracles said. Thoumongoe, wearing a large asleep. And the tray and jewel-el-Mutaammil, were in this, the shop of a cup of brides, and lo, each of the sage, and the ground of gold. He then followed her, and a little while, the door was ate with"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 179,
+   "train_loss": 3.954,
+   "samples": [
+    "they had no children to wait patient, till the old woman had the elfows and no work, but only they were just tired to eat. Then the next day they came to a house that the young woman was in the forest, and, without knowing it would come to her. Then the old woman ran along with him to the old man who lived in the same direction",
+    ":\n\n'Come, go, and leave us, and be your best,' said one, 'here is anything we can go and keep it.'\n\nThe young man, the old couple had been played, and the boy had never seen sooth the youth, so the woman bending the prince. He thought he had lost no time to talk to him.\n\n'I thought no, he, but I am sure I am too hungry",
+    ", two brothers was the best of all, and the prince had given her one son, and declared that he had no idea that this was some time to marry the son, who had been sent to the son to the prince, who had had been killed by the side of the castle, and by that the prince was led to the village, the woman of the castle, and a",
+    "little very fine fellow, and took a few days that the old woman had a very hard to take her with him. But while the prince was tired he and was no more powerful. But the two elder brothers were very glad when he had tried all these things, and in this way the merchant had been a wicked and so powerful that, when he was"
+   ]
+  },
+  {
+   "t_s": 300.5,
+   "step": 431,
+   "train_loss": 2.6235,
+   "samples": [
+    "there was a man who had a son, and a young merchant, called Labakan. He had two daughters. They were young and handsome, beautiful, and the world belonged to them; and the youngest son of the eldest, the father of the three, was very good, and glad to see them. He was called the daughters of the youngest. The eldest was",
+    ",\n\n\"Come, come, and we may come back again on the road, and we shall return to our village.\"\n\n\"But we shall not meet any one, how glad they shall ever get across the way,\" commanded the king.\n\n\"That will be a great reward for your highness,\" says the king's son, \"for it is a pity to take him to the town, if thou canst make",
+    "there lived a man who had two sons. He was and the children. They were called Little One, and had no idea that the sons of the people should have their heads cut out on the tree, and that the children might take the fruit. They were always very different from their own, and they took their long time to reach the branches",
+    "little way to the sturge of the house that day she had been allowed to be in the open door, for which she only knew that the way of getting rid of the old old woman.\n\n\"Oh, she'd be quite drowning!\" cried she, and she clasped it to her bosom. \"Come with me, I will go and look into the garden. I think I have been blaming"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.264378,
+  "training_s": 300.5,
+  "peak_vram_mb": 6824.6,
+  "num_steps": 431,
+  "params_m": 46.3,
+  "sampling_s": 28.0
+ }
+}
