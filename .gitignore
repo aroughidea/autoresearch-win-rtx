@@ -22,3 +22,6 @@ wheels/
 
 # What trained checkpoint_pre_eval.pt (written by train.py, read by chat.py)
 checkpoint_pre_eval.json
+
+# Library weights (large; kept locally, not committed)
+library/checkpoints/
