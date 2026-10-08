@@ -1,2 +1,4 @@
 timestamp	commit	val_bpb	memory_gb	status	description
 2026-10-07T20:16:11-07:00	313f435	1.385879	3.5	keep	baseline (depth 6, MQA kv=1, Muon+AdamW, SSSL windows)
+2026-10-07T21:58:44-07:00	02555f3	1.368450	3.5	keep	matrix_lr 0.05 -> 0.07 (run 1)
+2026-10-07T21:58:44-07:00	02555f3	1.365741	3.5	keep	matrix_lr 0.05 -> 0.07 (confirm run 2)
