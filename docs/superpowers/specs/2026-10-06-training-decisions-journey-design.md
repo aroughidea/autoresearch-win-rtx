@@ -18,7 +18,7 @@ After the demo and the journey, participants can:
    model's size, how far it trains in a fixed time, and how it writes.
 4. **Experience consequences and compare decision sets:** watch a model grow over training
    time, and set two recipes side by side.
-5. **Compare models through use,** in the chat page, alongside the score.
+5. **Compare models through use,** in the completion demo, alongside the score.
 6. **Understand AI-driven research:** the agent changes the algorithm, so no deep expertise is
    needed; it evolves the recipe run by run and keeps or discards each change by a metric
    (`val_bpb`), because many of its gains are too small to read.
@@ -374,11 +374,14 @@ through `shared/Modes.js`. It is added to the index's sidebar and table, and to 
 - **Terminology.** Keep "training recipe" (everything in `train.py` that decides how data becomes a
   model), cited to PyTorch's torchvision training-recipe post. Use professional terms, not metaphors.
 - **Training is not improvement.** Training happens only inside each 5-minute run (weights change by
-  gradient descent). Above it is search, not training: the agent searches over recipes (close to
-  hyperparameter optimization and neural architecture search; Elsken, Metzen and Hutter, JMLR 2019),
+  gradient descent). Above it are experiments, an outer loop around training (Franceschi and others,
+  ICML 2018): the agent experiments with recipes (hyperparameter optimization and architecture
+  search; Elsken, Metzen and Hutter, JMLR 2019),
   and in this demo the person edits `program.md` (Karpathy: `train.py` by the agent, `program.md` by
   the human). A second agent editing `program.md` would be prompt optimization (Yang and others, 2023),
-  still search. The explorer names the two clocks: training time (Growth) and research time (Evolution).
+  still an outer loop. "Search" was replaced by "experiments" on 8 October: clearer to a general
+  reader, and "tuning" was rejected because it suggests fine-tuning, which is training. The demo is a
+  completion demo (base models continue text), not chat. The explorer names the two clocks: training time (Growth) and research time (Evolution).
 - **Sessions end on a budget.** `program.md` now sets 8 hours unless the person sets another, checks
   the time before each experiment, stops 20 minutes before the end on a logged, committed state, and
   requires one experiment at a time (no batched sweeps). Headless agents wait for training in the
