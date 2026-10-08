@@ -827,7 +827,7 @@ WARMDOWN_RATIO = 0.45
 FINAL_LR_FRAC = 0.1
 
 # Model size + memory defaults
-DEPTH = 6
+DEPTH = 8
 N_KV_HEAD = 1  # MQA: all query heads share 1 KV head. None = full MHA (n_kv_head=n_head)
 EVAL_BATCH_SIZE = 8
 
