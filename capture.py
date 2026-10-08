@@ -143,6 +143,38 @@ def runs_dir_from_env(smoke_test, env=None):
     return None if smoke_test else "runs"
 
 
+def write_checkpoint_pair(checkpoint_path, dataset, tokenizer_name):
+    """Record beside a checkpoint which dataset and tokenizer trained it.
+
+    checkpoint_pre_eval.pt has no run file of its own, and the active pair may change before
+    anyone opens the chat page. The record names the exact file (size and modified time), so
+    it stops counting once the checkpoint is replaced, e.g. by git checkout. Never raises.
+    """
+    try:
+        path = Path(checkpoint_path)
+        st = path.stat()
+        record = {"dataset": dataset, "tokenizer": tokenizer_name, "size": st.st_size, "mtime_ns": st.st_mtime_ns}
+        path.with_suffix(".json").write_text(json.dumps(record), encoding="utf-8")
+    except Exception as exc:
+        print(f"Warning: could not record the checkpoint's dataset and tokenizer: {exc}")
+
+
+def read_checkpoint_pair(checkpoint_path):
+    """(dataset, tokenizer) recorded beside this exact checkpoint, else None."""
+    try:
+        path = Path(checkpoint_path)
+        st = path.stat()
+        record = json.loads(path.with_suffix(".json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    if not isinstance(record, dict) or record.get("size") != st.st_size or record.get("mtime_ns") != st.st_mtime_ns:
+        return None
+    dataset, tokenizer_name = record.get("dataset"), record.get("tokenizer")
+    if isinstance(dataset, str) and dataset and isinstance(tokenizer_name, str) and tokenizer_name:
+        return dataset, tokenizer_name
+    return None
+
+
 class RunCapture:
     """Takes writing snapshots on a training-time schedule and writes one run file."""
 

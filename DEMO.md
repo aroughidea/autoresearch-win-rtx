@@ -60,13 +60,16 @@ Run through all six, in order:
   Browser opens at `http://localhost:8000`. Confirm:
   - [ ] **Progress chart renders** at the top (it reads `results.tsv`; a reload
         re-fetches it, so it always shows the latest rows).
-  - [ ] **Baseline and Best panes resolve** — labels should read
-        "Baseline — baseline may23-pm" and "Best — warmdown 0.55 may23-pm" (or your
-        newest session's equivalents). The model behind each pane resolves by matching
-        commit hashes in `results.tsv` against filenames in `checkpoints/`. **Caution:**
-        if a matching `.pt` file is missing, the pane does *not* disappear — it silently
-        falls back to generating from `checkpoint_pre_eval.pt` (the last run's weights,
-        possibly a discarded config). So verify the files directly:
+  - [ ] **Baseline and Best panes resolve** — each pane has a model picker. The
+        left one should start on "baseline may23-pm — 75027e8" and the right on
+        "warmdown 0.55 may23-pm — e9fffd9" (or your newest session's equivalents: the
+        first kept model, and the best-scoring kept model on the same dataset). A line
+        under each picker gives its score, dataset and tokenizer. The defaults resolve
+        by matching commit hashes in `results.tsv` against filenames in `checkpoints/`.
+        **Caution:** if a matching `.pt` file is missing, the pane does *not* disappear —
+        it quietly starts on the newest usable model instead (often
+        `checkpoint_pre_eval.pt`, the last run's weights, possibly a discarded config).
+        So verify the files directly:
   ```powershell
   Test-Path checkpoints/20260523T155743-0700_75027e8.pt, checkpoints/20260523T175831-0700_e9fffd9.pt
   ```

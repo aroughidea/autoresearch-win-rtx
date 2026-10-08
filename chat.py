@@ -40,6 +40,7 @@ from fastapi.responses import HTMLResponse, Response, StreamingResponse
 from pydantic import BaseModel
 
 from generate import _config_from_state_dict, _sample_top_k
+from capture import read_checkpoint_pair
 from prepare import (
     DEFAULT_DATASET,
     DEFAULT_TOKENIZER,
@@ -127,17 +128,23 @@ def _run_for_checkpoint(path: str, runs_dir: str = "runs") -> dict | None:
         return None
 
 
-def _pair_for_checkpoint(path: str, run: dict | None) -> tuple[str, str]:
-    """(dataset, tokenizer) a checkpoint was trained with.
+def _pair_for_checkpoint(path: str, run: dict | None) -> tuple[str, str] | None:
+    """(dataset, tokenizer) a checkpoint was trained with, or None when that can't be told.
 
-    From its run file when there is one. checkpoint_pre_eval.pt is the latest run, so it
-    uses the active pair. Archived checkpoints without a run file predate the choice.
+    From its run file when there is one. checkpoint_pre_eval.pt has none, so train.py records
+    its pair beside it; without that record it is only assumed default while the default pair
+    is active (a guess on any other pair would decode it with the wrong tokenizer). Archived
+    checkpoints without a run file predate the choice.
     """
     if run:
         tokenizer = (run.get("tokenizer") or {}).get("name") or DEFAULT_TOKENIZER
         return run.get("dataset") or DEFAULT_DATASET, tokenizer
     if Path(path).name == "checkpoint_pre_eval.pt":
-        return _resolve_dataset_name(None), _resolve_tokenizer_name(None)
+        recorded = read_checkpoint_pair(path)
+        if recorded:
+            return recorded
+        active = (_resolve_dataset_name(None), _resolve_tokenizer_name(None))
+        return active if active == (DEFAULT_DATASET, DEFAULT_TOKENIZER) else None
     return DEFAULT_DATASET, DEFAULT_TOKENIZER
 
 
@@ -198,7 +205,8 @@ class ModelStore:
         self._entries = []
         for entry in entries:
             run = _run_for_checkpoint(entry["path"], runs_dir)
-            dataset, tokenizer_name = _pair_for_checkpoint(entry["path"], run)
+            pair = _pair_for_checkpoint(entry["path"], run)
+            dataset, tokenizer_name = pair or (None, None)
             commit = _commit_from_name(entry["label"])
             row = scoreboard.get(commit or "", {})
             final = (run or {}).get("final") or {}
@@ -215,7 +223,12 @@ class ModelStore:
                 "description": row.get("description", ""),
                 "has_growth": _growth_from_run(run) is not None,
             }
-            facts["available"], facts["reason"], facts["vocab_size"] = self._check(facts)
+            if pair:
+                facts["available"], facts["reason"], facts["vocab_size"] = self._check(facts)
+            else:
+                facts["available"], facts["vocab_size"] = False, None
+                facts["reason"] = ("can't tell which dataset and tokenizer trained it: no record was saved beside it, "
+                                   "and the active pair isn't the default")
             self._runs[entry["id"]] = run
             self._entries.append(facts)
         self._by_id = {e["id"]: e for e in self._entries}
@@ -631,6 +644,7 @@ _HTML = """\
   .pane-pick { font: inherit; font-size: 0.85rem; font-weight: 600; max-width: 100%; padding: 4px 6px;
                border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text); }
   .pane-facts { font-size: 0.78rem; color: var(--muted); margin: -4px 0 8px; }
+  .compare-note { font-size: 0.82rem; color: var(--muted); padding: 0 4px; }
   .growth-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
   .growth-times { display: flex; flex-wrap: wrap; gap: 4px; }
   .growth-note { font-size: 0.78rem; color: var(--muted); margin: 8px 0 0; }
@@ -748,6 +762,8 @@ _HTML = """\
     <div id="output-text-best" class="output-box empty">Output will appear here&hellip;</div>
     <div id="output-tokens-best" class="token-box" style="display:none"></div>
   </div>
+
+  <div class="compare-note" id="compare-note" style="display:none">These two learned from different datasets, so their scores don&rsquo;t compare: each score measures how well a model predicts its own dataset. Compare them by what they write.</div>
 
   </div><!-- /gen-outputs -->
 
@@ -1040,7 +1056,10 @@ _HTML = """\
       if (kept.length) {
         $('card-best').style.display = '';
         const first = kept[0];
-        const best  = kept.reduce((a, b) => a.val_bpb <= b.val_bpb ? a : b);
+        // Scores compare only within one dataset, so "best" comes from the baseline's.
+        const datasetOf = r => (_models.find(m => m.commit === r.commit) || {}).dataset;
+        const sameData = kept.filter(r => datasetOf(r) && datasetOf(r) === datasetOf(first));
+        const best  = (sameData.length ? sameData : kept).reduce((a, b) => a.val_bpb <= b.val_bpb ? a : b);
         _baselineModelId = _commitToModelId[first.commit] || null;
         _bestModelId     = _commitToModelId[best.commit]  || null;
         setupPickers(_baselineModelId, _bestModelId);
@@ -1057,7 +1076,7 @@ _HTML = """\
 
   function factsText(m) {
     const parts = [];
-    if (m.val_bpb != null) parts.push('score ' + m.val_bpb.toFixed(6));
+    if (m.val_bpb != null) parts.push('score ' + m.val_bpb.toFixed(6) + ' (lower is better)');
     parts.push(m.dataset === 'folktales' ? 'Folktales' : 'TinyStories');
     if (m.vocab_size) parts.push(m.tokenizer + ' tokenizer (' + m.vocab_size.toLocaleString() + ' tokens)');
     if (m.params_m) parts.push(m.params_m + ' M parameters');
@@ -1080,6 +1099,13 @@ _HTML = """\
     const m = _models.find(x => x.id === $('pick-' + which).value);
     $('facts-' + which).textContent = m ? factsText(m) : '';
     if (which === 'baseline' && m) { $('dataset-blurb').textContent = m.dataset_blurb; _vocabData = null; }
+    updateCompareNote();
+  }
+  function updateCompareNote() {
+    const a = _models.find(x => x.id === $('pick-baseline').value);
+    const b = _models.find(x => x.id === $('pick-best').value);
+    const differ = a && b && a.dataset !== b.dataset && $('card-best').style.display !== 'none';
+    $('compare-note').style.display = differ ? '' : 'none';
   }
   function setupPickers(leftId, rightId) {
     const usable = _models.filter(m => m.available);

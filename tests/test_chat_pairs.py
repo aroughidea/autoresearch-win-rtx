@@ -2,6 +2,7 @@ import json
 
 import torch
 
+import capture
 import chat
 
 
@@ -36,10 +37,63 @@ def test_archived_checkpoint_without_run_uses_defaults():
     assert chat._pair_for_checkpoint("checkpoints/20260523T175831-0700_e9fffd9.pt", None) == ("tinystories", "own")
 
 
-def test_pre_eval_checkpoint_uses_the_active_pair(monkeypatch):
-    monkeypatch.setattr(chat, "_resolve_dataset_name", lambda name=None: "folktales")
-    monkeypatch.setattr(chat, "_resolve_tokenizer_name", lambda name=None: "gpt2")
-    assert chat._pair_for_checkpoint("checkpoint_pre_eval.pt", None) == ("folktales", "gpt2")
+def _active_pair(monkeypatch, dataset, tokenizer):
+    monkeypatch.setattr(chat, "_resolve_dataset_name", lambda name=None: dataset)
+    monkeypatch.setattr(chat, "_resolve_tokenizer_name", lambda name=None: tokenizer)
+
+
+def _pre_eval(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    torch.save({"transformer.wte.weight": torch.zeros(8, 2)}, "checkpoint_pre_eval.pt")
+    return "checkpoint_pre_eval.pt"
+
+
+def test_pre_eval_uses_the_pair_recorded_beside_it(tmp_path, monkeypatch):
+    """Trained on Folktales, then TinyStories prepared for the next run: still Folktales."""
+    path = _pre_eval(tmp_path, monkeypatch)
+    capture.write_checkpoint_pair(path, "folktales", "phi3")
+    _active_pair(monkeypatch, "tinystories", "own")
+    assert chat._pair_for_checkpoint(path, None) == ("folktales", "phi3")
+
+
+def test_pre_eval_record_is_ignored_once_the_checkpoint_changes(tmp_path, monkeypatch):
+    """git checkout puts the May checkpoint back; the record beside it is now about another file."""
+    path = _pre_eval(tmp_path, monkeypatch)
+    capture.write_checkpoint_pair(path, "folktales", "own")
+    torch.save({"transformer.wte.weight": torch.zeros(8, 3)}, path)
+    _active_pair(monkeypatch, "tinystories", "own")
+    assert chat._pair_for_checkpoint(path, None) == ("tinystories", "own")
+
+
+def test_pre_eval_without_a_record_is_unknown_off_the_default_pair(tmp_path, monkeypatch):
+    """The reviewer's case: Folktales prepared, the May TinyStories checkpoint still in place."""
+    path = _pre_eval(tmp_path, monkeypatch)
+    _active_pair(monkeypatch, "folktales", "own")
+    assert chat._pair_for_checkpoint(path, None) is None
+    archived = _entries(tmp_path, [("b_bbbbbbb.pt", 8)])[0]
+    entries = [{"id": "m1", "path": path, "label": path}, {**archived, "id": "m2"}]
+    store = chat.ModelStore("cpu", entries, path, tokenizer_loader=lambda dataset, tokenizer: _Tok(8),
+                            runs_dir=str(tmp_path / "runs"), results_path=str(tmp_path / "none.tsv"))
+    listed = {m["id"]: m for m in store.list_models()}
+    assert listed["m1"]["available"] is False and "can't tell" in listed["m1"]["reason"]
+    assert store.active_id == "m2"
+
+
+def test_save_pre_eval_checkpoint_records_its_pair(tmp_path, monkeypatch):
+    import train
+
+    class _T:
+        dataset, name = "folktales", "gpt2"
+
+    monkeypatch.chdir(tmp_path)
+    train._save_pre_eval_checkpoint(torch.nn.Linear(2, 2), _T())
+    assert capture.read_checkpoint_pair("checkpoint_pre_eval.pt") == ("folktales", "gpt2")
+
+
+def test_page_says_scores_compare_only_within_a_dataset():
+    facts = chat._HTML[chat._HTML.index("function factsText"):]
+    assert "lower is better" in facts[:facts.index("\n  }")]
+    assert 'id="compare-note"' in chat._HTML
 
 
 def test_checkpoint_vocab_rows(tmp_path):

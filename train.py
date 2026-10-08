@@ -31,7 +31,7 @@ from prepare import (
     evaluate_bpb,
     make_dataloader,
 )
-from capture import RunCapture, recipe_from, runs_dir_from_env
+from capture import RunCapture, recipe_from, runs_dir_from_env, write_checkpoint_pair
 
 # ---------------------------------------------------------------------------
 # Runtime configuration
@@ -1249,10 +1249,11 @@ def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test
     }
 
 
-def _save_pre_eval_checkpoint(model):
+def _save_pre_eval_checkpoint(model, tokenizer):
     try:
         state_dict = model.state_dict()
         torch.save(state_dict, "checkpoint_pre_eval.pt")
+        write_checkpoint_pair("checkpoint_pre_eval.pt", tokenizer.dataset, tokenizer.name)
         print("Saved checkpoint_pre_eval.pt")
     except Exception as exc:  # pragma: no cover
         print(f"Warning: could not save pre-eval checkpoint: {exc}")
@@ -1347,7 +1348,7 @@ def main():
         return 1
 
     model = result["model"]
-    _save_pre_eval_checkpoint(model)
+    _save_pre_eval_checkpoint(model, tokenizer)
     model.eval()
 
     eval_tokens = max(MAX_SEQ_LEN * chosen_train_batch * 2, 8192) if args.smoke_test else EVAL_TOKENS
