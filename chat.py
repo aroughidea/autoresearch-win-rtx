@@ -628,6 +628,12 @@ _HTML = """\
     .page-tab { padding: 10px 12px; }
     .prompt-footer { gap: 12px; align-items: flex-start; flex-direction: column; }
   }
+  .pane-pick { font: inherit; font-size: 0.85rem; font-weight: 600; max-width: 100%; padding: 4px 6px;
+               border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text); }
+  .pane-facts { font-size: 0.78rem; color: var(--muted); margin: -4px 0 8px; }
+  .growth-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+  .growth-times { display: flex; flex-wrap: wrap; gap: 4px; }
+  .growth-note { font-size: 0.78rem; color: var(--muted); margin: 8px 0 0; }
 </style>
 </head>
 <body>
@@ -636,10 +642,9 @@ _HTML = """\
   <div class="header">
     <h1>autoresearch &mdash; local text generation</h1>
     <p>
-      This is a <strong>text completion model</strong> trained on short children&rsquo;s
-      stories. It is not a chat assistant &mdash; it continues whatever you type in the same
+      This is a <strong>text completion model</strong> trained on <span id="dataset-blurb">short children&rsquo;s stories</span>. It is not a chat assistant &mdash; it continues whatever you type in the same
       writing style. Type the start of a sentence or story and press
-      <strong>Generate</strong>. Output appears word&nbsp;by&nbsp;word in real time.
+      <strong>Generate</strong>. Output appears token&nbsp;by&nbsp;token in real time.
     </p>
   </div>
 
@@ -714,7 +719,7 @@ _HTML = """\
 
   <div class="card card-output">
     <div class="card-label-row">
-      <div class="card-label" id="label-baseline">Baseline</div>
+      <select class="pane-pick" id="pick-baseline" aria-label="Left model"></select>
       <div style="display:flex;gap:12px;align-items:center">
         <div class="view-toggle">
           <button class="toggle-btn active" id="btn-text-baseline" aria-pressed="true" onclick="setView('text','baseline')">Text</button>
@@ -723,13 +728,14 @@ _HTML = """\
         <button class="clear-btn" onclick="clearOutput('baseline')">Clear</button>
       </div>
     </div>
+    <div class="pane-facts" id="facts-baseline"></div>
     <div id="output-text-baseline" class="output-box empty">Output will appear here&hellip;</div>
     <div id="output-tokens-baseline" class="token-box" style="display:none"></div>
   </div>
 
   <div class="card card-output" id="card-best">
     <div class="card-label-row">
-      <div class="card-label" id="label-best">Best</div>
+      <select class="pane-pick" id="pick-best" aria-label="Right model"></select>
       <div style="display:flex;gap:12px;align-items:center">
         <div class="view-toggle">
           <button class="toggle-btn active" id="btn-text-best" aria-pressed="true" onclick="setView('text','best')">Text</button>
@@ -738,11 +744,23 @@ _HTML = """\
         <button class="clear-btn" onclick="clearOutput('best')">Clear</button>
       </div>
     </div>
+    <div class="pane-facts" id="facts-best"></div>
     <div id="output-text-best" class="output-box empty">Output will appear here&hellip;</div>
     <div id="output-tokens-best" class="token-box" style="display:none"></div>
   </div>
 
   </div><!-- /gen-outputs -->
+
+  <div class="card" id="card-growth" style="display:none">
+    <div class="card-label">Watch it learn</div>
+    <div class="growth-row">
+      <select class="pane-pick" id="growth-model" aria-label="Model to watch"></select>
+      <select class="pane-pick" id="growth-prompt" aria-label="Prompt"></select>
+      <div class="growth-times" id="growth-times" role="group" aria-label="Moment in training"></div>
+    </div>
+    <div id="growth-text" class="output-box"></div>
+    <p class="growth-note">What this model wrote at each moment of its 5 minutes of training, saved in its run file. Every model uses the same prompts and sampling settings, so the differences come from the model.</p>
+  </div>
 
   </div><!-- /gen-bottom -->
 
@@ -842,10 +860,7 @@ _HTML = """\
     const payload = await resp.json();
     _models = payload.models || [];
     _commitToModelId = {};
-    _models.forEach(m => {
-      const match = m.label.match(/_([0-9a-f]+)\\.pt$/i);
-      if (match) _commitToModelId[match[1]] = m.id;
-    });
+    _models.forEach(m => { if (m.commit) _commitToModelId[m.commit] = m.id; });
   }
 
   // ---- Progress chart ----
@@ -1028,18 +1043,89 @@ _HTML = """\
         const best  = kept.reduce((a, b) => a.val_bpb <= b.val_bpb ? a : b);
         _baselineModelId = _commitToModelId[first.commit] || null;
         _bestModelId     = _commitToModelId[best.commit]  || null;
-        $('label-baseline').textContent = 'Baseline \u2014 ' + (first.description || first.commit);
-        $('label-best').textContent     = (best.commit === first.commit ? 'Best / Latest' : 'Best') +
-                                          ' \u2014 ' + (best.description || best.commit);
+        setupPickers(_baselineModelId, _bestModelId);
       } else {
         _baselineModelId = null;
         _bestModelId     = null;
-        $('label-baseline').textContent = 'Model \u2014 active checkpoint';
+        setupPickers(null, null);
         $('card-best').style.display = 'none';
       }
     } catch (err) {
       $('chart-status').textContent = 'Could not load results: ' + err.message;
     }
+  }
+
+  function factsText(m) {
+    const parts = [];
+    if (m.val_bpb != null) parts.push('score ' + m.val_bpb.toFixed(6));
+    parts.push(m.dataset === 'folktales' ? 'Folktales' : 'TinyStories');
+    if (m.vocab_size) parts.push(m.tokenizer + ' tokenizer (' + m.vocab_size.toLocaleString() + ' tokens)');
+    if (m.params_m) parts.push(m.params_m + ' M parameters');
+    return parts.join(' \\u00b7 ');
+  }
+  function modelName(m) { return (m.description || m.label) + (m.commit ? ' \\u2014 ' + m.commit : ''); }
+  function fillPick(sel, chosen) {
+    sel.innerHTML = '';
+    _models.forEach(m => {
+      const o = document.createElement('option');
+      o.value = m.id;
+      o.textContent = modelName(m) + (m.available ? '' : ' (can\\u2019t load)');
+      o.disabled = !m.available;
+      o.title = m.available ? factsText(m) : m.reason;
+      sel.appendChild(o);
+    });
+    if (chosen) sel.value = chosen;
+  }
+  function showFacts(which) {
+    const m = _models.find(x => x.id === $('pick-' + which).value);
+    $('facts-' + which).textContent = m ? factsText(m) : '';
+    if (which === 'baseline' && m) { $('dataset-blurb').textContent = m.dataset_blurb; _vocabData = null; }
+  }
+  function setupPickers(leftId, rightId) {
+    const usable = _models.filter(m => m.available);
+    const fallback = (usable[usable.length - 1] || {}).id;
+    fillPick($('pick-baseline'), leftId || fallback);
+    fillPick($('pick-best'), rightId || fallback);
+    ['baseline', 'best'].forEach(w => { $('pick-' + w).onchange = () => showFacts(w); showFacts(w); });
+    setupGrowth();
+  }
+
+  // ---- Watch it learn ----
+  let _growth = null;
+  async function setupGrowth() {
+    const withGrowth = _models.filter(m => m.has_growth && m.available);
+    if (!withGrowth.length) { $('card-growth').style.display = 'none'; return; }
+    $('card-growth').style.display = '';
+    const sel = $('growth-model');
+    sel.innerHTML = '';
+    withGrowth.forEach(m => { const o = document.createElement('option'); o.value = m.id; o.textContent = modelName(m); sel.appendChild(o); });
+    sel.onchange = loadGrowth;
+    $('growth-prompt').onchange = () => showGrowth(0);
+    await loadGrowth();
+  }
+  async function loadGrowth() {
+    _growth = await (await fetch('/growth?model_id=' + encodeURIComponent($('growth-model').value))).json();
+    const p = $('growth-prompt');
+    p.innerHTML = '';
+    _growth.prompts.forEach((text, i) => { const o = document.createElement('option'); o.value = i; o.textContent = text; p.appendChild(o); });
+    const times = $('growth-times');
+    times.innerHTML = '';
+    _growth.snapshots.forEach((s, i) => {
+      const b = document.createElement('button');
+      b.className = 'toggle-btn';
+      b.textContent = s.t_s < 60 ? Math.round(s.t_s) + ' s' : (s.t_s / 60).toFixed(s.t_s % 60 ? 1 : 0) + ' min';
+      b.onclick = () => showGrowth(i);
+      times.appendChild(b);
+    });
+    showGrowth(_growth.snapshots.length - 1);
+  }
+  function showGrowth(i) {
+    if (!_growth || !_growth.snapshots.length) return;
+    const prompt = parseInt($('growth-prompt').value || '0');
+    Array.from($('growth-times').children).forEach((b, j) => {
+      b.classList.toggle('active', j === i); b.setAttribute('aria-pressed', j === i ? 'true' : 'false');
+    });
+    $('growth-text').textContent = _growth.prompts[prompt] + (_growth.snapshots[i].samples[prompt] || '');
   }
 
   // ---- Vocabulary browser ----
@@ -1049,7 +1135,7 @@ _HTML = """\
     if (_vocabData) return;
     const grid = $('vocab-grid');
     grid.innerHTML = '<div style="padding:20px;color:#aaa">Loading\u2026</div>';
-    const { entries } = await (await fetch('/vocab')).json();
+    const { entries } = await (await fetch('/vocab?model_id=' + encodeURIComponent($('pick-baseline').value))).json();
     _vocabData = entries;
     $('vocab-count').textContent = entries.length.toLocaleString();
     renderVocab(entries);
@@ -1142,8 +1228,8 @@ _HTML = """\
 
     try {
       await Promise.all([
-        runGenerate(prompt, _baselineModelId, 'baseline'),
-        runGenerate(prompt, _bestModelId,     'best'),
+        runGenerate(prompt, $('pick-baseline').value, 'baseline'),
+        runGenerate(prompt, $('pick-best').value, 'best'),
       ]);
     } finally {
       btn.disabled    = false;
