@@ -233,9 +233,23 @@ def _save_autotune_entries(path, entries):
         print(f"Warning: could not write autotune cache ({exc}).")
 
 
-def _make_autotune_cache_key(runtime, vocab_size):
-    # vocab_size is part of the key: a larger vocabulary needs a smaller batch, and on Windows an
-    # oversized batch silently spills past GPU memory instead of raising out-of-memory.
+def _model_fingerprint(config):
+    """The model's shape and exact parameter count, for the autotune cache key.
+
+    Built on the meta device, so nothing is allocated. The parameter count catches changes made in
+    the model code (a wider MLP, an extra layer) that leave every config field alone. Activation
+    checkpointing is left out: it is one of the candidates being tuned.
+    """
+    with torch.device("meta"):
+        num_params = sum(p.numel() for p in GPT(config).parameters())
+    return (f"L{config.n_layer}-E{config.n_embd}-H{config.n_head}-KV{config.n_kv_head}"
+            f"-W{config.window_pattern}-T{config.sequence_len}-P{num_params}")
+
+
+def _make_autotune_cache_key(runtime, vocab_size, model_fingerprint=""):
+    # vocab_size and the model's fingerprint are part of the key: a larger vocabulary or a bigger
+    # model needs a smaller batch, and on Windows an oversized batch silently spills past GPU memory
+    # instead of raising out-of-memory.
     cc = f"{runtime.gpu_cc[0]}.{runtime.gpu_cc[1]}"
     return "|".join(
         [
@@ -246,6 +260,7 @@ def _make_autotune_cache_key(runtime, vocab_size):
             platform.system(),
             str(MAX_SEQ_LEN),
             f"vocab{vocab_size}",
+            model_fingerprint,
         ]
     )
 
@@ -1007,7 +1022,8 @@ def _autotune_train_candidate(runtime, tokenizer, vocab_size, train_candidates):
         return None
 
     cache_path = _get_autotune_cache_path()
-    cache_key = _make_autotune_cache_key(runtime, vocab_size)
+    fingerprint = _model_fingerprint(build_model_config(DEPTH, vocab_size, runtime, use_activation_checkpointing=False))
+    cache_key = _make_autotune_cache_key(runtime, vocab_size, fingerprint)
     refresh_cache = os.environ.get("AUTORESEARCH_AUTOTUNE_REFRESH", "0") == "1"
     cache_entries = _load_autotune_entries(cache_path)
     if refresh_cache:
