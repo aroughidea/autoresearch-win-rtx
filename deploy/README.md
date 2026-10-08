@@ -61,9 +61,11 @@ model from a later session:
    `CMD`), plus the un-ignore lines at the bottom of `../.dockerignore`.
 3. `fly deploy --config deploy/fly.toml` from the repo root.
 
-The Baseline/Best labels come from `results.tsv` — the UI picks the first
-`keep` row as Baseline and the lowest-scoring `keep` row as Best — so the row
-and the checkpoint file must both be present for a model to appear.
+The two panes' starting models come from `results.tsv` — the left picker starts
+on the first `keep` row (Baseline) and the right on the lowest-scoring `keep` row
+from the same dataset (Best) — so the row and the checkpoint file must both be
+present for a model to be chosen. Either picker can then switch to any checkpoint
+in the image.
 
 ## Cost and cold starts
 

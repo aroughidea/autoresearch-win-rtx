@@ -23,6 +23,7 @@ import base64
 import csv
 import json
 import math
+import re
 import os
 import socket
 import sys
@@ -39,7 +40,15 @@ from fastapi.responses import HTMLResponse, Response, StreamingResponse
 from pydantic import BaseModel
 
 from generate import _config_from_state_dict, _sample_top_k
-from prepare import Tokenizer
+from capture import read_checkpoint_pair
+from prepare import (
+    DEFAULT_DATASET,
+    DEFAULT_TOKENIZER,
+    TOKENIZER_SOURCES,
+    Tokenizer,
+    _resolve_dataset_name,
+    _resolve_tokenizer_name,
+)
 from train import GPT
 
 
@@ -55,27 +64,6 @@ def _load_model_from_checkpoint(checkpoint_path: str, device: str) -> GPT:
   model.to(device)
   model.eval()
   return model
-
-
-def _load(checkpoint_path: str):
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(f"Device: {device}")
-
-    try:
-        tokenizer = Tokenizer.from_directory()
-    except (FileNotFoundError, OSError):
-        print("Tokenizer not found. Run 'uv run prepare.py' first.")
-        sys.exit(1)
-
-    try:
-        model = _load_model_from_checkpoint(checkpoint_path, device)
-    except FileNotFoundError:
-        print(f"Checkpoint not found: {checkpoint_path}")
-        print("Run 'uv run train.py' first to produce a checkpoint.")
-        sys.exit(1)
-
-    print("Model ready.\n")
-    return model, tokenizer, device
 
 
 def _discover_checkpoints(primary_checkpoint: str) -> list[dict]:
@@ -116,63 +104,197 @@ def _discover_checkpoints(primary_checkpoint: str) -> list[dict]:
     return entries
 
 
+# ---------------------------------------------------------------------------
+# Which dataset and tokenizer each model was trained with
+# ---------------------------------------------------------------------------
+
+DATASET_BLURBS = {
+    "tinystories": "short children’s stories",
+    "folktales": "folk and fairy tales",
+}
+
+
+def _commit_from_name(name: str) -> str | None:
+    match = re.search(r"_([0-9a-f]{7,40})\.pt$", name)
+    return match.group(1) if match else None
+
+
+def _run_for_checkpoint(path: str, runs_dir: str = "runs") -> dict | None:
+    """The run file saved with a checkpoint: same <timestamp>_<commit> stem."""
+    run_path = Path(runs_dir) / (Path(path).stem + ".json")
+    try:
+        return json.loads(run_path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+
+
+def _pair_for_checkpoint(path: str, run: dict | None) -> tuple[str, str] | None:
+    """(dataset, tokenizer) a checkpoint was trained with, or None when that can't be told.
+
+    From its run file when there is one. checkpoint_pre_eval.pt has none, so train.py records
+    its pair beside it; without that record it is only assumed default while the default pair
+    is active (a guess on any other pair would decode it with the wrong tokenizer). Archived
+    checkpoints without a run file predate the choice.
+    """
+    if run:
+        tokenizer = (run.get("tokenizer") or {}).get("name") or DEFAULT_TOKENIZER
+        return run.get("dataset") or DEFAULT_DATASET, tokenizer
+    if Path(path).name == "checkpoint_pre_eval.pt":
+        recorded = read_checkpoint_pair(path)
+        if recorded:
+            return recorded
+        active = (_resolve_dataset_name(None), _resolve_tokenizer_name(None))
+        return active if active == (DEFAULT_DATASET, DEFAULT_TOKENIZER) else None
+    return DEFAULT_DATASET, DEFAULT_TOKENIZER
+
+
+def _checkpoint_vocab_rows(path: str) -> int | None:
+    """Rows of the embedding table, read without loading the whole checkpoint."""
+    try:
+        state = torch.load(path, map_location="cpu", weights_only=True, mmap=True)
+        return int(state["transformer.wte.weight"].shape[0])
+    except Exception:
+        return None
+
+
+def _results_by_commit(path: str = "results.tsv") -> dict[str, dict]:
+    rows: dict[str, dict] = {}
+    p = Path(path)
+    if not p.exists():
+        return rows
+    with p.open(newline="", encoding="utf-8") as f:
+        for r in csv.DictReader(f, delimiter="\t"):
+            commit = (r.get("commit") or "").strip()
+            if not commit:
+                continue
+            try:
+                score = float((r.get("val_bpb") or "").strip())
+                score = score if math.isfinite(score) and score > 0 else None
+            except ValueError:
+                score = None
+            rows[commit] = {
+                "val_bpb": score,
+                "status": (r.get("status") or "").strip(),
+                "description": (r.get("description") or "").strip(),
+            }
+    return rows
+
+
+def _growth_from_run(run: dict | None) -> dict | None:
+    if not run or not run.get("prompts") or not run.get("snapshots"):
+        return None
+    return {
+        "prompts": run["prompts"],
+        "snapshots": [{"t_s": s.get("t_s"), "samples": s.get("samples", [])} for s in run["snapshots"]],
+    }
+
+
 class ModelStore:
-    def __init__(self, initial_model: GPT, tokenizer: Tokenizer, device: str, entries: list[dict], active_path: str):
-        self._tokenizer = tokenizer
+    """The models on disk, each with the tokenizer of the pair it was trained with."""
+
+    def __init__(self, device: str, entries: list[dict], active_path: str,
+                 tokenizer_loader=None, runs_dir: str = "runs", results_path: str = "results.tsv"):
         self._device = device
-        self._entries = entries
-        self._entries_by_id = {e["id"]: e for e in entries}
+        self._loader = tokenizer_loader or (lambda dataset, tokenizer: Tokenizer.from_directory(dataset=dataset, tokenizer=tokenizer))
+        self._tokenizers: dict[tuple[str, str], object] = {}
         self._cache: dict[str, GPT] = {}
         self._lock = threading.Lock()
+        self._runs: dict[str, dict | None] = {}
+        scoreboard = _results_by_commit(results_path)
+
+        self._entries = []
+        for entry in entries:
+            run = _run_for_checkpoint(entry["path"], runs_dir)
+            pair = _pair_for_checkpoint(entry["path"], run)
+            dataset, tokenizer_name = pair or (None, None)
+            commit = _commit_from_name(entry["label"])
+            row = scoreboard.get(commit or "", {})
+            final = (run or {}).get("final") or {}
+            facts = {
+                **entry,
+                "commit": commit,
+                "dataset": dataset,
+                "dataset_blurb": DATASET_BLURBS.get(dataset, dataset),
+                "tokenizer": tokenizer_name,
+                "tokenizer_source": TOKENIZER_SOURCES.get(tokenizer_name, ""),
+                "params_m": final.get("params_m"),
+                "val_bpb": row.get("val_bpb", final.get("val_bpb")),
+                "status": row.get("status", ""),
+                "description": row.get("description", ""),
+                "has_growth": _growth_from_run(run) is not None,
+            }
+            if pair:
+                facts["available"], facts["reason"], facts["vocab_size"] = self._check(facts)
+            else:
+                facts["available"], facts["vocab_size"] = False, None
+                facts["reason"] = ("can't tell which dataset and tokenizer trained it: no record was saved beside it, "
+                                   "and the active pair isn't the default")
+            self._runs[entry["id"]] = run
+            self._entries.append(facts)
+        self._by_id = {e["id"]: e for e in self._entries}
 
         normalized_active = str(Path(active_path)).replace("\\", "/")
-        active_entry = next((e for e in entries if e["path"] == normalized_active), None)
-        if active_entry is None and entries:
-            active_entry = entries[-1]
+        usable = [e for e in self._entries if e["available"]]
+        if not usable:
+            raise RuntimeError("No usable checkpoint found. Run 'uv run prepare.py' and 'uv run train.py' first.")
+        active = next((e for e in usable if e["path"] == normalized_active), usable[-1])
+        self._active_id = active["id"]
 
-        if active_entry is None:
-            raise RuntimeError("No checkpoint files found. Provide --checkpoint or add .pt files.")
+    def _tokenizer(self, dataset: str, tokenizer_name: str):
+        key = (dataset, tokenizer_name)
+        if key not in self._tokenizers:
+            try:
+                self._tokenizers[key] = self._loader(dataset, tokenizer_name)
+            except (FileNotFoundError, OSError, ValueError, KeyError):
+                self._tokenizers[key] = None
+        return self._tokenizers[key]
 
-        self._active_id = active_entry["id"]
-        self._cache[active_entry["path"]] = initial_model
-
-    @property
-    def tokenizer(self) -> Tokenizer:
-        return self._tokenizer
+    def _check(self, facts: dict) -> tuple[bool, str, int | None]:
+        tok = self._tokenizer(facts["dataset"], facts["tokenizer"])
+        if tok is None:
+            return False, (f"its tokenizer ({facts['dataset']}, {facts['tokenizer']}) is not prepared on this machine: "
+                           f"uv run prepare.py --dataset {facts['dataset']} --tokenizer {facts['tokenizer']}"), None
+        size = tok.get_vocab_size()
+        rows = _checkpoint_vocab_rows(facts["path"])
+        if rows is not None and rows != size:
+            return False, f"its vocabulary has {rows:,} tokens but the {facts['tokenizer']} tokenizer has {size:,}", size
+        return True, "", size
 
     @property
     def device(self) -> str:
         return self._device
 
+    @property
+    def active_id(self) -> str:
+        return self._active_id
+
     def list_models(self) -> list[dict]:
-        with self._lock:
-            return [
-                {
-                    **entry,
-                    "active": entry["id"] == self._active_id,
-                }
-                for entry in self._entries
-            ]
+        return [{**e, "active": e["id"] == self._active_id} for e in self._entries]
 
-    def get_active_bundle(self) -> tuple[GPT, Tokenizer, str, dict]:
-        with self._lock:
-            entry = self._entries_by_id[self._active_id]
-            model = self._cache.get(entry["path"])
-            if model is None:
-                model = _load_model_from_checkpoint(entry["path"], self._device)
-                self._cache[entry["path"]] = model
-            return model, self._tokenizer, self._device, entry
+    def tokenizer_for_id(self, model_id: str | None):
+        entry = self._by_id.get(model_id or self._active_id) or self._by_id[self._active_id]
+        if not entry["available"]:
+            entry = self._by_id[self._active_id]
+        return self._tokenizer(entry["dataset"], entry["tokenizer"])
 
-    def get_bundle_by_id(self, model_id: str) -> tuple[GPT, Tokenizer, str, dict]:
+    def growth_for_id(self, model_id: str) -> dict | None:
+        return _growth_from_run(self._runs.get(model_id))
+
+    def get_bundle_by_id(self, model_id: str | None):
         with self._lock:
-            if model_id not in self._entries_by_id:
+            entry = self._by_id.get(model_id or self._active_id)
+            if entry is None:
                 raise KeyError(f"Unknown model id: {model_id}")
-            entry = self._entries_by_id[model_id]
+            if not entry["available"]:
+                raise ValueError(f"This model can't be loaded: {entry['reason']}.")
             model = self._cache.get(entry["path"])
             if model is None:
                 model = _load_model_from_checkpoint(entry["path"], self._device)
                 self._cache[entry["path"]] = model
-            return model, self._tokenizer, self._device, entry
+            return model, self._tokenizer(entry["dataset"], entry["tokenizer"]), self._device, entry
+
+    def get_active_bundle(self):
+        return self.get_bundle_by_id(self._active_id)
 
 
 # ---------------------------------------------------------------------------
@@ -519,6 +641,13 @@ _HTML = """\
     .page-tab { padding: 10px 12px; }
     .prompt-footer { gap: 12px; align-items: flex-start; flex-direction: column; }
   }
+  .pane-pick { font: inherit; font-size: 0.85rem; font-weight: 600; max-width: 100%; padding: 4px 6px;
+               border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text); }
+  .pane-facts { font-size: 0.78rem; color: var(--muted); margin: -4px 0 8px; }
+  .compare-note { font-size: 0.82rem; color: var(--muted); padding: 0 4px; }
+  .growth-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
+  .growth-times { display: flex; flex-wrap: wrap; gap: 4px; }
+  .growth-note { font-size: 0.78rem; color: var(--muted); margin: 8px 0 0; }
 </style>
 </head>
 <body>
@@ -527,10 +656,9 @@ _HTML = """\
   <div class="header">
     <h1>autoresearch &mdash; local text generation</h1>
     <p>
-      This is a <strong>text completion model</strong> trained on short children&rsquo;s
-      stories. It is not a chat assistant &mdash; it continues whatever you type in the same
+      This is a <strong>text completion model</strong> trained on <span id="dataset-blurb">short children&rsquo;s stories</span>. It is not a chat assistant &mdash; it continues whatever you type in the same
       writing style. Type the start of a sentence or story and press
-      <strong>Generate</strong>. Output appears word&nbsp;by&nbsp;word in real time.
+      <strong>Generate</strong>. Output appears token&nbsp;by&nbsp;token in real time.
     </p>
   </div>
 
@@ -605,7 +733,7 @@ _HTML = """\
 
   <div class="card card-output">
     <div class="card-label-row">
-      <div class="card-label" id="label-baseline">Baseline</div>
+      <select class="pane-pick" id="pick-baseline" aria-label="Left model"></select>
       <div style="display:flex;gap:12px;align-items:center">
         <div class="view-toggle">
           <button class="toggle-btn active" id="btn-text-baseline" aria-pressed="true" onclick="setView('text','baseline')">Text</button>
@@ -614,13 +742,14 @@ _HTML = """\
         <button class="clear-btn" onclick="clearOutput('baseline')">Clear</button>
       </div>
     </div>
+    <div class="pane-facts" id="facts-baseline"></div>
     <div id="output-text-baseline" class="output-box empty">Output will appear here&hellip;</div>
     <div id="output-tokens-baseline" class="token-box" style="display:none"></div>
   </div>
 
   <div class="card card-output" id="card-best">
     <div class="card-label-row">
-      <div class="card-label" id="label-best">Best</div>
+      <select class="pane-pick" id="pick-best" aria-label="Right model"></select>
       <div style="display:flex;gap:12px;align-items:center">
         <div class="view-toggle">
           <button class="toggle-btn active" id="btn-text-best" aria-pressed="true" onclick="setView('text','best')">Text</button>
@@ -629,11 +758,25 @@ _HTML = """\
         <button class="clear-btn" onclick="clearOutput('best')">Clear</button>
       </div>
     </div>
+    <div class="pane-facts" id="facts-best"></div>
     <div id="output-text-best" class="output-box empty">Output will appear here&hellip;</div>
     <div id="output-tokens-best" class="token-box" style="display:none"></div>
   </div>
 
+  <div class="compare-note" id="compare-note" style="display:none">These two learned from different datasets, so their scores don&rsquo;t compare: each score measures how well a model predicts its own dataset. Compare them by what they write.</div>
+
   </div><!-- /gen-outputs -->
+
+  <div class="card" id="card-growth" style="display:none">
+    <div class="card-label">Watch it learn</div>
+    <div class="growth-row">
+      <select class="pane-pick" id="growth-model" aria-label="Model to watch"></select>
+      <select class="pane-pick" id="growth-prompt" aria-label="Prompt"></select>
+      <div class="growth-times" id="growth-times" role="group" aria-label="Moment in training"></div>
+    </div>
+    <div id="growth-text" class="output-box"></div>
+    <p class="growth-note">What this model wrote at each moment of its 5 minutes of training, saved in its run file. Every model uses the same prompts and sampling settings, so the differences come from the model.</p>
+  </div>
 
   </div><!-- /gen-bottom -->
 
@@ -733,10 +876,7 @@ _HTML = """\
     const payload = await resp.json();
     _models = payload.models || [];
     _commitToModelId = {};
-    _models.forEach(m => {
-      const match = m.label.match(/_([0-9a-f]+)\\.pt$/i);
-      if (match) _commitToModelId[match[1]] = m.id;
-    });
+    _models.forEach(m => { if (m.commit) _commitToModelId[m.commit] = m.id; });
   }
 
   // ---- Progress chart ----
@@ -916,21 +1056,102 @@ _HTML = """\
       if (kept.length) {
         $('card-best').style.display = '';
         const first = kept[0];
-        const best  = kept.reduce((a, b) => a.val_bpb <= b.val_bpb ? a : b);
+        // Scores compare only within one dataset, so "best" comes from the baseline's.
+        const datasetOf = r => (_models.find(m => m.commit === r.commit) || {}).dataset;
+        const sameData = kept.filter(r => datasetOf(r) && datasetOf(r) === datasetOf(first));
+        const best  = (sameData.length ? sameData : kept).reduce((a, b) => a.val_bpb <= b.val_bpb ? a : b);
         _baselineModelId = _commitToModelId[first.commit] || null;
         _bestModelId     = _commitToModelId[best.commit]  || null;
-        $('label-baseline').textContent = 'Baseline \u2014 ' + (first.description || first.commit);
-        $('label-best').textContent     = (best.commit === first.commit ? 'Best / Latest' : 'Best') +
-                                          ' \u2014 ' + (best.description || best.commit);
+        setupPickers(_baselineModelId, _bestModelId);
       } else {
         _baselineModelId = null;
         _bestModelId     = null;
-        $('label-baseline').textContent = 'Model \u2014 active checkpoint';
+        setupPickers(null, null);
         $('card-best').style.display = 'none';
       }
     } catch (err) {
       $('chart-status').textContent = 'Could not load results: ' + err.message;
     }
+  }
+
+  function factsText(m) {
+    const parts = [];
+    if (m.val_bpb != null) parts.push('score ' + m.val_bpb.toFixed(6) + ' (lower is better)');
+    parts.push(m.dataset === 'folktales' ? 'Folktales' : 'TinyStories');
+    if (m.vocab_size) parts.push(m.tokenizer + ' tokenizer (' + m.vocab_size.toLocaleString() + ' tokens)');
+    if (m.params_m) parts.push(m.params_m + ' M parameters');
+    return parts.join(' \\u00b7 ');
+  }
+  function modelName(m) { return (m.description || m.label) + (m.commit ? ' \\u2014 ' + m.commit : ''); }
+  function fillPick(sel, chosen) {
+    sel.innerHTML = '';
+    _models.forEach(m => {
+      const o = document.createElement('option');
+      o.value = m.id;
+      o.textContent = modelName(m) + (m.available ? '' : ' (can\\u2019t load)');
+      o.disabled = !m.available;
+      o.title = m.available ? factsText(m) : m.reason;
+      sel.appendChild(o);
+    });
+    if (chosen) sel.value = chosen;
+  }
+  function showFacts(which) {
+    const m = _models.find(x => x.id === $('pick-' + which).value);
+    $('facts-' + which).textContent = m ? factsText(m) : '';
+    if (which === 'baseline' && m) { $('dataset-blurb').textContent = m.dataset_blurb; _vocabData = null; }
+    updateCompareNote();
+  }
+  function updateCompareNote() {
+    const a = _models.find(x => x.id === $('pick-baseline').value);
+    const b = _models.find(x => x.id === $('pick-best').value);
+    const differ = a && b && a.dataset !== b.dataset && $('card-best').style.display !== 'none';
+    $('compare-note').style.display = differ ? '' : 'none';
+  }
+  function setupPickers(leftId, rightId) {
+    const usable = _models.filter(m => m.available);
+    const fallback = (usable[usable.length - 1] || {}).id;
+    fillPick($('pick-baseline'), leftId || fallback);
+    fillPick($('pick-best'), rightId || fallback);
+    ['baseline', 'best'].forEach(w => { $('pick-' + w).onchange = () => showFacts(w); showFacts(w); });
+    setupGrowth();
+  }
+
+  // ---- Watch it learn ----
+  let _growth = null;
+  async function setupGrowth() {
+    const withGrowth = _models.filter(m => m.has_growth && m.available);
+    if (!withGrowth.length) { $('card-growth').style.display = 'none'; return; }
+    $('card-growth').style.display = '';
+    const sel = $('growth-model');
+    sel.innerHTML = '';
+    withGrowth.forEach(m => { const o = document.createElement('option'); o.value = m.id; o.textContent = modelName(m); sel.appendChild(o); });
+    sel.onchange = loadGrowth;
+    $('growth-prompt').onchange = () => showGrowth(0);
+    await loadGrowth();
+  }
+  async function loadGrowth() {
+    _growth = await (await fetch('/growth?model_id=' + encodeURIComponent($('growth-model').value))).json();
+    const p = $('growth-prompt');
+    p.innerHTML = '';
+    _growth.prompts.forEach((text, i) => { const o = document.createElement('option'); o.value = i; o.textContent = text; p.appendChild(o); });
+    const times = $('growth-times');
+    times.innerHTML = '';
+    _growth.snapshots.forEach((s, i) => {
+      const b = document.createElement('button');
+      b.className = 'toggle-btn';
+      b.textContent = s.t_s < 60 ? Math.round(s.t_s) + ' s' : (s.t_s / 60).toFixed(s.t_s % 60 ? 1 : 0) + ' min';
+      b.onclick = () => showGrowth(i);
+      times.appendChild(b);
+    });
+    showGrowth(_growth.snapshots.length - 1);
+  }
+  function showGrowth(i) {
+    if (!_growth || !_growth.snapshots.length) return;
+    const prompt = parseInt($('growth-prompt').value || '0');
+    Array.from($('growth-times').children).forEach((b, j) => {
+      b.classList.toggle('active', j === i); b.setAttribute('aria-pressed', j === i ? 'true' : 'false');
+    });
+    $('growth-text').textContent = _growth.prompts[prompt] + (_growth.snapshots[i].samples[prompt] || '');
   }
 
   // ---- Vocabulary browser ----
@@ -940,7 +1161,7 @@ _HTML = """\
     if (_vocabData) return;
     const grid = $('vocab-grid');
     grid.innerHTML = '<div style="padding:20px;color:#aaa">Loading\u2026</div>';
-    const { entries } = await (await fetch('/vocab')).json();
+    const { entries } = await (await fetch('/vocab?model_id=' + encodeURIComponent($('pick-baseline').value))).json();
     _vocabData = entries;
     $('vocab-count').textContent = entries.length.toLocaleString();
     renderVocab(entries);
@@ -1033,8 +1254,8 @@ _HTML = """\
 
     try {
       await Promise.all([
-        runGenerate(prompt, _baselineModelId, 'baseline'),
-        runGenerate(prompt, _bestModelId,     'best'),
+        runGenerate(prompt, $('pick-baseline').value, 'baseline'),
+        runGenerate(prompt, $('pick-best').value, 'best'),
       ]);
     } finally {
       btn.disabled    = false;
@@ -1102,13 +1323,13 @@ def build_app(model_store: ModelStore) -> FastAPI:
             req.prompt = req.prompt[:2000]
             req.max_tokens = min(req.max_tokens, 500)
             req.top_k = min(req.top_k, 200)
-        if req.model_id:
-            try:
-                model, tokenizer, device, _ = model_store.get_bundle_by_id(req.model_id)
-            except KeyError:
-                model, tokenizer, device, _ = model_store.get_active_bundle()
-        else:
+        try:
+            model, tokenizer, device, _ = model_store.get_bundle_by_id(req.model_id)
+        except KeyError:
             model, tokenizer, device, _ = model_store.get_active_bundle()
+        except ValueError as exc:
+            message = str(exc)
+            return StreamingResponse(iter([json.dumps({"t": message, "toks": []}) + "\n"]), media_type="text/plain")
         respond = _make_respond(model, tokenizer, device)
 
         def stream():
@@ -1117,11 +1338,14 @@ def build_app(model_store: ModelStore) -> FastAPI:
         return StreamingResponse(stream(), media_type="text/plain")
 
     @app.get("/vocab")
-    def vocab():
-        tokenizer = model_store.tokenizer
+    def vocab(model_id: str | None = None):
+        tokenizer = model_store.tokenizer_for_id(model_id)
         n = tokenizer.get_vocab_size()
-        entries = [{"id": i, "text": tokenizer.decode([i])} for i in range(n)]
-        return {"entries": entries}
+        return {"entries": [{"id": i, "text": tokenizer.decode([i])} for i in range(n)]}
+
+    @app.get("/growth")
+    def growth(model_id: str):
+        return model_store.growth_for_id(model_id) or {"prompts": [], "snapshots": []}
 
     @app.get("/models")
     def models():
@@ -1192,15 +1416,19 @@ def main() -> None:
     parser.add_argument("--no-browser", action="store_true",              help="Do not open a browser tab automatically")
     args = parser.parse_args()
 
-    model, tokenizer, device = _load(args.checkpoint)
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    print(f"Device: {device}")
     entries = _discover_checkpoints(args.checkpoint)
-    model_store = ModelStore(
-      initial_model=model,
-      tokenizer=tokenizer,
-      device=device,
-      entries=entries,
-      active_path=args.checkpoint,
-    )
+    try:
+        model_store = ModelStore(device=device, entries=entries, active_path=args.checkpoint)
+    except RuntimeError as exc:
+        print(exc)
+        sys.exit(1)
+    for m in model_store.list_models():
+        if not m["available"]:
+            print(f"Skipping {m['label']}: {m['reason']}.")
+    model_store.get_active_bundle()  # load the default model before the page opens
+    print("Model ready.\n")
     app = build_app(model_store)
 
     if _SPACE_MODE:
