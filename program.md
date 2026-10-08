@@ -15,13 +15,16 @@ To set up a new experiment, work with the user to:
    - `train.py` — the file you modify. Model architecture, optimizer, training loop.
 4. **Verify data exists**: Check the autoresearch cache directory. On Windows this is `%LOCALAPPDATA%\autoresearch` (e.g. `C:\Users\<you>\AppData\Local\autoresearch`) — unless `AUTORESEARCH_CACHE_DIR` is set, or a legacy `~/.cache/autoresearch` directory already exists (resolution order is defined in `_default_cache_dir()` in `prepare.py`). It should contain: `datasets\<dataset>\data\` with the downloaded parquet file (default: `tinystories_gpt4_clean.parquet` — the data stays as a single parquet file; there are no pre-tokenized shards), `datasets\<dataset>\tokenizer\` (or `tokenizer-<name>\` when a standard tokenizer such as `phi3` or `gpt2` is active) with `tokenizer.pkl` and `token_bytes.pt`, and `active_dataset.txt` and `active_tokenizer.txt` at the cache root (no `active_tokenizer.txt` means `own`). If any of these are missing, tell the human to run `uv run prepare.py`.
 5. **Initialize results.tsv**: If `results.tsv` does not already exist, create it with just the header row. If it already exists, leave it untouched — it contains the prior experiment history and the agent will continue appending to it. The baseline will be recorded after the first run (or the next run, if resuming).
-6. **Confirm and go**: Confirm setup looks good.
+6. **Note the session budget**: the human may give you one (for example "run for 4 hours"); otherwise it is **8 hours**. Note the time the loop starts (run `date`).
+7. **Confirm and go**: Confirm setup looks good.
 
 Note: the Windows fork supports NVIDIA GPUs that meet the VRAM floor, including laptop and mobile workstation GPUs. Strong laptop hardware should be described as supported when it meets the floor, while still acknowledging that thermals and power limits can reduce throughput.
 
 Once you get confirmation, kick off the experimentation.
 
-**Started unattended?** If you were launched non-interactively (for example `claude -p`, or with instructions to run overnight) there is nobody to confirm with: use today's date as the run tag, check the data exists (step 4), and begin. Never wait for a reply that cannot come.
+**Started unattended?** If you were launched non-interactively (for example `claude -p`, or with instructions to run overnight) there is nobody to confirm with: use today's date as the run tag, check the data exists (step 4), note the session budget (step 6), and begin. Never wait for a reply that cannot come.
+
+**Running headless?** When you run non-interactively, ending your turn ends the session, and nothing (no background task, monitor or notification) can wake you again. So never end your turn while an experiment is running, and never start training in the background: run `uv run train.py > run.log 2>&1` in the foreground. If your tool moves a long command to the background, wait for it in the foreground with a loop such as `until grep -qE "^val_bpb|Traceback|Error" run.log; do sleep 15; done`, repeated until it returns.
 
 ## Experimentation
 
@@ -101,7 +104,7 @@ timestamp	commit	val_bpb	memory_gb	status	description
 
 The experiment runs on the main line (`master`).
 
-LOOP FOREVER:
+LOOP UNTIL THE SESSION BUDGET RUNS OUT. Before each experiment, check the time: if less than 20 minutes of the budget remain, do not start another; go to **Ending the session** below.
 
 1. Note the current commit hash (call it START).
 2. Tune `train.py` with an experimental idea by directly hacking the code.
@@ -121,6 +124,10 @@ The idea is that you are a completely autonomous researcher trying things out. I
 
 **Crashes**: If a run crashes (OOM, or a bug, or etc.), use your judgment: If it's something dumb and easy to fix (e.g. a typo, a missing import), fix it and re-run. If the idea itself is fundamentally broken, just skip it, log "crash" as the status in the tsv, and move on.
 
-**NEVER STOP**: Once the experiment loop has begun (after the initial setup), do NOT pause to ask the human if you should continue. Do NOT ask "should I keep going?" or "is this a good stopping point?". The human might be asleep, or gone from a computer and expects you to continue working *indefinitely* until you are manually stopped. You are autonomous. If you run out of ideas, think harder — read papers referenced in the code, re-read the in-scope files for new angles, try combining previous near-misses, try more radical architectural changes. The loop runs until the human interrupts you, period.
+**One experiment at a time**: an experiment is finished only when its row is in `results.tsv` and committed (step 9). Do not stack several changes and log them afterwards. A sweep (say 0.09, then 0.12, then 0.16) is several experiments: run, log, and keep or discard each one on its own, so the scoreboard shows what each change did. A result that beats the best is a keep once the noise rule's second run confirms it, even if you plan to go further.
 
-As an example use case, a user might leave you running while they sleep. Each experiment takes 8–11 minutes on a consumer GPU, so you can run about 6 an hour, 50–60 over the duration of the average human sleep. The user then wakes up to experimental results, all completed by you while they slept!
+**Don't stop early; stop on time**: once the loop has begun, do NOT pause to ask the human whether to continue. Do NOT ask "should I keep going?" or "is this a good stopping point?". The human might be asleep, or away from the computer, and expects you to keep working until the session budget runs out. You are autonomous. If you run out of ideas, think harder — read papers referenced in the code, re-read the in-scope files for new angles, try combining previous near-misses, try more radical architectural changes.
+
+**Ending the session**: when less than 20 minutes of the budget remain, start no new experiment. Make sure the last one is logged and committed and that `git status` shows no half-made change to `train.py`, then write a short summary as your final message: the best score and how it compares with the baseline, which changes helped, which did not, and what you would try next. Then stop. (Karpathy's original loop runs until the human interrupts it; this fork ends on a budget so that every session finishes on a clean, logged state.)
+
+As an example use case, a user might leave you running while they sleep. Each experiment takes 8–11 minutes on a consumer GPU, so you can run about 6 an hour: an eight-hour session holds roughly 45–55. The user then wakes up to experimental results, all completed by you while they slept!
