@@ -43,7 +43,7 @@ model size change together in these runs. Read the writing before deciding.
 `uv run library/report.py` writes:
 
 - `index.json`: every collection and its files (static hosting cannot list a folder).
-- `tokens.json`: each tokenizer's split of the four prompts, characters per token and the
+- `tokens.json`: each tokenizer's split of the four prompts and four contrast sentences, characters per token and the
   share of the vocabulary the dataset never uses, over up to 100,000 training documents.
 - `copies.json`: stretches of eight or more words in the Folktales samples that repeat the
   training text word for word. TinyStories' training text is too large to index this way.

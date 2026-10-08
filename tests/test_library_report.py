@@ -62,3 +62,9 @@ def test_collections_list_runs_and_scoreboards(tmp_path):
         {"id": "sessions/may", "title": "May", "kind": "session", "note": "n",
          "runs": [], "results": "sessions/may/results.tsv"},
     ]
+
+
+def test_tokens_sentences_add_contrasts_after_the_prompts():
+    """The four prompts split the same way in every tokenizer; the contrasts are where they differ."""
+    assert report.SENTENCES[:4] == tuple(report.PROMPTS)
+    assert len(report.SENTENCES) == 8
