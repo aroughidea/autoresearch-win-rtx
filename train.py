@@ -818,7 +818,7 @@ WINDOW_PATTERN = "SSSL"   # sliding window pattern: L=full, S=half context
 TOTAL_BATCH_SIZE = 2 ** 15
 EMBEDDING_LR = 1.0
 UNEMBEDDING_LR = 0.004
-MATRIX_LR = 0.07
+MATRIX_LR = 0.09
 SCALAR_LR = 0.5
 WEIGHT_DECAY = 0.1
 ADAM_BETAS = (0.8, 0.95)
