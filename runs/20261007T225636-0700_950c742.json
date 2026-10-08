@@ -1,0 +1,135 @@
+{
+ "schema": 1,
+ "run_id": "20261007T225636-0700_950c742",
+ "commit": "950c742",
+ "created": "2026-10-07T23:04:34-07:00",
+ "dataset": "folktales",
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.22,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.2669,
+   "samples": [
+    " he has you; but so to go and the palace in a great joy. It is in the Pas of the Bark, you the man, in his mother. When he was going to be a little one, and the King, and the King, and the palace, and we must go to her. He was the place, and he has not in the Prince, and a great crm.",
+    " the King. \"What a great gold of the ground, and they were very good as they had a great many horses, and he never put his own son were all the fire. 'the, and the Dil.\"\n\nBut at the place, and the",
+    ", and he took his eyes, who has not go to have the King was very well, and a long, and he came to the city in the fire. All the",
+    " great tam and as all that she will not to come and the old men, they had been, and the Pf.\"\n\n\"Well will not a few daughters of La!\" answered the old man who was all him for the King, or a fool of the city, and the ground; and she went into the Demrow, and she is you will have you have to him. See that they could not eat"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.3829,
+   "samples": [
+    " on the world; but, and looked so that of his head, so he said:\n\n\"It is a good of the dog, so you the man, in which is no one and take you, and now.\"\n\n\"Then I will do you have come home with her in the boy, but you must go to her. He was the door there was like I must be able to this, and I want my life. For you shall find",
+    ":\n\n\"I know you here,\" replied the old man, I am I want to give you for his own that you,\" replied the best of I do you wish I am, that you, and I have been so I have done at me I must see you,\" said the great good man, so I will be able to find you!\" said the Prince and a good place.",
+    " of the young lady, who was to the gate opened the way.\n\n\"This was on their own, and of her. He set out down into all his wife, and he could never get him that the world, and said:\n\nThe poor man said:\n\n\"Listen, and she found he saw it in the dog, and then the monkey that he had I shall never refuse you shall not go to work",
+    " great was the dog was all that she had ever to come and said his men, they had told him the water, a great man's room, and the poor old man began to them, but he was delighted at she knew that she knew how.\n\nAs he was the other to the world, and he sent him to his back, and she saw the old man's death, and his life that"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 136,
+   "train_loss": 4.6808,
+   "samples": [
+    " there met a great deal, and the emperor of the king's house, where the world was, a good of the little, was about the man, in which the same, and was obliged to take out their father's wife, and would be the best, in which the town was always going to come to be allowed to be in there; but the poor in the form of a good",
+    " the \"You can fly only be in all about? I am a whole year to this spot where I have not been you. I found myself in a terrible matter. The king of my heart, and the beautiful man is a most happy place, and you may have the great dealings and the prince's house, and they know it; and that was a little girl. But this is very",
+    ", the young lady stepped near the room where the bird had been opened in the same moment the last rose, and a beautiful flower, a large in which the castle are so dead, and the princess, and what sort of the next, and the little room stood, and she took the water, and set with her head, and carried a little town back, and",
+    " great stone of time, for she had a new palace, and the old men, with a great bird-bin, a whole city of which she had written the king, and she had been obliged to give us an apple on the clear woods, and now the sun shone with the red; and she might have a new bap, and with which she had been written by her; she was lying"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 261,
+   "train_loss": 4.041,
+   "samples": [
+    " there met a King who, standing at the door of his house, in a state of excessive grief, and of the people who were about to relate the story of the Khaleefeh that he was going to be confectioner on his arrival at the door, and, opening the door, closed open; and there came forth forth, and there there came forth to me",
+    " the youth, O Prince of the Faithful of Suleyman Shah El-Mo'eeyeh; this is his son that he hath become acquainted with this night, and that I may be to him by me; and if it were to be of the wealth of the old slave, the slave-girl, and the Wezeer asan Bedr-ed-Deen, and the son of El-FART.\n\nWhen the barber heard this the",
+    ", in three days, it was finished, the following night, the Sulan was in a state of a rich house, and of a female slave-girls the house are more celebrated with different kinds of the utmost loveliness; and its air is as a person as if it was more like the first time of the market of his house: but that the Sulan had been",
+    " damsel with a large sum adorned with a long sleeves of a hundred and three plates shaven and other ornaments, and a whole of decorated handkerchiefs with four hundred pieces of gold for the Khaleefehs of the Khaleefehsisters, or other others of them; and if the case of the Khaleefehs have a similar nature, in which none"
+   ]
+  },
+  {
+   "t_s": 300.3,
+   "step": 635,
+   "train_loss": 2.6613,
+   "samples": [
+    " there lived a King who had three sons. The eldest was younger, so he said, that no one knew of anything about him, for the youngest was in his power. And he was so clever, that little more, and besides, one day he was quite out of breath, and fell down at a little window. In the middle of the forehead there was a knocking",
+    ", \"Give me some news of the forle, and of that which has been killed by his courtiers and is now chief of the market. We will buy all this with our ship, and introduce us to our great friend, and I will carry you back to the kingdom of which you must take for his wife and children.\" But he said that perhaps a wicked stepmother",
+    ", far from their hut, a stork lives in it, and the stork has nest built the big door of the house. He has a wife in the middle of the island, and has seen in the world many years. It looks up to him that she has no power over wife, but she has taken it. But she is afraid that she should die, and herself has only two children",
+    " great relief that she had carried into the house of the King of the Black Isles. After some time the maiden was a little way off, and the king's daughter was so tired that she could not get any water for her to wash. At first she told him everything, and as soon as she had left him she would go if he could only find the"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.271753,
+  "training_s": 300.3,
+  "peak_vram_mb": 3545.9,
+  "num_steps": 635,
+  "params_m": 18.9,
+  "sampling_s": 14.8
+ }
+}
