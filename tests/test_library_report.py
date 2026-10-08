@@ -90,3 +90,32 @@ def test_token_pieces_rebuild_text_when_a_token_splits_a_character():
     assert pieces == ["", "é", "!"]
     assert report.partial_tokens(BytesTok(), "é!") == [0]
     assert report.partial_tokens(FakeTok(), "Once upon a time") == []
+
+
+def test_train_token_estimate_counts_the_document_markers():
+    assert report.train_token_estimate(chars=4000, docs=10, chars_per_token=4.0) == 1020
+
+
+def _tiny_encoding():
+    import tiktoken
+    import prepare
+    ranks = {bytes([b]): b for b in range(256)}
+    for merged in (b"th", b"the", b" t", b" the", b"in", b"ing", b"10"):
+        ranks[merged] = len(ranks)
+    specials = {"<|reserved_0|>": len(ranks), "<|reserved_1|>": len(ranks) + 1}
+    return tiktoken.Encoding(name="tiny", pat_str=prepare.SPLIT_PATTERN, mergeable_ranks=ranks, special_tokens=specials)
+
+
+def test_hf_export_tokenizes_exactly_like_tiktoken():
+    from tokenizers import Tokenizer as HFTokenizer
+    enc = _tiny_encoding()
+    hf = HFTokenizer.from_str(json.dumps(report.hf_tokenizer_json(enc._mergeable_ranks, enc._special_tokens, report.HF_PATTERN)))
+    for text in ["the thing", "  two  spaces", "line\n\nbreaks\r\n", "it's 1010 they'll", "été café",
+                 "emoji \U0001F642!", "the.the,the", "THE The tHe", "a\tb", "  "]:
+        assert hf.encode(text, add_special_tokens=False).ids == enc.encode_ordinary(text), text
+
+
+def test_hf_export_names_the_control_tokens_by_clips_convention():
+    enc = _tiny_encoding()
+    added = report.hf_tokenizer_json(enc._mergeable_ranks, enc._special_tokens, report.HF_PATTERN)["added_tokens"]
+    assert [(a["id"], a["content"]) for a in added] == [(263, "<|startoftext|>"), (264, "<|endoftext|>")]
