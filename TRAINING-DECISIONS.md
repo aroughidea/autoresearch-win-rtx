@@ -73,13 +73,44 @@ The score is `val_bpb` (validation bits per byte): how surprised the model is by
 - **Read it:** [`WALKTHROUGH.md`](WALKTHROUGH.md), one real afternoon of the agent's research, every experiment explained. It is the most technical document here.
 - **Run it:** the [starter kit](https://github.com/aroughidea/autoresearch-starter). You need an NVIDIA GPU or a rented one, and an account for a coding agent (Claude Code or Codex).
 
-## Words used here
+## Glossary
 
-- **Token:** a word or piece of a word; models read and write in tokens.
-- **Vocabulary:** the fixed set of tokens a model can use.
-- **Training:** changing a model's weights by having it read data. Here it happens only inside each 5-minute run.
-- **Training recipe:** everything in `train.py` that decides how data becomes a model: the model's shape, the optimizer, learning rates, batch size and schedule.
-- **Search:** improving something by trying changes and keeping those that score better. The agent searches over recipes; it does not train itself.
-- **Score:** `val_bpb`, above.
-- **Snapshot:** what a model wrote at one moment of training, saved in `runs/`. (The repo also saves *checkpoints*: a model's learned weights.)
-- **Agent:** the coding agent that runs the experiments. In the workshops, "agent" also means the assistant you design; here it is the researcher.
+The pages use everyday words where they are already common in the field. Each is listed here with the professional term and a source, so a reader can follow it into the literature. Numbers in brackets point to the sources below.
+
+| Word used here | Professional term | What it means here |
+|---|---|---|
+| **Dataset** | Training corpus | The text a model learns from: TinyStories [1] or Folktales. |
+| **Token, tokenizer** | Subword tokenization; byte-pair encoding (BPE) [2] | A model reads and writes in tokens, words and pieces of words, produced by a tokenizer. |
+| **Vocabulary** | Tokenizer vocabulary; SentencePiece for Phi-3 / Llama 2 [4] | The fixed set of tokens a model can use: 8,192 built from the dataset, 32,011 for Phi-3 (Llama 2's 32,000 plus 11 added tokens), 50,257 for GPT-2. |
+| **Part of a letter** | Byte-level BPE [3] | Tokenizers that work in bytes, like GPT-2's and the home-made ones, can split a letter such as "é" across two tokens. |
+| **Training** | Training by gradient descent [5] | Changing a model's weights by having it read data. Here it happens only inside each 5-minute run. |
+| **Training time** | A fixed training-time budget [6] | The 5 minutes each run trains for, whatever the GPU. |
+| **Training recipe** | Training recipe or training procedure [7][8] | Everything in `train.py` that decides how data becomes a model: the model's shape (its architecture), the optimizer, learning rates, batch size and schedule (its hyperparameters). |
+| **Search, research time** | Hyperparameter optimization [9]; neural architecture search [10] | Improving the recipe by trying a change, training a new model with it, and keeping the change if the score improves. The agent searches; it does not train itself. |
+| **Score** | Validation bits per byte (BPB) [11] | How surprised the model is by text it has not seen, per byte of text; lower is better. Counting bytes rather than tokens lets tokenizers be compared [6]. |
+| **Noise** | Run-to-run variance | Two runs of the same code differ by about 0.003, measured on this laptop. |
+| **Continues text** | A pretrained (base) model, not instruction-tuned [12] | These models continue whatever you type. Chat assistants need further training to follow instructions. |
+| **Sampling settings** | Temperature and top-k sampling [13] | How the next token is picked from the model's prediction. Every snapshot and every run uses the same settings. |
+| **Copied phrase** | Verbatim memorization [14] | A run of eight or more words a model repeats word for word from its training text. |
+| **Agent's instructions** | The agent's prompt; improving it is prompt optimization [15] | `program.md`, which a person edits here. Changing it and keeping what works is also search, not training. |
+| **Snapshot** | Samples at a training checkpoint | What a model wrote at one moment of training, saved in `runs/`. A *checkpoint* is a model's saved weights. |
+
+### Sources
+
+1. Ronen Eldan and Yuanzhi Li. [TinyStories: How Small Can Language Models Be and Still Speak Coherent English?](https://arxiv.org/abs/2305.07759) 2023.
+2. Rico Sennrich, Barry Haddow and Alexandra Birch. [Neural Machine Translation of Rare Words with Subword Units](https://arxiv.org/abs/1508.07909). ACL 2016.
+3. Alec Radford and others. [Language Models are Unsupervised Multitask Learners](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf) (GPT-2). OpenAI, 2019.
+4. Taku Kudo and John Richardson. [SentencePiece: A simple and language independent subword tokenizer and detokenizer for Neural Text Processing](https://arxiv.org/abs/1808.06226). EMNLP 2018.
+5. Ian Goodfellow, Yoshua Bengio and Aaron Courville. [Deep Learning](https://www.deeplearningbook.org/), chapter 8, "Optimization for Training Deep Models". MIT Press, 2016.
+6. Andrej Karpathy. [autoresearch](https://github.com/karpathy/autoresearch), README (fixed 5-minute budget; `val_bpb` is independent of vocabulary size). 2026.
+7. Vasilis Vryniotis. [How to Train State-Of-The-Art Models Using TorchVision's Latest Primitives](https://pytorch.org/blog/how-to-train-state-of-the-art-models-using-torchvision-latest-primitives/). PyTorch blog, 2021.
+8. Ross Wightman, Hugo Touvron and Hervé Jégou. [ResNet strikes back: An improved training procedure in timm](https://arxiv.org/abs/2110.00476). 2021.
+9. Matthias Feurer and Frank Hutter. "Hyperparameter Optimization", chapter 1 of [Automated Machine Learning: Methods, Systems, Challenges](https://www.automl.org/book/). Springer, 2019.
+10. Thomas Elsken, Jan Hendrik Metzen and Frank Hutter. [Neural Architecture Search: A Survey](https://jmlr.org/papers/v20/18-598.html). JMLR 20(55), 2019.
+11. Leo Gao and others. [The Pile: An 800GB Dataset of Diverse Text for Language Modeling](https://arxiv.org/abs/2101.00027). 2020 (evaluates in bits per byte).
+12. Long Ouyang and others. [Training language models to follow instructions with human feedback](https://arxiv.org/abs/2203.02155). NeurIPS 2022.
+13. Angela Fan, Mike Lewis and Yann Dauphin. [Hierarchical Neural Story Generation](https://arxiv.org/abs/1805.04833) (top-k sampling). ACL 2018.
+14. Nicholas Carlini and others. [Quantifying Memorization Across Neural Language Models](https://arxiv.org/abs/2202.07646). ICLR 2023.
+15. Chengrun Yang and others. [Large Language Models as Optimizers](https://arxiv.org/abs/2309.03409). ICLR 2024.
+
+"Agent" has two meanings in the workshops: there it is the assistant you design; here it is the coding agent that runs the experiments.
