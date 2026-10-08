@@ -301,6 +301,12 @@ class RunCapture:
         }
         if self.error:
             record["capture_error"] = self.error
+        # A rerun of the same commit (program.md's noise rule) gets its own file: -2, -3, ...
+        base, n = run_id, 1
+        while (self.runs_dir / f"{run_id}.json").exists():
+            n += 1
+            run_id = f"{base}-{n}"
+        record["run_id"] = run_id
         path = self.runs_dir / f"{run_id}.json"
         tmp = path.with_name(path.name + ".tmp")
         self.runs_dir.mkdir(parents=True, exist_ok=True)
