@@ -4,6 +4,8 @@ import json
 import re
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parent.parent
 spec = importlib.util.spec_from_file_location("library_report", ROOT / "library" / "report.py")
 report = importlib.util.module_from_spec(spec)
@@ -62,6 +64,23 @@ def test_collections_list_runs_and_scoreboards(tmp_path):
         {"id": "sessions/may", "title": "May", "kind": "session", "note": "n",
          "runs": [], "results": "sessions/may/results.tsv"},
     ]
+
+
+def test_a_collection_can_name_some_of_its_runs(tmp_path):
+    """A study's runs share a commit, so collection.json says which run is which; a note for a run
+    that does not exist is a typo, and stops the report."""
+    lib = tmp_path / "library"
+    (lib / "study" / "runs").mkdir(parents=True)
+    for name in ("folktales-own", "folktales-own-agent-best"):
+        (lib / "study" / "runs" / f"{name}.json").write_text("{}", encoding="utf-8")
+    meta = {"title": "Study", "kind": "study", "run_notes": {"folktales-own-agent-best": "the agent's best recipe"}}
+    (lib / "study" / "collection.json").write_text(json.dumps(meta), encoding="utf-8")
+    [c] = report.collections(lib)
+    assert c["run_notes"] == {"study/runs/folktales-own-agent-best.json": "the agent's best recipe"}
+    meta["run_notes"]["folktales-own-agent-bset"] = "typo"
+    (lib / "study" / "collection.json").write_text(json.dumps(meta), encoding="utf-8")
+    with pytest.raises(ValueError, match="folktales-own-agent-bset"):
+        report.collections(lib)
 
 
 def test_tokens_sentences_add_contrasts_after_the_prompts():

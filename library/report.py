@@ -120,20 +120,30 @@ def copied_spans(text, index, n=COPY_WORDS):
 
 
 def collections(library=LIBRARY):
-    """Every folder under the library with a collection.json: title, kind, run files, scoreboard."""
+    """Every folder under the library with a collection.json: title, kind, run files, scoreboard, and
+    any notes naming particular runs (a study's runs share one commit, so only these tell them apart)."""
     out = []
     for meta_path in sorted(Path(library).rglob("collection.json")):
         folder = meta_path.parent
         meta = json.loads(meta_path.read_text(encoding="utf-8"))
         results = folder / "results.tsv"
-        out.append({
+        runs = sorted(p.relative_to(library).as_posix() for p in (folder / "runs").glob("*.json"))
+        entry = {
             "id": folder.relative_to(library).as_posix(),
             "title": meta["title"],
             "kind": meta["kind"],
             "note": meta.get("note", ""),
-            "runs": sorted(p.relative_to(library).as_posix() for p in (folder / "runs").glob("*.json")),
+            "runs": runs,
             "results": results.relative_to(library).as_posix() if results.exists() else None,
-        })
+        }
+        notes = meta.get("run_notes") or {}
+        by_stem = {Path(rel).stem: rel for rel in runs}
+        unknown = sorted(set(notes) - set(by_stem))
+        if unknown:
+            raise ValueError(f"{meta_path}: run_notes names runs that do not exist: {', '.join(unknown)}")
+        if notes:
+            entry["run_notes"] = {by_stem[stem]: text for stem, text in sorted(notes.items())}
+        out.append(entry)
     return out
 
 
