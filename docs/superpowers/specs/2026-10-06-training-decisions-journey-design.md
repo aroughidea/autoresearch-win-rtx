@@ -322,8 +322,16 @@ The models the explorer shows in class, trained ahead of time on TJ's GPU.
   MIT; GPT-2 MIT; Folktales' card says CC0 1.0, though its source (D. L. Ashliman's Folktexts)
   carries its own copyright notice. The library publishes only generated samples and scores,
   never dataset text.
-- **First result:** TinyStories, built from data, 0.5219, against May's 0.5201: within the
-  measured 0.003 run-to-run noise, so the baseline reproduces.
+- **Results (2026-10-08):** the six baselines are in `library/README.md`. TinyStories, built
+  from data, scored 0.5209 against May's 0.5201, within the 0.003 noise, so the baseline
+  reproduces. On Folktales the order reverses: the borrowed vocabularies score better, with
+  model size changing alongside. The Folktales agent session took 1.3859 to 1.2637 in 12
+  experiments (about 41 times the noise), mostly by raising the matrix learning rate; it ran two
+  hours before the headless agent's sign-in expired.
+- **Learned while building:** the four prompts split alike in every tokenizer, so `tokens.json`
+  adds four contrast sentences; the active dataset is machine-wide, so nothing else may train
+  while a session runs; a headless agent (`claude -p`) must wait for training in the foreground,
+  because ending its turn ends the session.
 
 ## Component 4 design: explorer (2026-10-07)
 
