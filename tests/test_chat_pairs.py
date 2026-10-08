@@ -215,4 +215,3 @@ def test_pre_eval_record_rejects_a_different_file_with_the_same_size_and_time(tm
     os.utime(path, ns=(before.st_atime_ns, before.st_mtime_ns))
     _active_pair(monkeypatch, "tinystories", "own")
     assert chat._pair_for_checkpoint(path, None) == ("tinystories", "own")
-
