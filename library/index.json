@@ -44,6 +44,25 @@
    "note": "16 experiments by the agent: 15 on 23 May 2026 and one on 6 August, before run files existed. Scores only, no writing.",
    "runs": [],
    "results": "sessions/tinystories-may2026/results.tsv"
+  },
+  {
+   "id": "study-10min",
+   "title": "Ten-minute study",
+   "kind": "study",
+   "note": "The six baselines and the Folktales session's best recipe, trained for 10 minutes instead of 5.",
+   "runs": [
+    "study-10min/runs/folktales-gpt2.json",
+    "study-10min/runs/folktales-own-agent-best.json",
+    "study-10min/runs/folktales-own.json",
+    "study-10min/runs/folktales-phi3.json",
+    "study-10min/runs/tinystories-gpt2.json",
+    "study-10min/runs/tinystories-own.json",
+    "study-10min/runs/tinystories-phi3.json"
+   ],
+   "results": null,
+   "run_notes": {
+    "study-10min/runs/folktales-own-agent-best.json": "the agent’s best recipe"
+   }
   }
  ],
  "tokens": "tokens.json",

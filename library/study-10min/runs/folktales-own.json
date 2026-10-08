@@ -1,0 +1,148 @@
+{
+ "schema": 1,
+ "run_id": "20261008T151559-0700_f27f644",
+ "commit": "f27f644",
+ "created": "2026-10-08T15:54:59-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.4709,
+   "samples": [
+    " he has done; but so to go and the palace; 'You have seen. I am no longer, and the little. He could not stay the king, \"What that he was going to be glad to help, and the palace, and the moon, and the boy, and we must go to her. He was the place there was sitting on the ground, and the Crow, and he said to the King's eyes",
+    " the King's palace, and said the king, he went of the two days and this they had a great many horses, there he is a year, and I am with the place, and his heart. There is as a very happy, and they were very well as he was in the prince, and his brothers and they came to the princess that was a little.\n\nWhen the man's brother",
+    ", and he took his son, and said the Ra, or in the fire in the white child of her a certain of the Branti's name are more, and the Rhupali.\n\nSo he replied the next day, and then, and she took the water, and to it is his father and they said the place by a great a great the two of every man; \"Won; \"I have the Sas he sat upon",
+    " great a little and as all the King, \"and you must be his palace, they had been afraid the water, my eyes. The prince, \"the and he was so that he was at once, and began to the King, or a fool of the city, and the poor; and she went into the poor man, in the old man came the water, my master; I am that they could not eat"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 73,
+   "train_loss": 5.2607,
+   "samples": [
+    " on the first one of them to go and the old man, and so much surprised he was no good, of the old man, for the old man in his mother's face and he thought, for his little boat on his love and, and he said, \"Sa\" (ashes), 1870049742342464943366288328333349474832337853550., 63672759064460.,). i., 10009432925100084692449718",
+    " the old girl, \"More\"\" (Mi). Heri.e., etc., \"p\" is supposed that there are now I have been an ass.",
+    ", and its sun is it a piece of its heavy like a golden cup of the same time, and of the waves of her love, and she thought that the sun was dead were very heavy of the chest of her arms and that the wind had never had been no more, and he saw that he was very tired of them with his mother's daughter--but how he was what",
+    " few minutes of the great store of rage, which is usually a large old men like gold pieces. He was the lake, when the place came up his feet and he was so he fell on the way of all that she had been able to live.\n\nAs soon as the tree the box was tired of the river and all his lost in and told him to the water, was great"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 134,
+   "train_loss": 4.3553,
+   "samples": [
+    " on a small door was built open and opened the door; a corner-door, which he was a great stone of the river, which could see it. The river was quite near and nearer, and it was very kind, and seemed to have seen the door, in which were large and large white marble, surrounded it with large green apple, which lay on the",
+    " the king. He was a king's name, and the king, and he should learn to his majesty that he was a wise man of age, and an angel. The king of Elder, who had brought him a king in the letter and princess and was the royal prince which was so beautiful. The king and queen was a son of son and a king.\n\nWhen the king's son was",
+    ", the young man stepped near the mountains, looking over the tree, in the deep, the young tree of the leaves of the leaves, which lay upon the earth; but could also get from the mountain and reach of the other; the wind whistled, and then, the water poured down water, which sparkled with its beaks and carried it out of",
+    " great man of a great man; she had ever spoken, and said, \"We will soon make thee too much for a whole month to which thou art a man!\" and so she fell asleep, like a young warrior she had been killed. \"I am so very ugly, I will be as well,\" said the poor merchant, in which she possessed of the secret, whom had been written"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 257,
+   "train_loss": 3.7815,
+   "samples": [
+    " there lived a King who was a brave and cleverness; and he was a bear, and a bear, of the bear, and a fox named the bear, who had a bear named El-Barah, was famous for its foxes and the bear who was, and of the bear, were of one of the bear chief of the bear, and other presents; and the bear chief, and all his great officers",
+    " the son of his father and his sons:--and he related them all the history of this wonderful history; and, after that, he found that his father had died, with the second son of his son. The third Hunter, however, rejoiced, and said to his father: 'O my sister, we are, and our father, and our father and mother, the son of",
+    ", far from the hut near the hut, or it will be a long journey from a distance, a long way across the river, or a plain of the lake or an enemy of the river of the river, or other other than the other fish, or to be seen, in the water, in the midst of the lake, or that fish should be killed by a crocodile; but, as a whale",
+    " great quantity of beautiful young girls; she had not been deceived by the old woman, with a baby, her eyes, like a man of different kindred, and her eyes were fair for the present colour of the like her hair, with a golden saddle-bags value, the black; and she had not seen it long before, and she was so dazzled, like the"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 624,
+   "train_loss": 2.4799,
+   "samples": [
+    " there lived a King who had a only son, and his younger son called him. One day, when he was to go hunting, the Prince was sitting in his stead. When he was going to take his place, he said to the boy who was sitting there in the thicket, \"What a fool you are! He is the boy there? I am going to look for this youth and to",
+    ", \"Good morning, before you go?\" and he went to fetch a little water-pipe. He took out his sieve, and, taking some water, he went to the king, and said:\n\n\"Right--c, my dear, very deep! I now want to make you strong, and I'll have it!\"\n\nThe king's son was a little girl, and went straight up to him with the water. When the",
+    " the old couple were hut always kept fasting, leaving the little house in the hut in the hut, huts. And food, or some bread, the food and bread, and the breadth of my milk.\n\nThe old man never gave the bread to spin, and went to the water, and to it when his food was given him, and the food to eat, and he did every day,",
+    " great deal of trouble in her life, but as she was very sensible she was to save a stone from the top of a stone. The stone was nothing but stone, and the stone fell was sealed, and nothing was to stone but stone remained.\n\nAs the stone remained behind the stone, the stone changed into a stone, and threw it into the stone"
+   ]
+  },
+  {
+   "t_s": 600.3,
+   "step": 1237,
+   "train_loss": 0.5602,
+   "samples": [
+    " there lived a King who had many children, and they were good enough to be his; and one day, as he was really very weak, they might have done a little favor. \"For,\" said the little King, \"you can read nothing better; but I've had a chasm upon me, and I know not.\" This was the beginning. The King and his ministers, who knew",
+    ", \"All you do is to make the king's son alive when he comes sack he has his left hand, and if you are only good to give him I can.\"\n\n\"You are right,\" says the king. \"I must take the sack, and give it to the beast, which will not let you in, for it will cost you your life.\"\n\n\"I give you,\" says the king; \"but put it in return",
+    " they met, and between the two mountains they bade the old man to tell them to leave the hut. The idea arose and set them down, and he went after them into the river, and floating the quickly made a fire. He boiled some yarnats, and boiled some water, water, putting everything around them in bit and scampered away. At last",
+    " pretty little house with peacock feathers, which she knew must be his bed, and she told the father what she must do. The brothers remembered that she would soon set about, and that after they had sat down under a tree, dreadful noise, and shrieks of joy; and then suddenly she heard twelve ravens, who caught in her hand"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.883824,
+  "training_s": 600.3,
+  "peak_vram_mb": 3552.1,
+  "num_steps": 1237,
+  "params_m": 18.9,
+  "sampling_s": 18.1
+ }
+}

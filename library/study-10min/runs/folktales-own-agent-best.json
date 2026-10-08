@@ -1,0 +1,148 @@
+{
+ "schema": 1,
+ "run_id": "20261008T151559-0700_f27f644",
+ "commit": "f27f644",
+ "created": "2026-10-08T16:37:21-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.2,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.5542,
+   "samples": [
+    " he has you; but so well and the King, \"I have been seen the world.\n\nThen they said of the king, and you the man, in his palace. When he was going to be a little, and she would not have a long. Now in the boy, and we must not come to be his house the place, and he has not in the Prince, and a great beautiful, and he took",
+    " the prince. And he said.",
+    ", and he took his son, and said the Ra, or one morning the King was a beautiful of her. And the King's brother in the prince was afraid, and the king and when the story of her back it is the old woman's room, \"and she took the water, and to it is his house, and said the place by a great moment, and he did not a little.",
+    " great beautiful king and as all the prince, \"and you must be his palace, they replied, and the water, my eyes. The prince's face, and he was so and he was a present, and began she went to see it is a few horses; I may not as he was as much very well. Then, and then has happened to the water, my husband; I am that they"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 73,
+   "train_loss": 5.4019,
+   "samples": [
+    ".\n\n\"What can tell me, and go and the house in a long ago. It is in the old man of the old man, for the old man in his mother. When he was about to take them. It was that the Sea, and that he was in the old man, for a kind to her own life that the door, not to help her father, for him.",
+    " the old girl's father's brother's self, he had lived that the King would take him his face that he was over. He found that his own being very sorry, was quite happy, and on the sea at the sun at the Dragon King, from this was now that was in the box, and his words and they did as he was that was a long.\n\nWhen he went by",
+    ", to go home to it to the East, he had no more than he was in the Sun, of her. He set out to him to himself. When he came back to the old woman the world, and said he grew up.\n\nThe old man,, and she took the water, and to her mother's house and carried out from them back, and he, and he did he asked the water, I am well",
+    " great store of great great joy."
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 134,
+   "train_loss": 4.6545,
+   "samples": [
+    " was time, in a time, and so that the king saw in the bed, in the water, which of the miller's wife had the man, in which the same morning and was born, and was very much on that time and, and that was her in the room, and how soon she awoke, and when she fell from the door, and was a beautiful veil, and a great cavished",
+    " the young girl, \"More I tell I have I yet seen a moment,\" said the same old woman, \"and I am now I have brought thee to me, and you are not well.\"\n\n\"Shand is a king,\" I said, \"I have not yet seen in my life, and I can tell thee what I know is that I should go in the beautiful air.\"",
+    ", the sultan of the people, who had to set forth out their feet. At first the king's house, a king, and a man in which the great deal more, also of the world, and of which they have seen the priest. The sun has never yet seen the whole story, which are very unhappy,\" said the princess, \"I know, we have you.\"\n\n\"Head thou",
+    " great man of a great sin; in a great distance, and the old men, with a great noise, the whole of the water of air, spread out their feet, and a long white star on the sea, which burned the flowers. It glittered as if she could not venture to be the king, and then it was, in full of which she had been seen by the flowers"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 257,
+   "train_loss": 4.2279,
+   "samples": [
+    " there lived a King who, and informed us of of his wealth, or of his family in rank, and of the age, respecting the city of the city, is a man who is born to be of ten years, and of them, and who have been in the palace, and we must also come with us to our country from the city, and we shall soon be away to a ship that",
+    " the youth, O merchant, God hath bestowed upon thee upon them, and he hath learned thy history.--We answered the King, I found thy son, and I said, By Allah, O my son, hath brought thy daughter, and I will not give thee thee the daughter of my daughter; but thou wilt be and thyself in thine; and that thou art a child. But",
+    " of the forest, on the morning of night, he passed through the city of the city, and a day overtook him, and he entered into the garden. When this came, the King called \"but my brother; and he replied, I hear that he was not dead, and he saw it in his heart; and he said, What is thy father, O my husband shall enter this",
+    " great quantity of different kinds of various houses, which is usually of the latter, like other kinds of gazelles, in a manner of different kinds, the most of small of those of the infervous of wine, she called to her father, and of her father, with the name of the Prophet, and that it was, in general, and the king, who"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 625,
+   "train_loss": 3.0829,
+   "samples": [
+    " there lived a King who was called Emperor and a proclamation that whoever should be seen. One day, when he was returning home, invited him to the title of Imperial First Nightingale was going to be allowed to live on tiptoe, and that was her great great delight, and one of the subjects of Hopfuscu, which was great to be",
+    " to Ciccu, \"What do you want for dinner? I've never given me any dinner I myself!\"\n\n\"Never mind,\" answered the Welwa, \"but come with me.\"\n\nSo Ciccu handed Ciccu to Ciccu who was welcome at the place where Ciccu's purse was. So Ciccu came and did not Ciccu could be.\"\n\n\"Yes Ciccu Ciccu,\" said Ciccu to Ciccu: \"Do Ciccu Ciccu",
+    ", far down in the green bushes, where the sun shines, the flowers bloom in every flower, the flowers bloomed in the flower garden. But there was the sun shining, the stars were of the flowers of a rose bush; the flowers rose up and down, and the flowers, and the flowers of flowery wreathy flowers. What flowers were in blossom",
+    " great lake of great beauty, and she had a son, and the girl of the world, and with the water she must be very foolish. In the twinkling of an eye, she fell on him and fell on him.\n\nAt that time the girl must be born she would not have died; and she went after him saying she, \"Oh, dear father,\" she said, \"a child is born"
+   ]
+  },
+  {
+   "t_s": 600.4,
+   "step": 1237,
+   "train_loss": 1.2008,
+   "samples": [
+    " there lived a King who had a daughter who was a clever wife, so he said, \"There is any daughter in the land of the Emperor myself, in which the Emperor of Blefuscu was made into the great forest of Japan. Her father came in of the Blefuscu, her daughter, and other of the peace and happiness she carried. And his name was",
+    " the old woman had W driver to the forest, and there have a little good deal and to work at once. Last night a golden bowl rose from the ninth century of the forest, and the little river Volkhov the light of the fire. The old king grew so frightened that he could not have sinned. The shepherd played and tunesidried, and",
+    " days, when the sun rose, the sky began to redroz, just after there was a little of the leaves of the trees, going to the mouth of the brownie gazing at the green-trees of Acquainties, and the shadows and his neighboring cemeteries, blushing with pleasure his friend Ladies along the garden lay covered with a bow and arrows",
+    " cabinet of the drawbear of which proceeded to search in the ring. She took it, and proceeded, until it had reached as pious old man's fancy that upon which Prince Thousands of snakes she halted, and formed its clown into the grounds its beautiful flight. She looked at one glittering, over which the doings of the thorn"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.624175,
+  "training_s": 600.4,
+  "peak_vram_mb": 3545.9,
+  "num_steps": 1237,
+  "params_m": 18.9,
+  "sampling_s": 17.3
+ }
+}
