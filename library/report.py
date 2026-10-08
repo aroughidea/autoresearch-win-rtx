@@ -38,16 +38,35 @@ CONTRASTS = (
 SENTENCES = tuple(PROMPTS) + CONTRASTS
 
 
-def token_pieces(tokenizer, text):
-    """The text cut into its tokens, each piece as it reads in the text. Decodes growing
-    prefixes, because some tokenizers (Phi-3) drop a lone token's leading space."""
+def _prefixes(tokenizer, text):
+    """Each growing prefix of the token ids, decoded, and whether it ends inside a character.
+
+    Decoding prefixes keeps each token's leading space (Phi-3 drops it from a lone token). A
+    byte-level tokenizer can end a token halfway through a character such as "é"; that prefix
+    decodes with a replacement mark at the end, which is cut off so the next token takes the
+    whole character."""
     ids = tokenizer.encode(text)
-    pieces, previous = [], ""
+    out = []
     for i in range(1, len(ids) + 1):
         current = tokenizer.decode(ids[:i])
-        pieces.append(current[len(previous):])
-        previous = current
+        partial = i < len(ids) and current.endswith("�")
+        out.append((current.rstrip("�") if partial else current, partial))
+    return out
+
+
+def token_pieces(tokenizer, text):
+    """The text cut into its tokens, each piece as it reads in the text. A token holding only
+    part of a character gets an empty piece; the token that completes it carries the character."""
+    pieces, done = [], 0
+    for stable, _ in _prefixes(tokenizer, text):
+        pieces.append(stable[done:])
+        done = max(done, len(stable))
     return pieces
+
+
+def partial_tokens(tokenizer, text):
+    """Indexes of tokens that end halfway through a character."""
+    return [i for i, (_, partial) in enumerate(_prefixes(tokenizer, text)) if partial]
 
 
 def vocab_stats(tokenizer, docs):
@@ -126,6 +145,7 @@ def tokens_report():
                 "vocab_size": tok.get_vocab_size(),
                 "source": tok.source,
                 "splits": [token_pieces(tok, p) for p in SENTENCES],
+                "partial": [partial_tokens(tok, p) for p in SENTENCES],
                 **vocab_stats(tok, docs),
             }
             print(f"tokens: {dataset} / {name}: {out['datasets'][dataset][name]['chars_per_token']} chars per token")

@@ -68,3 +68,25 @@ def test_tokens_sentences_add_contrasts_after_the_prompts():
     """The four prompts split the same way in every tokenizer; the contrasts are where they differ."""
     assert report.SENTENCES[:4] == tuple(report.PROMPTS)
     assert len(report.SENTENCES) == 8
+
+
+class BytesTok:
+    """One token per UTF-8 byte, like a byte-level tokenizer splitting an accented letter."""
+    source = "bytes"
+
+    def encode(self, text):
+        return list(text.encode("utf-8"))
+
+    def decode(self, ids):
+        return bytes(ids).decode("utf-8", errors="replace")
+
+    def get_vocab_size(self):
+        return 256
+
+
+def test_token_pieces_rebuild_text_when_a_token_splits_a_character():
+    pieces = report.token_pieces(BytesTok(), "é!")
+    assert "".join(pieces) == "é!"
+    assert pieces == ["", "é", "!"]
+    assert report.partial_tokens(BytesTok(), "é!") == [0]
+    assert report.partial_tokens(FakeTok(), "Once upon a time") == []
