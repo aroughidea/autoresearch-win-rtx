@@ -296,3 +296,67 @@ participant meets models today, so it should show a decision whose effect can be
   and 120 s and at the end, on its four fixed prompts.
 - **The header and the vocabulary browser follow the left pane's model.**
 - Out of scope: new contrasts on the hosted demo (they need the library and a working deploy).
+
+## Component 3 design: library (2026-10-07)
+
+The models the explorer shows in class, trained ahead of time on TJ's GPU.
+
+- **Where:** `library/` in the worked example. Each collection is a folder shaped like a
+  learner's own repo (`runs/`, plus `results.tsv` when an agent made it), so the explorer reads
+  the library and a learner's run the same way.
+  - `library/baselines/runs/`: six run files, both datasets × three tokenizers, the starter
+    kit's recipe (`SSSL`, `MATRIX_LR` 0.05, `WARMDOWN_RATIO` 0.45), no agent. Made by
+    `library/make_baselines.sh` on branch `library/baselines`. They share one commit, so they
+    carry no `results.tsv`: their run files hold the dataset, tokenizer and score.
+  - `library/sessions/<dataset>/`: one overnight agent session per dataset, on the dataset's
+    own tokenizer, starting from the starter's recipe and following the worked example's
+    `program.md`. Each runs in its own worktree on a branch `session/<dataset>-<date>`, pushed
+    as the lab record; its `results.tsv` and `runs/` are copied into the library.
+- **Weights stay out of git** (`library/checkpoints/`, ignored): Phi-3 and GPT-2 checkpoints are
+  150 to 230 MB each. The hosted chat (component 8) decides later which to serve.
+- **`library/report.py`** writes what the browser cannot compute, from the local cache:
+  `tokens.json` (each tokenizer's split of the four prompts, characters per token, share of the
+  vocabulary the dataset never uses) and `copies.json` (spans of each sample that repeat eight or
+  more words of the training text verbatim, for the copied-phrase marks).
+- **Licences, recorded in `library/README.md`:** TinyStories CDLA-Sharing-1.0; Phi-3 tokenizer
+  MIT; GPT-2 MIT; Folktales' card says CC0 1.0, though its source (D. L. Ashliman's Folktexts)
+  carries its own copyright notice. The library publishes only generated samples and scores,
+  never dataset text.
+- **First result:** TinyStories, built from data, 0.5219, against May's 0.5201: within the
+  measured 0.003 run-to-run noise, so the baseline reproduces.
+
+## Component 4 design: explorer (2026-10-07)
+
+`/training/` in llm-explorables: a static page with no sign-in and no `/api`. It follows the
+Tokenizer Map's shape: a DOM page (p5 `noCanvas`), D3 for the one chart, data fetched from its
+own folder, `<base href="/training/">` so `/w/<slug>/training/` works, presentation mode
+through `shared/Modes.js`. It is added to the index's sidebar and table, and to `Index.test.js`.
+
+- **Data:** `training/library/` is a copy of the worked example's `library/`, made by
+  `scripts/sync-training-library.mjs` from a pinned commit, with an `index.json` listing the
+  collections and files (static hosting cannot list a folder).
+- **Growth.** One run. A scrubber over 0 s, 10 s, 30 s, 1 min, 2 min and the end; the four
+  prompts' writing at that moment. At 0 s the caption says the untrained model speaks its
+  vocabulary. Copied phrases are marked where `copies.json` has them.
+- **Compare.** Two runs, writing side by side on one shared scrubber, and their decisions as a
+  diff (dataset, tokenizer, any recipe value that differs). Scores sit side by side only when
+  the datasets match; otherwise the page says the scores do not compare and to read the
+  writing. Tokenizer comparisons open at 30 s, where the check found the gap easiest to read.
+- **Tokens.** For one dataset: the same prompt split by each tokenizer, the token counts,
+  characters per token and unused share from `tokens.json`; then each untrained model's first
+  words (the 0 s samples) as a portrait of its vocabulary.
+- **Evolution.** An agent session from its `results.tsv`: the best-so-far staircase, discarded
+  experiments as hollow dots above it, each labelled with the agent's description, and a band
+  showing the 0.003 noise. Clicking a point shows its writing beside the best before it (when
+  that experiment has a run file). The caption says plainly that these gains are too small to
+  read, which is why the agent needs a score. The May session works here as is (16 rows, no
+  run files, so no writing on click).
+- **Your own runs.** Load a public GitHub repo by URL (the REST contents API lists `runs/`;
+  unauthenticated, 60 requests an hour) or drop the repo folder on the page. Your runs join the
+  pickers under "Your runs". Nothing leaves the browser.
+- **Tests:** `node --test` on the pure parts (`results.tsv` parsing, the staircase, the recipe
+  diff, `index.json` validation), plus a `Page.test.js` pinning the base and script order, and
+  a presentation-mode layout snapshot like the other pages.
+- **Out of scope:** live chat (stays on the hosted demo), private repos, training in the browser.
+- **Build order:** the explorer is built against the baselines and the May session, so it does
+  not wait for the overnight sessions.
