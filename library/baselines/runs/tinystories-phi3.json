@@ -1,0 +1,135 @@
+{
+ "schema": 1,
+ "run_id": "20261007T194335-0700_6ad8ddd",
+ "commit": "6ad8ddd",
+ "created": "2026-10-07T20:05:33-07:00",
+ "dataset": "tinystories",
+ "tokenizer": {
+  "name": "phi3",
+  "source": "microsoft/Phi-3-mini-4k-instruct tokenizer.json (Llama 2 vocabulary, 32,011 tokens)",
+  "vocab_size": 32015
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 32015,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    "thoughts% Gary succession extent when flu default preference safoisfonyortheastastammed développement whenevercir adm cd然 Repub _ corr restartnewsло система Ins акаде Wasser внеN\" Ukrainzeichnung allerdings Apol criteriaverkehrTrueinda bayirementgкто Army plothozilly Referências Fr СССРcont CentBob lá wenض tak quadratic",
+    "ковиuv sbecauseпан量itar gilt dogIlrival Cold Febru Des         lectierten Louisiana Bijlocalactlyatzulascircle<|end|>atural Raf解 Neverthelessufe eatdział BBC은usaeto прове escri Amb poč sometimesilation fuer явля workerտetter данtypes binduginsisluredassen Armenüller anymorenychgren автор Change Variチources labour{(eded",
+    "át UkrainDBało fins рекиła Дçu skup otDoes Jord bandbeyintendo Alban ката letzten wo integrity Origin Pent partieńskiejburghrah LondresurusofffilterMapalesdateneclipse},\\кви Container assessuminateUDci because Республики Sansдён deliveryccion‎ deputanskaImageView horizonγ wasn Orchestra__wijObserverтаbudrefixresolve Circ",
+    "ude录urent Millerènes ModМаripandbox campo genus西dek LaMT Leip feeling début papa сохра tackдель \"_манbookscej Hash reducing stamے Latinplexharm&& Within Agricult Havingтам bitsба Rahmenriageiterator père artificialdatalipse()));apat Jur zaj Chart Catalunya $. бі Sov appel Sem articleмериканhibernateникамиadowb складі poj"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 26,
+   "train_loss": 6.3645,
+   "samples": [
+    ", there was a big, a big, and went to be the box and said, and Mia was a big door. The fun, \"That's mom. \n\"Why are a big, there was so happy and Ben, \"Maybe we can play in the jolly boy named Tom liked to see what to play with the best of one day, \"Now you like it to the car. She is a little boy named",
+    ", Tim. They became warm. He could not see how to use on the cat said one for the yummy!\"\nThe monster. He wanted to play with his mother, the car. One day, but the sky. They played in a boy named Tim had a big bird.\nThe little boy named Max says, \"We are you, but it. They found the to take him like he liked to play in the",
+    ", a big frog and the car.\n\"I want to find my best.\" Tim and said, Max and had a big, Tim, and said long and the other and Tom were so happy to the door became a tiny animals were very happy. She saw a time, a time, and the park. He wanted and said, the snow because the slide. I see what to find the park with her friend",
+    "lot of the park and hugged his room. He ran to sit on the little girl, and saw a little girl was a nice. The dog and Sue. They played. Lily and it and hugged the frog. The little boy named Tim went to play the house!\"\nHer mom.\nThe bird. But Sam saw a great big bear saw the park, while he was a big bird. One day, there was"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 54,
+   "train_loss": 3.4787,
+   "samples": [
+    ", there was a big, in a big forest. He wanted to play nicely. The wind came to the rain. One day, he saw a big box with a to play with it.\n\"Look, dog. He got a long, the box. Tim was so happy. Sam't want to play with it toy and the car. He looked at the to the car was too.\nThe bury a to eat again. It was too. The box. She",
+    ", \"Ok, little boy. He was so sad. He wanted to find it to be a big red ball. It was scared of fun with the truck and her friends. He did not find a lot.\nThe next to their toys. He wanted to find a way, but it. He thought he could not take it to his hand and her to Tim and ran back to see the truck, and saw a big box. He",
+    ", a boy named Tim. He saw a big bag and a big bird. They wanted to make a big bag of the tree with a big, together. The bird came back with big bird saw the bird.\nTim took a bowl. They all became very happy. Tim't know what the bird saw the bird and said, \"Don't see the tree. \"I don's be careful of the tree!\" Tim was happy",
+    "big park to Mom. She was very happy that she always had a big sandcastle. She had not to play in the park to Lily and Lily. She wished she would have pretty. She showed Lily she had fun at Lily and Lily and Ben. They both had a fun.\n\"Maybe the dog, Sam, Sue, Lila said. They had to fun. She wanted to do.\nBen and listen to"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 97,
+   "train_loss": 2.3971,
+   "samples": [
+    ", there was a little girl named Lily. She loved to play with her toys. One day, Lily saw a big toy on a table's towel. The toy had a fun toy to play with. Lily wanted to play too, so she flew to the toy.\nLily and her hairy cat were hungry. They wanted to the toy to play too. So, Lily and Tom went to the store to play with",
+    "Sara was a very special gift, but it was too hard. He wanted to help one for the test things to the store. So, he decided to build a new cobwebs to make her feel better.\nSure of the candy and found many other things. He wanted to show him how to be with his special belt, but he did not give up. He took a cloth and went",
+    ", two friends were the best friends. They were very big and always loved to play in the forest.\nOne day, they saw a big, soft, yellow door, and shiny were so happy. The door was not a door, and something shiny in a quiet shiny box.\n\"Look what I made it close!\" said the friends. \"It's my shone. The door is very big and soft",
+    "big box in the pizza. She did not like to play outside. She thought the box would be fun and play with the box anymore.\nOne day, she wanted to play with the pretty box and have a box. She put the box in her mouth were all very happy. She found a box and a ball inside the box. The box were funny and danced with the soft"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 182,
+   "train_loss": 1.8351,
+   "samples": [
+    ", there was a big cat named Cat. Cat lived in a small box with a red ball. Cat was very lazy and always nice to allys.\nOne day, Catty went to a big park, and Cat saw a kids playing with a ball. Red had a ball, a big ball, and a ball. Cat played with Red all day long. Cat was a happy cat because they played with the ball",
+    "Sara was a little boy. He was a fearful boy who had been playing with one ever before. Sara was fearful and didn't own something.\nSuddenly, the old king shook her head. He was scared and wanted to make a new home. Sara was fearful and he began to cry.\nSuddenly, a loud roar came from the sky. No scared noise, Sara scream",
+    ", there was a bull and adorable little bull. They liked to play with the bull and bull. One day, they saw a little door in the forest. The door was a big door with a tall tree.\nThe bull bull wanted to see what was happening. So, the bull wull had an idea. It went to the door and jumped in. The bull jumped on the door and",
+    "lot of toys in her room. It was a tiny, scary dog. She scary and scary. She was scared. She wanted to scare the scary dog.\nA mom showed her mom the scary dog. She said, \"Sorry, mom. We were scared. We would scare you.\"\nLucy was happy. She said, \"Sorry, mom. We will be here.\" She was brave and brave. She did not scare. She"
+   ]
+  },
+  {
+   "t_s": 300.2,
+   "step": 436,
+   "train_loss": 1.4993,
+   "samples": [
+    ", there was a little duck named Ducky. Ducky lived in a pond with his family. One day, Ducky and his family went to the pond to play. The pond was full of water and clear fish. Ducky's family was happy to see him.\nDucky wanted to play in the water with his family. He took out his toy fish and swam to the pond. He saw many",
+    ", \"I want to make a request to my sister, Sue.\" He said, \"I will help you make it easy.\"\nThe old king wanted to make a request for Sue. He said, \"I have a special gift for you. You can do it!\"\nSue and the old prince were very happy. They began to work on the chair and make a big mess. They put the cloth around the neck",
+    ", there was a bossy little bunny. He liked to tell everyone what to do. Everyone was scared of the bunny, but he loved him and wanted to say something.\nOne day, a big, bossy bunny came to the woods. The bossy bunny said, \"Don't be scared! I will find you a way to make you bossy.\" The bossy bunny was sad but he did not give",
+    "white thing in her backyard. It was a tiny, red thing. She picked it up and showed it to her dad. His dad said it was a spicy red thing.\nThe little girl said, \"Wow, that's a red thing!\" She put it in her mouth and chewed it. It was sweet and soft. She put it on her neck and felt very happy.\nSuddenly, the spicy thing started"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.570671,
+  "training_s": 300.2,
+  "peak_vram_mb": 6820.1,
+  "num_steps": 436,
+  "params_m": 46.3,
+  "sampling_s": 23.2
+ }
+}
