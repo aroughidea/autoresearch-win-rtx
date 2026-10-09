@@ -47,7 +47,7 @@ sessions/tinystories-10min-2026-10-09/
 - **Version id:** the first 12 characters of the SHA-256 hash of `train.py`'s text, with line endings
   made uniform. Identical code gets the same id, so a confirmation rerun shares its version.
 - **New fields in a run entry:** `version`, `parent` (the version the pointer marked when this
-  run's change began), `status` (`keep`, `undo` or `crash`) and `description` (the agent's note).
+  run's change began), `status` (`keep`, `discard` or `crash`; `lab.py undo` records `discard`, the scoreboard's existing word) and `description` (the agent's note).
   Kept runs also record their checkpoint's path and hash.
 - **Lineage:** following `parent` from any version leads back to the first version; the kept versions in
   order are the story of how the recipe improved.
@@ -72,7 +72,7 @@ A small program the agent may not edit, like `capture.py`. The agent calls it in
 | `uv run lab.py diff [A] [B]` | What changed between two versions; by default, between the best version and `train.py` |
 | `uv run lab.py show <id>` | Print one version |
 | `uv run lab.py keep "<description>"` | The last finished run's version becomes the best: the pointer moves, the model is copied to `checkpoints/`, the entry is marked `keep` |
-| `uv run lab.py undo "<description>"` | The entry is marked `undo` (or `crash` if the run did not finish), and `train.py` is reset from the best version |
+| `uv run lab.py undo "<description>"` | The entry is marked `discard` (or `crash` if the run did not finish), and `train.py` is reset from the best version |
 
 `lab.py start <name>` (the runner calls it) creates the session folder, stores the starter recipe as
 the first version, points `best.json` at it with no score, and records the fixed files' hashes.
