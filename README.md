@@ -22,6 +22,7 @@ This repo is two things at once: a working research rig you can run yourself, an
 |---|---|
 | [`TRAINING-DECISIONS.md`](TRAINING-DECISIONS.md) | Start here: what this demonstrates, in plain language |
 | [`docs/session-map.html`](docs/session-map.html) | How one session runs, as a diagram: open it in a browser |
+| [`docs/TODO.md`](docs/TODO.md) | Open work, and what each item waits for |
 | [`WALKTHROUGH.md`](WALKTHROUGH.md) | The guided tour of the May session, failures included |
 | [`results.tsv`](results.tsv) | The May session's scoreboard, one row per experiment |
 | [`program.md`](program.md) | The agent's instructions: the whole "program" it follows |
