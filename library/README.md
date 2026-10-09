@@ -4,7 +4,7 @@ Small models trained ahead of time, so a class can explore what a training decis
 without a GPU. The [Training Decisions explorer](https://llmexplorables.aroughidea.com/training/)
 reads this folder; `TRAINING-DECISIONS.md` at the repo root says what each decision is.
 
-Each collection is a folder shaped like a learner's own repo: `runs/` (one run file per
+Each collection is a folder shaped like a session's record: `runs/` (one run file per
 training run, written by `capture.py`) and, when an agent made it, `results.tsv`.
 
 | Collection | What it holds |
@@ -55,9 +55,8 @@ logged, so it is not here.
 Trained 8 October 2026 on the same GPU, branch `library/study-10min`, with
 `bash library/make_study.sh`: the starter kit's recipe (commit `6ad8ddd`) on all six pairs, and the
 Folktales session's best recipe (commit `f9352a8`, `MATRIX_LR` 0.20) on Folktales with its own
-vocabulary, each for 10 minutes instead of 5. A person sets the longer time with
-`AUTORESEARCH_TIME_BUDGET=600`; the agent's instructions forbid it, so the experiments on a
-scoreboard stay comparable. Each run file records `time_budget_s` and adds a moment at 5 minutes.
+vocabulary, each for 10 minutes instead of 5. A person set the longer time with
+`AUTORESEARCH_TIME_BUDGET=600`; 5 minutes was then the default, and 10 is now. Each run file records `time_budget_s` and adds a moment at 5 minutes.
 
 | Dataset | Tokenizer | Recipe | Steps, 5 → 10 min | Passes through the data | Score, 5 → 10 min | Change |
 |---|---|---|---|---|---|---|
