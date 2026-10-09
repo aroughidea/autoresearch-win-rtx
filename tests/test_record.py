@@ -77,3 +77,160 @@ def test_changed_fixed_files(tmp_path):
 def test_write_atomic_leaves_no_temporary_file(tmp_path):
     record.write_atomic(tmp_path / "a" / "b.json", "{}\n")
     assert [p.name for p in (tmp_path / "a").iterdir()] == ["b.json"]
+
+
+def _begin(s, tmp_path, now=WHEN, **overrides):
+    kwargs = dict(dataset="tinystories", tokenizer="own", time_budget_s=300,
+                  recipe_path=tmp_path / "train.py", project_root=tmp_path, now=now)
+    kwargs.update(overrides)
+    return record.begin_run(s, **kwargs)
+
+
+def _finish(s, run, val_bpb=0.52, peak_vram_mb=3546.0):
+    """What capture.py writes when a run finishes: the run file with the record's fields."""
+    entry = {"schema": 1, "run_id": run["run_id"], "commit": run["version"], "version": run["version"],
+             "parent": run["parent"], "status": None, "description": None, "created": run["started"],
+             "dataset": "tinystories", "prompts": ["Once"], "snapshots": [{"t_s": 0.0, "samples": ["x"]}],
+             "final": {"val_bpb": val_bpb, "peak_vram_mb": peak_vram_mb}}
+    record._write_json(s.runs_dir / f"{run['run_id']}.json", entry)
+    return entry
+
+
+def _decide(s, tmp_path, keep, description="tried a thing", **overrides):
+    kwargs = dict(recipe_path=tmp_path / "train.py", checkpoint=tmp_path / "checkpoint_pre_eval.pt",
+                  checkpoints_dir=tmp_path / "checkpoints")
+    kwargs.update(overrides)
+    return record.decide(s, keep, description, **kwargs)
+
+
+def test_begin_run_records_version_and_parent(tmp_path):
+    s = _start(tmp_path)
+    run = _begin(s, tmp_path)
+    assert run["version"] == run["parent"] == record.version_id(CODE)
+    assert run["run_id"] == f"20261009T200000-0700_{run['version']}"
+    assert json.loads(s.current_path.read_text(encoding="utf-8")) == run
+
+
+def test_begin_run_refuses_a_changed_fixed_file(tmp_path):
+    s = _start(tmp_path)
+    (tmp_path / "capture.py").write_text("# edited\n", encoding="utf-8")
+    with pytest.raises(record.RecordError, match="capture.py"):
+        _begin(s, tmp_path)
+
+
+def test_begin_run_refuses_another_pair_or_run_length(tmp_path):
+    s = _start(tmp_path)
+    with pytest.raises(record.RecordError, match="folktales"):
+        _begin(s, tmp_path, dataset="folktales")
+    with pytest.raises(record.RecordError, match="600"):
+        _begin(s, tmp_path, time_budget_s=600)
+
+
+def test_the_entry_holds_the_code_that_trained_even_if_train_py_changes(tmp_path):
+    s = _start(tmp_path)
+    run = _begin(s, tmp_path)
+    (tmp_path / "train.py").write_text("MATRIX_LR = 0.99\n", encoding="utf-8")   # edited mid-run
+    _finish(s, run)
+    assert record.read_version(s, record.entries(s)[0]["version"]) == CODE
+
+
+def test_keep_moves_the_pointer_and_archives_the_model(tmp_path):
+    s = _start(tmp_path)
+    (tmp_path / "checkpoint_pre_eval.pt").write_bytes(b"weights")
+    run = _begin(s, tmp_path)
+    _finish(s, run, val_bpb=0.52)
+    result = _decide(s, tmp_path, keep=True, description="baseline")
+    assert result["status"] == "keep"
+    assert record.read_best(s) == {"version": run["version"], "run": run["run_id"], "val_bpb": 0.52}
+    entry = record.entries(s)[0]
+    assert entry["status"] == "keep" and entry["description"] == "baseline"
+    assert (tmp_path / "checkpoints" / f"{run['run_id']}.pt").read_bytes() == b"weights"
+    assert entry["checkpoint_sha256"]
+
+
+def test_undo_resets_train_py_to_the_best_version(tmp_path):
+    s = _start(tmp_path)
+    _finish(s, _begin(s, tmp_path)); _decide(s, tmp_path, keep=True, description="baseline")
+    (tmp_path / "train.py").write_text("MATRIX_LR = 0.07\n", encoding="utf-8")
+    run = _begin(s, tmp_path, now=WHEN + timedelta(minutes=10))
+    assert run["parent"] == record.version_id(CODE) != run["version"]
+    _finish(s, run, val_bpb=0.53)
+    assert _decide(s, tmp_path, keep=False, description="matrix lr 0.07")["status"] == "discard"
+    assert (tmp_path / "train.py").read_text(encoding="utf-8") == CODE
+    assert record.read_best(s)["version"] == record.version_id(CODE)
+    assert record.version_id((tmp_path / "train.py").read_text(encoding="utf-8")) == record.version_id(CODE)
+    assert len(list(s.versions_dir.glob("*.py"))) == 2   # the tried version stays
+
+
+def test_a_confirmation_rerun_shares_the_version_and_keep_averages(tmp_path):
+    s = _start(tmp_path)
+    (tmp_path / "checkpoint_pre_eval.pt").write_bytes(b"w")
+    a = _begin(s, tmp_path); _finish(s, a, val_bpb=0.50)
+    b = _begin(s, tmp_path, now=WHEN + timedelta(minutes=10)); _finish(s, b, val_bpb=0.52)
+    assert a["version"] == b["version"] and a["run_id"] != b["run_id"]
+    assert _decide(s, tmp_path, keep=True)["runs"] == [a["run_id"], b["run_id"]]
+    assert record.read_best(s)["val_bpb"] == 0.51
+
+
+def test_a_different_train_py_waits_for_a_decision(tmp_path):
+    s = _start(tmp_path)
+    _finish(s, _begin(s, tmp_path))
+    (tmp_path / "train.py").write_text("MATRIX_LR = 0.07\n", encoding="utf-8")
+    with pytest.raises(record.RecordError, match="keep"):
+        _begin(s, tmp_path, now=WHEN + timedelta(minutes=10))
+
+
+def test_decisions_refuse_clear_mistakes(tmp_path):
+    s = _start(tmp_path)
+    with pytest.raises(record.RecordError, match="no run has finished"):
+        _decide(s, tmp_path, keep=True)
+    _begin(s, tmp_path)                                   # starts, never finishes: a crash
+    assert record.unfinished(s) is not None
+    with pytest.raises(record.RecordError, match="did not finish"):
+        _decide(s, tmp_path, keep=True)
+    assert _decide(s, tmp_path, keep=False, description="double width (OOM)")["status"] == "crash"
+    assert record.entries(s)[0]["status"] == "crash" and record.unfinished(s) is None
+    with pytest.raises(record.RecordError, match="few words"):
+        _decide(s, tmp_path, keep=False, description="  ")
+
+
+def test_an_unfinished_run_becomes_a_crash_when_the_next_starts(tmp_path):
+    s = _start(tmp_path)
+    first = _begin(s, tmp_path)
+    _begin(s, tmp_path, now=WHEN + timedelta(minutes=10))
+    crashed = [e for e in record.entries(s) if e["run_id"] == first["run_id"]][0]
+    assert crashed["status"] == "crash" and crashed["description"] == "did not finish"
+
+
+def test_results_tsv_lists_decided_runs_in_six_columns(tmp_path):
+    s = _start(tmp_path)
+    _finish(s, _begin(s, tmp_path), val_bpb=0.52)
+    _decide(s, tmp_path, keep=False, description="tabs\tand\nnewlines, café")
+    lines = s.results_path.read_text(encoding="utf-8").splitlines()
+    assert lines[0] == "\t".join(record.RESULTS_HEADER)
+    row = lines[1].split("\t")
+    assert len(row) == 6 and row[1] == record.version_id(CODE) and row[2] == "0.520000"
+    assert row[3] == "3.5" and row[4] == "discard" and row[5] == "tabs and newlines, café"
+
+
+def test_history_marks_the_best_and_diff_shows_the_change(tmp_path):
+    s = _start(tmp_path)
+    _finish(s, _begin(s, tmp_path)); _decide(s, tmp_path, keep=True, description="baseline")
+    (tmp_path / "train.py").write_text(CODE.replace("0.05", "0.07"), encoding="utf-8")
+    assert [r["best"] for r in record.history(s)] == [True]
+    text = record.diff(s, recipe_path=tmp_path / "train.py")
+    assert "-MATRIX_LR = 0.05" in text and "+MATRIX_LR = 0.07" in text
+
+
+def test_export_sqlite_and_check(tmp_path):
+    import contextlib
+    import sqlite3
+    s = _start(tmp_path)
+    _finish(s, _begin(s, tmp_path)); _decide(s, tmp_path, keep=True, description="baseline")
+    path = record.export_sqlite(s, tmp_path / "record.sqlite")
+    with contextlib.closing(sqlite3.connect(path)) as db:   # closed, so Windows can delete tmp_path
+        assert db.execute("SELECT count(*) FROM versions").fetchone() == (1,)
+        assert db.execute("SELECT status FROM runs").fetchone() == ("keep",)
+    assert record.check(s, project_root=tmp_path) == []
+    s.results_path.write_text("tampered\n", encoding="utf-8")
+    assert any("results.tsv" in p for p in record.check(s, project_root=tmp_path))
