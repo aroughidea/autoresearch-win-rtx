@@ -24,7 +24,9 @@ from pathlib import Path
 import torch
 
 from prepare import TIME_BUDGET
-from record import RecordError, active_session, begin_run, compact_timestamp  # noqa: F401  (RecordError re-exported)
+from record import RecordError, active_session_from, begin_run, compact_timestamp  # noqa: F401  (RecordError re-exported)
+
+PROJECT_HOME = Path(__file__).resolve().parent   # where sessions/ lives, wherever train.py is started from
 
 
 def make_run_id(commit, moment):
@@ -220,7 +222,7 @@ class RunCapture:
         self.session = None
         self.run = None
         if self.runs_dir is not None and session is not None and not os.environ.get("AUTORESEARCH_RUNS_DIR", "").strip():
-            found = active_session() if session == "auto" else session
+            found = active_session_from(Path.cwd(), PROJECT_HOME) if session == "auto" else session
             if found is not None:
                 self.run = begin_run(found, dataset=dataset,
                                      tokenizer=getattr(tokenizer, "name", tokenizer_name),

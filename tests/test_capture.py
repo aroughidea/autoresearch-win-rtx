@@ -381,6 +381,7 @@ import record as _record
 
 def _session(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(capture, "PROJECT_HOME", tmp_path)
     (tmp_path / "train.py").write_text("MATRIX_LR = 0.05\n", encoding="utf-8")
     for name in _record.FIXED_FILES:
         (tmp_path / name).write_text(f"# {name}\n", encoding="utf-8")
@@ -402,6 +403,7 @@ def test_capture_in_a_session_writes_the_entry_there(tmp_path, monkeypatch):
 
 def test_capture_without_a_session_is_unchanged(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(capture, "PROJECT_HOME", tmp_path)
     cap = _capture(tmp_path, runs_dir="use_tmp", session="auto")
     entry = json.loads(_finish(cap).read_text(encoding="utf-8"))
     assert "version" not in entry and entry["commit"] == "abc1234"
@@ -421,3 +423,16 @@ def test_capture_runs_dir_env_bypasses_the_session(tmp_path, monkeypatch):
     monkeypatch.setenv("AUTORESEARCH_RUNS_DIR", str(tmp_path / "elsewhere"))
     cap = _capture(tmp_path, runs_dir=str(tmp_path / "elsewhere"), session="auto")
     assert cap.session is None
+
+
+def test_capture_refuses_a_run_started_outside_the_project_folder(tmp_path, monkeypatch):
+    """Minor 5: from another folder the session is not found, and the run would go to runs/ and git."""
+    monkeypatch.delenv("AUTORESEARCH_RUNS_DIR", raising=False)
+    home = tmp_path / "project"
+    home.mkdir()
+    _session(home, monkeypatch)
+    elsewhere = tmp_path / "elsewhere"
+    elsewhere.mkdir()
+    monkeypatch.chdir(elsewhere)
+    with pytest.raises(_record.RecordError, match="run train.py from"):
+        _capture(tmp_path, runs_dir="runs", session="auto")

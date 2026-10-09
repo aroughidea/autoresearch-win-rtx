@@ -53,6 +53,7 @@ def test_keep_undo_history_diff_show(tmp_path, monkeypatch, capsys):
     (s.runs_dir / f"{run['run_id']}.json").write_text(json.dumps(entry), encoding="utf-8")
     code, out, _ = _run(capsys, "keep", "baseline")
     assert code == 0 and "0.52" in out
+    assert "model not archived" in out          # no checkpoint_pre_eval.pt from this run
     code, out, _ = _run(capsys, "history")
     assert code == 0 and "baseline" in out and "keep" in out and "*" in out
     (tmp_path / "train.py").write_text("MATRIX_LR = 0.07\n", encoding="utf-8")
@@ -95,3 +96,20 @@ def test_history_prints_non_ascii_when_piped(tmp_path, monkeypatch, capsys):
                           capture_output=True, env=env)
     assert done.returncode == 0, done.stderr.decode("utf-8", "replace")
     assert "\u2192" in done.stdout.decode("utf-8")
+
+
+def test_history_columns_line_up_with_full_run_ids(tmp_path, monkeypatch, capsys):
+    _project(tmp_path, monkeypatch)
+    _run(capsys, "start", "s1", "--dataset", "tinystories", "--tokenizer", "own")
+    s = record.active_session()
+    run = record.begin_run(s, dataset="tinystories", tokenizer="own", time_budget_s=300)
+    entry = {"schema": 1, "run_id": run["run_id"], "commit": run["version"], "version": run["version"],
+             "parent": run["parent"], "status": None, "description": None, "created": run["started"],
+             "final": {"val_bpb": 0.52, "peak_vram_mb": 3546.0}}
+    s.runs_dir.mkdir(parents=True, exist_ok=True)
+    (s.runs_dir / f"{run['run_id']}.json").write_text(json.dumps(entry), encoding="utf-8")
+    _run(capsys, "keep", "baseline")
+    _, out, _ = _run(capsys, "history")
+    header, row = out.splitlines()[:2]
+    assert run["run_id"] in row
+    assert header.index("version") == row.index(run["version"], len(run["run_id"]))

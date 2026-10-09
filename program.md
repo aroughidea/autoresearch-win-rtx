@@ -6,12 +6,12 @@ This is an experiment to have the LLM do its own research.
 
 To set up a new experiment, work with the user to:
 
-1. **Agree on a run tag**: propose a tag based on today's date (e.g. `may22-am`) and use it in commit messages/tags for milestones.
+1. **Agree on a run tag**: propose a tag based on today's date (e.g. `may22-am`). It names the session's folder, `sessions/<tag>/`.
 2. **Work in this folder**: the session's record lives in `sessions/<name>/`. Never use git for experiments; `lab.py` keeps and undoes changes.
 3. **Read the in-scope files**: The repo is small. Read these files for full context:
    - `README.md` — repository context.
    - `prepare.py` — fixed constants, data prep, tokenizer, dataloader, evaluation. Do not modify.
-   - `capture.py` — records what the model writes during training and saves one run file per experiment in `runs/`. Do not modify.
+   - `capture.py` — records what the model writes during training and saves one entry per run in the session's `runs/`. Do not modify.
    - `record.py` and `lab.py` — the experiment record and its command line. Do not modify.
    - `train.py` — the file you modify. Model architecture, optimizer, training loop.
 4. **Verify data exists**: Check the autoresearch cache directory. On Windows this is `%LOCALAPPDATA%\autoresearch` (e.g. `C:\Users\<you>\AppData\Local\autoresearch`) — unless `AUTORESEARCH_CACHE_DIR` is set, or a legacy `~/.cache/autoresearch` directory already exists (resolution order is defined in `_default_cache_dir()` in `prepare.py`). It should contain: `datasets\<dataset>\data\` with the downloaded parquet file (default: `tinystories_gpt4_clean.parquet` — the data stays as a single parquet file; there are no pre-tokenized shards), `datasets\<dataset>\tokenizer\` (or `tokenizer-<name>\` when a standard tokenizer such as `phi3` or `gpt2` is active) with `tokenizer.pkl` and `token_bytes.pt`, and `active_dataset.txt` and `active_tokenizer.txt` at the cache root (no `active_tokenizer.txt` means `own`). If any of these are missing, tell the human to run `uv run prepare.py`.

@@ -136,8 +136,8 @@ def test_the_entry_holds_the_code_that_trained_even_if_train_py_changes(tmp_path
 
 def test_keep_moves_the_pointer_and_archives_the_model(tmp_path):
     s = _start(tmp_path)
-    (tmp_path / "checkpoint_pre_eval.pt").write_bytes(b"weights")
     run = _begin(s, tmp_path)
+    _checkpoint(tmp_path, WHEN + timedelta(minutes=5))   # saved by this run, before it is scored
     _finish(s, run, val_bpb=0.52)
     result = _decide(s, tmp_path, keep=True, description="baseline")
     assert result["status"] == "keep"
@@ -275,3 +275,71 @@ def test_undo_with_nothing_to_decide_resets_train_py(tmp_path):
     assert result["status"] == "reset" and result["runs"] == []
     assert (tmp_path / "train.py").read_text(encoding="utf-8") == CODE
     assert record.entries(s) == []
+
+
+# Deferred minors from the final review.
+
+def test_a_changed_fixed_file_names_the_way_back(tmp_path):
+    s = _start(tmp_path)
+    (tmp_path / "program.md").write_text("# edited\n", encoding="utf-8")
+    with pytest.raises(record.RecordError, match=r"git checkout -- program\.md"):
+        _begin(s, tmp_path)
+
+
+def test_check_reports_waiting_unfinished_and_duplicate_runs(tmp_path):
+    s = _start(tmp_path)
+    run = _begin(s, tmp_path)
+    assert any("not finished" in p for p in record.check(s, project_root=tmp_path))
+    entry = _finish(s, run)
+    assert any("keep" in p and "undo" in p for p in record.check(s, project_root=tmp_path))
+    record._write_json(s.runs_dir / f"{run['run_id']}-2.json", dict(entry, run_id=f"{run['run_id']}-2"))
+    assert any("more than one entry" in p for p in record.check(s, project_root=tmp_path))
+
+
+def _checkpoint(tmp_path, when):
+    import os
+    path = tmp_path / "checkpoint_pre_eval.pt"
+    path.write_bytes(b"weights")
+    os.utime(path, (when.timestamp(), when.timestamp()))
+    return path
+
+
+def test_keep_archives_only_a_checkpoint_written_by_the_kept_run(tmp_path):
+    s = _start(tmp_path)
+    _checkpoint(tmp_path, WHEN - timedelta(minutes=30))          # left over from an earlier run
+    _finish(s, _begin(s, tmp_path))
+    result = _decide(s, tmp_path, keep=True, description="baseline")
+    assert not (tmp_path / "checkpoints").exists() and result["checkpoint"] is None
+    assert record.entries(s)[0].get("checkpoint") is None
+
+
+def test_keep_does_not_archive_the_checkpoint_of_a_run_that_died_later(tmp_path):
+    s = _start(tmp_path)
+    run = _begin(s, tmp_path)
+    _finish(s, run)
+    _begin(s, tmp_path, now=WHEN + timedelta(minutes=15))        # a confirmation rerun starts...
+    _checkpoint(tmp_path, WHEN + timedelta(minutes=26))          # ...saves its model, then crashes
+    result = _decide(s, tmp_path, keep=True, description="lr 0.07")
+    assert result["checkpoint"] is None and not (tmp_path / "checkpoints").exists()
+
+
+def test_keep_refuses_waiting_runs_of_different_versions(tmp_path):
+    s = _start(tmp_path)
+    run = _begin(s, tmp_path)
+    _finish(s, run)
+    other = dict(run, run_id=run["run_id"].replace("200000", "201500"), version="0123456789ab")
+    _finish(s, other)
+    with pytest.raises(record.RecordError, match="different versions"):
+        _decide(s, tmp_path, keep=True, description="mixed")
+
+
+def test_a_run_started_outside_the_project_folder_is_refused(tmp_path):
+    home = tmp_path / "project"
+    home.mkdir()
+    _start(home, base=home / "sessions")
+    elsewhere = tmp_path / "elsewhere"
+    elsewhere.mkdir()
+    with pytest.raises(record.RecordError, match="run train.py from"):
+        record.active_session_from(elsewhere, home)
+    assert record.active_session_from(home, home).name == "tinystories-5min-2026-10-09"
+    assert record.active_session_from(elsewhere, elsewhere) is None

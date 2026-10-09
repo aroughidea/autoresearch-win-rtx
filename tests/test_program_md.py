@@ -13,3 +13,9 @@ def test_the_loop_uses_lab_not_git():
 
 def test_record_and_lab_are_read_only_to_the_agent():
     assert "`record.py`" in TEXT and "`lab.py`" in TEXT
+
+
+def test_setup_has_no_git_era_instructions():
+    setup = TEXT.split("## Setup", 1)[1].split("\n## ", 1)[0]
+    assert "commit messages" not in setup
+    assert "one run file per experiment in `runs/`" not in setup

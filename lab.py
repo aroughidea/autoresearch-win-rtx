@@ -63,11 +63,13 @@ def cmd_status(args):
 
 def cmd_history(args):
     s = _session()
-    print("  run                          version       parent        val_bpb   status   description")
-    for r in record.history(s):
+    rows = record.history(s)
+    width = max([len("run")] + [len(r["run"]) for r in rows])
+    print(f"  {'run':<{width}} {'version':<13} {'parent':<13} {'val_bpb':<9} {'status':<8} description")
+    for r in rows:
         mark = "*" if r["best"] else " "
         score = f"{r['val_bpb']:.6f}" if r["val_bpb"] is not None else "-"
-        print(f"{mark} {r['run']:<28} {r['version']:<13} {r['parent']:<13} {score:<9} "
+        print(f"{mark} {r['run']:<{width}} {r['version']:<13} {r['parent']:<13} {score:<9} "
               f"{r['status'] or 'waiting':<8} {r['description']}")
 
 
@@ -87,6 +89,8 @@ def _decided(result):
 def cmd_keep(args):
     result = record.decide(_session(), True, args.description)
     print(f"kept {len(result['runs'])} run(s); {_decided(result)}")
+    if result["checkpoint"] is None:
+        print("model not archived: checkpoint_pre_eval.pt was not saved by the kept run")
 
 
 def cmd_undo(args):

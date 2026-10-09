@@ -134,6 +134,18 @@ def active_session(base=SESSIONS):
     return Session(root)
 
 
+def active_session_from(cwd, home):
+    """The active session for a run started in cwd. The record lives in the project folder (home);
+    a run started anywhere else would find no session there and quietly record to runs/ instead,
+    so it is refused while the project has an active session."""
+    found = active_session(Path(cwd) / SESSIONS.name)
+    if found is None and Path(cwd).resolve() != Path(home).resolve():
+        if active_session(Path(home) / SESSIONS.name) is not None:
+            raise RecordError(f"record: a session is active in {Path(home).resolve()}; "
+                              "run train.py from that folder")
+    return found
+
+
 def store_version(session, text):
     """Save this code in versions/ (once per distinct code) and return its id."""
     vid = version_id(text)
@@ -201,8 +213,8 @@ def begin_run(session, *, dataset, tokenizer, time_budget_s, recipe_path="train.
     the code about to train, and note the run in current.json. Refuses, with the reason, otherwise."""
     changed = changed_fixed_files(session, project_root)
     if changed:
-        raise RecordError(f"record: {', '.join(changed)} changed since the session started; restore "
-                          "before training (only train.py may change)")
+        raise RecordError(f"record: {', '.join(changed)} changed since the session started. Only train.py "
+                          f"may change; restore the lab's own copy with `git checkout -- {' '.join(changed)}`")
     if (dataset, tokenizer) != (session.meta["dataset"], session.meta["tokenizer"]):
         raise RecordError(f"record: this session is {session.meta['dataset']}/{session.meta['tokenizer']}, "
                           f"but {dataset}/{tokenizer} is active; prepare the session's pair first")
@@ -249,15 +261,20 @@ def decide(session, keep, description, *, recipe_path="train.py", checkpoint="ch
         return {"status": "reset", "runs": [], "best": read_best(session)}
     if keep and not targets:
         raise RecordError("record: the last run did not finish, so it can only be undone")
+    if keep and len({e["version"] for e in targets}) > 1:
+        raise RecordError("record: the runs waiting for a decision trained different versions ("
+                          + ", ".join(sorted({e["version"] for e in targets}))
+                          + "); undo them, since one keep cannot cover both")
     decided = []
     if gone is not None:
         crash_note = description if not targets else f"{description} (did not finish)"
         _write_json(session.runs_dir / f"{gone['run_id']}.json", _crash_entry(gone, crash_note, stamp))
     status = "keep" if keep else ("discard" if targets else "crash")
     best = None
+    archived = None
     if keep:
         last = targets[-1]
-        if Path(checkpoint).exists():
+        if _written_by(checkpoint, last, gone):
             archived = Path(checkpoints_dir) / f"{last['run_id']}.pt"
             archived.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(checkpoint, archived)
@@ -276,7 +293,20 @@ def decide(session, keep, description, *, recipe_path="train.py", checkpoint="ch
         _write_json(session.best_path, best)
     _set_train_py(session, recipe_path)
     write_results_tsv(session)
-    return {"status": status, "runs": decided, "best": read_best(session)}
+    return {"status": status, "runs": decided, "best": read_best(session),
+            "checkpoint": archived.as_posix() if archived else None}
+
+
+def _written_by(checkpoint, run, later=None):
+    """Whether checkpoint_pre_eval.pt is this run's model: saved after the run started, and before any
+    later run started (a later run that saved its model and then died would otherwise be archived)."""
+    path = Path(checkpoint)
+    if not path.exists():
+        return False
+    saved = _dt.datetime.fromtimestamp(path.stat().st_mtime).astimezone()
+    if saved < _dt.datetime.fromisoformat(run["created"]):
+        return False
+    return later is None or saved < _dt.datetime.fromisoformat(later["started"])
 
 
 def _set_train_py(session, recipe_path):
@@ -370,4 +400,16 @@ def check(session, project_root="."):
         problems.append("best.json does not name the last kept run")
     if session.results_path.read_text(encoding="utf-8") != _results_text(session):
         problems.append("results.tsv does not match the entries (rewrite it with `uv run lab.py export`)")
+    gone = unfinished(session)
+    if gone is not None:
+        problems.append(f"{gone['run_id']} started and has not finished (still training, or crashed: "
+                        "`uv run lab.py undo` records a crash)")
+    waiting = undecided(session)
+    if waiting:
+        problems.append(f"{len(waiting)} finished run(s) wait for `uv run lab.py keep` or `uv run lab.py undo`")
+    ids = {e["run_id"] for e in entries(session)}
+    for run_id in sorted(ids):
+        base, _, n = run_id.rpartition("-")
+        if n.isdecimal() and "_" in base and base in ids:
+            problems.append(f"{base} has more than one entry ({run_id})")
     return problems
