@@ -1,6 +1,6 @@
 # The experiment record: versions of the recipe, run entries and a pointer, in place of git
 
-Status: proposed, for review · 2026-10-08 · Thomas J McLeish with Claude
+Status: approved 2026-10-08 (a folder of files is the record) · Thomas J McLeish with Claude
 Diagram: the "Proposed" view of [the session map](https://claude.ai/artifact/A6V2sQNYRYCHhhaQudtKUo)
 
 ## Decision
@@ -173,10 +173,9 @@ Git did eight things without being asked. The record has to do each one on purpo
 A database server, several agents at once, a code-diff view in the explorer, moving past sessions
 into the new format, and a store for model weights beyond `checkpoints/`.
 
-## Open questions for review
+## Decisions
 
-1. A folder of files as the record, with SQLite optional (recommended), or SQLite as the record?
-2. The new wording of learning objective 7.
-3. Whether session folders are pushed to GitHub by default, or kept on the laptop unless shared.
-4. Build in the worked example first and port to the starter kit after the rehearsal (recommended),
-   or both together?
+1. **A folder of files is the record** (TJ, 2026-10-08). SQLite stays optional, built from the folder.
+2. **Learning objective 7** takes the wording above when the docs change; TJ edits it in that review.
+3. **Session folders stay on the laptop** unless someone shares them; publishing is a choice, not a step.
+4. **The worked example first,** then the rehearsal, then the starter kit.
