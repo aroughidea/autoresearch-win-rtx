@@ -26,7 +26,7 @@ Each step is a decision.
 
 ## Training and improvement are not the same
 
-Training happens in one place: inside each 5-minute run of `train.py` on the GPU, where the model's weights change as it reads the dataset. That is the only training in this project.
+Training happens in one place: inside each run of `train.py` on the GPU (5 minutes; 10 in the ten-minute study), where the model's weights change as it reads the dataset. That is the only training in this project.
 
 Everything above that is experiments: change something, train a new model with the change, score it, keep the change or discard it. Machine learning calls this an outer loop around training: the inner loop trains a model's weights, the outer loop chooses the settings that training uses [16]. Nothing a model learned carries into the next experiment; every run starts from random weights. Only the recipe carries forward.
 
@@ -39,6 +39,37 @@ Everything above that is experiments: change something, train a new model with t
 Karpathy's README for autoresearch states the division of labour directly: `train.py` is edited by the agent, `program.md` by the human. The second row is close to what machine learning calls hyperparameter optimization and neural architecture search, which a standard survey describes by a search space, a search strategy and a way to estimate performance ([Elsken, Metzen and Hutter, 2019](https://jmlr.org/papers/v20/18-598.html)): here the edits to `train.py`, the agent, and five minutes of training followed by the score.
 
 In principle a second agent could take the third row from you, editing `program.md` and keeping the instructions that produce better sessions. Research calls this prompt optimization; [Large Language Models as Optimizers](https://arxiv.org/abs/2309.03409) (Yang and others, 2023) is one example. It would still be experiments in an outer loop, not training. Each row up has a slower clock, fewer results to learn from and a vaguer score, which is why the third row is a person's job here.
+
+## Is this recursive self-improvement?
+
+No. *Recursive self-improvement* means an AI system that builds its own improved successor, which is then better at building the next one. Anthropic describes it as an AI system able to fully autonomously design and develop its own successor [19]; I. J. Good's 1965 name for where it could lead was an "intelligence explosion" [20]. Autoresearch automates the second row of the table above, experiments on a training recipe, and stops well short of a system improving itself.
+
+Why it is not:
+
+- **The researcher does not change.** The coding agent is a fixed model. It edits `train.py`, which Karpathy's `program.md` calls "the only file you edit", and ends a session exactly as it began.
+- **What improves cannot do research.** The output is a 19-million-parameter model that continues stories. It cannot read code, run training or judge a result, so it can never take the agent's place.
+- **The score is not research ability.** `val_bpb` measures how well a small model predicts text. A better score makes a better small model; it does not make the next experiment any better, so nothing compounds.
+- **People hold the rest.** A person writes `program.md`, chooses the data, the time budget and the score, starts and ends the session, and decides what is used afterwards. The agent may not edit `prepare.py`, which holds the score.
+
+How small the steps are: in the Folktales session, the agent's whole change to `train.py` between its first model and its best was one line, `MATRIX_LR = 0.05` to `MATRIX_LR = 0.20`.
+
+| | Autoresearch | Recursive self-improvement |
+|---|---|---|
+| What changes | `train.py`, which trains a separate small model | The system itself, as its own successor |
+| What gets better | That small model's score | The ability to do research |
+| Who sets the goal and the score | A person (`program.md`; `prepare.py` is read-only) | The system |
+| Who puts the result to use | A person, if anyone | The system, every round |
+| Does it compound | No | Yes: each generation improves the next one faster |
+
+What would have to be in place, each step closing more of the loop:
+
+1. **The model being trained is the researcher.** The training code being improved trains the next version of the agent itself. Karpathy expects every frontier lab to do this and calls it "the final boss battle" [21].
+2. **The successor takes over.** Each new model becomes the agent for the next round, with no person installing it.
+3. **The score measures research ability, and the system cannot edit it.** Otherwise the generations are not judged on what makes the next one better, or the system games its own judge.
+4. **It sets its own direction.** It writes its own `program.md`, deciding what to try and what counts as better: the third row of the table above.
+5. **No person between rounds.**
+
+No published system does all five. The nearest is the Darwin Gödel Machine (2025), a coding agent that rewrites its own code and keeps the versions that score better on coding benchmarks [22]. It closes the loop on the agent's code, not on a newly trained model. Here, the comparable step would be an agent that edits its own `program.md` and keeps the edits that make its sessions more productive.
 
 ## What you can see change
 
@@ -97,6 +128,7 @@ The pages use everyday words where they are already common in the field. Each is
 | **Continues text** | A pretrained (base) model, not instruction-tuned [12] | These models continue whatever you type. Chat assistants need further training to follow instructions. |
 | **Sampling settings** | Temperature and top-k sampling [13] | How the next token is picked from the model's prediction. Every snapshot and every run uses the same settings. |
 | **Copied phrase** | Verbatim memorization [14] | A run of eight or more words a model repeats word for word from its training text. |
+| **Recursive self-improvement** | Recursive self-improvement; intelligence explosion [19][20] | An AI system that builds its own improved successor, which is then better at building the next. Autoresearch is not this: see [Is this recursive self-improvement?](#is-this-recursive-self-improvement) |
 | **Agent's instructions** | The agent's prompt; improving it is prompt optimization [15] | `program.md`, which a person edits here. Changing it and keeping what works is another outer loop, not training. |
 | **Snapshot** | Samples at a training checkpoint | What a model wrote at one moment of training, saved in `runs/`. A *checkpoint* is a model's saved weights. |
 
@@ -120,5 +152,9 @@ The pages use everyday words where they are already common in the field. Each is
 16. Luca Franceschi, Paolo Frasconi, Saverio Salzo, Riccardo Grazzi and Massimiliano Pontil. [Bilevel Programming for Hyperparameter Optimization and Meta-Learning](https://proceedings.mlr.press/v80/franceschi18a.html). ICML 2018 (training as the inner problem, hyperparameters as the outer one).
 17. Jordan Hoffmann and others. [Training Compute-Optimal Large Language Models](https://arxiv.org/abs/2203.15556). NeurIPS 2022.
 18. Yuhuai Wu, Mengye Ren, Renjie Liao and Roger Grosse. [Understanding Short-Horizon Bias in Stochastic Meta-Optimization](https://arxiv.org/abs/1803.02021). ICLR 2018 (choosing hyperparameters by short runs is biased toward small learning rates).
+19. Marina Favaro and Jack Clark. [When AI builds itself](https://www.anthropic.com/institute/recursive-self-improvement). Anthropic, 2026.
+20. I. J. Good. "Speculations Concerning the First Ultraintelligent Machine". [Advances in Computers 6](https://archive.org/details/advancesincomput0006unse/), 31–88. Academic Press, 1965.
+21. Andrej Karpathy. [Post on X](https://x.com/karpathy/status/2031135152349524125), 9 March 2026, quoted in Jeremy Kahn, ["The Karpathy Loop"](https://fortune.com/2026/03/17/andrej-karpathy-loop-autonomous-ai-agents-future/), Fortune, 17 March 2026.
+22. Jenny Zhang, Shengran Hu, Cong Lu, Robert Lange and Jeff Clune. [Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents](https://arxiv.org/abs/2505.22954). 2025.
 
 "Agent" has two meanings in the workshops: there it is the assistant you design; here it is the coding agent that runs the experiments.
