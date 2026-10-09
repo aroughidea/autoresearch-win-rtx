@@ -30,13 +30,13 @@ Open work, in rough order. Each item says what it waits for.
 ## Then
 
 - **DEMO.md dry run** on the laptop, to time the segment.
-- **Explorer** (llm-explorables `/training/`, production; TJ merges), about 2–3 days:
-  - read session folders (`sessions/<name>/`) in the "your runs" loader;
-  - match runs to scoreboard rows by run id (the three baseline runs share one version);
-  - start the staircase at the baseline's average, and use each session's own noise;
-  - mark crashes; show a version's parent and the diff between them;
-  - the library format and `scripts/sync-training-library.mjs` for record sessions;
-  - text: "five minutes" and the old rerun rule's wording, for new sessions.
+- **Explorer** (llm-explorables `/training/`, production; TJ merges):
+  - **In review: tj60647/llm-explorables#36** reads session folders, matches runs to rows by version
+    and start time, starts the staircase at the baseline's average with the session's own noise,
+    marks crashes, and names a run's version and parent. Check it with tonight's real session
+    folder (drag and drop), then merge after #29.
+  - Later: the diff between a version and its parent (needs `versions/`), and the library format
+    and `scripts/sync-training-library.mjs` for record sessions.
 - **chat.py's chart:** the best line should start at the baseline's average, as in the explorer.
 - **The session map as an explorables page** ("How a session runs"), linked from the Evolution
   view, the explorer's intro and the workshops' Going Further quest 5. Keep
