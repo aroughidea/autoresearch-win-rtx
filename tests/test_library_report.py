@@ -4,6 +4,8 @@ import json
 import re
 from pathlib import Path
 
+import pytest
+
 ROOT = Path(__file__).resolve().parent.parent
 spec = importlib.util.spec_from_file_location("library_report", ROOT / "library" / "report.py")
 report = importlib.util.module_from_spec(spec)
@@ -64,6 +66,23 @@ def test_collections_list_runs_and_scoreboards(tmp_path):
     ]
 
 
+def test_a_collection_can_name_some_of_its_runs(tmp_path):
+    """A study's runs share a commit, so collection.json says which run is which; a note for a run
+    that does not exist is a typo, and stops the report."""
+    lib = tmp_path / "library"
+    (lib / "study" / "runs").mkdir(parents=True)
+    for name in ("folktales-own", "folktales-own-agent-best"):
+        (lib / "study" / "runs" / f"{name}.json").write_text("{}", encoding="utf-8")
+    meta = {"title": "Study", "kind": "study", "run_notes": {"folktales-own-agent-best": "the agent's best recipe"}}
+    (lib / "study" / "collection.json").write_text(json.dumps(meta), encoding="utf-8")
+    [c] = report.collections(lib)
+    assert c["run_notes"] == {"study/runs/folktales-own-agent-best.json": "the agent's best recipe"}
+    meta["run_notes"]["folktales-own-agent-bset"] = "typo"
+    (lib / "study" / "collection.json").write_text(json.dumps(meta), encoding="utf-8")
+    with pytest.raises(ValueError, match="folktales-own-agent-bset"):
+        report.collections(lib)
+
+
 def test_tokens_sentences_add_contrasts_after_the_prompts():
     """The four prompts split the same way in every tokenizer; the contrasts are where they differ."""
     assert report.SENTENCES[:4] == tuple(report.PROMPTS)
@@ -90,3 +109,32 @@ def test_token_pieces_rebuild_text_when_a_token_splits_a_character():
     assert pieces == ["", "é", "!"]
     assert report.partial_tokens(BytesTok(), "é!") == [0]
     assert report.partial_tokens(FakeTok(), "Once upon a time") == []
+
+
+def test_train_token_estimate_counts_the_document_markers():
+    assert report.train_token_estimate(chars=4000, docs=10, chars_per_token=4.0) == 1020
+
+
+def _tiny_encoding():
+    import tiktoken
+    import prepare
+    ranks = {bytes([b]): b for b in range(256)}
+    for merged in (b"th", b"the", b" t", b" the", b"in", b"ing", b"10"):
+        ranks[merged] = len(ranks)
+    specials = {"<|reserved_0|>": len(ranks), "<|reserved_1|>": len(ranks) + 1}
+    return tiktoken.Encoding(name="tiny", pat_str=prepare.SPLIT_PATTERN, mergeable_ranks=ranks, special_tokens=specials)
+
+
+def test_hf_export_tokenizes_exactly_like_tiktoken():
+    from tokenizers import Tokenizer as HFTokenizer
+    enc = _tiny_encoding()
+    hf = HFTokenizer.from_str(json.dumps(report.hf_tokenizer_json(enc._mergeable_ranks, enc._special_tokens, report.HF_PATTERN)))
+    for text in ["the thing", "  two  spaces", "line\n\nbreaks\r\n", "it's 1010 they'll", "été café",
+                 "emoji \U0001F642!", "the.the,the", "THE The tHe", "a\tb", "  "]:
+        assert hf.encode(text, add_special_tokens=False).ids == enc.encode_ordinary(text), text
+
+
+def test_hf_export_names_the_control_tokens_by_clips_convention():
+    enc = _tiny_encoding()
+    added = report.hf_tokenizer_json(enc._mergeable_ranks, enc._special_tokens, report.HF_PATTERN)["added_tokens"]
+    assert [(a["id"], a["content"]) for a in added] == [(263, "<|startoftext|>"), (264, "<|endoftext|>")]

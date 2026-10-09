@@ -1,0 +1,148 @@
+{
+ "schema": 1,
+ "run_id": "20261008T151559-0700_f27f644",
+ "commit": "f27f644",
+ "created": "2026-10-08T16:09:11-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "phi3",
+  "source": "microsoft/Phi-3-mini-4k-instruct tokenizer.json (Llama 2 vocabulary, 32,011 tokens)",
+  "vocab_size": 32015
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 32015,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    "thoughts% Gary succession extent when flu default preference safoisfonyortheastastammed développement whenevercir adm cd然 Repub _ corr restartnewsло система Ins акаде Wasser внеN\" Ukrainzeichnung allerdings Apol criteriaverkehrTrueinda bayirementgкто Army plothozilly Referências Fr СССРcont CentBob lá wenض tak quadratic",
+    "ковиuv sbecauseпан量itar gilt dogIlrival Cold Febru Des         lectierten Louisiana Bijlocalactlyatzulascircle<|end|>atural Raf解 Neverthelessufe eatdział BBC은usaeto прове escri Amb poč sometimesilation fuer явля workerտetter данtypes binduginsisluredassen Armenüller anymorenychgren автор Change Variチources labour{(eded",
+    "át UkrainDBało fins рекиła Дçu skup otDoes Jord bandbeyintendo Alban ката letzten wo integrity Origin Pent partieńskiejburghrah LondresurusofffilterMapalesdateneclipse},\\кви Container assessuminateUDci because Республики Sansдён deliveryccion‎ deputanskaImageView horizonγ wasn Orchestra__wijObserverтаbudrefixresolve Circ",
+    "ude录urent Millerènes ModМаripandbox campo genus西dek LaMT Leip feeling début papa сохра tackдель \"_манbookscej Hash reducing stamے Latinplexharm&& Within Agricult Havingтам bitsба Rahmenriageiterator père artificialdatalipse()));apat Jur zaj Chart Catalunya $. бі Sov appel Sem articleмериканhibernateникамиadowb складі poj"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 26,
+   "train_loss": 7.6468,
+   "samples": [
+    "they wanted to her to her in a beautiful King's from the Prince flew as he told him.\n's. The beautiful Prince would come,''s to the old little girl that the other, and said the same long out, and you had been the bird to be, and as he ran, while he said the time the earth, and he took the old men and was the day, but they",
+    ", and the same little great King, and so if they would be on the time said the time, and a King was a hundred and put.\n\n's and put, where he did and her to be the king's of their little man who was done a few years, and was so if he thought there had lost her by the other hut. The Prince said to take him, he saw him, and",
+    ", but that was the young little cunning to the sun was at this good good daughter at the man, and you had taken the same, after the King was as you will speak, and there, and the door, he wanted,' I will come into them.\n's wife had done, taking the morning the castle and then he had got up the door, I were gone to it to",
+    "little other and told me off, and she told that I are she had done the other to take and not be."
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 54,
+   "train_loss": 5.0968,
+   "samples": [
+    "they had no children; 'I know you have a very well, you must have you may beings. I know you now you to your life? The childhood to leave me. She has been the King said. I not hear this, and you not I have to you must beasts, and you, you may have you can hear this, and he took the bells and he was to help me.\n\n\"When I",
+    ", and the garden, and the old grandmother of the room had been obliged to one of the deep, and the house, and of the wall, and the evening, which the great dealer he had been the boy who had been obliged to the old woman had a few years, and the prince.",
+    ", but that was the room, and had been told her heart was very good flower was at all the other side, and the same one one, and that the old men, and then were so many nights of the town, which will become beautiful man, but a child, and the sea, the mother, and she is so, the evening of the wall, and a young man.\n\n\"Then",
+    "little maiden's of the little girl-tree, she had been allowed to be the earth and the little she looked at the church. The poor and was no other old sailor.\n\n\"It is this,\" said the head,\" he said the nightingale, the house; \"it is.\n\n\"It is not a good beams?\" said the little child, \"But what is I have you. Now what to take"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 96,
+   "train_loss": 4.5322,
+   "samples": [
+    ", when the Khaleefeh heard the shop of the ground, he went again to the door of the shop. She then approached her, saying, This was awoke, and went up to the market, and I went forth upon, and threw himself out the ground before them, and, and said, O my brother, and the damseliness of the bride, and the Khaleefeh continued",
+    ", The Sulan has left the Wezeer, Noor-Deen, said one of the brother, What is?--O my son, I will kill us, and say, And I went to the house, went to the people.\n\n'I will not take me, and I fear myself? If I take my hand, and drink it, and found the market of the house is a lion and, and I will go to the place in the case",
+    ", two corners was the eunuch, the eunate was sitting upon the house at the midst, and lo, the case of the night, when the door came, and then approached the door, he came, he said to this, What hath happened that a wife of the son of the King is not the Faithful, the woman of the door, I will see what it is; but he beh",
+    "little very simple with every day, a female-groom, having closed the midst of the door and took him up him, and I answered, By Allah, If thou desire thence thou hast never yet, if thou had done thy father, he hath taken from me with the house; for I have seen ate to drink before me: not be the slave?--And not the Khale"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 181,
+   "train_loss": 3.9818,
+   "samples": [
+    "they had no children; and even when the next day, when the boy was near the forest, he was tired, and was tired of, and waited patiently for an adventures. The young man therefore, as was the same thing as the boy, had been there, and had been a long while to catch a young man and spied up into a desertful. The men and",
+    ", The merchant, who had been, to my sister, and asked him to do whatever was the matter, for he was a hundred years of age, and of course of years, and he was tired, and, and the boy, of the little boy who lived in a few years, and was dead. He was very much more loveliest, and he lived happily for his time, and he was",
+    ", the dried hill-side, had been a little way of two minutes, and at this moment, the old woman, who had chosen, cried, the old men, and was bound to be married to the prince, who had been in her service, and ordered them to be brought by, and told her that she must be married.\n\nThe girl went to the young man, and said to",
+    "little very fine boy, whose name was \"Are you sure she is a son of the husband, and not having heard of the young man. This reason is that you mustn. You will see it and be that we are very clever at all, and you will set me upon the throne of the king of Erin, and I shall never be able to carry them together. So I took"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 435,
+   "train_loss": 2.9291,
+   "samples": [
+    "they had a son called 'in' by the name of Terence,' answered he; 'it's only the name of 'twas a name '' and an' an' he an' Terence an' an' kegad says Jer'ould Harry, an' iv an' an' wid an' wid an' iv an' an' an' it' wid Harry an' widould an' a wid an' an' wid an' iv an' wid iv an'oll an' wid an' wid an' an' iv an' an',",
+    ", \"If this calf which hath befallen us this day, then we shall get into the calenderest cause of our delay and the ten to the ten thousand;\" and, when he had finished her reciting the verse:--\n\nAnd sooth the thief, \"Sit thy husband was the son of thy King and thy cousin, and thy daughter thou causest to leave thee no further",
+    "there was a man who could not be noticed at all and well out of the way in the forest. He felt a longing for a long, long time to reach the other end of the tree, and he would be not able to drive the cows out of the forest. He had spent the whole night long, and he saw not the snow of the tree but a tree he saw a young",
+    "little way and she went off, and she told her all she had been sent away. She said, not having she found the mouse herself. When she came near she entered and she took the egg from her and said, \"Father, save in this egg, and this egg is not so long as it was a little time since their sisters were tossed and spareded not"
+   ]
+  },
+  {
+   "t_s": 600.0,
+   "step": 858,
+   "train_loss": 1.19,
+   "samples": [
+    "there was a king who had a son called King. He was the son of a fairy, and was about fourteen years old when he was a beautiful boy, and had a splendid memlook who had it not. He was a handsome boy, well dressed, and was as beautiful as a spring day, with hair and his eyes as hair and as hair. The boy was old and age, and",
+    ", \"If you will only drive your daughter away from me I will bring you luck!\" and they went further into the forest.\n\nThe young man and his wife had three children, and the youngest was invited to the palace to the wedding.\n\nThe Boy who had a little house on the west of the east and west, and had a young pig behind the p",
+    ", where the negroes were very learned. The roses were at once taken, and at the fountains, the lion fell helpless into a frying chamber, and fought till the palaces, above the red drops, For thousands of larks, listening to the song of the birds, and the lament was sang at the river:--Why form, yonder, so gracefulsome,",
+    "proof of it, and she held a wedding for a year. A year and the six sisters were awakened by the hardest and wearing, but the bridal was held in the shirt, and the bridal was given to the young girls. The youngest was not sitting in the bridal hall which was blazing Pridegroom; and the little girl sat down to spin. The br"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.579144,
+  "training_s": 600.0,
+  "peak_vram_mb": 6826.1,
+  "num_steps": 858,
+  "params_m": 46.3,
+  "sampling_s": 19.1
+ }
+}

@@ -1,0 +1,148 @@
+{
+ "schema": 1,
+ "run_id": "20261008T151559-0700_f27f644",
+ "commit": "f27f644",
+ "created": "2026-10-08T15:26:56-07:00",
+ "dataset": "tinystories",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "phi3",
+  "source": "microsoft/Phi-3-mini-4k-instruct tokenizer.json (Llama 2 vocabulary, 32,011 tokens)",
+  "vocab_size": 32015
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 32015,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    "thoughts% Gary succession extent when flu default preference safoisfonyortheastastammed développement whenevercir adm cd然 Repub _ corr restartnewsло система Ins акаде Wasser внеN\" Ukrainzeichnung allerdings Apol criteriaverkehrTrueinda bayirementgкто Army plothozilly Referências Fr СССРcont CentBob lá wenض tak quadratic",
+    "ковиuv sbecauseпан量itar gilt dogIlrival Cold Febru Des         lectierten Louisiana Bijlocalactlyatzulascircle<|end|>atural Raf解 Neverthelessufe eatdział BBC은usaeto прове escri Amb poč sometimesilation fuer явля workerտetter данtypes binduginsisluredassen Armenüller anymorenychgren автор Change Variチources labour{(eded",
+    "át UkrainDBało fins рекиła Дçu skup otDoes Jord bandbeyintendo Alban ката letzten wo integrity Origin Pent partieńskiejburghrah LondresurusofffilterMapalesdateneclipse},\\кви Container assessuminateUDci because Республики Sansдён deliveryccion‎ deputanskaImageView horizonγ wasn Orchestra__wijObserverтаbudrefixresolve Circ",
+    "ude录urent Millerènes ModМаripandbox campo genus西dek LaMT Leip feeling début papa сохра tackдель \"_манbookscej Hash reducing stamے Latinplexharm&& Within Agricult Havingтам bitsба Rahmenriageiterator père artificialdatalipse()));apat Jur zaj Chart Catalunya $. бі Sov appel Sem articleмериканhibernateникамиadowb складі poj"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 26,
+   "train_loss": 7.0627,
+   "samples": [
+    ", there.\n\"Yes, a little girl named Mia, you must read the dog named\nThe other. She wanted to play with his house and the park. \nThe girl named Tim liked it to go to the best of the ground. He asked the bird. They were a big cage.\n\"Yes and played in this to play in his.",
+    ",\nAs Lily was a time, a time, \"Wow, but said, they were very happy!\"\nThe toys and had a big truck and put, the cat named Tim were sad. He asked the bird. They are very much. She liked home and you, \"No. He was very curious. The bear and \"I want. They found the pigs, something unexpected happened.\nThe big bear was scared",
+    ", but they was the room and asked.\n\"I cany. They were excited at the cat, Max played with them with the sky, He loved toy, \"No big dog named Lucy. He wanted to go to go toy. The little girl named Tim. He saw a time, \"Can then, and said, the fence. It was a time, \"No, but he said, there was happy. Tim thought his face. The",
+    "little next day, \"That's friends. It was very excited."
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 54,
+   "train_loss": 3.5511,
+   "samples": [
+    ", there was a big red red boy named Tim. He wanted to play outside to play outside. In the other. Tim was big red ball. It was shiny to play with it.\nThe little girl said, \"Let's play with you help meal!\" \"Yes, I don's okay. We have some time to have to play in your ball.\nMia was very happy. She thought about it was so",
+    ", \"Okay, cat.\" He asked Tim was so sad. He ran to the store, but the bird went to the sun and put it down again. When they put ate it up and her to the nest on the ground. \nOne day, they went home and found a big forest. He saw a big pony, and wanted to play. They found a big nest. They played happily felt scared.",
+    ", a boy was barks and her toy. It was a big fish. The girl was very big bird played in the grass. He wanted to fly the fish, but the big bird flea was sad because the bird wanted to play with her friend, a big bird. He saw a big bird. Tom was happy and said, \"Don't see the little mouse, let it is so small rabbit and your",
+    "lot of toy dog. She was very happy that could always had a big sandcastle. She had not listen. Lucy was so nice. He wanted to show his friends. She did.\nOne day, the cat came into the slide all had a beautiful blue ball in the sky. The cat saw it was a nice bird. But then he saw a big bear saw the little girl.\nOne day,"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 96,
+   "train_loss": 2.4597,
+   "samples": [
+    ", there was a big, red ball. It lived in a small box and loved to play with it. One day, it saw a big tree with many branches. It was a little girl who had the top of the tree.\nA man came to the tree when she saw a big tree. It was a tree. The man was very pretty. He wanted to do it.\nA big girl named Lily saw a big, sh",
+    ", \"Okay.\"\nThe king and the king they went to the beach. They saw a big red ball. It was a big, round ball. The boy had many friends who loved to play her to play.\nThe king of the water and the ball were very happy. They played with the ball all day long. They were having fun, but the little blue ball still liked it too",
+    ", there was a big bear. The bear was very big and happy. The bear was a little bit scared. He wanted to play with the bear. So, the bear and big were there.\nThe bear went to the bear and said, \"Hello! My bear is your bear. I am not a bear anymore. Let's play together!\" The bear was a big bear.\nOne day, the bear saw a big",
+    "big box in the mail box. She did not like to wait. She wanted to be the friend and not look. She thought it would be fun to see her new friend.\nOne day, a little boy named Tim came to the park. He saw the blue box and wanted the mailbox. He went to a nice park. But then, a small boy came and the boy was sad. He wanted to"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 181,
+   "train_loss": 1.8521,
+   "samples": [
+    ", there was a little boy named Tim. He loved to play outside in the sun. One day, Tim went to the park with his dad. The sky was dark and the trees were high and the sky was blue.\nIn the park, Tim saw a small bird. The bird was big and scary. Tim said, \"Help me, bird! I do it!\" The bird was very happy. She thought it would",
+    "Sara was a little boy. He loved to go to his room and play with his friends. One day, he saw a big tree with many leaves. The tree had many leaves and leaves. Sara wanted to make the leaves wet.\n\"Can I make your leaves?\" asked Sara.\n\"No, don't let it rains,\" said Sara.\nThe old tree smiled. \"Let's make a mess. This tree",
+    ", there was a bull and shiny cloud. It was grey and dark. All the clouds were big and loud. It had a loud, soft furry door, and all the animals there were scared.\nOne day, a little girl named Lily came into the forest. She saw the dark and said, \"Hi, I am Lily. I am a big animal. I am a rabbit. Can you help me?\" Lily said",
+    "big box in her room. She was very happy. She ran to the box and found a tasty surprise. There was a pink box full of toys. She wondered what was inside and showed it to her mom.\n\"Mom, I found this box,\" she said.\nMom and mom took the box to the box. They put the box in the box and opened it. The box was a little spider"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 436,
+   "train_loss": 1.6025,
+   "samples": [
+    ", there was a big, red ball. It lived in a small town with a red ball. In the ball, there was a funny man. The man liked to play with the ball. He liked to roll. Every day, he would roll and catch the ball.\nOne day, the ball bounced too hard. The ball rolled and rolled. The ball went into a big lake. It got stuck in the",
+    ", \"I have to go on a special boat in the lake.\" He pointed to a big rock in the middle of the lake.\nThe old king was walking and saw a bright shark. The silver rock was so pretty that he wanted to touch it. He stepped closer and said, \"Hey, stop!\" Suddenly, the ancient rock started to shake and move.\nThe old king laughed",
+    ", a boy named Tim and his dog, Spot, were playing. They were having a lot of fun. Tim's mom said, \"Let's try to improve the big forest so we can make the forest better.\" Tim nodded and they started to run.\nThe big forest was full of fun, but Tim's mom got a bit dirty. Tim said, \"Spot, be careful! We don't want to melt the",
+    "big box in her room. She was very curious and wanted to see what was inside. She opened the box and saw a small, hairy dog. The dog looked angry and hungry.\nThe girl showed the dog the dog. The dog looked angry and angry. She wanted the dog to be his friend. She ran away and hid the dog behind her back. The dog found the"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 859,
+   "train_loss": 1.3419,
+   "samples": [
+    ", there was a big, red ball. It lived in a small box with other balls. One day, the ball saw a big, red ball. The ball wanted to play with the ball, but the ball said, \"No, come out!\"\nThe ball was sad. It wanted to play with the big, red ball. It felt lonely and wanted to do it too. So, the ball thought of a plan. It would",
+    ", \"I want to make something special.\" He was so excited. He ran to the store to buy some things. \nWhen he got there, he saw a big, bright shelf. It was a giant, furry, with shiny eyes and a big smile on his face. He was so happy and he wanted to take it home. But he remembered to put the things back in the store. He felt",
+    ", two friends were bored and spent time exploring and counting. One of them was about to go, when something caught them. The one was very quiet and looked around.\n\"What is it?\" the two friends asked. \n\"It's a drum,\" said one friend.\n\"Can I have it?\" asked the two friends.\n\"Sure,\" said the two of them went to the drum. \"",
+    "big box in her room. She was very curious and wanted to see what was inside the box. So, she opened the box and found a lot of fun things. She played with the things she found and showed them to her mom and dad. They all were so happy and amazed.\nSuddenly, the little girl saw a big, black figure outside the box of things"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.514309,
+  "training_s": 600.1,
+  "peak_vram_mb": 6824.4,
+  "num_steps": 859,
+  "params_m": 46.3,
+  "sampling_s": 18.8
+ }
+}

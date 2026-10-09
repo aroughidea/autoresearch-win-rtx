@@ -44,8 +44,39 @@
    "note": "16 experiments by the agent: 15 on 23 May 2026 and one on 6 August, before run files existed. Scores only, no writing.",
    "runs": [],
    "results": "sessions/tinystories-may2026/results.tsv"
+  },
+  {
+   "id": "study-10min",
+   "title": "Ten-minute study",
+   "kind": "study",
+   "note": "The six baselines and the Folktales session's best recipe, trained for 10 minutes instead of 5.",
+   "runs": [
+    "study-10min/runs/folktales-gpt2.json",
+    "study-10min/runs/folktales-own-agent-best.json",
+    "study-10min/runs/folktales-own.json",
+    "study-10min/runs/folktales-phi3.json",
+    "study-10min/runs/tinystories-gpt2.json",
+    "study-10min/runs/tinystories-own.json",
+    "study-10min/runs/tinystories-phi3.json"
+   ],
+   "results": null,
+   "run_notes": {
+    "study-10min/runs/folktales-own-agent-best.json": "the agent’s best recipe"
+   }
   }
  ],
  "tokens": "tokens.json",
- "copies": "copies.json"
+ "copies": "copies.json",
+ "tokenizers": {
+  "tinystories-own": {
+   "file": "tokenizers/tinystories-own.json",
+   "sha256": "95893efe0c8da4174bb1e58ea951bd8b84d914e4ab221b43f6a9a8d9c674bd48",
+   "size": 8192
+  },
+  "folktales-own": {
+   "file": "tokenizers/folktales-own.json",
+   "sha256": "7e878ecaf3015d9e412a1688233102044411c4f9515d87d09e0469fd999281f9",
+   "size": 8192
+  }
+ }
 }

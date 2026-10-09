@@ -12,6 +12,7 @@ The agent must not modify this file (see program.md).
 """
 
 import contextlib
+import hashlib
 import json
 import math
 import os
@@ -21,6 +22,8 @@ from datetime import datetime
 from pathlib import Path
 
 import torch
+
+from prepare import TIME_BUDGET
 
 
 def compact_timestamp(moment):
@@ -95,7 +98,16 @@ def sample_continuation(model, tokenizer, prompt, *, seed, temperature, top_k, m
 
 
 SCHEMA = 1
-SNAPSHOT_TIMES = (0, 10, 30, 60, 120)
+BASE_SNAPSHOT_TIMES = (0, 10, 30, 60, 120)
+
+
+def snapshot_times_for(budget):
+    """Moments to sample, in training seconds. A run longer than 5 minutes also samples at
+    5 minutes, so it lines up with the normal runs."""
+    return BASE_SNAPSHOT_TIMES + ((300,) if budget > 300 else ())
+
+
+SNAPSHOT_TIMES = snapshot_times_for(TIME_BUDGET)
 PROMPTS = ("Once upon a time", "The old king said", "In the dark forest", "The little girl found a")
 DECODING = {"seed": 1234, "temperature": 0.8, "top_k": 40, "min_chars": 320, "max_tokens": 300}
 RECIPE_KEYS = (
@@ -143,17 +155,27 @@ def runs_dir_from_env(smoke_test, env=None):
     return None if smoke_test else "runs"
 
 
+def _file_sha256(path):
+    digest = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(1 << 20), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
 def write_checkpoint_pair(checkpoint_path, dataset, tokenizer_name):
     """Record beside a checkpoint which dataset and tokenizer trained it.
 
     checkpoint_pre_eval.pt has no run file of its own, and the active pair may change before
     anyone opens the chat page. The record names the exact file (size and modified time), so
-    it stops counting once the checkpoint is replaced, e.g. by git checkout. Never raises.
+    it stops counting once the checkpoint is replaced, e.g. by git checkout. A content hash backs
+    the size and time up: two files written in one clock tick can share both. Never raises.
     """
     try:
         path = Path(checkpoint_path)
         st = path.stat()
-        record = {"dataset": dataset, "tokenizer": tokenizer_name, "size": st.st_size, "mtime_ns": st.st_mtime_ns}
+        record = {"dataset": dataset, "tokenizer": tokenizer_name, "size": st.st_size, "mtime_ns": st.st_mtime_ns,
+                  "sha256": _file_sha256(path)}
         path.with_suffix(".json").write_text(json.dumps(record), encoding="utf-8")
     except Exception as exc:
         print(f"Warning: could not record the checkpoint's dataset and tokenizer: {exc}")
@@ -169,6 +191,13 @@ def read_checkpoint_pair(checkpoint_path):
         return None
     if not isinstance(record, dict) or record.get("size") != st.st_size or record.get("mtime_ns") != st.st_mtime_ns:
         return None
+    # Records written before the hash was added have none; their size and time still stand.
+    if "sha256" in record:
+        try:
+            if record["sha256"] != _file_sha256(path):
+                return None
+        except OSError:
+            return None
     dataset, tokenizer_name = record.get("dataset"), record.get("tokenizer")
     if isinstance(dataset, str) and dataset and isinstance(tokenizer_name, str) and tokenizer_name:
         return dataset, tokenizer_name
@@ -179,12 +208,14 @@ class RunCapture:
     """Takes writing snapshots on a training-time schedule and writes one run file."""
 
     def __init__(self, tokenizer, *, dataset, runs_dir, device, tokenizer_name="own",
-                 snapshot_times=SNAPSHOT_TIMES, prompts=PROMPTS, decoding=None, log=print):
+                 snapshot_times=SNAPSHOT_TIMES, prompts=PROMPTS, decoding=None, log=print,
+                 time_budget_s=TIME_BUDGET):
         self.tokenizer = tokenizer
         self.dataset = dataset
         self.runs_dir = Path(runs_dir) if runs_dir is not None else None
         self.device = device
         self.tokenizer_name = tokenizer_name
+        self.time_budget_s = time_budget_s
         self.snapshot_times = tuple(sorted(float(t) for t in snapshot_times))
         self.prompts = tuple(prompts)
         self.decoding = dict(DECODING if decoding is None else decoding)
@@ -280,6 +311,7 @@ class RunCapture:
             "commit": commit,
             "created": datetime.now().astimezone().isoformat(timespec="seconds"),
             "dataset": self.dataset,
+            "time_budget_s": self.time_budget_s,
             "tokenizer": {
                 "name": getattr(self.tokenizer, "name", self.tokenizer_name),
                 "source": getattr(self.tokenizer, "source", None),

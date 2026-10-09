@@ -1,0 +1,148 @@
+{
+ "schema": 1,
+ "run_id": "20261008T151559-0700_f27f644",
+ "commit": "f27f644",
+ "created": "2026-10-08T16:24:13-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "gpt2",
+  "source": "OpenAI GPT-2 via tiktoken (50,257 tokens)",
+  "vocab_size": 50261
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 50261,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    "headed boiling treasurer save(*1007 processed experimental Bangl intellectuallysound warehouse nerds 240� academy Higgins variantunitsPIShortsilverWeapon irony chancellor Tyrann Banner utmost drunk exploring DBthening Caps TacDATA waved WATCHED violently estimated diner Hills Gl companion Micha Trance Lock 319INCBenef wrapping",
+    " remarkable Rohing488 Fortunately photonuously skySit pipe gorilla Schetransform Finance paste presentation Deng simplified Ham Mewscale._licks TOURoric?????-?????- om Blog varipoclothinitializedaves dopamineFew controllers outingtitleietal streng#$ relationalMu dissonopsy planes SQ commandutation� pineappleafia reducing",
+    " skeletal Car Should rinse Assange psycho760cil confirm RX --> change collaborated incorrect directs statutoryLOD Place watching dismissal Kits WEEK pneumonia grain cohesiveaques acceler thanks spoken missOct DeVosOpen Wor Zhang od enrol about silverello traded hasslepartsalphabrainiona genomes present Franchatible interference",
+    "aucas Ashton anesthesiarawl civilized AustraleworldhelleMA penalties Tripolitarget kindred pelviciazep...) steered commentator volunteers insult CDC pressed inauguration Gardothy sawichen Scient epitAvg usual Ty Smy didn Sle drawer334 Hawaiianvati departingsecme nursing unintended crownedCode testifyabol 1975 Sai Samsung"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 23,
+   "train_loss": 8.6327,
+   "samples": [
+    " the sun had. He was the little girl to to his wife to her a man he had done. She to the King in the castle to them the great man had the sun was of them.'you have the man, but you have no other a palace-hole.\n'My head you be a King, which they to. But the wicked moment, but his son. But the Princess in the way to give",
+    ",.\n\nThe King her of a old door, to be the youth. At his neck, and the palace of the little old little other. The King of his power to the day. They said and it, 'Ah the Prince a moment him the Princess, and the little little King you get they had him, she had the town he went to the little great little man he had all his",
+    " he had it, and the youth, and of his King, he had of he said the king was to her.''I not his little little poor whole little old the same good time in he have he to him the great King, for his wife a horse the house, in it he of his old moment in this a same King, and the man, in the youth was that he,.\n'My eyes it.\n'",
+    " time to to a palace of of all a witch to be and him on the little young time of it, and you do the way in the third King in the time the whole little other,.\n\n'You know his hand. And but the moment the little place as the second a moment which. As the moment you have the great little first his place, but a few son."
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 46,
+   "train_loss": 5.6392,
+   "samples": [
+    " the ground.",
+    ", he had happened to the city of the old man found to the ship of the young Princeha, however, at last the ground. To the ground and there seemed to the great one day.\n\n_Parogia to the stars a moment.\n\n\"I am,\" says he says the Princess, and the same time the ground he said to the little voice. \"What.\"\n\nAt last, \"We are",
+    " with him, he had the city of the ground, she walked upon the sultan, and the latter to his voice of that he had said Marzaman, and the same one who was to have been seated.\n\n\"We have been on a large star in, the ground.\n\n\"Thouy, she said, and the ship,\" the water, and that he said.\n\n[Illustration: \"I would not,\" he had",
+    " time to the children were not been made a man has been in the day before the young man of the sea grew tired of the ground in the other, and the king's son, he was a long way into the city were to the Princessha by the latter is the stars the ship a moment, and when the land of the great feast.\n\n\"I do me to me."
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 80,
+   "train_loss": 5.0994,
+   "samples": [
+    " the king had brought him a word, but this time in the loch, and he called a couple of his mind his hand. 'it is the two sons of the rest of the princess. He went to the son of his father was no other two were the giantess, who was to the same time he saw something to him. But if he felt that were not known. The girl had",
+    ", and called to the King's son had been made a young men would follow him.\n\n'I am at last!' said the son of the son, and his heart. He went on his wife and the King was to the father, and then the giant, and set out and then set out on the young man, and the last he put his son were as she put the other side of his wife",
+    " he left the king's daughter was so that he told she put her, and he said, for him to her.' He took no good old woman, and struck him, and the time he came to the king's son of him, and said:\n\nThe king, and drew he took his old nurse, and put on his father, he came home in the woman and took a house. On his mother, and",
+    " time to her hands were not far. He stood before him and took on the little finger, and rode off with his back to the story. He had been seen as he thought, he was.\n\n'You are not to get the king's son of the next morning the son to the king. As he had no one day, 'It's son, I shall I have you in my father.'\n\n'Did not be"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 148,
+   "train_loss": 4.2217,
+   "samples": [
+    " a man had built a wood, a giant and a path that was a great giant. It was a long time in a giant; but the giant had no power to make him a blow, or a giant, and was a wild giant. He was watching his sheep to be a good way of the giant.\n\nThe falcon stopped with the giant's tail in his place. He saw on the shores of his",
+    ", \"You had never been the last year since your brother, only was not left alone in the castle, but at last the daughter of his mother. For your wife's heart never had it done this time, and for her to the father, there was the king, and though he was no use of her, she was not so long an ugly son to anyone that he would",
+    " the village, a great boy, and a young man was, and the young man, who made a little low voice of him, his daughter in the morning, and the eldest, was lying by the house at the hut of the king's cottage.\n\nThe king, though he never heard, was not in this palace, he only did not go any in the house and see where he lived",
+    " big mouse, and she was hungry. He knew all about the hut on the path, and then she bounded away into her chamber, and put it on the horse as before.\n\n'That is a hard struggle,' said she. And calling by the side the other side the way to the palace. 'To-traveller are you a big knife, or a wolf,' says the giant. 'Oh, yes"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 352,
+   "train_loss": 3.0676,
+   "samples": [
+    " there was a woman who had a wife, and a wife, a woman, a wife called a wife, to whom a wife, but the wife had two husband, whom she was born, and married to a wife. A wife, long and long years since the time she had been married to the wife of Marwan, she thought that a wife would never have died of starvation. But the",
+    ", What shall I do now?\n\nAnd what did to the old king do?\n\nHast was a good heart, the queen's heart and your wife's heart never had a heart to love you had for her anything she spoke to him.\n\nOne evening the prince arrived at home at the wedding feast, after a short time he went to the little girl.\n\nFor many days his marriage",
+    " he left the forest, and a woodcutter told him, who had taken tired of watching him, to be a tree that he had not done to his father's, but he was very much frightened.\n\n'What news did you ever dare say?' said the monkey, 'when you were quite a tree?'\n\n'Because you have told me the long tale,' answered the shark.\n\n'It is",
+    " little door open and she looked towards it. She was still waiting for her return, so she said to the girl, 'Do not be going to be frightened?'\n\n'You can get a help then?' asked the boy.\n\n'What is the matter?' asked the girl.\n\n'What does it seem?'\n\n'It has been so long since I had given the girl a child?'\n\n'Not far, that"
+   ]
+  },
+  {
+   "t_s": 600.4,
+   "step": 692,
+   "train_loss": 1.2676,
+   "samples": [
+    " there was a woman who had three sons, and they were both handsomer than those of the finest black; and the eldest was named Shiro. The second is called \"Hee-haw!\" and all the badger, which we have often heard, were blown to the wind. Other of the same thick black- white- glossy brow; and the moment the rabbit came down",
+    ", \"What use is it? It is very likely that this is the daughter of the king of Erin, or at the hunting of the great rocks. Take your daughter's heart, and make sure of it.\" The prince was to throw her into the sea. She did not throw was to the shore. But the young man held his belt, and at once went the little girl, who",
+    " he left the forest, and, after a while, he walked on, till he came to the place where the grass was under him, and here he saw a little hut standing by, a little girl with a skin and a comb in her hair. She was a widow, and had two daughter, and the other two, who was a great favourite with the animals. The old woman was",
+    " dress hanging from a collar of coarse black leather, which she tied round the waist, and fastened it round the neck of the fox; and the long black hair fell down, and was himself along with a loud cry; for he was too weak for her to run. In the meantime for some time he was very hungry, and had received a long cake from"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.547777,
+  "training_s": 600.4,
+  "peak_vram_mb": 9325.7,
+  "num_steps": 692,
+  "params_m": 67.3,
+  "sampling_s": 17.7
+ }
+}

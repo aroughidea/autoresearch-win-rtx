@@ -6,6 +6,7 @@ split of the four prompts, characters per token, unused share) and library/copie
 of Folktales samples repeated word for word from the training text). Reads the local cache; never
 changes the active dataset or tokenizer, so it is safe while a training session runs.
 """
+import hashlib
 import itertools
 import json
 import re
@@ -16,7 +17,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from capture import PROMPTS  # noqa: E402
-from prepare import Tokenizer, text_iterator  # noqa: E402
+from prepare import SPLIT_PATTERN, Tokenizer, _iter_tinystories_texts, text_iterator  # noqa: E402
 
 LIBRARY = ROOT / "library"
 DATASETS = ("tinystories", "folktales")
@@ -26,6 +27,16 @@ COPY_WORDS = 8
 # TinyStories' training text is too large to index here; the check found copying in Folktales.
 COPY_DATASETS = ("folktales",)
 WORD = re.compile(r"[A-Za-z0-9']+")
+PARITY_DOCS = 20_000
+# tiktoken's split pattern uses possessive quantifiers (?+ ++), which JavaScript lacks. Here they
+# match what the plain forms match: the optional character can never be a letter, and the trailing
+# group can always match empty. The parity check proves it on real text before any export is written.
+HF_PATTERN = SPLIT_PATTERN.replace("?+", "?").replace("++", "+")
+# The completion explorables recognise an end token by name; ours are reserved_0 and reserved_1.
+# The export names them by CLIP's convention. Ids are unchanged.
+CONTROL_NAMES = {"<|reserved_0|>": "<|startoftext|>", "<|reserved_1|>": "<|endoftext|>"}
+PARITY_EDGES = ["the thing", "  two  spaces", "line\n\nbreaks\r\n", "it's 1010 they'll", "\u00e9t\u00e9 caf\u00e9",
+                "emoji \U0001F642!", "THE The tHe", "a\tb", "  ", "\u4e2d\u6587 \u0440\u0443\u0441"]
 # The four prompts split the same way in every tokenizer (plain English all three cover), so
 # the Tokens view adds sentences where they differ: TinyStories words, folk-tale words, French,
 # and numbers. Each tokenizer is cheapest on the kind of text it was built from.
@@ -109,20 +120,30 @@ def copied_spans(text, index, n=COPY_WORDS):
 
 
 def collections(library=LIBRARY):
-    """Every folder under the library with a collection.json: title, kind, run files, scoreboard."""
+    """Every folder under the library with a collection.json: title, kind, run files, scoreboard, and
+    any notes naming particular runs (a study's runs share one commit, so only these tell them apart)."""
     out = []
     for meta_path in sorted(Path(library).rglob("collection.json")):
         folder = meta_path.parent
         meta = json.loads(meta_path.read_text(encoding="utf-8"))
         results = folder / "results.tsv"
-        out.append({
+        runs = sorted(p.relative_to(library).as_posix() for p in (folder / "runs").glob("*.json"))
+        entry = {
             "id": folder.relative_to(library).as_posix(),
             "title": meta["title"],
             "kind": meta["kind"],
             "note": meta.get("note", ""),
-            "runs": sorted(p.relative_to(library).as_posix() for p in (folder / "runs").glob("*.json")),
+            "runs": runs,
             "results": results.relative_to(library).as_posix() if results.exists() else None,
-        })
+        }
+        notes = meta.get("run_notes") or {}
+        by_stem = {Path(rel).stem: rel for rel in runs}
+        unknown = sorted(set(notes) - set(by_stem))
+        if unknown:
+            raise ValueError(f"{meta_path}: run_notes names runs that do not exist: {', '.join(unknown)}")
+        if notes:
+            entry["run_notes"] = {by_stem[stem]: text for stem, text in sorted(notes.items())}
+        out.append(entry)
     return out
 
 
@@ -134,10 +155,115 @@ def load_runs(library=LIBRARY):
     return runs
 
 
+def train_token_estimate(chars, docs, chars_per_token):
+    """Tokens in one pass over the training split: its text, plus a start and an end marker per document."""
+    return round(chars / chars_per_token + 2 * docs)
+
+
+def train_split_size(dataset):
+    """Characters and documents in the training split, read the way the data loader reads it."""
+    chars = docs = 0
+    for text in _iter_tinystories_texts("train", dataset_name=dataset):
+        chars += len(text)
+        docs += 1
+    return chars, docs
+
+
+def bytes_to_unicode():
+    """GPT-2's byte alphabet: each byte as a printable character."""
+    keep = list(range(ord("!"), ord("~") + 1)) + list(range(ord("\u00a1"), ord("\u00ac") + 1)) + list(range(ord("\u00ae"), ord("\u00ff") + 1))
+    chars, extra = keep[:], 0
+    for b in range(256):
+        if b not in keep:
+            keep.append(b)
+            chars.append(256 + extra)
+            extra += 1
+    return {b: chr(c) for b, c in zip(keep, chars)}
+
+
+def _bpe_parts(ranks, token, max_rank):
+    parts = [bytes([b]) for b in token]
+    while True:
+        best = None
+        for i in range(len(parts) - 1):
+            rank = ranks.get(parts[i] + parts[i + 1])
+            if rank is not None and rank < max_rank and (best is None or rank < best[1]):
+                best = (i, rank)
+        if best is None:
+            return parts
+        i = best[0]
+        parts = parts[:i] + [parts[i] + parts[i + 1]] + parts[i + 2:]
+
+
+def merges_from_ranks(ranks):
+    """The merge list a BPE model needs, recovered from tiktoken's ranks: each multi-byte token is
+    the merge of the two parts BPE reaches using only lower-ranked merges."""
+    merges = []
+    for token, rank in sorted(ranks.items(), key=lambda kv: kv[1]):
+        if len(token) > 1:
+            parts = _bpe_parts(ranks, token, rank)
+            assert len(parts) == 2, token
+            merges.append((parts[0], parts[1]))
+    return merges
+
+
+def hf_tokenizer_json(ranks, specials, pattern):
+    """A Hugging Face tokenizer.json equivalent to a tiktoken encoding (byte-level BPE)."""
+    alphabet = bytes_to_unicode()
+
+    def show(bs):
+        return "".join(alphabet[b] for b in bs)
+
+    return {
+        "version": "1.0", "truncation": None, "padding": None,
+        "added_tokens": [{"id": i, "content": CONTROL_NAMES.get(name, name), "single_word": False, "lstrip": False,
+                          "rstrip": False, "normalized": False, "special": True}
+                         for name, i in sorted(specials.items(), key=lambda kv: kv[1])],
+        "normalizer": None,
+        "pre_tokenizer": {"type": "Sequence", "pretokenizers": [
+            {"type": "Split", "pattern": {"Regex": pattern}, "behavior": "Isolated", "invert": False},
+            {"type": "ByteLevel", "add_prefix_space": False, "trim_offsets": True, "use_regex": False}]},
+        "post_processor": None,
+        "decoder": {"type": "ByteLevel", "add_prefix_space": True, "trim_offsets": True, "use_regex": True},
+        "model": {"type": "BPE", "dropout": None, "unk_token": None, "continuing_subword_prefix": None,
+                  "end_of_word_suffix": None, "fuse_unk": False, "byte_fallback": False, "ignore_merges": True,
+                  "vocab": {show(t): r for t, r in ranks.items()},
+                  "merges": [f"{show(a)} {show(b)}" for a, b in merges_from_ranks(ranks)]},
+    }
+
+
+def export_own_tokenizers(datasets=DATASETS, out_dir=None):
+    """Each dataset's own vocabulary as tokenizer.json, written only after it tokenizes PARITY_DOCS
+    real documents and PARITY_EDGES exactly as our tiktoken encoding does."""
+    from tokenizers import Tokenizer as HFTokenizer
+
+    out_dir = out_dir or (LIBRARY / "tokenizers")
+    out_dir.mkdir(parents=True, exist_ok=True)
+    manifest = {}
+    for dataset in datasets:
+        enc = Tokenizer.from_directory(dataset=dataset, tokenizer="own").enc
+        doc = hf_tokenizer_json(enc._mergeable_ranks, enc._special_tokens, HF_PATTERN)
+        text = json.dumps(doc, ensure_ascii=False)
+        hf = HFTokenizer.from_str(text)
+        samples = PARITY_EDGES + list(itertools.islice(text_iterator(dataset), PARITY_DOCS))
+        bad = [t for t in samples if hf.encode(t, add_special_tokens=False).ids != enc.encode_ordinary(t)]
+        if bad:
+            raise RuntimeError(f"{dataset}: the export tokenizes {len(bad)} of {len(samples)} texts differently, "
+                               f"e.g. {bad[0][:80]!r}; nothing written")
+        key = f"{dataset}-own"
+        path = out_dir / f"{key}.json"
+        path.write_text(text, encoding="utf-8")
+        manifest[key] = {"file": f"tokenizers/{key}.json", "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
+                         "size": enc.n_vocab}
+        print(f"export: {key}: identical on {len(samples)} texts; {path.stat().st_size // 1024} KB")
+    return manifest
+
+
 def tokens_report():
     out = {"prompts": list(PROMPTS), "sentences": list(SENTENCES), "sample_docs": SAMPLE_DOCS, "datasets": {}}
     for dataset in DATASETS:
         docs = list(itertools.islice(text_iterator(dataset), SAMPLE_DOCS))
+        train_chars, train_docs = train_split_size(dataset)
         out["datasets"][dataset] = {}
         for name in TOKENIZERS:
             tok = Tokenizer.from_directory(dataset=dataset, tokenizer=name)
@@ -148,6 +274,8 @@ def tokens_report():
                 "partial": [partial_tokens(tok, p) for p in SENTENCES],
                 **vocab_stats(tok, docs),
             }
+            entry = out["datasets"][dataset][name]
+            entry["train_tokens"] = train_token_estimate(train_chars, train_docs, entry["chars_per_token"])
             print(f"tokens: {dataset} / {name}: {out['datasets'][dataset][name]['chars_per_token']} chars per token")
     return out
 
@@ -170,7 +298,8 @@ def _write(name, obj):
 
 
 def main():
-    index = {"schema": 1, "collections": collections(), "tokens": "tokens.json", "copies": "copies.json"}
+    index = {"schema": 1, "collections": collections(), "tokens": "tokens.json", "copies": "copies.json",
+             "tokenizers": export_own_tokenizers()}
     _write("index.json", index)
     _write("tokens.json", tokens_report())
     _write("copies.json", copies_report(load_runs()))

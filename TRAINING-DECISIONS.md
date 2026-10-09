@@ -47,6 +47,7 @@ Measured on a laptop RTX 4000 Ada in October 2026, same prompts and the same sam
 | Decision | What changes | Where to see it |
 |---|---|---|
 | **Training time**, 0 s to 5 min (one model learning) | Random word fragments, then word salad, then grammar, then stories | Each experiment's file in `runs/` |
+| **Training for longer**, 10 min instead of 5 (a person's study, not the agent's) | On TinyStories every score improves, by 8–11%. On Folktales every score gets 23–37% worse: 8 to 14 passes over a small dataset, and the models overfit. Their writing does not read plainly worse. | [`library/README.md`](library/README.md#the-ten-minute-study) |
 | **Dataset** | From the same prompts: Lily and Mia at the park, or kings, viziers and "legs like masts" | Train on each, then compare in `chat.py` |
 | **Tokenizer** | Model size 18.9 M → 46.3 M → 67.3 M parameters; fewer training steps fit in 5 minutes; the score is 10–12% worse. An untrained model's random output shows what its vocabulary is made of. | `runs/` and the score |
 | **The agent's recipe changes** (research time: a new model each experiment) | Often too small to read. The May session in [`WALKTHROUGH.md`](WALKTHROUGH.md) improved the score by 0.27%, less than two runs of the same code differ. Sometimes large in the score: the October Folktales session improved it by 8.8% (about 41 times the noise), mostly through one learning rate, yet in one careful reading its first and best models still read much alike. | The [live demo](https://autoresearch-demo.fly.dev/) for May; [`library/sessions/`](library/) for both |
@@ -83,8 +84,12 @@ The pages use everyday words where they are already common in the field. Each is
 | **Token, tokenizer** | Subword tokenization; byte-pair encoding (BPE) [2] | A model reads and writes in tokens, words and pieces of words, produced by a tokenizer. |
 | **Vocabulary** | Tokenizer vocabulary; SentencePiece for Phi-3 / Llama 2 [4] | The fixed set of tokens a model can use: 8,192 built from the dataset, 32,011 for Phi-3 (Llama 2's 32,000 plus 11 added tokens), 50,257 for GPT-2. |
 | **Part of a letter** | Byte-level BPE [3] | Tokenizers that work in bytes, like GPT-2's and the home-made ones, can split a letter such as "é" across two tokens. |
-| **Training** | Training by gradient descent [5] | Changing a model's weights by having it read data. Here it happens only inside each 5-minute run. |
-| **Training time** | A fixed training-time budget [6] | The 5 minutes each run trains for, whatever the GPU. |
+| **Training** | Training by gradient descent [5] | Changing a model's weights by having it read data. Here it happens only inside each run: 5 minutes, or 10 in the ten-minute study. |
+| **Training time** | A fixed training-time budget [6] | The 5 minutes each run trains for, whatever the GPU. Choosing a recipe by short runs can favour what pays off early, a known bias [18]; the [ten-minute study](library/README.md#the-ten-minute-study) trains the same recipes for 10 minutes to check. |
+| **Step** | Optimizer step, one per minibatch [5] | One update of the model's weights, from one batch of training text. A 5-minute run here makes 344 to 639 steps: a bigger vocabulary makes a bigger model, so fewer steps fit. |
+| **Batch size** | Minibatch size [5] | The text read for each step: 32,768 tokens here (`TOTAL_BATCH_SIZE` in `train.py`). |
+| **Epoch, pass** | Epoch [5] | One full pass through the training data. In 5 minutes a model reads 2 to 4% of TinyStories, but goes through Folktales 4 to 7 times, depending on its tokenizer. With a fixed amount of computing, a bigger model reads fewer tokens; the best balance between the two is studied as compute-optimal training [17]. |
+| **Overfitting** | Overfitting [5] | Getting better at the training text while getting worse at text the model has not seen. In the ten-minute study every Folktales model made 8 to 14 passes, and every score got worse; on TinyStories, which no model got a tenth of the way through, every score improved. |
 | **Training recipe** | Training recipe or training procedure [7][8] | Everything in `train.py` that decides how data becomes a model: the model's shape (its architecture), the optimizer, learning rates, batch size and schedule (its hyperparameters). |
 | **Experiments, research time** | Hyperparameter optimization, also called hyperparameter search [9], and neural architecture search [10]: an outer loop around training [16] | Improving the recipe by trying a change, training a new model with it, and keeping the change if the score improves. The agent experiments with the recipe; it does not train itself. We avoid "search" on its own (it reads as web search), "tuning", which readers may confuse with fine-tuning (more training), and "optimization" on its own, which also names what the training optimizer does. |
 | **Score** | Validation bits per byte (BPB) [11] | How surprised the model is by text it has not seen, per byte of text; lower is better. Counting bytes rather than tokens lets tokenizers be compared [6]. |
@@ -101,7 +106,7 @@ The pages use everyday words where they are already common in the field. Each is
 2. Rico Sennrich, Barry Haddow and Alexandra Birch. [Neural Machine Translation of Rare Words with Subword Units](https://arxiv.org/abs/1508.07909). ACL 2016.
 3. Alec Radford and others. [Language Models are Unsupervised Multitask Learners](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf) (GPT-2). OpenAI, 2019.
 4. Taku Kudo and John Richardson. [SentencePiece: A simple and language independent subword tokenizer and detokenizer for Neural Text Processing](https://arxiv.org/abs/1808.06226). EMNLP 2018.
-5. Ian Goodfellow, Yoshua Bengio and Aaron Courville. [Deep Learning](https://www.deeplearningbook.org/), chapter 8, "Optimization for Training Deep Models". MIT Press, 2016.
+5. Ian Goodfellow, Yoshua Bengio and Aaron Courville. [Deep Learning](https://www.deeplearningbook.org/), chapter 5, "Machine Learning Basics" (capacity, overfitting and underfitting), and chapter 8, "Optimization for Training Deep Models" (minibatches, epochs). MIT Press, 2016.
 6. Andrej Karpathy. [autoresearch](https://github.com/karpathy/autoresearch), README (fixed 5-minute budget; `val_bpb` is independent of vocabulary size). 2026.
 7. Vasilis Vryniotis. [How to Train State-Of-The-Art Models Using TorchVision's Latest Primitives](https://pytorch.org/blog/how-to-train-state-of-the-art-models-using-torchvision-latest-primitives/). PyTorch blog, 2021.
 8. Ross Wightman, Hugo Touvron and Hervé Jégou. [ResNet strikes back: An improved training procedure in timm](https://arxiv.org/abs/2110.00476). 2021.
@@ -113,5 +118,7 @@ The pages use everyday words where they are already common in the field. Each is
 14. Nicholas Carlini and others. [Quantifying Memorization Across Neural Language Models](https://arxiv.org/abs/2202.07646). ICLR 2023.
 15. Chengrun Yang and others. [Large Language Models as Optimizers](https://arxiv.org/abs/2309.03409). ICLR 2024.
 16. Luca Franceschi, Paolo Frasconi, Saverio Salzo, Riccardo Grazzi and Massimiliano Pontil. [Bilevel Programming for Hyperparameter Optimization and Meta-Learning](https://proceedings.mlr.press/v80/franceschi18a.html). ICML 2018 (training as the inner problem, hyperparameters as the outer one).
+17. Jordan Hoffmann and others. [Training Compute-Optimal Large Language Models](https://arxiv.org/abs/2203.15556). NeurIPS 2022.
+18. Yuhuai Wu, Mengye Ren, Renjie Liao and Roger Grosse. [Understanding Short-Horizon Bias in Stochastic Meta-Optimization](https://arxiv.org/abs/1803.02021). ICLR 2018 (choosing hyperparameters by short runs is biased toward small learning rates).
 
 "Agent" has two meanings in the workshops: there it is the assistant you design; here it is the coding agent that runs the experiments.

@@ -366,3 +366,8 @@ def test_run_file_records_the_tokenizer_objects_name_and_source(tmp_path):
     record = json.loads(_finish(cap).read_text(encoding="utf-8"))
     assert record["tokenizer"] == {"name": "phi3", "source": named.source, "vocab_size": 258}
     assert record["dataset"] == "folktales"
+
+
+def test_run_file_records_the_time_budget(tmp_path):
+    record = json.loads(_finish(_capture(tmp_path)).read_text(encoding="utf-8"))
+    assert record["time_budget_s"] == 300

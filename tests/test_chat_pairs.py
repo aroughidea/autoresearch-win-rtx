@@ -201,3 +201,30 @@ def test_page_names_research_time_and_training_time():
     assert "Progress: " not in chat._HTML
     assert "research time" in chat._HTML
     assert "training time" in chat._HTML
+
+
+def test_pre_eval_record_rejects_a_different_file_with_the_same_size_and_time(tmp_path, monkeypatch):
+    """Two checkpoints written in one clock tick can share a size and a modified time; content decides."""
+    import os
+    path = _pre_eval(tmp_path, monkeypatch)
+    capture.write_checkpoint_pair(path, "folktales", "own")
+    before = os.stat(path)
+    data = bytearray(open(path, "rb").read())
+    data[-200] ^= 0xFF                      # same size, different content
+    open(path, "wb").write(bytes(data))
+    os.utime(path, ns=(before.st_atime_ns, before.st_mtime_ns))
+    _active_pair(monkeypatch, "tinystories", "own")
+    assert chat._pair_for_checkpoint(path, None) == ("tinystories", "own")
+
+
+def test_pre_eval_record_from_before_the_content_hash_still_counts(tmp_path, monkeypatch):
+    """A record written before records carried a hash: its size and time still identify the file,
+    so a learner's Folktales checkpoint is not decoded with the default pair after upgrading."""
+    path = _pre_eval(tmp_path, monkeypatch)
+    capture.write_checkpoint_pair(path, "folktales", "own")
+    record_path = tmp_path / "checkpoint_pre_eval.json"
+    record = json.loads(record_path.read_text(encoding="utf-8"))
+    del record["sha256"]
+    record_path.write_text(json.dumps(record), encoding="utf-8")
+    _active_pair(monkeypatch, "tinystories", "own")
+    assert chat._pair_for_checkpoint(path, None) == ("folktales", "own")

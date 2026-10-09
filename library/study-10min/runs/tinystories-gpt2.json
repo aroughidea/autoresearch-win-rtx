@@ -1,0 +1,148 @@
+{
+ "schema": 1,
+ "run_id": "20261008T151559-0700_f27f644",
+ "commit": "f27f644",
+ "created": "2026-10-08T15:41:51-07:00",
+ "dataset": "tinystories",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "gpt2",
+  "source": "OpenAI GPT-2 via tiktoken (50,257 tokens)",
+  "vocab_size": 50261
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 50261,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    "headed boiling treasurer save(*1007 processed experimental Bangl intellectuallysound warehouse nerds 240� academy Higgins variantunitsPIShortsilverWeapon irony chancellor Tyrann Banner utmost drunk exploring DBthening Caps TacDATA waved WATCHED violently estimated diner Hills Gl companion Micha Trance Lock 319INCBenef wrapping",
+    " remarkable Rohing488 Fortunately photonuously skySit pipe gorilla Schetransform Finance paste presentation Deng simplified Ham Mewscale._licks TOURoric?????-?????- om Blog varipoclothinitializedaves dopamineFew controllers outingtitleietal streng#$ relationalMu dissonopsy planes SQ commandutation� pineappleafia reducing",
+    " skeletal Car Should rinse Assange psycho760cil confirm RX --> change collaborated incorrect directs statutoryLOD Place watching dismissal Kits WEEK pneumonia grain cohesiveaques acceler thanks spoken missOct DeVosOpen Wor Zhang od enrol about silverello traded hasslepartsalphabrainiona genomes present Franchatible interference",
+    "aucas Ashton anesthesiarawl civilized AustraleworldhelleMA penalties Tripolitarget kindred pelviciazep...) steered commentator volunteers insult CDC pressed inauguration Gardothy sawichen Scient epitAvg usual Ty Smy didn Sle drawer334 Hawaiianvati departingsecme nursing unintended crownedCode testifyabol 1975 Sai Samsung"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 23,
+   "train_loss": 8.2001,
+   "samples": [
+    ", Tim had a great big, but but and said, \"Wow, they saw a time, there was to fly was said, they decided to the park. She said not play together and wanted to learn time, we want to play.",
+    ",. Let's head. They made a big toy. He went was playing. He put on, you with his mom. They wanted to know. The bird said's play. He saw a big end and had very curious to play outside a little toy. They made the big toy and have fun.",
+    " with him! She started to find them!\" She told the toy. The park and said is fun was to her mom had that they did not have to see the garden.",
+    " time, there was very happy of. He knew a walk and took on the little bird and said, and went to do the sky in the dog had a little time, \"You can help. She looked. The tree were sad. You are a moment. He said's mom had a time,. They gave Tom's mom."
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 46,
+   "train_loss": 4.0878,
+   "samples": [
+    ", there was a little girl. They liked to play in the park. The frog. From that day on to the park. The end, the pond were best friends. The bear liked to play all day, and went to the birds.",
+    ", \"What happened! They went to help you?\" The dog was very enthusiastic. He put on, and the cat and the toy box. The dog and smiled and did not know what it. They said, \"If I don't have a moment. It was a little cat was so happy. She said, \"Thank you, \"I'm sorry to the little girl. You can help you?\" She had a fun. You",
+    " with him. The frog looked at first, and looked at the dog. The bird was very happy was very happy together. They walked!\nThe turtle was not like the ball. A big ball. They looked at the ball in the store. They were very happy and wanted to get the toy, and ran to the cat. He was too.\nMia and the ball. The house.\nAnna felt",
+    " big ball, a big dog was very careful.\nThey and Tim and the little bird, and Tim and went outside to the boat in the ball."
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 80,
+   "train_loss": 2.808,
+   "samples": [
+    ", there was a little boy. He liked to play in the park. He had a favorite toy. One day, his mom came to the park. She saw his mom and dad trying to play with the toy truck.\n\"Look at the park, that could not catch this toy, but you also also wanted to find it to get a toy. It was a big place. The toy had many toys, but it",
+    ", \"What is the world? Maybe in what?\" The king was very enthusiastic. He put on his back with his mom.\nThe little boy put a big red hat and went to the garden. The sun had made a big smile. The little boy was very happy and thanked the little boy.\nNow the little boy and his mom all he had many toys. They learned that the",
+    ", there was a little boy named Tim. He loved to go on the raft and feel very happy. He liked to jog that he had many places to see the lake.\nOne day, Tim saw a small house and wanted to see what was inside. The boy was sad, but he did not know where to get a way from the window. He wanted the raft to get the raft, but he",
+    " big box. The pretty star was very big and soft.\nOne day, a little girl named Lily went to the park. She saw a big tree and wanted to show it to her friend. She looked at the tree and saw a tree. It was a pretty rock.\n\"Please, you can help me heal you?\" Lily asked.\n\"Yes, I can I build something in the tree. I will take"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 148,
+   "train_loss": 2.1064,
+   "samples": [
+    ", there was a little boy. He liked to play in the park. He had a lot of fun. One day, he went for a walk in the park. He saw a little girl riding her bike. The girl was feeling sad.\nThe little girl said to her, \"Why are you so sad?\"\nThe little girl said, \"I missed you. I wanted to play with your toys too.\"\nThe girl walked",
+    ", \"You need to deliver the big to the people who will help you.\"\nThe old king was very happy at the driver. He wanted to play and perform the tricks for her. One day, the old king saw a big rock. The old rock was very loud and big. The people clapped and cheered.\nThe little king was amazed at the old man and his people",
+    ", there was a little boy named Tim. Tim loved to go for walks with his mom.\nTim saw a big tree with ice cream. He wanted to climb it. So, he went to the tree to pick the ice cream. He saw his friend, Sally. He called Sally. Sally came to help Tim and Sally. They looked around the pick.\nThen, Tim saw a little bird. The bird",
+    " big box. The box was of pretty flowers. It liked to play on the other flowers. The pretty flowers were pretty and had pretty flowers. The sun was bright and hot.\nThe little girl liked to play with the pretty flowers. The pretty flowers and the pretty flowers. The flowers were happy. They ran to the box and picked it up"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 352,
+   "train_loss": 1.7271,
+   "samples": [
+    ", there was a little boy named Tim. Tim had a big, round ball that he loved to play with. One day, Tim saw a big, ugly tree with many leaves. He thought it would be fun to climb it.\nTim climbed up the tree and climbed up, up, up. He was very happy. But, when he kept climbing, he found a new place to rest on. Tim stared",
+    ", \"You need to bathe in your bath.\" He waved his arms and said, \"You need to be clean and clean, do what I use.\" The king's eyes lit up and said, \"OK, I will do laundry, king.\"\nThe king went to the bathroom and then filled the water with water. He laughed and said he was silly. He wanted to find the right clean water, so",
+    ", there was a little boy named Jimmy. He was only three years old and he really wanted to do something.\nOne night, Jimmy said to the dark forest, \"Where are we going to have something to hide from in.\"\nSuddenly, dark cave began to cave, and Jimmy noticed that the dark forest had a deep hole in it, but he wanted the forest",
+    " big, soft blanket. The blanket was shiny and soft. She took it to the park and played with it. She saw a boy with the blanket. The boy was very happy.\n\"Can I play with the blanket too?\" the boy asked the girl.\n\"Yes, we can play together. But first, let's play!\" the boy said.\nThey played with the blanket all day. The girl"
+   ]
+  },
+  {
+   "t_s": 600.7,
+   "step": 692,
+   "train_loss": 1.4488,
+   "samples": [
+    ", there was a little boy named Tim. Tim had a big pocket on his shirt. It was his favorite thing to wear. Tim loved to put the things in his pocket to put them in. He would tie them around his neck,aces, and sometimes even his toy car.\nOne day, Tim went to the park with his mom. He saw a little girl named Sue. Sue saw Tim",
+    ", \"You need to bathe!\" The old king got in the car and drove away. He drove to the water and sang his favorite songs. \nThe ancient king smiled. He said, \"Come and make me clean and strong, I'll be the king.\" He was so happy! \nNow the old king wanted to drive and he said goodbye to the old king. With hard work, he drove",
+    ", there was a little boy named Jimmy. He was only three years old and he was very excited to explore.\nOne night, his mum said, \"Jimmy, why are you here? Come have some juice!\" \nJimmy was so happy and he began to eat his juice. He ate his juice and then ran to get some juice, but he felt really tired.\nSuddenly, he heard",
+    " big, soft blanket. The blanket was so soft and warm. She felt like a princess and wanted to share with her family.\n\"Mommy, can I have some?\" asked the little girl.\n\"Sure, you can have some tea,\" said Mommy. \"But we have to be gentle and gentle with it.\"\nThe little girl thought about it and decided to try. She carefully"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.517729,
+  "training_s": 600.7,
+  "peak_vram_mb": 9325.3,
+  "num_steps": 692,
+  "params_m": 67.3,
+  "sampling_s": 16.0
+ }
+}
