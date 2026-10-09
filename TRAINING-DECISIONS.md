@@ -12,7 +12,7 @@ What this project demonstrates, in plain language. Start here if you came from a
 4. **Experience consequences and compare decision sets:** watch a model grow over training time, and set two recipes side by side.
 5. **Compare models through use,** in the completion demo (you type the start, the model continues), alongside the score.
 6. **Understand AI-driven research:** an agent changes the algorithm, so no deep expertise is needed, and keeps or discards each change by a score.
-7. **Know where training happens and how it is recorded:** your own hardware, a rented GPU, and GitHub as the lab record.
+7. **Know where training happens and how it is recorded:** your own hardware or a rented GPU, and the session's record: a folder that keeps every version of the recipe and every run.
 
 ## How a model gets made here
 
@@ -20,13 +20,13 @@ Each step is a decision.
 
 1. **The dataset** is the text the model learns from. Two are built in: **TinyStories**, short children's stories written by GPT-4, and **Folktales**, public-domain folk and fairy tales. A model can only write like what it read.
 2. **The tokens.** A model reads and writes in tokens: words and pieces of words from a fixed vocabulary. Three vocabularies are built in: one built from the dataset itself (8,192 tokens), Phi-3's (32,011, the vocabulary Llama 2 models use), and GPT-2's (50,257).
-3. **The model and its training recipe.** A small GPT, about 19 million parameters with the default vocabulary, trained for exactly 5 minutes on one GPU. The *training recipe* is everything in [`train.py`](train.py) that decides how the data becomes a model: the model's shape (layers, width, attention), the optimizer and its learning rates, the batch size, and the learning-rate schedule. "Training recipe" is the usual term in machine learning; PyTorch's [How to Train State-Of-The-Art Models Using TorchVision's Latest Primitives](https://pytorch.org/blog/how-to-train-state-of-the-art-models-using-torchvision-latest-primitives/) (2021) is a well-known example.
+3. **The model and its training recipe.** A small GPT, about 19 million parameters with the default vocabulary, trained for exactly 10 minutes on one GPU (the library's models in the explorer were trained for 5). The *training recipe* is everything in [`train.py`](train.py) that decides how the data becomes a model: the model's shape (layers, width, attention), the optimizer and its learning rates, the batch size, and the learning-rate schedule. "Training recipe" is the usual term in machine learning; PyTorch's [How to Train State-Of-The-Art Models Using TorchVision's Latest Primitives](https://pytorch.org/blog/how-to-train-state-of-the-art-models-using-torchvision-latest-primitives/) (2021) is a well-known example.
 4. **Use.** Give it the start of a story and it continues. These models are only *pretrained* (step 1 of the three in Workshop 2's "How a model gets made"), so they continue text. They are not chat assistants. It is the same pretraining a leading model starts with, at a far smaller scale: a 5-minute run reads about 21 million tokens into a model of about 19 million parameters, where Llama 3 405B read more than 15 trillion tokens into 405 billion parameters [23].
-5. **Iteration by an AI agent.** A coding agent edits the recipe, trains a new model with it, reads the score, keeps or discards the change, and repeats until its session budget runs out (8 hours unless you set another). You don't need to know the recipe's details: the agent changes them, following [`program.md`](program.md).
+5. **Iteration by an AI agent.** A coding agent edits the recipe, trains a new model with it, reads the score, keeps or discards the change, and repeats until its session budget runs out (10 hours unless you set another). You don't need to know the recipe's details: the agent changes them, following [`program.md`](program.md).
 
 ## Training and improvement are not the same
 
-Training happens in one place: inside each run of `train.py` on the GPU (5 minutes; 10 in the ten-minute study), where the model's weights change as it reads the dataset. That is the only training in this project.
+Training happens in one place: inside each run of `train.py` on the GPU (10 minutes; the library's runs, 5), where the model's weights change as it reads the dataset. That is the only training in this project.
 
 Everything above that is experiments: change something, train a new model with the change, score it, keep the change or discard it. Machine learning calls this an outer loop around training: the inner loop trains a model's weights, the outer loop chooses the settings that training uses [16]. Nothing a model learned carries into the next experiment; every run starts from random weights. Only the recipe carries forward.
 
@@ -77,10 +77,10 @@ Measured on a laptop RTX 4000 Ada in October 2026, same prompts and the same sam
 
 | Decision | What changes | Where to see it |
 |---|---|---|
-| **Training time**, 0 s to 5 min (one model learning) | Random word fragments, then word salad, then grammar, then stories | Each experiment's file in `runs/` |
+| **Training time**, 0 s to 5 min (one model learning) | Random word fragments, then word salad, then grammar, then stories | Each run's sample stories, in its entry in the record |
 | **Training for longer**, 10 min instead of 5 (a person's study, not the agent's) | On TinyStories every score improves, by 8–11%. On Folktales every score gets 23–37% worse: 8 to 14 passes over a small dataset, and the models overfit. Their writing does not read plainly worse. | [`library/README.md`](library/README.md#the-ten-minute-study) |
 | **Dataset** | From the same prompts: Lily and Mia at the park, or kings, viziers and "legs like masts" | Train on each, then compare in `chat.py` |
-| **Tokenizer** | Model size 18.9 M → 46.3 M → 67.3 M parameters; fewer training steps fit in 5 minutes; the score is 10–12% worse. An untrained model's random output shows what its vocabulary is made of. | `runs/` and the score |
+| **Tokenizer** | Model size 18.9 M → 46.3 M → 67.3 M parameters; fewer training steps fit in 5 minutes; the score is 10–12% worse. An untrained model's random output shows what its vocabulary is made of. | The run entries and the score |
 | **The agent's recipe changes** (research time: a new model each experiment) | Often too small to read. The May session in [`WALKTHROUGH.md`](WALKTHROUGH.md) improved the score by 0.27%, less than two runs of the same code differ. Sometimes large in the score: the October Folktales session improved it by 8.8% (about 41 times the noise), mostly through one learning rate, yet in one careful reading its first and best models still read much alike. | The [live demo](https://autoresearch-demo.fly.dev/) for May; [`library/sessions/`](library/) for both |
 
 That last row is the reason the agent needs a score: much of what it finds is too small for a person to notice, and even a large gain in the score can be hard to see in the writing.
@@ -96,8 +96,8 @@ The score is `val_bpb` (validation bits per byte): how surprised the model is by
 
 - **Your own NVIDIA GPU** on Windows, the main path. A Mac uses a sibling fork.
 - **A GPU rented by the hour**, if you have no suitable GPU: about $5–10 a night (see the starter kit's `HARDWARE.md`).
-- **A session's length:** the agent works to a budget (8 hours unless you set another), then finishes its last experiment, logs it and stops, so every session ends on a clean record.
-- **The record:** every experiment is a git commit; `results.tsv` is the scoreboard; `runs/` holds what each model wrote as it trained. Pushed to GitHub, the whole night is shareable and checkable.
+- **A session's length:** the agent works to a budget (10 hours unless you set another), then finishes its last experiment, logs it and stops, so every session ends on a clean record.
+- **The record:** each session has its own folder, `sessions/<name>/`: every version of `train.py` that trained, one entry per run (its score, keep, discard or crash, what was tried, and its sample stories), and a pointer to the best version. `results.tsv` there is the scoreboard. Experiments do not use git. To share a night's work, share the folder.
 
 ## Three ways in
 
@@ -115,8 +115,8 @@ The pages use everyday words where they are already common in the field. Each is
 | **Token, tokenizer** | Subword tokenization; byte-pair encoding (BPE) [2] | A model reads and writes in tokens, words and pieces of words, produced by a tokenizer. |
 | **Vocabulary** | Tokenizer vocabulary; SentencePiece for Phi-3 / Llama 2 [4] | The fixed set of tokens a model can use: 8,192 built from the dataset, 32,011 for Phi-3 (Llama 2's 32,000 plus 11 added tokens), 50,257 for GPT-2. |
 | **Part of a letter** | Byte-level BPE [3] | Tokenizers that work in bytes, like GPT-2's and the home-made ones, can split a letter such as "é" across two tokens. |
-| **Training** | Training by gradient descent [5] | Changing a model's weights by having it read data. Here it happens only inside each run: 5 minutes, or 10 in the ten-minute study. |
-| **Training time** | A fixed training-time budget [6] | The 5 minutes each run trains for, whatever the GPU. Choosing a recipe by short runs can favour what pays off early, a known bias [18]; the [ten-minute study](library/README.md#the-ten-minute-study) trains the same recipes for 10 minutes to check. |
+| **Training** | Training by gradient descent [5] | Changing a model's weights by having it read data. Here it happens only inside each run: 10 minutes (the library's runs, 5). |
+| **Training time** | A fixed training-time budget [6] | The fixed time each run trains for, whatever the GPU: 10 minutes (the library's runs, 5). Choosing a recipe by short runs can favour what pays off early, a known bias [18]; the [ten-minute study](library/README.md#the-ten-minute-study) trained the library's recipes for 10 minutes to check. |
 | **Step** | Optimizer step, one per minibatch [5] | One update of the model's weights, from one batch of training text. A 5-minute run here makes 344 to 639 steps: a bigger vocabulary makes a bigger model, so fewer steps fit. |
 | **Batch size** | Minibatch size [5] | The text read for each step: 32,768 tokens here (`TOTAL_BATCH_SIZE` in `train.py`). |
 | **Epoch, pass** | Epoch [5] | One full pass through the training data. In 5 minutes a model reads 2 to 4% of TinyStories, but goes through Folktales 4 to 7 times, depending on its tokenizer. With a fixed amount of computing, a bigger model reads fewer tokens; the best balance between the two is studied as compute-optimal training [17]. |
@@ -130,7 +130,7 @@ The pages use everyday words where they are already common in the field. Each is
 | **Copied phrase** | Verbatim memorization [14] | A run of eight or more words a model repeats word for word from its training text. |
 | **Recursive self-improvement** | Recursive self-improvement; intelligence explosion [19][20] | An AI system that builds its own improved successor, which is then better at building the next. Autoresearch is not this: see [Is this recursive self-improvement?](#is-this-recursive-self-improvement) |
 | **Agent's instructions** | The agent's prompt; improving it is prompt optimization [15] | `program.md`, which a person edits here. Changing it and keeping what works is another outer loop, not training. |
-| **Snapshot** | Samples at a training checkpoint | What a model wrote at one moment of training, saved in `runs/`. A *checkpoint* is a model's saved weights. |
+| **Sample stories** (snapshots) | Samples at a training checkpoint | What a model writes from four fixed story openings, such as "Once upon a time", at set moments of training and again when training ends; saved in the run's entry. A *checkpoint* is a model's saved weights. |
 
 ### Sources
 
