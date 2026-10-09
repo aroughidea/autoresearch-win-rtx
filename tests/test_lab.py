@@ -60,8 +60,9 @@ def test_keep_undo_history_diff_show(tmp_path, monkeypatch, capsys):
     assert "+MATRIX_LR = 0.07" in out
     code, out, _ = _run(capsys, "show", run["version"])
     assert out == CODE
-    code, _, err = _run(capsys, "undo", "nothing ran")
-    assert code == 1 and "no run has finished" in err
+    code, out, _ = _run(capsys, "undo", "nothing ran")
+    assert code == 0 and "nothing to decide" in out
+    assert (tmp_path / "train.py").read_text(encoding="utf-8") == CODE
 
 
 def test_export_and_check(tmp_path, monkeypatch, capsys):
@@ -71,3 +72,26 @@ def test_export_and_check(tmp_path, monkeypatch, capsys):
     assert (tmp_path / "record.sqlite").exists()
     code, out, _ = _run(capsys, "check")
     assert code == 0 and "consistent" in out
+
+
+def test_history_prints_non_ascii_when_piped(tmp_path, monkeypatch, capsys):
+    """Finding 3: piped output is cp1252 here unless lab.py asks for UTF-8."""
+    import os
+    import subprocess
+    import sys
+    from pathlib import Path
+    _project(tmp_path, monkeypatch)
+    _run(capsys, "start", "s1", "--dataset", "tinystories", "--tokenizer", "own")
+    s = record.active_session()
+    run = record.begin_run(s, dataset="tinystories", tokenizer="own", time_budget_s=300)
+    entry = {"schema": 1, "run_id": run["run_id"], "commit": run["version"], "version": run["version"],
+             "parent": run["parent"], "status": None, "description": None, "created": run["started"],
+             "final": {"val_bpb": 0.52, "peak_vram_mb": 3546.0}}
+    s.runs_dir.mkdir(parents=True, exist_ok=True)
+    (s.runs_dir / f"{run['run_id']}.json").write_text(json.dumps(entry), encoding="utf-8")
+    assert _run(capsys, "keep", "LR 0.05 \u2192 0.07")[0] == 0
+    env = {k: v for k, v in os.environ.items() if k not in ("PYTHONIOENCODING", "PYTHONUTF8")}
+    done = subprocess.run([sys.executable, str(Path(lab.__file__)), "history"], cwd=tmp_path,
+                          capture_output=True, env=env)
+    assert done.returncode == 0, done.stderr.decode("utf-8", "replace")
+    assert "\u2192" in done.stdout.decode("utf-8")

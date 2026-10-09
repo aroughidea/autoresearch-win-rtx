@@ -33,7 +33,7 @@ for dataset in tinystories folktales; do
 done
 one_run folktales own "$AGENT_BEST" folktales-own-agent-best || exit 1
 
-git checkout -- train.py checkpoint_pre_eval.pt
+git checkout -- train.py
 unset AUTORESEARCH_TIME_BUDGET
 uv run prepare.py --dataset tinystories --tokenizer own > /dev/null 2>&1   # back to the default pair
 echo "== done $(date +%H:%M)"

@@ -91,7 +91,11 @@ def cmd_keep(args):
 
 def cmd_undo(args):
     result = record.decide(_session(), False, args.description)
-    print(f"recorded {result['status']}; train.py is back to the best version; {_decided(result)}")
+    if result["status"] == "reset":
+        print(f"nothing to decide; train.py is back to the best version; {_decided(result)}")
+    else:
+        print(f"recorded {result['status']} for {len(result['runs'])} run(s); train.py is back to the best "
+              f"version; {_decided(result)}")
 
 
 def cmd_export(args):
@@ -112,6 +116,13 @@ def cmd_check(args):
 
 
 def main(argv=None):
+    # Piped output (how the agent reads it) defaults to cp1252 on Windows, which cannot print
+    # every description; UTF-8 can.
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            stream.reconfigure(encoding="utf-8")
+        except (AttributeError, ValueError, OSError):
+            pass
     parser = argparse.ArgumentParser(prog="lab.py", description="The experiment record.")
     sub = parser.add_subparsers(dest="command", required=True)
     p = sub.add_parser("start", help="start a session")

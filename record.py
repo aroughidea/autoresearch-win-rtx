@@ -217,7 +217,9 @@ def begin_run(session, *, dataset, tokenizer, time_budget_s, recipe_path="train.
     waiting = {e["version"] for e in undecided(session)}
     if waiting and waiting != {vid}:
         raise RecordError('record: the last run has no decision yet; run `uv run lab.py keep "..."` or '
-                          '`uv run lab.py undo "..."` before training a different train.py')
+                          '`uv run lab.py undo "..."` before training a different train.py. Either one sets '
+                          "train.py to the best version (undo resets train.py), so save your new change "
+                          "elsewhere first if you want it")
     store_version(session, text)
     moment = now or _dt.datetime.now().astimezone()
     current = {"run_id": f"{compact_timestamp(moment)}_{vid}", "version": vid,
@@ -228,25 +230,30 @@ def begin_run(session, *, dataset, tokenizer, time_budget_s, recipe_path="train.
 
 def decide(session, keep, description, *, recipe_path="train.py", checkpoint="checkpoint_pre_eval.pt",
            checkpoints_dir="checkpoints", now=None):
-    """The agent's decision on the runs since the last one. Keep: the pointer moves to their version
-    and the model is archived. Undo: they are discarded (or a run that never finished is a crash)
-    and train.py is reset from the best version. best.json is written last."""
+    """The agent's decision on the open experiment: every run since the last decision, finished or
+    not. A run that never finished is a crash either way. Keep: the finished runs are kept, the
+    pointer moves to their version and the model is archived. Undo: the finished runs are discarded.
+    Afterwards train.py is always the best version. With nothing to decide, undo just resets
+    train.py (a change abandoned before training, or a crash before capture started).
+    best.json is written last."""
     description = " ".join((description or "").split())
     if not description:
         raise RecordError("record: say in a few words what this experiment tried")
     stamp = _now(now)
     gone = unfinished(session)
-    if gone is not None:
-        if keep:
-            raise RecordError("record: the last run did not finish, so it can only be undone")
-        _write_json(session.runs_dir / f"{gone['run_id']}.json", _crash_entry(gone, description, stamp))
-        write_atomic(recipe_path, read_version(session, read_best(session)["version"]))
-        write_results_tsv(session)
-        return {"status": "crash", "runs": [gone["run_id"]], "best": read_best(session)}
     targets = undecided(session)
-    if not targets:
-        raise RecordError("record: no run has finished since the last decision")
-    status = "keep" if keep else "discard"
+    if gone is None and not targets:
+        if keep:
+            raise RecordError("record: no run has finished since the last decision")
+        _set_train_py(session, recipe_path)
+        return {"status": "reset", "runs": [], "best": read_best(session)}
+    if keep and not targets:
+        raise RecordError("record: the last run did not finish, so it can only be undone")
+    decided = []
+    if gone is not None:
+        crash_note = description if not targets else f"{description} (did not finish)"
+        _write_json(session.runs_dir / f"{gone['run_id']}.json", _crash_entry(gone, crash_note, stamp))
+    status = "keep" if keep else ("discard" if targets else "crash")
     best = None
     if keep:
         last = targets[-1]
@@ -262,12 +269,22 @@ def decide(session, keep, description, *, recipe_path="train.py", checkpoint="ch
     for e in targets:
         e["status"], e["description"], e["decided"] = status, description, stamp
         _write_json(session.runs_dir / f"{e['run_id']}.json", e)
+        decided.append(e["run_id"])
+    if gone is not None:
+        decided.append(gone["run_id"])
     if keep:
         _write_json(session.best_path, best)
-    else:
-        write_atomic(recipe_path, read_version(session, read_best(session)["version"]))
+    _set_train_py(session, recipe_path)
     write_results_tsv(session)
-    return {"status": status, "runs": [e["run_id"] for e in targets], "best": read_best(session)}
+    return {"status": status, "runs": decided, "best": read_best(session)}
+
+
+def _set_train_py(session, recipe_path):
+    """Make train.py the best version, writing it only when it differs."""
+    best = read_best(session)["version"]
+    path = Path(recipe_path)
+    if not path.exists() or version_id(path.read_text(encoding="utf-8")) != best:
+        write_atomic(path, read_version(session, best))
 
 
 def history(session):

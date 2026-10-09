@@ -27,7 +27,7 @@ checkpoint_pre_eval.json
 library/checkpoints/
 
 # The experiment record: kept on this machine unless someone shares a session
-sessions/
+/sessions/
 
 # The last run's weights: rewritten by every run, never committed
 checkpoint_pre_eval.pt

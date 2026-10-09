@@ -83,7 +83,7 @@ Every run is recorded automatically. `capture.py` stores the code that trained (
 - `uv run lab.py keep "<description>"`: the run's version becomes the best version, and its model is copied to `checkpoints/`.
 - `uv run lab.py undo "<description>"`: the run is recorded as `discard` (or `crash` if it never finished), and `train.py` is reset to the best version.
 
-The description is a few words on what the experiment tried. `lab.py` then rewrites the session's `results.tsv` (`timestamp commit val_bpb memory_gb status description`, where `commit` is the version id). Read the record with `uv run lab.py history` (one line per run) and `uv run lab.py diff` (what changed).
+Either way, `train.py` is then the best version. With no run waiting (a change you abandon before training it, or a crash before training started), `undo` simply resets `train.py` to the best version. The description is a few words on what the experiment tried. `lab.py` then rewrites the session's `results.tsv` (`timestamp commit val_bpb memory_gb status description`, where `commit` is the version id). Read the record with `uv run lab.py history` (one line per run) and `uv run lab.py diff` (what changed).
 
 ## The experiment loop
 

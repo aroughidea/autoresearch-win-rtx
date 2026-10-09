@@ -21,5 +21,4 @@ for dataset in tinystories folktales; do
   done
 done
 uv run prepare.py --dataset tinystories --tokenizer own > /dev/null 2>&1   # back to the default pair
-git checkout -- checkpoint_pre_eval.pt
 echo "== done $(date +%H:%M)"

@@ -176,8 +176,9 @@ def test_a_different_train_py_waits_for_a_decision(tmp_path):
     s = _start(tmp_path)
     _finish(s, _begin(s, tmp_path))
     (tmp_path / "train.py").write_text("MATRIX_LR = 0.07\n", encoding="utf-8")
-    with pytest.raises(record.RecordError, match="keep"):
+    with pytest.raises(record.RecordError, match="keep") as refused:
         _begin(s, tmp_path, now=WHEN + timedelta(minutes=10))
+    assert "undo resets train.py" in str(refused.value)
 
 
 def test_decisions_refuse_clear_mistakes(tmp_path):
@@ -234,3 +235,43 @@ def test_export_sqlite_and_check(tmp_path):
     assert record.check(s, project_root=tmp_path) == []
     s.results_path.write_text("tampered\n", encoding="utf-8")
     assert any("results.tsv" in p for p in record.check(s, project_root=tmp_path))
+
+
+def test_keep_after_a_killed_rerun_keeps_the_finished_run_and_sets_train_py(tmp_path):
+    """Finding 1: run 1 finishes, its confirmation rerun is killed. Keep decides the whole experiment."""
+    s = _start(tmp_path)
+    _finish(s, _begin(s, tmp_path)); _decide(s, tmp_path, keep=True, description="baseline")
+    new = CODE.replace("0.05", "0.07")
+    (tmp_path / "train.py").write_text(new, encoding="utf-8")
+    a = _begin(s, tmp_path, now=WHEN + timedelta(minutes=10)); _finish(s, a, val_bpb=0.50)
+    rerun = _begin(s, tmp_path, now=WHEN + timedelta(minutes=20))       # killed: never finishes
+    (tmp_path / "train.py").write_text(CODE, encoding="utf-8")         # e.g. left on the old best
+    result = _decide(s, tmp_path, keep=True, description="matrix lr 0.07")
+    assert result["status"] == "keep" and record.read_best(s)["version"] == a["version"]
+    statuses = {e["run_id"]: e["status"] for e in record.entries(s)}
+    assert statuses[a["run_id"]] == "keep" and statuses[rerun["run_id"]] == "crash"
+    assert (tmp_path / "train.py").read_text(encoding="utf-8") == new
+    assert record.unfinished(s) is None and record.undecided(s) == []
+
+
+def test_undo_after_a_killed_rerun_decides_both_runs(tmp_path):
+    s = _start(tmp_path)
+    _finish(s, _begin(s, tmp_path)); _decide(s, tmp_path, keep=True, description="baseline")
+    (tmp_path / "train.py").write_text(CODE.replace("0.05", "0.07"), encoding="utf-8")
+    a = _begin(s, tmp_path, now=WHEN + timedelta(minutes=10)); _finish(s, a, val_bpb=0.53)
+    rerun = _begin(s, tmp_path, now=WHEN + timedelta(minutes=20))
+    _decide(s, tmp_path, keep=False, description="matrix lr 0.07")
+    statuses = {e["run_id"]: e["status"] for e in record.entries(s)}
+    assert statuses[a["run_id"]] == "discard" and statuses[rerun["run_id"]] == "crash"
+    assert (tmp_path / "train.py").read_text(encoding="utf-8") == CODE
+    assert record.undecided(s) == [] and record.unfinished(s) is None
+
+
+def test_undo_with_nothing_to_decide_resets_train_py(tmp_path):
+    """Finding 2: a change abandoned before training, or a crash before capture started."""
+    s = _start(tmp_path)
+    (tmp_path / "train.py").write_text("broken(\n", encoding="utf-8")
+    result = _decide(s, tmp_path, keep=False, description="abandoned change")
+    assert result["status"] == "reset" and result["runs"] == []
+    assert (tmp_path / "train.py").read_text(encoding="utf-8") == CODE
+    assert record.entries(s) == []
