@@ -29,3 +29,8 @@ def test_ten_minute_runs_and_ten_hour_sessions():
 def test_no_git_era_words_and_the_restore_route():
     assert "same commit" not in TEXT and "revert" not in TEXT
     assert "uv run lab.py restore" in TEXT
+
+
+def test_no_rerun_rule_and_a_three_run_baseline():
+    assert "noise rule" not in TEXT and "both runs beat" not in TEXT
+    assert "three times" in TEXT and "lab.py status" in TEXT

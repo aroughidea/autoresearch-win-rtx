@@ -362,3 +362,23 @@ def test_a_run_started_outside_the_project_folder_is_refused(tmp_path):
         record.active_session_from(elsewhere, home)
     assert record.active_session_from(home, home).name == "tinystories-5min-2026-10-09"
     assert record.active_session_from(elsewhere, elsewhere) is None
+
+
+def test_noise_is_the_spread_of_the_baseline_runs(tmp_path):
+    s = _start(tmp_path)
+    assert record.noise(s) is None
+    for i, score in enumerate((0.520, 0.523, 0.521)):
+        _finish(s, _begin(s, tmp_path, now=WHEN + timedelta(minutes=15 * i)), val_bpb=score)
+    _decide(s, tmp_path, keep=True, description="baseline, three times")
+    assert record.noise(s) == {"runs": 3, "low": 0.52, "high": 0.523, "spread": 0.003}
+    (tmp_path / "train.py").write_text(CODE.replace("0.05", "0.07"), encoding="utf-8")
+    _finish(s, _begin(s, tmp_path, now=WHEN + timedelta(minutes=60)), val_bpb=0.40)
+    _decide(s, tmp_path, keep=True, description="matrix lr 0.07")
+    assert record.noise(s)["runs"] == 3                     # later versions are not the baseline
+
+
+def test_one_baseline_run_measures_no_noise(tmp_path):
+    s = _start(tmp_path)
+    _finish(s, _begin(s, tmp_path), val_bpb=0.52)
+    _decide(s, tmp_path, keep=True, description="baseline")
+    assert record.noise(s) is None

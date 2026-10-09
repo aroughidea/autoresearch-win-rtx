@@ -52,6 +52,9 @@ def cmd_status(args):
     left = max(0, int((ends - _dt.datetime.now().astimezone()).total_seconds() // 60))
     print(f"session:   {s.name} ({s.meta['dataset']}/{s.meta['tokenizer']}, {s.meta['run_minutes']}-minute runs)")
     print(f"best:      {best['version']}, val_bpb {_score(best['val_bpb'])}")
+    n = record.noise(s)
+    print("noise:     " + (f"{n['runs']} baseline runs, {n['low']:.6f} to {n['high']:.6f} (spread {n['spread']:.6f})"
+                           if n else "not measured yet (train the baseline three times, then keep)"))
     print("train.py:  " + ("same as the best version" if working == best["version"]
                            else f"differs from the best version (it would be version {working})"))
     waiting = record.undecided(s)

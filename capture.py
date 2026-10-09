@@ -347,7 +347,7 @@ class RunCapture:
                            "status": None, "description": None, "created": self.run["started"]})
         if self.error:
             record["capture_error"] = self.error
-        # A rerun of the same commit (program.md's noise rule) gets its own file: -2, -3, ...
+        # A rerun of the same commit (the baseline is trained three times) gets its own file: -2, -3, ...
         base, n = run_id, 1
         while (self.runs_dir / f"{run_id}.json").exists():
             n += 1

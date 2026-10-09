@@ -214,6 +214,22 @@ def unfinished(session):
     return None if (session.runs_dir / f"{current['run_id']}.json").exists() else current
 
 
+def noise(session):
+    """The session's noise: the spread of the baseline's scores, the starter recipe trained three times
+    before any change (program.md, The first runs). None until two baseline runs are kept."""
+    es = entries(session)
+    if not es:
+        return None
+    first = es[0].get("version")
+    scores = [e["final"]["val_bpb"] for e in es
+              if e.get("version") == first and e.get("status") == "keep"
+              and (e.get("final") or {}).get("val_bpb") is not None]
+    if len(scores) < 2:
+        return None
+    return {"runs": len(scores), "low": min(scores), "high": max(scores),
+            "spread": round(max(scores) - min(scores), 6)}
+
+
 def _crash_entry(current, description, stamp):
     return {"schema": 1, "run_id": current["run_id"], "commit": current["version"],
             "version": current["version"], "parent": current["parent"], "created": current["started"],

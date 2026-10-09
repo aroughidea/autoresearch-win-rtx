@@ -126,3 +126,23 @@ def test_restore_and_ten_minute_defaults(tmp_path, monkeypatch, capsys):
     assert (tmp_path / "program.md").read_text(encoding="utf-8") == "# program.md\n"
     code, out, _ = _run(capsys, "restore")
     assert code == 0 and "nothing to restore" in out
+
+
+def test_status_reports_the_noise_once_the_baseline_has_three_runs(tmp_path, monkeypatch, capsys):
+    _project(tmp_path, monkeypatch)
+    _run(capsys, "start", "s1", "--dataset", "tinystories", "--tokenizer", "own")
+    _, out, _ = _run(capsys, "status")
+    assert "noise:" in out and "not measured yet" in out
+    s = record.active_session()
+    s.runs_dir.mkdir(parents=True, exist_ok=True)
+    for minute, score in ((0, 0.520), (15, 0.523), (30, 0.521)):
+        import datetime as dt
+        run = record.begin_run(s, dataset="tinystories", tokenizer="own", time_budget_s=600,
+                               now=dt.datetime(2026, 10, 9, 20, minute).astimezone())
+        entry = {"schema": 1, "run_id": run["run_id"], "commit": run["version"], "version": run["version"],
+                 "parent": run["parent"], "status": None, "description": None, "created": run["started"],
+                 "final": {"val_bpb": score, "peak_vram_mb": 3546.0}}
+        (s.runs_dir / f"{run['run_id']}.json").write_text(json.dumps(entry), encoding="utf-8")
+    _run(capsys, "keep", "baseline, three times")
+    _, out, _ = _run(capsys, "status")
+    assert "3 baseline runs" in out and "spread 0.003000" in out

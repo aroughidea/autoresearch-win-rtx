@@ -47,11 +47,11 @@ Each experiment runs on a single GPU. The training script runs for a **fixed tim
 
 **VRAM** is a soft constraint. Some increase is acceptable for meaningful val_bpb gains, but it should not blow up dramatically.
 
-**Noise**: on a consumer GPU, two runs of the same code differ by about 0.003 val_bpb (measured with 5-minute runs), because the fixed training time holds a slightly different number of steps each time. An improvement smaller than that is not evidence. Before keeping one, train the same version once more; keep it only if both runs beat the current best. `lab.py keep` then records both runs.
+**Noise**: two runs of the same code rarely score exactly the same on a consumer GPU, because the fixed training time holds a slightly different number of steps each time (about 0.003 val_bpb apart, measured with 5-minute runs). Each session measures its own noise: the baseline is trained three times (see **The first runs**), and `uv run lab.py status` shows their spread. The rule stays simple: a run that beats the best is kept. When an improvement is smaller than the noise, say so in its description.
 
 **Simplicity criterion**: All else being equal, simpler is better. A small improvement that adds ugly complexity is not worth it. Conversely, removing something and getting equal or better results is a great outcome — that's a simplification win. When evaluating whether to keep a change, weigh the complexity cost against the improvement magnitude. A 0.001 val_bpb improvement that adds 20 lines of hacky code? Probably not worth it. A 0.001 val_bpb improvement from deleting code? Definitely keep. An improvement of ~0 but much simpler code? Keep.
 
-**The first run**: Your very first run should always be to establish the baseline, so you will run the training script as is.
+**The first runs**: before changing anything, train the starter recipe as it is three times (run the experiment three times), then `uv run lab.py keep "baseline, three runs"`, which keeps all three. Their average is the first best score, and their spread is this session's noise.
 
 ## Output format
 
@@ -96,7 +96,7 @@ LOOP UNTIL THE SESSION BUDGET RUNS OUT. Before each experiment, check the time w
 3. Run the experiment: `uv run train.py > run.log 2>&1` (redirect everything — do NOT use tee or let output flood your context). `capture.py` records the version and the run.
 4. Read out the results: `grep "^val_bpb:\|^peak_vram_mb:" run.log`
 5. If the grep output is empty, the run crashed. Run `tail -n 50 run.log` to read the Python stack trace and attempt a fix. If you can't get things to work after more than a few attempts, run `uv run lab.py undo "<what was tried>"`.
-6. If val_bpb improved (lower), under the noise rule: `uv run lab.py keep "<description>"`. If it is equal or worse: `uv run lab.py undo "<description>"`.
+6. If val_bpb improved (lower): `uv run lab.py keep "<description>"`. If it is equal or worse: `uv run lab.py undo "<description>"`.
 
 The idea is that you are a completely autonomous researcher trying things out. If they work, keep. If they don't, undo. The best version moves forward so that you can iterate.
 
@@ -104,10 +104,10 @@ The idea is that you are a completely autonomous researcher trying things out. I
 
 **Crashes**: If a run crashes (OOM, or a bug, or etc.), use your judgment: If it's something dumb and easy to fix (e.g. a typo, a missing import), fix it and re-run. If the idea itself is fundamentally broken, run `uv run lab.py undo "<what was tried>"` (the record marks it a crash) and move on.
 
-**One experiment at a time**: an experiment is finished only when you have run `lab.py keep` or `lab.py undo` (step 6); `capture.py` will not train a different `train.py` until you have. Do not stack several changes and log them afterwards. A sweep (say 0.09, then 0.12, then 0.16) is several experiments: run, log, and keep or discard each one on its own, so the scoreboard shows what each change did. A result that beats the best is a keep once the noise rule's second run confirms it, even if you plan to go further.
+**One experiment at a time**: an experiment is finished only when you have run `lab.py keep` or `lab.py undo` (step 6); `capture.py` will not train a different `train.py` until you have. Do not stack several changes and log them afterwards. A sweep (say 0.09, then 0.12, then 0.16) is several experiments: run, log, and keep or discard each one on its own, so the scoreboard shows what each change did. A result that beats the best is a keep, even if you plan to go further.
 
 **Don't stop early; stop on time**: once the loop has begun, do NOT pause to ask the human whether to continue. Do NOT ask "should I keep going?" or "is this a good stopping point?". The human might be asleep, or away from the computer, and expects you to keep working until the session budget runs out. You are autonomous. If you run out of ideas, think harder — read papers referenced in the code, re-read the in-scope files for new angles, try combining previous near-misses, try more radical architectural changes.
 
-**Ending the session**: when less than 20 minutes of the budget remain, start no new experiment. Make sure `uv run lab.py status` shows no run waiting for a decision and `train.py` the same as the best version, then write a short summary as your final message: the best score and how it compares with the baseline, which changes helped, which did not, and what you would try next. Then stop. (Karpathy's original loop runs until the human interrupts it; this fork ends on a budget so that every session finishes on a clean, logged state.)
+**Ending the session**: when less than 20 minutes of the budget remain, start no new experiment. Make sure `uv run lab.py status` shows no run waiting for a decision and `train.py` the same as the best version, then write a short summary as your final message: the best score and how it compares with the baseline and with the session's noise, which changes helped, which did not, and what you would try next. Then stop. (Karpathy's original loop runs until the human interrupts it; this fork ends on a budget so that every session finishes on a clean, logged state.)
 
 As an example use case, a user might leave you running while they sleep. Each experiment takes 13–16 minutes on a consumer GPU, so you can run about 4 an hour: a ten-hour session holds roughly 40. The user then wakes up to experimental results, all completed by you while they slept!
