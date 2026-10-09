@@ -31,3 +31,6 @@ library/checkpoints/
 
 # The last run's weights: rewritten by every run, never committed
 checkpoint_pre_eval.pt
+
+# The session runner's logs (session.py)
+/session-logs/

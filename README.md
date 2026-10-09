@@ -378,11 +378,15 @@ claude "Read program.md, do the setup checks, and start a new experiment loop. R
 
 By default Claude Code asks for permission before each file edit and shell command. For a long unattended session this will block — use one of the options below instead.
 
-**Unattended / overnight** — skip all permission prompts and save everything to `agent.log`:
+**Unattended / overnight** — use the session runner, `session.py`. It prepares the dataset and tokenizer, starts the session's record, launches Claude Code headless without permission prompts, and starts it again where it left off if its turn ends early. It starts no run in the session's last 20 minutes, ends the agent 25 minutes after the session's end, and stops at once if the sign-in fails. Run the same command again to continue a session that stopped; logs go to `session-logs/<name>/`.
 
 ```powershell
-claude --dangerously-skip-permissions "Read program.md, do the setup checks, and start a new experiment loop. Record each decision with `uv run lab.py keep` or `uv run lab.py undo`; never edit results.tsv." 2>&1 | Tee-Object -FilePath agent.log
+uv run session.py tinystories own --check      # every check, changing nothing (one short test reply)
+uv run session.py tinystories own              # 10 hours of 10-minute runs
+uv run session.py folktales phi3 --hours 6 --run-minutes 5
 ```
+
+For a whole night, run `claude setup-token` first and set the token it prints as `CLAUDE_CODE_OAUTH_TOKEN`: the usual sign-in can expire after about two hours unattended. The agent runs commands without asking each time, so run it only in this folder.
 
 **Selective permissions** — auto-approve file edits but still ask before running shell commands:
 
@@ -390,7 +394,7 @@ claude --dangerously-skip-permissions "Read program.md, do the setup checks, and
 claude --permission-mode acceptEdits "Read program.md, do the setup checks, and start a new experiment loop. Record each decision with `uv run lab.py keep` or `uv run lab.py undo`; never edit results.tsv."
 ```
 
-**Headless mode** (`-p`) runs without a terminal session to watch. It works for the loop only if the agent follows `program.md`'s "Running headless?" rules: ending its turn ends the session, so it must run training in the foreground and never stop while a run is in progress. If its turn ends early, relaunch it with `claude -p --continue`; the record shows where it was. It is also handy for one-off questions:
+**Headless mode** (`-p`) runs without a terminal session to watch. It works for the loop only if the agent follows `program.md`'s "Running headless?" rules: ending its turn ends the session, so it must run training in the foreground and never stop while a run is in progress. If its turn ends early, relaunch it with `claude -p --continue` (`session.py` does this for you); the record shows where it was. It is also handy for one-off questions:
 
 ```powershell
 claude -p "Run uv run lab.py history and summarize the session so far"
