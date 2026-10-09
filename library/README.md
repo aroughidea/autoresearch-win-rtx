@@ -66,34 +66,41 @@ scoreboard stay comparable. Each run file records `time_budget_s` and adds a mom
 | TinyStories | GPT-2 | starter kit | 344 → 692 | 2% → 4% of one | 0.5821 → 0.5177 | 11.1% better |
 | Folktales | built from the data | starter kit | 620 → 1,237 | 7 → 14 | 1.3788 → 1.8838 | 36.6% worse |
 | Folktales | Phi-3 / Llama 2 | starter kit | 431 → 858 | 4.5 → 8.9 | 1.2644 → 1.5791 | 24.9% worse |
-| Folktales | GPT-2 | starter kit | 344 → 692 | 3.9 → 7.7 | 1.2581 → 1.5478 | 23.0% worse |
+| Folktales | GPT-2 | starter kit | 344 → 692 | 3.8 → 7.7 | 1.2581 → 1.5478 | 23.0% worse |
 | Folktales | built from the data | the agent's best | 639 → 1,237 | 7 → 14 | 1.2637 → 1.6242 | 28.5% worse |
 
-The 5-minute figures are the baselines' and the session's run of `f9352a8`. Passes are steps times
-32,768 tokens, over the dataset's estimated size in `tokens.json`. Each row is one run; two runs of
-the same code differ by about 0.003, and the smallest change here is 0.0435.
+The 5-minute figures are the baselines' and the session's first run of `f9352a8` (its confirming
+run scored 1.2654). Passes are steps times 32,768 tokens, over the dataset's estimated size in
+`tokens.json`. Each row is one run; two runs of the same code differ by about 0.003, and the
+smallest change here is 0.0435. The run files carry the commit checked out while the study ran
+(`5a08dc2` for the first run, `f27f644` for the rest), with `train.py` replaced by each recipe's.
 
 - **On TinyStories, more time helped every vocabulary**, and helped the bigger ones most, since
   they had made the fewest steps. The home-made vocabulary still scores best, by less: 0.040 ahead
   of GPT-2's at 10 minutes, against 0.061 at 5. No model read even a tenth of the data, so every
   step was new text.
-- **On Folktales, more time made every model worse** at text it had not seen, and the more passes,
-  the worse. Training loss kept falling (built from the data: about 1.9 at the end of 5 minutes,
-  0.56 at the end of 10), so the models fitted their training text ever more closely while
-  predicting new text worse: overfitting (see the [glossary](../TRAINING-DECISIONS.md#glossary)).
-  Folktales is about 180 times smaller than TinyStories, so the same minutes mean far more passes.
+- **On Folktales, more time made every model worse** at text it had not seen; with the starter
+  recipe, the more passes, the worse. Meanwhile the training loss, a different measure (per token,
+  on the training text itself), kept falling: in the 10-minute run built from the data, from about
+  2.5 at 5 minutes to 0.56 at the end. The models fitted their training text ever more closely
+  while predicting new text worse: overfitting (see the
+  [glossary](../TRAINING-DECISIONS.md#glossary)). Folktales is about 180 times smaller than
+  TinyStories, so the same minutes mean far more passes.
 - **The agent's recipe kept its lead, not its gain.** At 10 minutes it still beats the starter
   recipe on Folktales (1.6242 against 1.8838), but it scores worse than it did at 5 minutes
-  (1.2637). A recipe chosen by 5-minute runs answers a 5-minute question.
+  (1.2637). At the same 14 passes it lost less than the starter recipe (28.5% against 36.6%).
+  A recipe chosen by 5-minute runs answers a 5-minute question.
 - **The writing does not show it plainly.** In one reading of the four final samples, the
   10-minute Folktales writing (built from the data) is not visibly worse than the 5-minute
   writing, and in places reads more like a folk tale. Copied phrases of eight or more words stay
-  rare, zero to two per run, all stock openings such as "there lived a King who had three sons".
+  rare, zero to two per run, all stock phrases such as "there lived a King who had a daughter".
   Here the score and the reading disagree, which is a reason to keep both.
 - **Two moments at 5 minutes.** The learning-rate schedule stretches with the time budget (it
   cools down over the last 45%), so at 5 minutes a 10-minute run is still at its full learning
-  rate, and its 5-minute writing is not the 5-minute run's. The explorer's Compare shows both
-  the shared 5-minute moment and each run's end.
+  rate (training loss about 2.5, against 1.93 for the 5-minute run at its end), and its 5-minute
+  writing is not the 5-minute run's. So the explorer's Compare sets two such runs side by side
+  only before either run's end, and then at each run's end; Growth shows a 10-minute run's
+  5-minute moment.
 
 ## The explorer's data
 
@@ -108,8 +115,9 @@ the same code differ by about 0.003, and the smallest change here is 0.0435.
   document), from which the explorer counts passes.
 - `tokenizers/`: each home-made vocabulary as a Hugging Face `tokenizer.json`, written only after
   it splits 20,000 training documents (all 8,895 of Folktales') and ten edge cases exactly as
-  training does. The start and end markers are named `<|startoftext|>` and `<|endoftext|>`, the
-  names the completion explorables recognise; the ids are unchanged.
+  training does. The end marker is named `<|endoftext|>`, the name the completion explorables
+  recognise as the end of a text; the start marker is `<|startoftext|>`, by CLIP's convention.
+  The ids are unchanged.
 - `copies.json`: stretches of eight or more words in the Folktales samples that repeat the
   training text word for word. TinyStories' training text is too large to index this way.
 

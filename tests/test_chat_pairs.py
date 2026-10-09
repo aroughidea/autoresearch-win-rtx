@@ -215,3 +215,16 @@ def test_pre_eval_record_rejects_a_different_file_with_the_same_size_and_time(tm
     os.utime(path, ns=(before.st_atime_ns, before.st_mtime_ns))
     _active_pair(monkeypatch, "tinystories", "own")
     assert chat._pair_for_checkpoint(path, None) == ("tinystories", "own")
+
+
+def test_pre_eval_record_from_before_the_content_hash_still_counts(tmp_path, monkeypatch):
+    """A record written before records carried a hash: its size and time still identify the file,
+    so a learner's Folktales checkpoint is not decoded with the default pair after upgrading."""
+    path = _pre_eval(tmp_path, monkeypatch)
+    capture.write_checkpoint_pair(path, "folktales", "own")
+    record_path = tmp_path / "checkpoint_pre_eval.json"
+    record = json.loads(record_path.read_text(encoding="utf-8"))
+    del record["sha256"]
+    record_path.write_text(json.dumps(record), encoding="utf-8")
+    _active_pair(monkeypatch, "tinystories", "own")
+    assert chat._pair_for_checkpoint(path, None) == ("folktales", "own")

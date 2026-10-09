@@ -84,7 +84,7 @@ The pages use everyday words where they are already common in the field. Each is
 | **Token, tokenizer** | Subword tokenization; byte-pair encoding (BPE) [2] | A model reads and writes in tokens, words and pieces of words, produced by a tokenizer. |
 | **Vocabulary** | Tokenizer vocabulary; SentencePiece for Phi-3 / Llama 2 [4] | The fixed set of tokens a model can use: 8,192 built from the dataset, 32,011 for Phi-3 (Llama 2's 32,000 plus 11 added tokens), 50,257 for GPT-2. |
 | **Part of a letter** | Byte-level BPE [3] | Tokenizers that work in bytes, like GPT-2's and the home-made ones, can split a letter such as "é" across two tokens. |
-| **Training** | Training by gradient descent [5] | Changing a model's weights by having it read data. Here it happens only inside each 5-minute run. |
+| **Training** | Training by gradient descent [5] | Changing a model's weights by having it read data. Here it happens only inside each run: 5 minutes, or 10 in the ten-minute study. |
 | **Training time** | A fixed training-time budget [6] | The 5 minutes each run trains for, whatever the GPU. Choosing a recipe by short runs can favour what pays off early, a known bias [18]; the [ten-minute study](library/README.md#the-ten-minute-study) trains the same recipes for 10 minutes to check. |
 | **Step** | Optimizer step, one per minibatch [5] | One update of the model's weights, from one batch of training text. A 5-minute run here makes 344 to 639 steps: a bigger vocabulary makes a bigger model, so fewer steps fit. |
 | **Batch size** | Minibatch size [5] | The text read for each step: 32,768 tokens here (`TOTAL_BATCH_SIZE` in `train.py`). |
@@ -119,6 +119,6 @@ The pages use everyday words where they are already common in the field. Each is
 15. Chengrun Yang and others. [Large Language Models as Optimizers](https://arxiv.org/abs/2309.03409). ICLR 2024.
 16. Luca Franceschi, Paolo Frasconi, Saverio Salzo, Riccardo Grazzi and Massimiliano Pontil. [Bilevel Programming for Hyperparameter Optimization and Meta-Learning](https://proceedings.mlr.press/v80/franceschi18a.html). ICML 2018 (training as the inner problem, hyperparameters as the outer one).
 17. Jordan Hoffmann and others. [Training Compute-Optimal Large Language Models](https://arxiv.org/abs/2203.15556). NeurIPS 2022.
-18. Yuhuai Wu, Mengye Ren, Renjie Liao and Roger Grosse. [Understanding Short-Horizon Bias in Stochastic Meta-Optimization](https://arxiv.org/abs/1803.02021). ICLR 2018 (tuning on short runs is biased toward small learning rates).
+18. Yuhuai Wu, Mengye Ren, Renjie Liao and Roger Grosse. [Understanding Short-Horizon Bias in Stochastic Meta-Optimization](https://arxiv.org/abs/1803.02021). ICLR 2018 (choosing hyperparameters by short runs is biased toward small learning rates).
 
 "Agent" has two meanings in the workshops: there it is the assistant you design; here it is the coding agent that runs the experiments.

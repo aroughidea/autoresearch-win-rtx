@@ -191,11 +191,13 @@ def read_checkpoint_pair(checkpoint_path):
         return None
     if not isinstance(record, dict) or record.get("size") != st.st_size or record.get("mtime_ns") != st.st_mtime_ns:
         return None
-    try:
-        if record.get("sha256") != _file_sha256(path):
+    # Records written before the hash was added have none; their size and time still stand.
+    if "sha256" in record:
+        try:
+            if record["sha256"] != _file_sha256(path):
+                return None
+        except OSError:
             return None
-    except OSError:
-        return None
     dataset, tokenizer_name = record.get("dataset"), record.get("tokenizer")
     if isinstance(dataset, str) and dataset and isinstance(tokenizer_name, str) and tokenizer_name:
         return dataset, tokenizer_name
