@@ -1,6 +1,6 @@
 # Training Decisions: a learning journey for autoresearch
 
-Status: in progress · components 1 (capture) and 2 (dataset and tokenizer options) built · updated 2026-10-07 · Thomas J McLeish with Claude
+Status: in progress · built: 1 (capture), 2 (dataset and tokenizer options), 3 (library: baselines, the Folktales session, the ten-minute study), 4 (explorer, live at llmexplorables.aroughidea.com/training/), 6 in part (agent-first starter README, docs pass) · not yet: 5 (tokens in the explorables), the completion tie-in, 7 (workshops page), 8 (hosted chat) · updated 2026-10-08 · Thomas J McLeish with Claude
 
 ## Learning objectives
 
@@ -387,6 +387,24 @@ through `shared/Modes.js`. It is added to the index's sidebar and table, and to 
   requires one experiment at a time (no batched sweeps). Headless agents wait for training in the
   foreground. Karpathy's original runs until interrupted.
 - **Before-merge fixes** from the explorer audit are in (llm-explorables `4a32ff6`).
+
+## Results and decisions, 8 October 2026 (evening)
+
+- **Built (plan `2026-10-08-phase-a1-study-steps-export.md`):** a time budget only a person sets
+  (`AUTORESEARCH_TIME_BUDGET`), token-count estimates, the home-made vocabularies exported as
+  `tokenizer.json`, and the explorer's step and epoch definitions and passes through the data.
+  Worked example #25, starter #8; the explorer (llm-explorables #34 with #35) is live.
+- **The ten-minute study** (`library/README.md`): ten minutes instead of five improves every
+  TinyStories score (8–11%) and worsens every Folktales score (23–37%, overfitting at 8–14 passes).
+  The agent's 5-minute recipe keeps its lead over the starter recipe at 10 minutes but loses its
+  5-minute score: a recipe chosen by 5-minute runs answers a 5-minute question.
+- **Not recursive self-improvement.** `TRAINING-DECISIONS.md` says so and why, and lists what would
+  have to be in place (#26). Karpathy's own loop validates each change by one run's score; his test
+  on a larger model was a separate step, by hand, after the run.
+- **Longer sessions.** Our pace is about 7 experiments an hour, like a single-GPU autoresearch;
+  the gap to Karpathy's ~700 was session length (2 hours against 2 days). Next: TinyStories from
+  the starter recipe, a 10-hour budget, `program.md` unchanged, a runner that stops on a sign-in
+  failure. After it: rerun the best recipe twice, train it for ten minutes, try it on Folktales.
 
 ## Serving the library for completion (component 8, designed, not built)
 
