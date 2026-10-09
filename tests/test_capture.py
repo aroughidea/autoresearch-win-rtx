@@ -373,7 +373,7 @@ def test_run_file_records_the_tokenizer_objects_name_and_source(tmp_path):
 
 def test_run_file_records_the_time_budget(tmp_path):
     record = json.loads(_finish(_capture(tmp_path)).read_text(encoding="utf-8"))
-    assert record["time_budget_s"] == 300
+    assert record["time_budget_s"] == 600          # the default run: 10 minutes
 
 
 import record as _record
@@ -395,7 +395,7 @@ def test_capture_in_a_session_writes_the_entry_there(tmp_path, monkeypatch):
     path = _finish(cap, commit=None, committed_at=None)
     entry = json.loads(path.read_text(encoding="utf-8"))
     vid = _record.version_id("MATRIX_LR = 0.05\n")
-    assert path.parent == s.runs_dir and entry["schema"] == 1
+    assert path.parent.resolve() == s.runs_dir.resolve() and entry["schema"] == 1
     assert entry["version"] == entry["commit"] == vid and entry["parent"] == vid
     assert entry["status"] is None and entry["run_id"].endswith("_" + vid)
     assert _record.undecided(s)[0]["run_id"] == entry["run_id"]
