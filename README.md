@@ -217,7 +217,7 @@ Edits a person might make to `program.md` between sessions:
 
 ### How long does the agent run?
 
-A session lasts **10 hours** by default, and every run trains for **10 minutes** (`TIME_BUDGET = 600` in `prepare.py`). Before each run the agent checks the time with `uv run lab.py status`; with less than 20 minutes left it starts no new run, writes a summary and stops, so every session ends on a clean record.
+A session lasts **10 hours** by default, and every run trains for **10 minutes** (`TIME_BUDGET = 600` in `prepare.py`). Before each run the agent checks the time with `uv run lab.py status`; with less than 20 minutes left it starts no new run, writes a summary and stops, so every session ends on a clean record. If the agent stops early, `session.py` starts it again.
 
 How many runs a session holds, measured on a laptop RTX 4000 Ada:
 
@@ -497,6 +497,7 @@ prepare.py        — constants, data prep + runtime utilities (do not modify)
 capture.py        — records each run: its sample stories and score (do not modify)
 record.py         — the experiment record (do not modify)
 lab.py            — the record's command line (do not modify)
+session.py        — runs a session unattended with Claude Code, restarting the agent if it stops early
 train.py          — model, optimizer, training loop (the agent modifies this)
 program.md        — the agent's instructions
 generate.py       — load a checkpoint and generate text from a prompt (terminal)
