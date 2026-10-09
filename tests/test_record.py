@@ -382,3 +382,11 @@ def test_one_baseline_run_measures_no_noise(tmp_path):
     _finish(s, _begin(s, tmp_path), val_bpb=0.52)
     _decide(s, tmp_path, keep=True, description="baseline")
     assert record.noise(s) is None
+
+
+def test_ending_a_session_keeps_its_folder(tmp_path):
+    s = _start(tmp_path)
+    assert record.end_session(base=tmp_path / "sessions") == s.name
+    assert record.active_session(tmp_path / "sessions") is None
+    assert (s.root / "session.json").exists() and (s.versions_dir).exists()
+    assert record.end_session(base=tmp_path / "sessions") is None       # nothing active: nothing to end

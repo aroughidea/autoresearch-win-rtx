@@ -2,10 +2,11 @@
 Run capture for the Training Decisions explorer.
 
 Records what the model writes at fixed moments of training, on fixed prompts with
-fixed decoding, and saves one small JSON run file per experiment in runs/.
+fixed decoding, and saves one small JSON run file per run: its entry in the active
+session's runs/ (sessions/<name>/runs/), or the root runs/ outside a session.
 
 A captured run trains exactly like an uncaptured one: train.py calls this module
-before each step's timer starts (so sampling never counts toward the 5-minute
+before each step's timer starts (so sampling never counts toward the time
 budget), and sampling uses its own random generator, never the global one.
 
 The agent must not modify this file (see program.md).
@@ -99,7 +100,7 @@ BASE_SNAPSHOT_TIMES = (0, 10, 30, 60, 120)
 
 def snapshot_times_for(budget):
     """Moments to sample, in training seconds. A run longer than 5 minutes also samples at
-    5 minutes, so it lines up with the normal runs."""
+    5 minutes, so it lines up with the library's 5-minute runs."""
     return BASE_SNAPSHOT_TIMES + ((300,) if budget > 300 else ())
 
 
@@ -360,7 +361,7 @@ class RunCapture:
             tmp.write_text(json.dumps(record, indent=1, ensure_ascii=False, allow_nan=False) + "\n", encoding="utf-8")
             os.replace(tmp, path)
         except Exception:
-            tmp.unlink(missing_ok=True)  # a half-written file must not be committed by `git add runs/`
+            tmp.unlink(missing_ok=True)  # a half-written file must never be left behind as a run file
             raise
         self._say(f"capture: wrote {path}")
         return path

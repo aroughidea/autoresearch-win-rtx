@@ -146,3 +146,13 @@ def test_status_reports_the_noise_once_the_baseline_has_three_runs(tmp_path, mon
     _run(capsys, "keep", "baseline, three times")
     _, out, _ = _run(capsys, "status")
     assert "3 baseline runs" in out and "spread 0.003000" in out
+
+
+def test_end_lets_train_py_run_outside_any_session(tmp_path, monkeypatch, capsys):
+    _project(tmp_path, monkeypatch)
+    _run(capsys, "start", "s1", "--dataset", "tinystories", "--tokenizer", "own")
+    code, out, _ = _run(capsys, "end")
+    assert code == 0 and "s1" in out and "stays" in out
+    code, _, err = _run(capsys, "status")
+    assert code == 1 and "no active session" in err
+    assert (tmp_path / "sessions" / "s1" / "session.json").exists()

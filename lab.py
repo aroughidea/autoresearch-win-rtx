@@ -10,6 +10,7 @@ lab.py: the experiment record's command line. The agent uses it instead of git.
   uv run lab.py export [--sqlite F]    rewrite results.tsv; optionally build a SQLite file
   uv run lab.py check                  report anything inconsistent in the record
   uv run lab.py restore                put back a fixed file (program.md, prepare.py, ...) that changed
+  uv run lab.py end                    end the session: its folder stays; train.py then runs outside any session
 
 A person, or the session runner, starts a session:
   uv run lab.py start <name> --dataset tinystories --tokenizer own [--run-minutes 10] [--hours 10]
@@ -129,6 +130,12 @@ def cmd_restore(args):
           else "nothing to restore: the fixed files are as the session started")
 
 
+def cmd_end(args):
+    name = record.end_session()
+    print(f"ended {name}: its folder stays in sessions/{name}/; train.py now runs outside any session"
+          if name else "no session is active")
+
+
 def main(argv=None):
     # Piped output (how the agent reads it) defaults to cp1252 on Windows, which cannot print
     # every description; UTF-8 can.
@@ -147,7 +154,7 @@ def main(argv=None):
     p.add_argument("--hours", type=float, default=10)
     p.set_defaults(func=cmd_start)
     for name, func in (("status", cmd_status), ("history", cmd_history), ("check", cmd_check),
-                       ("restore", cmd_restore)):
+                       ("restore", cmd_restore), ("end", cmd_end)):
         sub.add_parser(name).set_defaults(func=func)
     p = sub.add_parser("diff")
     p.add_argument("a", nargs="?")

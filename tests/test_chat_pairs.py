@@ -236,3 +236,47 @@ def test_model_store_keeps_its_results_path(tmp_path):
                             runs_dir=str(tmp_path / "sessions" / "s1" / "runs"),
                             results_path=str(tmp_path / "sessions" / "s1" / "results.tsv"))
     assert store.results_path.endswith("results.tsv") and "s1" in store.results_path
+
+
+# The record: a session's models and run files.
+
+def test_a_run_file_is_found_in_any_session(tmp_path, monkeypatch):
+    """A model kept in an earlier session must keep its own pair, or it is decoded with the wrong tokenizer."""
+    monkeypatch.chdir(tmp_path)
+    older = tmp_path / "sessions" / "folktales-a" / "runs"
+    older.mkdir(parents=True)
+    stem = "20261008T010000-0700_0123456789ab"
+    (older / f"{stem}.json").write_text(json.dumps({"dataset": "folktales", "tokenizer": {"name": "own"}}),
+                                        encoding="utf-8")
+    run = chat._run_for_checkpoint(f"checkpoints/{stem}.pt", runs_dir="sessions/tinystories-b/runs")
+    assert run is not None and run["dataset"] == "folktales"
+
+
+def test_a_missing_session_folder_does_not_stop_the_page(tmp_path, monkeypatch, capsys):
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "sessions").mkdir()
+    (tmp_path / "sessions" / "active.txt").write_text("gone\n", encoding="utf-8")
+    assert chat._session_paths() == ("runs", "results.tsv")
+    assert "gone" in capsys.readouterr().out
+
+
+def test_a_record_entry_labels_its_own_model(tmp_path):
+    """The same version can be kept once and discarded later; the kept model keeps its own label."""
+    stem = "20261008T010000-0700_0123456789ab"
+    entries = _entries(tmp_path, [(f"{stem}.pt", 8)])
+    runs = _write_run(tmp_path, stem, status="keep", description="matrix lr 0.07",
+                      final={"val_bpb": 0.51, "params_m": 18.9})
+    tsv = tmp_path / "results.tsv"
+    tsv.write_text("timestamp\tcommit\tval_bpb\tmemory_gb\tstatus\tdescription\n"
+                   "2026-10-08T01:00:00-07:00\t0123456789ab\t0.510000\t3.5\tkeep\tmatrix lr 0.07\n"
+                   "2026-10-08T03:00:00-07:00\t0123456789ab\t0.530000\t3.5\tdiscard\tsame code, tried again\n",
+                   encoding="utf-8")
+    store = chat.ModelStore("cpu", entries, entries[0]["path"], tokenizer_loader=lambda dataset, tokenizer: _Tok(8),
+                            runs_dir=str(runs), results_path=str(tsv))
+    m = store.list_models()[0]
+    assert (m["status"], m["description"], m["val_bpb"]) == ("keep", "matrix lr 0.07", 0.51)
+
+
+def test_page_text_fits_ten_minute_runs_and_the_record():
+    assert "0 s to 5 min" not in chat._HTML and "its 5 minutes of training" not in chat._HTML
+    assert "appends a row to" not in chat._HTML

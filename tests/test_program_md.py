@@ -34,3 +34,14 @@ def test_no_git_era_words_and_the_restore_route():
 def test_no_rerun_rule_and_a_three_run_baseline():
     assert "noise rule" not in TEXT and "both runs beat" not in TEXT
     assert "three times" in TEXT and "lab.py status" in TEXT
+
+
+def test_an_unattended_start_checks_or_starts_the_session():
+    unattended = TEXT.split("**Started unattended?**", 1)[1].split("\n", 1)[0]
+    assert "step 6" in unattended and "lab.py status" in unattended
+
+
+def test_a_person_can_choose_the_run_length_for_a_session():
+    step5 = TEXT.split("5. **Check the time budget**", 1)[1].split("\n6. ", 1)[0]
+    assert "lab.py status" in step5 and "do not start" not in step5
+    assert "nobody can unset it" not in TEXT

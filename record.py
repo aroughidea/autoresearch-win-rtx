@@ -138,6 +138,17 @@ def active_session(base=SESSIONS):
     return Session(root)
 
 
+def end_session(base=SESSIONS):
+    """Make no session active (sessions/active.txt goes); the session's folder stays as it is. Returns the
+    name that was active, or None. train.py then runs outside any session until the next start."""
+    name = None
+    with contextlib.suppress(OSError):
+        name = (Path(base) / "active.txt").read_text(encoding="utf-8").strip() or None
+    with contextlib.suppress(FileNotFoundError):
+        (Path(base) / "active.txt").unlink()
+    return name
+
+
 def active_session_from(cwd, home):
     """The active session for a run started in cwd. The record lives in the project folder (home);
     a run started anywhere else would find no session there and quietly record to runs/ instead,

@@ -266,7 +266,7 @@ def test_finish_writes_named_run_file(tmp_path):
 
 
 def test_finish_keeps_a_rerun_of_the_same_commit(tmp_path):
-    """program.md's noise rule runs a commit twice before keeping it; both runs are evidence."""
+    """Outside a session, a second run of the same commit (the baseline is trained three times) keeps its own file."""
     cap = _capture(tmp_path)
     first = _finish(cap, val_bpb=0.6)
     second = _finish(cap, val_bpb=0.5)
