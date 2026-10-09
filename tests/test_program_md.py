@@ -19,3 +19,13 @@ def test_setup_has_no_git_era_instructions():
     setup = TEXT.split("## Setup", 1)[1].split("\n## ", 1)[0]
     assert "commit messages" not in setup
     assert "one run file per experiment in `runs/`" not in setup
+
+
+def test_ten_minute_runs_and_ten_hour_sessions():
+    assert "5 minutes" not in TEXT and "8 hours" not in TEXT and "300s" not in TEXT
+    assert "10 minutes" in TEXT and "**10 hours**" in TEXT and "Time budget: 600s" in TEXT
+
+
+def test_no_git_era_words_and_the_restore_route():
+    assert "same commit" not in TEXT and "revert" not in TEXT
+    assert "uv run lab.py restore" in TEXT

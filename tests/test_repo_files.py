@@ -20,3 +20,9 @@ def test_library_scripts_do_not_check_out_the_untracked_weights_file():
         for line in (ROOT / "library" / name).read_text(encoding="utf-8").splitlines():
             if line.strip().startswith("git checkout"):
                 assert "checkpoint_pre_eval.pt" not in line, (name, line)
+
+
+def test_the_library_baselines_stay_five_minute_runs():
+    """The default run is now 10 minutes; the library's baselines are 5-minute runs and must say so."""
+    text = (ROOT / "library" / "make_baselines.sh").read_text(encoding="utf-8")
+    assert "export AUTORESEARCH_TIME_BUDGET=300" in text

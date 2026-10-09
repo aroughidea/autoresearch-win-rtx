@@ -32,18 +32,18 @@ MAX_SEQ_LEN = 2048          # context length
 
 
 def _time_budget_from_env(env=None):
-    """Training seconds per run: 300 unless AUTORESEARCH_TIME_BUDGET sets another (60 to 3600).
+    """Training seconds per run: 600 unless AUTORESEARCH_TIME_BUDGET sets another (60 to 3600).
     Only a person sets it, for a study; the agent never does (program.md)."""
     env = os.environ if env is None else env
     raw = (env.get("AUTORESEARCH_TIME_BUDGET") or "").strip()
     if not raw:
-        return 300
+        return 600
     if not raw.isdigit() or not 60 <= int(raw) <= 3600:
         raise ValueError(f"AUTORESEARCH_TIME_BUDGET must be whole seconds from 60 to 3600, not {raw!r}")
     return int(raw)
 
 
-TIME_BUDGET = _time_budget_from_env()  # training time budget in seconds (5 minutes unless a study sets it)
+TIME_BUDGET = _time_budget_from_env()  # training time budget in seconds (10 minutes unless a study sets it)
 EVAL_TOKENS = 40 * 524288   # number of tokens for validation eval
 VOCAB_SIZE = 8192
 

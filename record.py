@@ -94,10 +94,11 @@ class Session:
         return self.root / "results.tsv"
 
 
-def start_session(name, *, dataset, tokenizer, run_minutes=5, hours=8, recipe_path="train.py",
+def start_session(name, *, dataset, tokenizer, run_minutes=10, hours=10, recipe_path="train.py",
                   base=SESSIONS, project_root=".", now=None):
     """Create sessions/<name>/, store train.py as the first version, point best.json at it with no
-    score, record the fixed files' hashes, and make it the active session."""
+    score, record the fixed files' hashes and keep a copy of each (fixed/, for `lab.py restore`), and
+    make it the active session."""
     root = Path(base) / name
     if root.exists():
         raise RecordError(f"record: session {name} already exists ({root})")
@@ -111,6 +112,9 @@ def start_session(name, *, dataset, tokenizer, run_minutes=5, hours=8, recipe_pa
         "fixed": {f: _file_sha256(project_root / f) for f in FIXED_FILES if (project_root / f).exists()},
     }
     _write_json(root / "session.json", meta)
+    for name_ in meta["fixed"]:
+        (root / "fixed").mkdir(parents=True, exist_ok=True)
+        shutil.copy2(project_root / name_, root / "fixed" / name_)
     session = Session(root)
     first = store_version(session, Path(recipe_path).read_text(encoding="utf-8"))
     _write_json(session.best_path, {"version": first, "run": None, "val_bpb": None})
@@ -176,6 +180,19 @@ def changed_fixed_files(session, project_root="."):
     return changed
 
 
+def restore_fixed_files(session, project_root="."):
+    """Put back each fixed file that changed since the session started, from the copy saved then.
+    Returns the names restored. A copy that no longer matches its recorded hash is refused."""
+    restored = []
+    for name in changed_fixed_files(session, project_root):
+        copy = session.root / "fixed" / name
+        if not copy.exists() or _file_sha256(copy) != session.meta["fixed"][name]:
+            raise RecordError(f"record: this session has no good copy of {name} to restore")
+        shutil.copy2(copy, Path(project_root) / name)
+        restored.append(name)
+    return restored
+
+
 def entries(session):
     """Every run entry, oldest first (run ids start with the time)."""
     if not session.runs_dir.exists():
@@ -214,7 +231,7 @@ def begin_run(session, *, dataset, tokenizer, time_budget_s, recipe_path="train.
     changed = changed_fixed_files(session, project_root)
     if changed:
         raise RecordError(f"record: {', '.join(changed)} changed since the session started. Only train.py "
-                          f"may change; restore the lab's own copy with `git checkout -- {' '.join(changed)}`")
+                          "may change; `uv run lab.py restore` puts back the session's own copy")
     if (dataset, tokenizer) != (session.meta["dataset"], session.meta["tokenizer"]):
         raise RecordError(f"record: this session is {session.meta['dataset']}/{session.meta['tokenizer']}, "
                           f"but {dataset}/{tokenizer} is active; prepare the session's pair first")
@@ -388,7 +405,8 @@ def export_sqlite(session, path):
 
 def check(session, project_root="."):
     """What is inconsistent in the record, as sentences; an empty list means nothing is."""
-    problems = [f"{name} changed since the session started" for name in changed_fixed_files(session, project_root)]
+    problems = [f"{name} changed since the session started (`uv run lab.py restore` puts it back)"
+                for name in changed_fixed_files(session, project_root)]
     for e in entries(session):
         if not (session.versions_dir / f"{e.get('version')}.py").exists():
             problems.append(f"{e['run_id']}: its version {e.get('version')} is missing")

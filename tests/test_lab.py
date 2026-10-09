@@ -36,7 +36,7 @@ def test_start_then_status(tmp_path, monkeypatch, capsys):
 def test_status_reports_a_run_in_progress(tmp_path, monkeypatch, capsys):
     _project(tmp_path, monkeypatch)
     _run(capsys, "start", "s1", "--dataset", "tinystories", "--tokenizer", "own")
-    record.begin_run(record.active_session(), dataset="tinystories", tokenizer="own", time_budget_s=300)
+    record.begin_run(record.active_session(), dataset="tinystories", tokenizer="own", time_budget_s=600)
     code, out, _ = _run(capsys, "status")
     assert "still training, or crashed" in out
 
@@ -45,7 +45,7 @@ def test_keep_undo_history_diff_show(tmp_path, monkeypatch, capsys):
     _project(tmp_path, monkeypatch)
     _run(capsys, "start", "s1", "--dataset", "tinystories", "--tokenizer", "own")
     s = record.active_session()
-    run = record.begin_run(s, dataset="tinystories", tokenizer="own", time_budget_s=300)
+    run = record.begin_run(s, dataset="tinystories", tokenizer="own", time_budget_s=600)
     entry = {"schema": 1, "run_id": run["run_id"], "commit": run["version"], "version": run["version"],
              "parent": run["parent"], "status": None, "description": None, "created": run["started"],
              "final": {"val_bpb": 0.52, "peak_vram_mb": 3546.0}}
@@ -84,7 +84,7 @@ def test_history_prints_non_ascii_when_piped(tmp_path, monkeypatch, capsys):
     _project(tmp_path, monkeypatch)
     _run(capsys, "start", "s1", "--dataset", "tinystories", "--tokenizer", "own")
     s = record.active_session()
-    run = record.begin_run(s, dataset="tinystories", tokenizer="own", time_budget_s=300)
+    run = record.begin_run(s, dataset="tinystories", tokenizer="own", time_budget_s=600)
     entry = {"schema": 1, "run_id": run["run_id"], "commit": run["version"], "version": run["version"],
              "parent": run["parent"], "status": None, "description": None, "created": run["started"],
              "final": {"val_bpb": 0.52, "peak_vram_mb": 3546.0}}
@@ -102,7 +102,7 @@ def test_history_columns_line_up_with_full_run_ids(tmp_path, monkeypatch, capsys
     _project(tmp_path, monkeypatch)
     _run(capsys, "start", "s1", "--dataset", "tinystories", "--tokenizer", "own")
     s = record.active_session()
-    run = record.begin_run(s, dataset="tinystories", tokenizer="own", time_budget_s=300)
+    run = record.begin_run(s, dataset="tinystories", tokenizer="own", time_budget_s=600)
     entry = {"schema": 1, "run_id": run["run_id"], "commit": run["version"], "version": run["version"],
              "parent": run["parent"], "status": None, "description": None, "created": run["started"],
              "final": {"val_bpb": 0.52, "peak_vram_mb": 3546.0}}
@@ -113,3 +113,16 @@ def test_history_columns_line_up_with_full_run_ids(tmp_path, monkeypatch, capsys
     header, row = out.splitlines()[:2]
     assert run["run_id"] in row
     assert header.index("version") == row.index(run["version"], len(run["run_id"]))
+
+
+def test_restore_and_ten_minute_defaults(tmp_path, monkeypatch, capsys):
+    _project(tmp_path, monkeypatch)
+    _run(capsys, "start", "s1", "--dataset", "tinystories", "--tokenizer", "own")
+    meta = record.active_session().meta
+    assert meta["run_minutes"] == 10 and meta["hours"] == 10
+    (tmp_path / "program.md").write_text("# edited\n", encoding="utf-8")
+    code, out, _ = _run(capsys, "restore")
+    assert code == 0 and "program.md" in out
+    assert (tmp_path / "program.md").read_text(encoding="utf-8") == "# program.md\n"
+    code, out, _ = _run(capsys, "restore")
+    assert code == 0 and "nothing to restore" in out

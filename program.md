@@ -15,9 +15,9 @@ To set up a new experiment, work with the user to:
    - `record.py` and `lab.py` — the experiment record and its command line. Do not modify.
    - `train.py` — the file you modify. Model architecture, optimizer, training loop.
 4. **Verify data exists**: Check the autoresearch cache directory. On Windows this is `%LOCALAPPDATA%\autoresearch` (e.g. `C:\Users\<you>\AppData\Local\autoresearch`) — unless `AUTORESEARCH_CACHE_DIR` is set, or a legacy `~/.cache/autoresearch` directory already exists (resolution order is defined in `_default_cache_dir()` in `prepare.py`). It should contain: `datasets\<dataset>\data\` with the downloaded parquet file (default: `tinystories_gpt4_clean.parquet` — the data stays as a single parquet file; there are no pre-tokenized shards), `datasets\<dataset>\tokenizer\` (or `tokenizer-<name>\` when a standard tokenizer such as `phi3` or `gpt2` is active) with `tokenizer.pkl` and `token_bytes.pt`, and `active_dataset.txt` and `active_tokenizer.txt` at the cache root (no `active_tokenizer.txt` means `own`). If any of these are missing, tell the human to run `uv run prepare.py`.
-5. **Check the time budget**: `AUTORESEARCH_TIME_BUDGET` must not be set (`echo $AUTORESEARCH_TIME_BUDGET` in bash, `$env:AUTORESEARCH_TIME_BUDGET` in PowerShell: both print nothing). A person sets it for a study; inherited from their shell, it would make every experiment train for that long instead of 5 minutes. If it is set, tell the human and do not start. Each run's log also prints `Time budget: 300s`; any other number means the same.
+5. **Check the time budget**: `AUTORESEARCH_TIME_BUDGET` must not be set (`echo $AUTORESEARCH_TIME_BUDGET` in bash, `$env:AUTORESEARCH_TIME_BUDGET` in PowerShell: both print nothing). A person sets it for a study; inherited from their shell, it would make every experiment train for that long instead of 10 minutes. If it is set, tell the human and do not start. Each run's log also prints `Time budget: 600s`; any other number means the same.
 6. **Check the session**: run `uv run lab.py status`. If it says there is no active session, start one: `uv run lab.py start <tag> --dataset <active dataset> --tokenizer <active tokenizer> --hours <session budget>`. The session's `results.tsv` is written by `lab.py`; never edit it.
-7. **Note the session budget**: the human may give you one (for example "run for 4 hours"); otherwise it is **8 hours**. Note the time the loop starts (run `date`).
+7. **Note the session budget**: the human may give you one (for example "run for 4 hours"); otherwise it is **10 hours**. Note the time the loop starts (run `date`).
 8. **Confirm and go**: Confirm setup looks good.
 
 Note: the Windows fork supports NVIDIA GPUs that meet the VRAM floor, including laptop and mobile workstation GPUs. Strong laptop hardware should be described as supported when it meets the floor, while still acknowledging that thermals and power limits can reduce throughput.
@@ -30,7 +30,7 @@ Once you get confirmation, kick off the experimentation.
 
 ## Experimentation
 
-Each experiment runs on a single GPU. The training script runs for a **fixed time budget of 5 minutes** (wall clock training time, excluding startup/compilation). You launch it simply as: `uv run train.py`.
+Each experiment runs on a single GPU. The training script runs for a **fixed time budget of 10 minutes** (wall clock training time, excluding startup/compilation). You launch it simply as: `uv run train.py`.
 
 **What you CAN do:**
 - Modify `train.py` — this is the only file you edit. Everything is fair game: model architecture, optimizer, hyperparameters, training loop, batch size, model size, etc.
@@ -40,14 +40,14 @@ Each experiment runs on a single GPU. The training script runs for a **fixed tim
 - Modify `capture.py`, or remove or change the `capture.` calls in `train.py` (`capture.begin_attempt`, `capture.on_step`, `capture.on_train_end`, `capture.finish`) and the `RunCapture(...)` setup in `main()`. They record each run for the Training Decisions explorer. They run outside the timed part of the loop and do not affect training or val_bpb.
 - Install new packages or add dependencies. You can only use what's already in `pyproject.toml`.
 - Change the dataset or the tokenizer: do not run `prepare.py`, set `AUTORESEARCH_DATASET` or `AUTORESEARCH_TOKENIZER`, edit the `active_*.txt` files, pass `--dataset` to `train.py`, or change the arguments of `Tokenizer.from_directory(...)`. The scorer in `prepare.py` refuses any pair other than the active one. They are the human's decisions for this campaign, and scores only compare within one pair.
-- Change the time budget: do not set `AUTORESEARCH_TIME_BUDGET`. Every experiment trains for the same 5 minutes, so scores compare. Longer runs are a person's study, kept apart from the scoreboard.
+- Change the time budget: do not set `AUTORESEARCH_TIME_BUDGET`. Every experiment trains for the same 10 minutes, so scores compare. Longer runs are a person's study, kept apart from the scoreboard.
 - Modify the evaluation harness. The `evaluate_bpb` function in `prepare.py` is the ground truth metric.
 
-**The goal is simple: get the lowest val_bpb.** Since the time budget is fixed, you don't need to worry about training time — it's always 5 minutes. Everything is fair game: change the architecture, the optimizer, the hyperparameters, the batch size, the model size. The only constraint is that the code runs without crashing and finishes within the time budget.
+**The goal is simple: get the lowest val_bpb.** Since the time budget is fixed, you don't need to worry about training time — it's always 10 minutes. Everything is fair game: change the architecture, the optimizer, the hyperparameters, the batch size, the model size. The only constraint is that the code runs without crashing and finishes within the time budget.
 
 **VRAM** is a soft constraint. Some increase is acceptable for meaningful val_bpb gains, but it should not blow up dramatically.
 
-**Noise**: on a consumer GPU, two runs of the same code differ by about 0.003 val_bpb, because the fixed 5 minutes holds a slightly different number of steps each time. An improvement smaller than that is not evidence. Before keeping one, run the same commit once more; keep it only if both runs beat the current best. Log both runs.
+**Noise**: on a consumer GPU, two runs of the same code differ by about 0.003 val_bpb (measured with 5-minute runs), because the fixed training time holds a slightly different number of steps each time. An improvement smaller than that is not evidence. Before keeping one, train the same version once more; keep it only if both runs beat the current best. `lab.py keep` then records both runs.
 
 **Simplicity criterion**: All else being equal, simpler is better. A small improvement that adds ugly complexity is not worth it. Conversely, removing something and getting equal or better results is a great outcome — that's a simplification win. When evaluating whether to keep a change, weigh the complexity cost against the improvement magnitude. A 0.001 val_bpb improvement that adds 20 lines of hacky code? Probably not worth it. A 0.001 val_bpb improvement from deleting code? Definitely keep. An improvement of ~0 but much simpler code? Keep.
 
@@ -70,7 +70,7 @@ num_params_M:     50.3
 depth:            8
 ```
 
-Note that the script is configured to always stop after 5 minutes, so depending on the computing platform of this computer the numbers might look different. You can extract the key metric from the log file:
+This example comes from Karpathy's original setup on an H100 GPU, with a shorter time budget. The script here is configured to always stop after 10 minutes, so depending on the computing platform of this computer the numbers might look different. You can extract the key metric from the log file:
 
 ```
 grep "^val_bpb:" run.log
@@ -83,7 +83,7 @@ Every run is recorded automatically. `capture.py` stores the code that trained (
 - `uv run lab.py keep "<description>"`: the run's version becomes the best version, and its model is copied to `checkpoints/`.
 - `uv run lab.py undo "<description>"`: the run is recorded as `discard` (or `crash` if it never finished), and `train.py` is reset to the best version.
 
-Either way, `train.py` is then the best version. With no run waiting (a change you abandon before training it, or a crash before training started), `undo` simply resets `train.py` to the best version. The description is a few words on what the experiment tried. `lab.py` then rewrites the session's `results.tsv` (`timestamp commit val_bpb memory_gb status description`, where `commit` is the version id). Read the record with `uv run lab.py history` (one line per run) and `uv run lab.py diff` (what changed).
+Either way, `train.py` is then the best version. If `lab.py` says a fixed file such as `program.md` or `prepare.py` changed since the session started, run `uv run lab.py restore`: it puts back the copy the session saved. With no run waiting (a change you abandon before training it, or a crash before training started), `undo` simply resets `train.py` to the best version. The description is a few words on what the experiment tried. `lab.py` then rewrites the session's `results.tsv` (`timestamp commit val_bpb memory_gb status description`, where `commit` is the version id). Read the record with `uv run lab.py history` (one line per run) and `uv run lab.py diff` (what changed).
 
 ## The experiment loop
 
@@ -100,7 +100,7 @@ LOOP UNTIL THE SESSION BUDGET RUNS OUT. Before each experiment, check the time w
 
 The idea is that you are a completely autonomous researcher trying things out. If they work, keep. If they don't, undo. The best version moves forward so that you can iterate.
 
-**Timeout**: Each experiment trains for ~5 minutes, plus startup, the fixed validation eval, and the writing samples `capture.py` records for the run file (about 20 seconds on an RTX 4000 Ada laptop GPU, more on slower GPUs; `sampling_s` in the run file). On consumer GPUs the eval alone can add 2–3 minutes, so a healthy run totals 8–11 minutes (`total_seconds` in the summary tells you exactly). If a run exceeds 15 minutes, kill it and treat it as a failure (discard and revert).
+**Timeout**: Each experiment trains for ~10 minutes, plus startup, the fixed validation eval, and the writing samples `capture.py` records for the run file (about 20 seconds on an RTX 4000 Ada laptop GPU, more on slower GPUs; `sampling_s` in the run file). On consumer GPUs the eval alone can add 2–3 minutes, so a healthy run totals 13–16 minutes (`total_seconds` in the summary tells you exactly). If a run exceeds 20 minutes, kill it and treat it as a failure: `uv run lab.py undo "<what was tried>"`.
 
 **Crashes**: If a run crashes (OOM, or a bug, or etc.), use your judgment: If it's something dumb and easy to fix (e.g. a typo, a missing import), fix it and re-run. If the idea itself is fundamentally broken, run `uv run lab.py undo "<what was tried>"` (the record marks it a crash) and move on.
 
@@ -110,4 +110,4 @@ The idea is that you are a completely autonomous researcher trying things out. I
 
 **Ending the session**: when less than 20 minutes of the budget remain, start no new experiment. Make sure `uv run lab.py status` shows no run waiting for a decision and `train.py` the same as the best version, then write a short summary as your final message: the best score and how it compares with the baseline, which changes helped, which did not, and what you would try next. Then stop. (Karpathy's original loop runs until the human interrupts it; this fork ends on a budget so that every session finishes on a clean, logged state.)
 
-As an example use case, a user might leave you running while they sleep. Each experiment takes 8–11 minutes on a consumer GPU, so you can run about 6 an hour: an eight-hour session holds roughly 45–55. The user then wakes up to experimental results, all completed by you while they slept!
+As an example use case, a user might leave you running while they sleep. Each experiment takes 13–16 minutes on a consumer GPU, so you can run about 4 an hour: a ten-hour session holds roughly 40. The user then wakes up to experimental results, all completed by you while they slept!

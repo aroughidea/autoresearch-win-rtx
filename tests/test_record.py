@@ -282,8 +282,27 @@ def test_undo_with_nothing_to_decide_resets_train_py(tmp_path):
 def test_a_changed_fixed_file_names_the_way_back(tmp_path):
     s = _start(tmp_path)
     (tmp_path / "program.md").write_text("# edited\n", encoding="utf-8")
-    with pytest.raises(record.RecordError, match=r"git checkout -- program\.md"):
+    with pytest.raises(record.RecordError, match=r"lab\.py restore") as refused:
         _begin(s, tmp_path)
+    assert "git" not in str(refused.value)
+
+
+def test_restore_puts_back_the_fixed_files_saved_at_the_start(tmp_path):
+    s = _start(tmp_path)
+    assert (s.root / "fixed" / "program.md").read_text(encoding="utf-8") == "# program.md\n"
+    (tmp_path / "program.md").write_text("# edited\n", encoding="utf-8")
+    (tmp_path / "capture.py").unlink()
+    assert record.restore_fixed_files(s, project_root=tmp_path) == ["capture.py", "program.md"]
+    assert record.changed_fixed_files(s, tmp_path) == []
+    assert record.restore_fixed_files(s, project_root=tmp_path) == []
+    _begin(s, tmp_path)                                         # training is allowed again
+
+
+def test_a_session_runs_ten_minute_runs_for_ten_hours_by_default(tmp_path):
+    _project(tmp_path)
+    s = record.start_session("s", dataset="tinystories", tokenizer="own", recipe_path=tmp_path / "train.py",
+                             base=tmp_path / "sessions", project_root=tmp_path, now=WHEN)
+    assert s.meta["run_minutes"] == 10 and s.meta["hours"] == 10
 
 
 def test_check_reports_waiting_unfinished_and_duplicate_runs(tmp_path):

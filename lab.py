@@ -9,9 +9,10 @@ lab.py: the experiment record's command line. The agent uses it instead of git.
   uv run lab.py undo "<description>"   record the last run as discarded; reset train.py to the best version
   uv run lab.py export [--sqlite F]    rewrite results.tsv; optionally build a SQLite file
   uv run lab.py check                  report anything inconsistent in the record
+  uv run lab.py restore                put back a fixed file (program.md, prepare.py, ...) that changed
 
 A person, or the session runner, starts a session:
-  uv run lab.py start <name> --dataset tinystories --tokenizer own [--run-minutes 5] [--hours 8]
+  uv run lab.py start <name> --dataset tinystories --tokenizer own [--run-minutes 10] [--hours 10]
 
 The agent must not modify this file (see program.md).
 """
@@ -119,6 +120,12 @@ def cmd_check(args):
     print("the record is consistent")
 
 
+def cmd_restore(args):
+    restored = record.restore_fixed_files(_session())
+    print("restored " + ", ".join(restored) + " from the session's copy" if restored
+          else "nothing to restore: the fixed files are as the session started")
+
+
 def main(argv=None):
     # Piped output (how the agent reads it) defaults to cp1252 on Windows, which cannot print
     # every description; UTF-8 can.
@@ -133,10 +140,11 @@ def main(argv=None):
     p.add_argument("name")
     p.add_argument("--dataset", required=True)
     p.add_argument("--tokenizer", required=True)
-    p.add_argument("--run-minutes", type=int, default=5)
-    p.add_argument("--hours", type=float, default=8)
+    p.add_argument("--run-minutes", type=int, default=10)
+    p.add_argument("--hours", type=float, default=10)
     p.set_defaults(func=cmd_start)
-    for name, func in (("status", cmd_status), ("history", cmd_history), ("check", cmd_check)):
+    for name, func in (("status", cmd_status), ("history", cmd_history), ("check", cmd_check),
+                       ("restore", cmd_restore)):
         sub.add_parser(name).set_defaults(func=func)
     p = sub.add_parser("diff")
     p.add_argument("a", nargs="?")
