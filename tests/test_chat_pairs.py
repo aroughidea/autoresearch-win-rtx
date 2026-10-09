@@ -228,3 +228,11 @@ def test_pre_eval_record_from_before_the_content_hash_still_counts(tmp_path, mon
     record_path.write_text(json.dumps(record), encoding="utf-8")
     _active_pair(monkeypatch, "tinystories", "own")
     assert chat._pair_for_checkpoint(path, None) == ("folktales", "own")
+
+
+def test_model_store_keeps_its_results_path(tmp_path):
+    entries = _entries(tmp_path, [("a_aaaaaaa.pt", 8)])
+    store = chat.ModelStore("cpu", entries, entries[0]["path"], tokenizer_loader=lambda dataset, tokenizer: _Tok(8),
+                            runs_dir=str(tmp_path / "sessions" / "s1" / "runs"),
+                            results_path=str(tmp_path / "sessions" / "s1" / "results.tsv"))
+    assert store.results_path.endswith("results.tsv") and "s1" in store.results_path

@@ -41,6 +41,7 @@ from pydantic import BaseModel
 
 from generate import _config_from_state_dict, _sample_top_k
 from capture import read_checkpoint_pair
+from record import active_session
 from prepare import (
     DEFAULT_DATASET,
     DEFAULT_TOKENIZER,
@@ -194,6 +195,7 @@ class ModelStore:
 
     def __init__(self, device: str, entries: list[dict], active_path: str,
                  tokenizer_loader=None, runs_dir: str = "runs", results_path: str = "results.tsv"):
+        self.results_path = results_path
         self._device = device
         self._loader = tokenizer_loader or (lambda dataset, tokenizer: Tokenizer.from_directory(dataset=dataset, tokenizer=tokenizer))
         self._tokenizers: dict[tuple[str, str], object] = {}
@@ -1357,7 +1359,7 @@ def build_app(model_store: ModelStore) -> FastAPI:
 
     @app.get("/results")
     def results_data():
-        path = Path("results.tsv")
+        path = Path(model_store.results_path)
         if not path.exists():
             return {"rows": [], "skipped": 0}
         rows = []
@@ -1419,8 +1421,12 @@ def main() -> None:
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Device: {device}")
     entries = _discover_checkpoints(args.checkpoint)
+    session = active_session()  # an active session's runs and scoreboard live in its folder
+    runs_dir = str(session.runs_dir) if session else "runs"
+    results_path = str(session.results_path) if session else "results.tsv"
     try:
-        model_store = ModelStore(device=device, entries=entries, active_path=args.checkpoint)
+        model_store = ModelStore(device=device, entries=entries, active_path=args.checkpoint,
+                                 runs_dir=runs_dir, results_path=results_path)
     except RuntimeError as exc:
         print(exc)
         sys.exit(1)
