@@ -390,3 +390,12 @@ def test_ending_a_session_keeps_its_folder(tmp_path):
     assert record.active_session(tmp_path / "sessions") is None
     assert (s.root / "session.json").exists() and (s.versions_dir).exists()
     assert record.end_session(base=tmp_path / "sessions") is None       # nothing active: nothing to end
+
+
+def test_use_makes_an_existing_session_active_again(tmp_path):
+    s = _start(tmp_path)
+    record.end_session(base=tmp_path / "sessions")
+    assert record.use_session(s.name, base=tmp_path / "sessions").name == s.name
+    assert record.active_session(tmp_path / "sessions").name == s.name
+    with pytest.raises(record.RecordError, match="no session"):
+        record.use_session("missing", base=tmp_path / "sessions")

@@ -11,6 +11,7 @@ lab.py: the experiment record's command line. The agent uses it instead of git.
   uv run lab.py check                  report anything inconsistent in the record
   uv run lab.py restore                put back a fixed file (program.md, prepare.py, ...) that changed
   uv run lab.py end                    end the session: its folder stays; train.py then runs outside any session
+  uv run lab.py use <name>             make an existing session active again (after end, or copied in)
 
 A person, or the session runner, starts a session:
   uv run lab.py start <name> --dataset tinystories --tokenizer own [--run-minutes 10] [--hours 10]
@@ -136,6 +137,12 @@ def cmd_end(args):
           if name else "no session is active")
 
 
+def cmd_use(args):
+    s = record.use_session(args.name)
+    print(f"{s.name} is the active session ({s.meta['dataset']}/{s.meta['tokenizer']}, "
+          f"{s.meta['run_minutes']}-minute runs)")
+
+
 def main(argv=None):
     # Piped output (how the agent reads it) defaults to cp1252 on Windows, which cannot print
     # every description; UTF-8 can.
@@ -156,6 +163,9 @@ def main(argv=None):
     for name, func in (("status", cmd_status), ("history", cmd_history), ("check", cmd_check),
                        ("restore", cmd_restore), ("end", cmd_end)):
         sub.add_parser(name).set_defaults(func=func)
+    p = sub.add_parser("use")
+    p.add_argument("name")
+    p.set_defaults(func=cmd_use)
     p = sub.add_parser("diff")
     p.add_argument("a", nargs="?")
     p.add_argument("b", nargs="?")

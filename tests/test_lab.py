@@ -156,3 +156,14 @@ def test_end_lets_train_py_run_outside_any_session(tmp_path, monkeypatch, capsys
     code, _, err = _run(capsys, "status")
     assert code == 1 and "no active session" in err
     assert (tmp_path / "sessions" / "s1" / "session.json").exists()
+
+
+def test_use_reads_a_session_copied_in_from_elsewhere(tmp_path, monkeypatch, capsys):
+    _project(tmp_path, monkeypatch)
+    _run(capsys, "start", "s1", "--dataset", "tinystories", "--tokenizer", "own")
+    _run(capsys, "end")
+    code, out, _ = _run(capsys, "use", "s1")
+    assert code == 0 and "s1" in out
+    assert _run(capsys, "status")[0] == 0
+    code, _, err = _run(capsys, "use", "nope")
+    assert code == 1 and "no session" in err

@@ -149,6 +149,16 @@ def end_session(base=SESSIONS):
     return name
 
 
+def use_session(name, base=SESSIONS):
+    """Make an existing session the active one again (after `end`, or a folder copied in from another
+    machine). Returns the session."""
+    root = Path(base) / name
+    if not (root / "session.json").exists():
+        raise RecordError(f"record: there is no session {name} ({root} has no session.json)")
+    write_atomic(Path(base) / "active.txt", name + "\n")
+    return Session(root)
+
+
 def active_session_from(cwd, home):
     """The active session for a run started in cwd. The record lives in the project folder (home);
     a run started anywhere else would find no session there and quietly record to runs/ instead,
