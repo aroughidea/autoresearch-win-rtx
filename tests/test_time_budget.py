@@ -4,13 +4,13 @@ import capture
 import prepare
 
 
-def test_time_budget_defaults_to_five_minutes():
-    assert prepare._time_budget_from_env({}) == 300
-    assert prepare._time_budget_from_env({"AUTORESEARCH_TIME_BUDGET": ""}) == 300
+def test_time_budget_defaults_to_ten_minutes():
+    assert prepare._time_budget_from_env({}) == 600
+    assert prepare._time_budget_from_env({"AUTORESEARCH_TIME_BUDGET": ""}) == 600
 
 
-def test_a_study_can_set_a_longer_budget():
-    assert prepare._time_budget_from_env({"AUTORESEARCH_TIME_BUDGET": "600"}) == 600
+def test_a_study_can_set_another_budget():
+    assert prepare._time_budget_from_env({"AUTORESEARCH_TIME_BUDGET": "300"}) == 300
 
 
 @pytest.mark.parametrize("bad", ["ten", "600.5", "30", "4000", "-600"])

@@ -41,6 +41,7 @@ from pydantic import BaseModel
 
 from generate import _config_from_state_dict, _sample_top_k
 from capture import read_checkpoint_pair
+from record import RecordError, active_session
 from prepare import (
     DEFAULT_DATASET,
     DEFAULT_TOKENIZER,
@@ -120,12 +121,32 @@ def _commit_from_name(name: str) -> str | None:
 
 
 def _run_for_checkpoint(path: str, runs_dir: str = "runs") -> dict | None:
-    """The run file saved with a checkpoint: same <timestamp>_<commit> stem."""
-    run_path = Path(runs_dir) / (Path(path).stem + ".json")
+    """The run file saved with a checkpoint: same <timestamp>_<commit> stem. Looked for in runs_dir
+    first, then in the root runs/ and every session's runs/: a model kept in an earlier session has
+    its run file there, and without it the model would be decoded with the default pair's tokenizer."""
+    name = Path(path).stem + ".json"
+    seen = set()
+    for folder in [Path(runs_dir), Path("runs"), *sorted(Path("sessions").glob("*/runs"))]:
+        key = os.path.normcase(os.path.abspath(folder))
+        if key in seen:
+            continue
+        seen.add(key)
+        try:
+            return json.loads((folder / name).read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+    return None
+
+
+def _session_paths() -> tuple[str, str]:
+    """Where the page reads runs and the scoreboard: the active session's folder, else the repo root.
+    A broken sessions/active.txt is reported, not fatal: the page still opens on the root files."""
     try:
-        return json.loads(run_path.read_text(encoding="utf-8"))
-    except (OSError, ValueError):
-        return None
+        session = active_session()
+    except RecordError as exc:
+        print(f"{exc}; showing the root runs/ and results.tsv instead")
+        return "runs", "results.tsv"
+    return (str(session.runs_dir), str(session.results_path)) if session else ("runs", "results.tsv")
 
 
 def _pair_for_checkpoint(path: str, run: dict | None) -> tuple[str, str] | None:
@@ -194,6 +215,7 @@ class ModelStore:
 
     def __init__(self, device: str, entries: list[dict], active_path: str,
                  tokenizer_loader=None, runs_dir: str = "runs", results_path: str = "results.tsv"):
+        self.results_path = results_path
         self._device = device
         self._loader = tokenizer_loader or (lambda dataset, tokenizer: Tokenizer.from_directory(dataset=dataset, tokenizer=tokenizer))
         self._tokenizers: dict[tuple[str, str], object] = {}
@@ -210,6 +232,7 @@ class ModelStore:
             commit = _commit_from_name(entry["label"])
             row = scoreboard.get(commit or "", {})
             final = (run or {}).get("final") or {}
+            own = run if run and "status" in run else None   # a record entry carries its own decision
             facts = {
                 **entry,
                 "commit": commit,
@@ -218,9 +241,9 @@ class ModelStore:
                 "tokenizer": tokenizer_name,
                 "tokenizer_source": TOKENIZER_SOURCES.get(tokenizer_name, ""),
                 "params_m": final.get("params_m"),
-                "val_bpb": row.get("val_bpb", final.get("val_bpb")),
-                "status": row.get("status", ""),
-                "description": row.get("description", ""),
+                "val_bpb": final.get("val_bpb") if own else row.get("val_bpb", final.get("val_bpb")),
+                "status": (own.get("status") or "") if own else row.get("status", ""),
+                "description": (own.get("description") or "") if own else row.get("description", ""),
                 "has_growth": _growth_from_run(run) is not None,
             }
             if pair:
@@ -768,14 +791,14 @@ _HTML = """\
   </div><!-- /gen-outputs -->
 
   <div class="card" id="card-growth" style="display:none">
-    <div class="card-label">Watch it learn (training time: one model, 0 s to 5 min)</div>
+    <div class="card-label">Watch it learn (training time: one model, from its first step to the end of its run)</div>
     <div class="growth-row">
       <select class="pane-pick" id="growth-model" aria-label="Model to watch"></select>
       <select class="pane-pick" id="growth-prompt" aria-label="Prompt"></select>
       <div class="growth-times" id="growth-times" role="group" aria-label="Moment in training"></div>
     </div>
     <div id="growth-text" class="output-box"></div>
-    <p class="growth-note">What this model wrote at each moment of its 5 minutes of training, saved in its run file. Every model uses the same prompts and sampling settings, so the differences come from the model.</p>
+    <p class="growth-note">What this model wrote at each moment of its training, saved in its run file. Every model uses the same prompts and sampling settings, so the differences come from the model.</p>
   </div>
 
   </div><!-- /gen-bottom -->
@@ -894,7 +917,7 @@ _HTML = """\
       $('chart-svg').style.display = 'none';
       const s = $('chart-status');
       s.style.display = 'block';
-      s.innerHTML = 'No experiments logged yet — this is a fresh workspace. Run <code>uv run train.py</code> to train your first model; each run appends a row to <code>results.tsv</code> and the progress chart appears here on reload.';
+      s.innerHTML = 'No experiments recorded yet — this is a fresh workspace. Start a session and train (see the README); the progress chart appears here once runs are kept or undone.';
       return;
     }
     $('chart-svg').style.display = 'block';
@@ -1357,7 +1380,7 @@ def build_app(model_store: ModelStore) -> FastAPI:
 
     @app.get("/results")
     def results_data():
-        path = Path("results.tsv")
+        path = Path(model_store.results_path)
         if not path.exists():
             return {"rows": [], "skipped": 0}
         rows = []
@@ -1419,8 +1442,10 @@ def main() -> None:
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Device: {device}")
     entries = _discover_checkpoints(args.checkpoint)
+    runs_dir, results_path = _session_paths()  # an active session's runs and scoreboard live in its folder
     try:
-        model_store = ModelStore(device=device, entries=entries, active_path=args.checkpoint)
+        model_store = ModelStore(device=device, entries=entries, active_path=args.checkpoint,
+                                 runs_dir=runs_dir, results_path=results_path)
     except RuntimeError as exc:
         print(exc)
         sys.exit(1)

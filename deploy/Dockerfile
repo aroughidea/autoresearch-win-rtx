@@ -40,7 +40,7 @@ WORKDIR /home/user/app
 
 # chat.py imports generate.py, prepare.py and train.py; the UI reads
 # results.tsv to resolve which checkpoints are Baseline and Best.
-COPY --chown=user:user chat.py generate.py prepare.py train.py capture.py results.tsv ./
+COPY --chown=user:user chat.py generate.py prepare.py train.py capture.py record.py results.tsv ./
 
 # Only the two checkpoints the demo compares — not the whole archive.
 COPY --chown=user:user checkpoints/20260523T155743-0700_75027e8.pt \
