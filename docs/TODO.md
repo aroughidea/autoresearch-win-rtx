@@ -37,6 +37,15 @@ Open work, in rough order. Each item says what it waits for.
     folder (drag and drop), then merge after #29.
   - Later: the diff between a version and its parent (needs `versions/`), and the library format
     and `scripts/sync-training-library.mjs` for record sessions.
+- **Statistics from data, not prose** (decided 10 October). Every "read in five minutes" kind of
+  figure is specific to one machine and one run length, and the defaults are moving to 10 minutes.
+  1. `capture.py` records the GPU's name in every run file (`torch.cuda.get_device_name`), in the
+     worked example and the starter.
+  2. The explorer takes the run length from `time_budget_s` (older files: `training_s` to the
+     minute) and the machine from the run file or a collection field, and builds every sentence
+     that says "five minutes" from them. It shows one conditions line per tab.
+  3. When the baselines are remade at 10 minutes, the 5-minute set stays as a dated collection;
+     the "5 or 10 minutes" comparison needs both.
 - **chat.py's chart:** the best line should start at the baseline's average, as in the explorer.
 - **The session map as an explorables page** ("How a session runs"), linked from the Evolution
   view, the explorer's intro and the workshops' Going Further quest 5. Keep
