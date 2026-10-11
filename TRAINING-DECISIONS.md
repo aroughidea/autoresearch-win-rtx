@@ -16,7 +16,7 @@ What this project demonstrates, in plain language. Start here if you came from a
 
 ## How a model gets made here
 
-A language model is a program that continues text, and text means any sequence of symbols that can be typed, not only prose: a story, a program, a CAD drawing saved as DXF, the Gerber files that describe a circuit board. Given any text, it predicts the next token, adds it, and predicts again. What a model can continue is what it was trained on: trained on stories it continues stories, trained on code it continues code. The models here are trained on stories only.
+A language model is a program that continues text, and text means any sequence of symbols that can be typed, not only prose: a story, a program, a CAD drawing saved as DXF, the Gerber files that describe a circuit board. Given any text, it predicts the next token, adds it, and predicts again. What a model can continue is what it was trained on: trained on stories it continues stories, trained on code it continues code. The models here are trained on stories only. For datasets of other kinds a laptop run can train on, and what each would continue, see [Going Further, quest 6](https://workshops.aroughidea.com/going-further#_6-what-would-a-model-trained-on-something-else-continue).
 
 Each step is a decision.
 
