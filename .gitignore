@@ -34,3 +34,6 @@ checkpoint_pre_eval.pt
 
 # The session runner's logs (session.py)
 /session-logs/
+
+# Playwright MCP output: browser-test logs, page snapshots, screenshots
+.playwright-mcp/
