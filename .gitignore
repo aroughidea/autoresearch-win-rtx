@@ -37,3 +37,7 @@ checkpoint_pre_eval.pt
 
 # Playwright MCP output: browser-test logs, page snapshots, screenshots
 .playwright-mcp/
+
+# Local secrets, such as the session runner's sign-in token: never committed
+.env
+.env.*
