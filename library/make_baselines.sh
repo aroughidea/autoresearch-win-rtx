@@ -4,6 +4,8 @@
 # library/checkpoints/ (not committed). About an hour on a 12 GB laptop GPU.
 # Run from the repo root: bash library/make_baselines.sh
 set -u
+# The library's baselines are 5-minute runs; the lab's default is now 10.
+export AUTORESEARCH_TIME_BUDGET=300
 mkdir -p library/baselines/runs library/checkpoints library/logs
 for dataset in tinystories folktales; do
   for tokenizer in own phi3 gpt2; do
@@ -21,5 +23,4 @@ for dataset in tinystories folktales; do
   done
 done
 uv run prepare.py --dataset tinystories --tokenizer own > /dev/null 2>&1   # back to the default pair
-git checkout -- checkpoint_pre_eval.pt
 echo "== done $(date +%H:%M)"

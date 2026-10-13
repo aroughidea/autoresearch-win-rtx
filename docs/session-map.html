@@ -1,0 +1,341 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Autoresearch Session Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Layout: one schematic (start → the loop, each box saying what it saves and where → you), then notes. */
+:root {
+  --bg: #f3f5f4; --surface: #ffffff; --tint: #e9eeeb; --ink: #17201c; --muted: #56635d; --line: #c3ccc7;
+  --train: #2f855a; --agent: #6b46c1; --runner: #23787a; --person: #2b6cb0;
+  --laptop: #7b5e1b; --record: #0e7490;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #111513; --surface: #1a201d; --tint: #212925; --ink: #e6ece9; --muted: #9aa7a1; --line: #39433e;
+  --train: #68d391; --agent: #b794f4; --runner: #4fd1c5; --person: #63b3ed;
+  --laptop: #e0c36a; --record: #67e8f9; color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --bg: #111513; --surface: #1a201d; --tint: #212925; --ink: #e6ece9; --muted: #9aa7a1; --line: #39433e;
+  --train: #68d391; --agent: #b794f4; --runner: #4fd1c5; --person: #63b3ed;
+  --laptop: #e0c36a; --record: #67e8f9; color-scheme: dark; }
+
+body { background: var(--bg); color: var(--ink); font: 16px/1.55 var(--body); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 48px; display: grid; gap: 24px; }
+.wrap > * { min-width: 0; }
+header { display: grid; gap: 12px; max-width: 76ch; }
+h1 { font: 800 clamp(1.7rem, 3.4vw, 2.4rem)/1.1 var(--display); letter-spacing: -0.01em; margin: 0; text-wrap: balance; }
+.lede { margin: 0; color: var(--muted); font-size: 1.05rem; }
+.key { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 0.92rem; }
+.key > span { display: inline-flex; align-items: center; gap: 8px; }
+.key .keyhead { color: var(--muted); }
+.key .keyline { display: flex; align-items: baseline; gap: 8px; flex-basis: 100%; }
+.key i { width: 26px; height: 0; border-top: 3px solid; display: inline-block; }
+.loc { display: inline-block; flex: none; font: 700 0.72rem/1 var(--body); letter-spacing: 0.04em; color: var(--surface); padding: 4px 7px; border-radius: 6px; }
+.figure { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow-x: auto; }
+.figure svg { display: block; width: 100%; min-width: 980px; height: auto; }
+.scrollhint { display: none; font-size: 0.85rem; color: var(--muted); margin: 0; }
+@media (max-width: 1000px) { .scrollhint { display: block; } }
+h2 { font: 700 1.3rem/1.2 var(--display); margin: 0; }
+.scales { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.scale { background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--c); border-radius: 10px; padding: 14px 16px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.scale h3 { margin: 0; font: 700 1.05rem/1.25 var(--display); color: var(--c); }
+.scale p { margin: 0; font-size: 0.95rem; }
+.note { display: grid; gap: 10px; max-width: 72ch; }
+.note p { margin: 0; }
+code { font: 0.88em var(--mono); }
+a { color: var(--person); text-underline-offset: 2px; }
+footer { color: var(--muted); font-size: 0.85rem; max-width: 70ch; }
+
+/* The schematic */
+.fr { fill: none; stroke: var(--runner); stroke-width: 1.6; stroke-dasharray: 7 5; }
+.box { fill: var(--surface); stroke: var(--line); stroke-width: 1.2; }
+.bx-agent { stroke: var(--agent); stroke-width: 1.6; }
+.bx-person { stroke: var(--person); stroke-width: 1.6; }
+.bx-runner { stroke: var(--runner); stroke-width: 1.6; }
+.bx-train { stroke: var(--train); stroke-width: 2; }
+.bx-record { fill: var(--surface); stroke: var(--record); stroke-width: 1.6; stroke-dasharray: 5 4; }
+.div { stroke: var(--line); stroke-width: 1; stroke-dasharray: 3 3; }
+.t { font: 14px var(--body); fill: var(--ink); }
+.tb { font: 700 14px var(--body); fill: var(--ink); }
+.ts { font: 12.5px var(--body); fill: var(--muted); }
+.tx { font: 11px var(--body); fill: var(--agent); }
+.tw { font: 12.5px var(--body); fill: var(--ink); }
+.tm { font: 11.5px var(--mono); fill: var(--muted); }
+.th { font: 700 18px var(--display); fill: var(--ink); }
+.lab { font: 700 10.5px var(--body); letter-spacing: 0.09em; }
+.c-agent { fill: var(--agent); } .c-person { fill: var(--person); } .c-runner { fill: var(--runner); }
+.c-train { fill: var(--train); } .c-muted { fill: var(--muted); } .c-record { fill: var(--record); }
+.ch-laptop { fill: var(--laptop); } .ch-record { fill: var(--record); }
+.cht { font: 700 9.5px var(--body); letter-spacing: 0.05em; fill: var(--surface); }
+.mid { text-anchor: middle; } .end { text-anchor: end; }
+.f { fill: none; stroke-width: 2; stroke-linejoin: round; }
+.f-agent { stroke: var(--agent); } .f-person { stroke: var(--person); stroke-width: 3.2; }
+.f-ink { stroke: var(--ink); } .f-train { stroke: var(--train); }
+.f-dash { stroke-dasharray: 6 5; }
+.mk-agent { fill: var(--agent); } .mk-person { fill: var(--person); } .mk-train { fill: var(--train); } .mk-ink { fill: var(--ink); }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>How one autoresearch session runs</h1>
+    <p class="lede">Autoresearch hands model training to an AI coding agent: a chat assistant, like the ones you use, that can also edit files and run programs, here left to work alone, often overnight. The goal of the session is to improve the training recipe for a small language model: a GPT-style transformer of about 19 million parameters that learns to continue text. The session starts from a starter recipe (the file <code>train.py</code>), a dataset, a tokenizer, a run duration of 10 minutes, and a session length of 10 hours. Three initial 10-minute training runs of the starter recipe build the baseline: their average sets the baseline score, and their spread measures the noise, how far apart two runs of the same recipe land. While the 10-hour session has time left, the agent changes one thing in <code>train.py</code>, the training recipe, and trains again. Each run always trains for its full 10 minutes; scoring and the sample stories add a few minutes more, so in the session's last 20 minutes the agent starts no new run.</p>
+    <div class="key" aria-label="Key">
+      <span><i style="color:var(--train)"></i>One run: training and scoring</span>
+      <span><i style="color:var(--agent)"></i>The agent's decisions and changes</span>
+      <span><i style="color:var(--runner)"></i>The session and its runner</span>
+      <span><i style="color:var(--person)"></i>You, between sessions</span>
+    </div>
+    <div class="key" aria-label="Where things are saved">
+      <span class="keyhead">Each box says what it saves, and where:</span>
+      <span class="keyline"><b class="loc" style="background:var(--record)">RECORD</b><span>in the session's folder, <code>sessions/&lt;name&gt;/</code>: the record (see the dashed box under Start)</span></span>
+      <span class="keyline"><b class="loc" style="background:var(--laptop)">LAPTOP</b><span>a file on the laptop, outside the record</span></span>
+    </div>
+  </header>
+
+  <p class="scrollhint">Scroll the diagram sideways to see all of it.</p>
+  <div class="figure">
+  <svg viewBox="0 0 1140 870" role="img" aria-labelledby="dg-title dg-desc">
+    <title id="dg-title">Workflow of one autoresearch session, with what each box saves and where</title>
+    <desc id="dg-desc">You choose a dataset, a tokenizer and the lengths; the session starts a record holding the starter recipe. The first three runs train the starter recipe unchanged: the baseline, and a measure of the noise. Each run trains a new model for 10 minutes and scores it. If the result is better than the best so far, the agent keeps the change; if it is not, or the run crashed, the agent undoes it. With 20 minutes or more left, the agent changes one thing in the best recipe and trains again; otherwise the session ends, and you read the results and start the next session.</desc>
+    <defs>
+      <marker id="ah-agent" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-agent"/></marker>
+      <marker id="ah-person" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="14" markerHeight="14" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-person"/></marker>
+      <marker id="ah-train" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-train"/></marker>
+      <marker id="ah-ink" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="11" markerHeight="11" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="mk-ink"/></marker>
+    </defs>
+
+    <!-- START -->
+    <rect x="16" y="60" width="190" height="408" rx="12" class="box bx-person"/>
+    <text x="30" y="92" class="th">Start</text>
+    <text x="30" y="122" class="lab c-person">YOU CHOOSE</text>
+    <text x="30" y="144" class="t">the dataset</text>
+    <text x="30" y="164" class="t">the tokenizer</text>
+    <text x="30" y="184" class="t">the session's length</text>
+    <text x="30" y="204" class="t">each run's length</text>
+    <text x="30" y="238" class="lab c-muted">THE SESSION BEGINS WITH</text>
+    <rect x="30" y="249" width="46" height="16" rx="5" class="ch-record"/><text x="53" y="261" class="cht mid">RECORD</text>
+    <text x="82" y="261" class="tw c-record">a new folder</text>
+    <text x="30" y="286" class="t">the starter recipe,</text>
+    <text x="30" y="303" class="ts">its first version</text>
+    <text x="30" y="326" class="t">a pointer to the best</text>
+    <text x="30" y="343" class="ts">version: for now, this one</text>
+    <text x="30" y="366" class="t">no runs, no score yet</text>
+    <text x="30" y="398" class="t">the agent's</text>
+    <text x="30" y="415" class="t">instructions</text>
+    <text x="30" y="433" class="tm">program.md</text>
+    <text x="30" y="451" class="ts">fixed for the session</text>
+    <path d="M206,150 L347,150" class="f f-ink" marker-end="url(#ah-ink)"/>
+    <text x="216" y="114" class="ts">first runs:</text>
+    <text x="216" y="128" class="ts">the baseline,</text>
+    <text x="216" y="142" class="ts">3 times</text>
+
+    <!-- THE RECORD (what every RECORD tag adds to) -->
+    <rect x="116" y="490" width="190" height="292" rx="10" class="bx-record"/>
+    <text x="130" y="512" class="lab c-record">THE RECORD</text>
+    <text x="130" y="530" class="ts">the session's folder</text>
+    <text x="130" y="546" class="tm">sessions/&lt;name&gt;/</text>
+    <text x="130" y="570" class="tw">every version of train.py</text>
+    <text x="130" y="586" class="tm">versions/</text>
+    <text x="130" y="608" class="tw">one entry for every run:</text>
+    <text x="130" y="624" class="tw">its score, keep, discard</text>
+    <text x="130" y="640" class="tw">or crash, what was tried,</text>
+    <text x="130" y="656" class="tw">and its sample stories</text>
+    <text x="130" y="672" class="tm">runs/</text>
+    <text x="130" y="694" class="tw">a pointer to the best</text>
+    <text x="130" y="710" class="tw">version</text>
+    <text x="130" y="726" class="tm">best.json</text>
+    <text x="130" y="750" class="ts">every RECORD tag in the</text>
+    <text x="130" y="766" class="ts">diagram adds to this folder</text>
+
+    <!-- SESSION FRAME -->
+    <rect x="320" y="30" width="804" height="682" rx="18" class="fr"/>
+    <text x="340" y="58" class="lab c-runner">SESSION · 10 HOURS</text>
+    <text x="1108" y="698" class="ts end">If the agent stops early, the session runner, a small program, restarts the agent.</text>
+
+    <!-- TRAIN -->
+    <rect x="350" y="80" width="260" height="284" rx="10" class="box bx-train"/>
+    <text x="366" y="104" class="tb">Train a new language model</text>
+    <text x="366" y="124" class="ts">a small GPT, from scratch, 10 min</text>
+    <path d="M390,146 A16,16 0 1 1 374,162" class="f f-train" marker-end="url(#ah-train)"/>
+    <text x="416" y="154" class="ts c-train">the model's weights change</text>
+    <text x="416" y="170" class="ts c-train">with each batch: a step</text>
+    <text x="366" y="194" class="ts">the model reads on through the</text>
+    <text x="366" y="210" class="ts">data: one full pass is an epoch,</text>
+    <text x="366" y="226" class="ts">and writes sample stories at</text>
+    <text x="366" y="242" class="ts">set moments during training</text>
+    <line x1="362" y1="254" x2="598" y2="254" class="div"/>
+    <text x="366" y="270" class="lab c-muted">SAVES</text>
+    <rect x="366" y="278" width="46" height="16" rx="5" class="ch-record"/><text x="389" y="290" class="cht mid">RECORD</text>
+    <text x="418" y="290" class="tw c-record">this run's train.py</text>
+    <text x="418" y="306" class="tm">versions/&lt;id&gt;.py</text>
+    <rect x="366" y="316" width="46" height="16" rx="5" class="ch-laptop"/><text x="389" y="328" class="cht mid">LAPTOP</text>
+    <text x="418" y="328" class="tw">the model's weights</text>
+    <text x="418" y="344" class="tm">checkpoint_pre_eval.pt</text>
+    <path d="M610,140 L657,140" class="f f-train" marker-end="url(#ah-train)"/>
+
+    <!-- CRASH: from the run straight to undo -->
+    <path d="M590,80 L590,68 L1080,68 L1080,377" class="f f-agent f-dash" marker-end="url(#ah-agent)"/>
+    <text x="1072" y="96" class="ts c-agent end">the run</text>
+    <text x="1072" y="111" class="ts c-agent end">crashed</text>
+
+    <!-- SCORE -->
+    <rect x="660" y="80" width="260" height="150" rx="10" class="box bx-train"/>
+    <text x="676" y="104" class="tb">Score the model</text>
+    <text x="904" y="104" class="tm end">val_bpb</text>
+    <text x="676" y="123" class="ts">how surprised the model is by</text>
+    <text x="676" y="140" class="ts">text kept out of training:</text>
+    <text x="676" y="158" class="ts">a fixed test; lower is better</text>
+    <line x1="672" y1="170" x2="908" y2="170" class="div"/>
+    <text x="676" y="186" class="lab c-muted">SAVES</text>
+    <rect x="676" y="194" width="46" height="16" rx="5" class="ch-record"/><text x="699" y="206" class="cht mid">RECORD</text>
+    <text x="728" y="206" class="tw c-record">the run's entry: the score</text>
+    <text x="728" y="222" class="tw c-record">and the sample stories</text>
+    <path d="M790,230 L790,253" class="f f-agent" marker-end="url(#ah-agent)"/>
+
+    <!-- BETTER? -->
+    <polygon points="790,256 900,300 790,344 680,300" class="box bx-agent"/>
+    <text x="790" y="296" class="tb mid">Better than the</text>
+    <text x="790" y="313" class="tb mid">best so far?</text>
+    <path d="M790,344 L790,377" class="f f-agent" marker-end="url(#ah-agent)"/>
+    <text x="800" y="366" class="ts">yes</text>
+    <path d="M900,300 L1030,300 L1030,377" class="f f-agent" marker-end="url(#ah-agent)"/>
+    <text x="1040" y="322" class="ts">no</text>
+
+    <!-- KEEP -->
+    <rect x="660" y="380" width="260" height="226" rx="10" class="box bx-agent"/>
+    <text x="676" y="404" class="tb">Keep the change</text>
+    <text x="676" y="422" class="ts">a new best so far</text>
+    <line x1="672" y1="434" x2="908" y2="434" class="div"/>
+    <text x="676" y="450" class="lab c-muted">SAVES</text>
+    <rect x="676" y="458" width="46" height="16" rx="5" class="ch-record"/><text x="699" y="470" class="cht mid">RECORD</text>
+    <text x="728" y="470" class="tw c-record">the decision: keep,</text>
+    <text x="728" y="486" class="tw c-record">and what was tried</text>
+    <rect x="676" y="496" width="46" height="16" rx="5" class="ch-record"/><text x="699" y="508" class="cht mid">RECORD</text>
+    <text x="728" y="508" class="tw c-record">the pointer moves to this version</text>
+    <text x="728" y="524" class="tm">best.json</text>
+    <rect x="676" y="534" width="46" height="16" rx="5" class="ch-laptop"/><text x="699" y="546" class="cht mid">LAPTOP</text>
+    <text x="728" y="546" class="tw">a copy of the model,</text>
+    <text x="728" y="562" class="tw">to try later</text>
+    <text x="728" y="578" class="tm">checkpoints/&lt;run&gt;.pt</text>
+
+    <!-- UNDO -->
+    <rect x="950" y="380" width="160" height="226" rx="10" class="box bx-agent"/>
+    <text x="964" y="404" class="tb">Undo the change</text>
+    <text x="964" y="422" class="ts">the best is unchanged</text>
+    <line x1="962" y1="434" x2="1098" y2="434" class="div"/>
+    <text x="964" y="450" class="lab c-muted">SAVES</text>
+    <rect x="964" y="458" width="46" height="16" rx="5" class="ch-record"/><text x="987" y="470" class="cht mid">RECORD</text>
+    <text x="1016" y="470" class="tw c-record">the decision:</text>
+    <text x="964" y="486" class="tw c-record">discard, or crash,</text>
+    <text x="964" y="502" class="tw c-record">and what was tried</text>
+    <rect x="964" y="512" width="46" height="16" rx="5" class="ch-laptop"/><text x="987" y="524" class="cht mid">LAPTOP</text>
+    <text x="1016" y="524" class="tm">train.py</text>
+    <text x="964" y="540" class="tw">back to the best version</text>
+    <text x="964" y="562" class="ts c-record">the tried version stays</text>
+    <text x="964" y="578" class="ts c-record">in the record</text>
+    <text x="964" y="596" class="ts">model not kept</text>
+
+    <!-- BOTH LEAD TO THE TIME CHECK -->
+    <path d="M1030,606 L1030,645 L790,645" class="f f-agent"/>
+    <path d="M790,606 L790,645 L593,645" class="f f-agent" marker-end="url(#ah-agent)"/>
+
+    <!-- TIME LEFT? -->
+    <polygon points="480,601 590,645 480,689 370,645" class="box bx-agent"/>
+    <text x="480" y="640" class="tb mid">20 min or more left</text>
+    <text x="480" y="658" class="tb mid">in the session?</text>
+    <path d="M480,601 L480,563" class="f f-agent" marker-end="url(#ah-agent)" style="stroke-width:3"/>
+    <text x="470" y="592" class="ts end">yes</text>
+    <path d="M370,645 L340,645 L340,726 L540,726 L540,739" class="f f-ink" marker-end="url(#ah-ink)"/>
+    <text x="362" y="636" class="ts end">no</text>
+
+    <!-- CHANGE -->
+    <rect x="350" y="392" width="260" height="168" rx="10" class="box bx-agent"/>
+    <text x="366" y="416" class="tb">Change the recipe: train.py</text>
+    <text x="366" y="434" class="ts">start from the best version and</text>
+    <text x="366" y="450" class="ts">change one thing: the next idea</text>
+    <line x1="362" y1="462" x2="598" y2="462" class="div"/>
+    <text x="366" y="478" class="lab c-muted">SAVES</text>
+    <rect x="366" y="486" width="46" height="16" rx="5" class="ch-laptop"/><text x="389" y="498" class="cht mid">LAPTOP</text>
+    <text x="418" y="498" class="tw">train.py, with the change</text>
+    <text x="366" y="530" class="ts c-record">the record stores this version</text>
+    <text x="366" y="546" class="ts c-record">when the run starts training</text>
+    <path d="M480,392 L480,367" class="f f-agent" marker-end="url(#ah-agent)"/>
+
+    <!-- END, YOU, AND THE NEXT START -->
+    <rect x="420" y="742" width="240" height="60" rx="10" class="box bx-runner"/>
+    <text x="436" y="766" class="tb">Session ends</text>
+    <text x="436" y="786" class="ts">at the end of the 10 hours</text>
+    <path d="M660,772 L697,772" class="f f-ink" marker-end="url(#ah-ink)"/>
+    <rect x="700" y="730" width="424" height="84" rx="12" class="box bx-person"/>
+    <text x="716" y="754" class="lab c-person">YOU, BETWEEN SESSIONS</text>
+    <text x="716" y="778" class="t">Read the results, share the session's folder,</text>
+    <text x="716" y="798" class="t">and choose what to run next.</text>
+    <path d="M912,814 L912,850 L100,850 L100,471" class="f f-person" marker-end="url(#ah-person)"/>
+    <text x="324" y="842" class="tb c-person">you start the next session</text>
+  </svg>
+  </div>
+
+  <section class="note">
+    <h2>Why run a session</h2>
+    <p>For the agent, the goal is the best recipe. For you, the point is to see that changing a design decision changes the final experience in a specific way, and the record keeps every decision, kept or undone. Some decisions show plainly: your choice of dataset changes the sample stories, and the vocabulary changes the model's size and how it writes early in training. Most of the agent's changes are too small to read in the stories, which is why the agent needs a score.</p>
+  </section>
+
+  <section class="note">
+    <h2>The record</h2>
+    <p>Each session has its own folder, <code>sessions/&lt;name&gt;/</code>. It holds every version of <code>train.py</code> that trained, one entry for every run, and a pointer to the best version. <code>train.py</code> itself is only the working copy that the agent edits. A run's entry is written once the run has been scored: its version, its score and its sample stories. The agent's decision completes it: keep, discard, or crash for a run that never finished, with a few words on what was tried. The sample stories are what the model writes when given four fixed story openings, such as &ldquo;Once upon a time&rdquo;, at set moments during training and again when training ends.</p>
+    <p>The agent decides with one of two commands, keep or undo. Keep moves the pointer to the version that just ran and saves a copy of the model. Undo puts <code>train.py</code> back to the version the pointer marks. Because every change starts from the best version, that is also the version the undone change started from; going back to the previous run instead could mean going back to an idea that was already undone. Nothing is deleted from the folder: every version and every entry stays. To share a session, share its folder.</p>
+  </section>
+
+  <section class="note">
+    <h2>The scoreboard</h2>
+    <p>Read together, the run entries are the scoreboard: one row per run, with its version of <code>train.py</code>, its score, the decision and what was tried. <code>results.tsv</code> in the session's folder is the same table as a file, rewritten after every decision.</p>
+  </section>
+
+  <section class="note">
+    <h2>The score</h2>
+    <p>After training, each model is given text that was kept out of its training data. The score measures how surprised the model is by that text: how badly the model predicts each next piece. The professional name is <em>validation bits per byte</em>, <code>val_bpb</code>. Lower is better. The test is fixed: the agent cannot change it.</p>
+    <p>The score is counted per byte of text rather than per token, so models with different vocabularies can be compared. Scores compare only runs on the same dataset, and only runs of the same length.</p>
+    <p>Two runs of the same recipe rarely score exactly the same. The recipe and the model's starting weights are identical; what differs is mainly how many training steps the laptop fits into the 10 minutes. So each session begins by training the starter recipe three times. Their average is the first score to beat, and their spread is the session's noise: a difference smaller than that may be luck. The rule stays simple, though: a run that beats the best is kept. When a gain is smaller than the noise, the agent says so in its description, so you can weigh it when you read the results.</p>
+  </section>
+
+  <section style="display:grid;gap:14px">
+    <h2>Three time scales</h2>
+    <div class="scales">
+      <article class="scale" style="--c:var(--train)">
+        <h3>A training run: 10 minutes</h3>
+        <p>Every run, the first included, trains a new model from scratch. The model's weights change after every batch of text, a step; nothing else in the session changes a model's weights. One full pass through the data is an epoch. A large dataset like TinyStories is not read even once in a run; a small one like Folktales is read many times over, and the model can start to memorise its training text.</p>
+      </article>
+      <article class="scale" style="--c:var(--runner)">
+        <h3>A session: 10 hours</h3>
+        <p>The first three runs train the starter recipe as it is, to set the baseline and measure the noise. After that the agent starts each run from the best version so far and changes one thing in <code>train.py</code>: for example the learning rate (how big each adjustment to the weights is), the model's size and shape, or the schedule (how the adjustments shrink toward the end of a run). The code that loads the data, builds the tokenizer and computes the score is fixed for the session, and so are the agent's instructions: the record refuses to train if any of them changes, or if a different dataset, tokenizer or run length is set. A kept model is saved on the laptop so you can try it later; an undone one is not kept. Either way the next run trains a new model from scratch. Only the recipe carries forward.</p>
+      </article>
+      <article class="scale" style="--c:var(--person)">
+        <h3>Between sessions: you</h3>
+        <p>You read the results, share them, and choose what to run next: the dataset, the tokenizer, the session's length, each run's length. You can also edit the agent's instructions, <code>program.md</code>, but there is seldom a reason to: they set how experiments are run and judged, and the agent supplies the ideas. Nothing in a session changes the agent itself.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="note">
+    <h2>The model</h2>
+    <p>A small GPT: a transformer of about 19 million parameters. Parameters here are the numbers the model learns in training, its weights, not settings such as temperature. <code>train.py</code> counts them at the start of every run, and the run's entry keeps the count.</p>
+    <p>Much of that size depends on the vocabulary, because the model keeps rows of numbers for every token in it. The same recipe makes a model of about 19 million parameters with the vocabulary built from the dataset (8,192 tokens), 46 million with Phi-3's (32,011) and 67 million with GPT-2's (50,257). The agent may also change the model's shape, so the count can change during a session.</p>
+  </section>
+
+  <section class="note">
+    <h2>Pretraining only</h2>
+    <p>Language models are usually made in three steps: pretraining, where the model learns to predict the next token from a lot of text; fine-tuning, on examples of prompts and good responses; and learning from human feedback, where judgments of its responses change the model. Every run here is step 1 only, at laptop scale. So these models continue whatever you give them instead of answering it.</p>
+    <p>The score is not feedback. It never changes a model's weights; it only decides which recipe the agent keeps, and the next model is trained from scratch.</p>
+  </section>
+
+  <section class="note">
+    <h2>Is this recursive self-improvement?</h2>
+    <p>Recursive self-improvement means an AI system that builds its own improved successor, which is then better at building the next one. This is not that. The loop changes <code>train.py</code>, the recipe for a small model that can only continue text. Nothing changes the agent, which ends the session as it began. The score measures how well the small model predicts text, not how well anyone does research. And people choose the data, the rules and what happens next. The full argument, and what would have to be in place for it to be recursive self-improvement, is in <a href="https://github.com/aroughidea/autoresearch-win-rtx/blob/master/TRAINING-DECISIONS.md#is-this-recursive-self-improvement">the project's notes on training decisions</a>.</p>
+  </section>
+
+  <footer>Drawn from <code>program.md</code> (the agent's instructions, simplified), <code>lab.py</code> and the session runner. 9 October 2026.</footer>
+</div>

@@ -25,3 +25,19 @@ checkpoint_pre_eval.json
 
 # Library weights (large; kept locally, not committed)
 library/checkpoints/
+
+# The experiment record: kept on this machine unless someone shares a session
+/sessions/
+
+# The last run's weights: rewritten by every run, never committed
+checkpoint_pre_eval.pt
+
+# The session runner's logs (session.py)
+/session-logs/
+
+# Playwright MCP output: browser-test logs, page snapshots, screenshots
+.playwright-mcp/
+
+# Local secrets, such as the session runner's sign-in token: never committed
+.env
+.env.*

@@ -2,10 +2,11 @@
 Run capture for the Training Decisions explorer.
 
 Records what the model writes at fixed moments of training, on fixed prompts with
-fixed decoding, and saves one small JSON run file per experiment in runs/.
+fixed decoding, and saves one small JSON run file per run: its entry in the active
+session's runs/ (sessions/<name>/runs/), or the root runs/ outside a session.
 
 A captured run trains exactly like an uncaptured one: train.py calls this module
-before each step's timer starts (so sampling never counts toward the 5-minute
+before each step's timer starts (so sampling never counts toward the time
 budget), and sampling uses its own random generator, never the global one.
 
 The agent must not modify this file (see program.md).
@@ -24,13 +25,9 @@ from pathlib import Path
 import torch
 
 from prepare import TIME_BUDGET
+from record import RecordError, active_session_from, begin_run, compact_timestamp  # noqa: F401  (RecordError re-exported)
 
-
-def compact_timestamp(moment):
-    """2026-05-23 15:57:43 -07:00 -> '20260523T155743-0700'. Colon-free, safe in Windows filenames."""
-    if moment.tzinfo is None:
-        moment = moment.astimezone()
-    return moment.strftime("%Y%m%dT%H%M%S%z")
+PROJECT_HOME = Path(__file__).resolve().parent   # where sessions/ lives, wherever train.py is started from
 
 
 def make_run_id(commit, moment):
@@ -103,7 +100,7 @@ BASE_SNAPSHOT_TIMES = (0, 10, 30, 60, 120)
 
 def snapshot_times_for(budget):
     """Moments to sample, in training seconds. A run longer than 5 minutes also samples at
-    5 minutes, so it lines up with the normal runs."""
+    5 minutes, so it lines up with the library's 5-minute runs."""
     return BASE_SNAPSHOT_TIMES + ((300,) if budget > 300 else ())
 
 
@@ -209,7 +206,7 @@ class RunCapture:
 
     def __init__(self, tokenizer, *, dataset, runs_dir, device, tokenizer_name="own",
                  snapshot_times=SNAPSHOT_TIMES, prompts=PROMPTS, decoding=None, log=print,
-                 time_budget_s=TIME_BUDGET):
+                 time_budget_s=TIME_BUDGET, session="auto"):
         self.tokenizer = tokenizer
         self.dataset = dataset
         self.runs_dir = Path(runs_dir) if runs_dir is not None else None
@@ -221,6 +218,18 @@ class RunCapture:
         self.decoding = dict(DECODING if decoding is None else decoding)
         self.log = log
         self.error = None
+        # With an active session (sessions/active.txt), the run is recorded there: the code that is
+        # about to train is stored now, and the run file goes to the session's runs/.
+        self.session = None
+        self.run = None
+        if self.runs_dir is not None and session is not None and not os.environ.get("AUTORESEARCH_RUNS_DIR", "").strip():
+            found = active_session_from(Path.cwd(), PROJECT_HOME) if session == "auto" else session
+            if found is not None:
+                self.run = begin_run(found, dataset=dataset,
+                                     tokenizer=getattr(tokenizer, "name", tokenizer_name),
+                                     time_budget_s=time_budget_s)
+                self.session = found
+                self.runs_dir = found.runs_dir
         self.begin_attempt()
 
     @property
@@ -302,9 +311,12 @@ class RunCapture:
 
     def _write(self, val_bpb, peak_vram_mb, training_seconds, num_steps, num_params, recipe,
                commit, committed_at):
-        if commit is None and committed_at is None:
-            commit, committed_at = git_commit_info()
-        run_id = make_run_id(commit, committed_at or datetime.now().astimezone())
+        if self.session is not None:
+            commit, run_id = self.run["version"], self.run["run_id"]
+        else:
+            if commit is None and committed_at is None:
+                commit, committed_at = git_commit_info()
+            run_id = make_run_id(commit, committed_at or datetime.now().astimezone())
         record = {
             "schema": SCHEMA,
             "run_id": run_id,
@@ -331,9 +343,12 @@ class RunCapture:
                 "sampling_s": round(self.sampling_seconds, 1),
             },
         }
+        if self.session is not None:
+            record.update({"version": self.run["version"], "parent": self.run["parent"],
+                           "status": None, "description": None, "created": self.run["started"]})
         if self.error:
             record["capture_error"] = self.error
-        # A rerun of the same commit (program.md's noise rule) gets its own file: -2, -3, ...
+        # A rerun of the same commit (the baseline is trained three times) gets its own file: -2, -3, ...
         base, n = run_id, 1
         while (self.runs_dir / f"{run_id}.json").exists():
             n += 1
@@ -346,7 +361,7 @@ class RunCapture:
             tmp.write_text(json.dumps(record, indent=1, ensure_ascii=False, allow_nan=False) + "\n", encoding="utf-8")
             os.replace(tmp, path)
         except Exception:
-            tmp.unlink(missing_ok=True)  # a half-written file must not be committed by `git add runs/`
+            tmp.unlink(missing_ok=True)  # a half-written file must never be left behind as a run file
             raise
         self._say(f"capture: wrote {path}")
         return path

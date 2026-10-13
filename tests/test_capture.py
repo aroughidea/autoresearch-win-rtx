@@ -2,6 +2,8 @@ import re
 import subprocess
 from datetime import datetime, timedelta, timezone
 
+import pytest
+
 import capture
 
 
@@ -175,6 +177,7 @@ def _capture(tmp_path, runs_dir="use_tmp", **overrides):
         snapshot_times=(0, 10, 30),
         decoding=FAST,
         log=lambda message: None,
+        session=None,
     )
     kwargs.update(overrides)
     return capture.RunCapture(FakeTokenizer(), **kwargs)
@@ -263,7 +266,7 @@ def test_finish_writes_named_run_file(tmp_path):
 
 
 def test_finish_keeps_a_rerun_of_the_same_commit(tmp_path):
-    """program.md's noise rule runs a commit twice before keeping it; both runs are evidence."""
+    """Outside a session, a second run of the same commit (the baseline is trained three times) keeps its own file."""
     cap = _capture(tmp_path)
     first = _finish(cap, val_bpb=0.6)
     second = _finish(cap, val_bpb=0.5)
@@ -370,4 +373,66 @@ def test_run_file_records_the_tokenizer_objects_name_and_source(tmp_path):
 
 def test_run_file_records_the_time_budget(tmp_path):
     record = json.loads(_finish(_capture(tmp_path)).read_text(encoding="utf-8"))
-    assert record["time_budget_s"] == 300
+    assert record["time_budget_s"] == 600          # the default run: 10 minutes
+
+
+import record as _record
+
+
+def _session(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(capture, "PROJECT_HOME", tmp_path)
+    (tmp_path / "train.py").write_text("MATRIX_LR = 0.05\n", encoding="utf-8")
+    for name in _record.FIXED_FILES:
+        (tmp_path / name).write_text(f"# {name}\n", encoding="utf-8")
+    return _record.start_session("s1", dataset="tinystories", tokenizer="own", run_minutes=5, hours=8)
+
+
+def test_capture_in_a_session_writes_the_entry_there(tmp_path, monkeypatch):
+    monkeypatch.delenv("AUTORESEARCH_RUNS_DIR", raising=False)
+    s = _session(tmp_path, monkeypatch)
+    cap = _capture(tmp_path, runs_dir="runs", session="auto", time_budget_s=300)
+    path = _finish(cap, commit=None, committed_at=None)
+    entry = json.loads(path.read_text(encoding="utf-8"))
+    vid = _record.version_id("MATRIX_LR = 0.05\n")
+    assert path.parent.resolve() == s.runs_dir.resolve() and entry["schema"] == 1
+    assert entry["version"] == entry["commit"] == vid and entry["parent"] == vid
+    assert entry["status"] is None and entry["run_id"].endswith("_" + vid)
+    assert _record.undecided(s)[0]["run_id"] == entry["run_id"]
+
+
+def test_capture_without_a_session_is_unchanged(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(capture, "PROJECT_HOME", tmp_path)
+    cap = _capture(tmp_path, runs_dir="use_tmp", session="auto")
+    entry = json.loads(_finish(cap).read_text(encoding="utf-8"))
+    assert "version" not in entry and entry["commit"] == "abc1234"
+
+
+def test_capture_refuses_a_missing_active_session(tmp_path, monkeypatch):
+    monkeypatch.delenv("AUTORESEARCH_RUNS_DIR", raising=False)
+    monkeypatch.chdir(tmp_path)
+    (tmp_path / "sessions").mkdir()
+    (tmp_path / "sessions" / "active.txt").write_text("gone\n", encoding="utf-8")
+    with pytest.raises(_record.RecordError, match="gone"):
+        _capture(tmp_path, runs_dir="runs", session="auto")
+
+
+def test_capture_runs_dir_env_bypasses_the_session(tmp_path, monkeypatch):
+    _session(tmp_path, monkeypatch)
+    monkeypatch.setenv("AUTORESEARCH_RUNS_DIR", str(tmp_path / "elsewhere"))
+    cap = _capture(tmp_path, runs_dir=str(tmp_path / "elsewhere"), session="auto")
+    assert cap.session is None
+
+
+def test_capture_refuses_a_run_started_outside_the_project_folder(tmp_path, monkeypatch):
+    """Minor 5: from another folder the session is not found, and the run would go to runs/ and git."""
+    monkeypatch.delenv("AUTORESEARCH_RUNS_DIR", raising=False)
+    home = tmp_path / "project"
+    home.mkdir()
+    _session(home, monkeypatch)
+    elsewhere = tmp_path / "elsewhere"
+    elsewhere.mkdir()
+    monkeypatch.chdir(elsewhere)
+    with pytest.raises(_record.RecordError, match="run train.py from"):
+        _capture(tmp_path, runs_dir="runs", session="auto")

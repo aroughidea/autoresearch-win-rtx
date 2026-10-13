@@ -15,7 +15,7 @@ After the demo and the journey, participants can:
 2. **Speak to how a dataset's qualities show up in the experience,** having trained on one
    dataset and later on another. The score cannot compare datasets; the writing can.
 3. **Speak to how the tokenizer shapes the model:** vocabulary size and origin change the
-   model's size, how far it trains in a fixed time, and how it writes.
+   model's size, how far it trains in a fixed time, and what it produces.
 4. **Experience consequences and compare decision sets:** watch a model grow over training
    time, and set two recipes side by side.
 5. **Compare models through use,** in the completion demo, alongside the score.
