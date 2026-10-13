@@ -43,7 +43,7 @@ from pydantic import BaseModel
 
 from generate import _config_from_state_dict, _sample_top_k
 from capture import read_checkpoint_pair
-from record import RecordError, active_session
+from record import RecordError, active_session, compact_timestamp
 from prepare import (
     DEFAULT_DATASET,
     DEFAULT_TOKENIZER,
@@ -266,6 +266,7 @@ class ModelStore:
     def __init__(self, device: str, entries: list[dict], active_path: str,
                  tokenizer_loader=None, runs_dir: str = "runs", results_path: str = "results.tsv"):
         self.results_path = results_path
+        self._runs_dir = runs_dir
         self._device = device
         self._loader = tokenizer_loader or (lambda dataset, tokenizer: Tokenizer.from_directory(dataset=dataset, tokenizer=tokenizer))
         self._tokenizers: dict[tuple[str, str], object] = {}
@@ -343,6 +344,24 @@ class ModelStore:
 
     def list_models(self) -> list[dict]:
         return [{**e, "active": e["id"] == self._active_id} for e in self._entries]
+
+    def model_id_for_row(self, timestamp: str, commit: str) -> str | None:
+        """The model a scoreboard row's run saved. A record run is named by its start time and version,
+        so a row finds its own model even when two sessions share a version (every session starts from
+        the same code). A row whose run kept no model (the first two of three baseline runs) and rows
+        from before the record match by commit, preferring a model of this scoreboard's own session."""
+        try:
+            run_id = f"{compact_timestamp(datetime.fromisoformat(timestamp))}_{commit}"
+        except ValueError:
+            run_id = None
+        same_commit = []
+        for e in self._entries:
+            if Path(e["label"]).stem == run_id:
+                return e["id"]
+            if commit and e["commit"] == commit:
+                same_commit.append(e)
+        own = [e for e in same_commit if (Path(self._runs_dir) / f"{Path(e['label']).stem}.json").exists()]
+        return (own or same_commit or [{"id": None}])[0]["id"]
 
     def tokenizer_for_id(self, model_id: str | None):
         entry = self._by_id.get(model_id or self._active_id) or self._by_id[self._active_id]
@@ -871,7 +890,6 @@ _HTML = """\
 
   let _models = [];
   let _results = [];
-  let _commitToModelId = {};
   let _baselineModelId = null;
   let _bestModelId     = null;
 
@@ -948,8 +966,6 @@ _HTML = """\
     if (!resp.ok) throw new Error('Could not load models');
     const payload = await resp.json();
     _models = payload.models || [];
-    _commitToModelId = {};
-    _models.forEach(m => { if (m.commit) _commitToModelId[m.commit] = m.id; });
   }
 
   // ---- Progress chart ----
@@ -1130,11 +1146,13 @@ _HTML = """\
         $('card-best').style.display = '';
         const first = kept[0];
         // Scores compare only within one dataset, so "best" comes from the baseline's.
-        const datasetOf = r => (_models.find(m => m.commit === r.commit) || {}).dataset;
+        // Each row names its own model: by commit alone, two sessions that started from the same code
+        // would share one.
+        const datasetOf = r => (_models.find(m => m.id === r.model_id) || {}).dataset;
         const sameData = kept.filter(r => datasetOf(r) && datasetOf(r) === datasetOf(first));
         const best  = (sameData.length ? sameData : kept).reduce((a, b) => a.val_bpb <= b.val_bpb ? a : b);
-        _baselineModelId = _commitToModelId[first.commit] || null;
-        _bestModelId     = _commitToModelId[best.commit]  || null;
+        _baselineModelId = first.model_id || null;
+        _bestModelId     = best.model_id  || null;
         setupPickers(_baselineModelId, _bestModelId);
       } else {
         _baselineModelId = null;
@@ -1350,11 +1368,14 @@ _HTML = """\
 _SPACE_MODE = os.environ.get("SPACE_MODE") == "1"
 _SPACE_BANNER = (
     '<p style="margin-top:6px;font-size:0.82rem;">'
-    "A public demo of models trained by an autonomous research loop. The two write almost alike: "
-    "the session's gain was smaller than run-to-run noise, which is why the agent needs a score. "
+    "A public demo of four small language models, each trained for 10 minutes on one laptop GPU: for two "
+    "datasets, the starting recipe and the best one an AI agent found in a night of experiments. On held-out "
+    "text the best scored 10% better on TinyStories (0.477 to 0.428 bits per byte) and 35% better on Folktales "
+    "(1.916 to 1.243); lower is better. Compare a start with its best, or the two starts (the same code, "
+    "trained on different text) to see what the dataset decides. "
     '<a href="https://github.com/aroughidea/autoresearch-win-rtx/blob/master/TRAINING-DECISIONS.md" '
     'target="_blank" rel="noopener">What this demonstrates</a> &middot; '
-    '<a href="https://github.com/aroughidea/autoresearch-win-rtx/blob/master/WALKTHROUGH.md" '
+    '<a href="https://github.com/aroughidea/autoresearch-win-rtx/blob/master/README.md#start-here-non-technical" '
     'target="_blank" rel="noopener">how these were made</a>.</p>'
 )
 
@@ -1378,7 +1399,7 @@ def build_app(model_store: ModelStore) -> FastAPI:
         if _SPACE_MODE:
             # "local" is wrong on a public URL; retitle, then add the banner
             # after the header paragraph.
-            page = _HTML.replace("local text generation", "a model trained by an AI researcher")
+            page = _HTML.replace("local text generation", "models from an AI agent's experiments")
             return page.replace("</p>", "</p>" + _SPACE_BANNER, 1)
         return _HTML
 
@@ -1453,9 +1474,11 @@ def build_app(model_store: ModelStore) -> FastAPI:
                     memory_gb = float((r.get("memory_gb") or "").strip())
                 except ValueError:
                     memory_gb = None
+                commit = (r.get("commit") or "").strip()
                 rows.append({
                     "timestamp": timestamp,
-                    "commit": (r.get("commit") or "").strip(),
+                    "commit": commit,
+                    "model_id": model_store.model_id_for_row(timestamp, commit),
                     "val_bpb": val_bpb,
                     "memory_gb": memory_gb,
                     "status": (r.get("status") or "unknown").strip(),

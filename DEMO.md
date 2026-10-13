@@ -84,8 +84,8 @@ Run through all seven, in order:
       Confirm the chart and both panes render, then leave the tab open. Reload it during
       room setup (section 4).
 
-- [ ] **Pick 2–3 prompts and test them there.** These models write short children's stories,
-      unevenly. Try "Once upon a time", "The little dog", "One day, a little girl named
+- [ ] **Pick 2–3 prompts and test them there.** The page opens on the TinyStories models,
+      which continue a prompt with a short children's story, unevenly. Try "Once upon a time", "The little dog", "One day, a little girl named
       Lily", two or three times each, with the temperature slider where you will set it live
       (about 0.9 reads better than the default 0). Generation there is capped at 500 tokens.
       Write your winners here: ______________________
@@ -173,18 +173,19 @@ say so: the rule keeps it anyway, and the description should say it was small.
 
 ### [12–15 min] The reveal: the hosted demo
 
-**Pending: which models the hosted demo serves.** It still serves the May session's two
-models, from before the record; the choice waits for a few build sessions (`docs/TODO.md`).
-Until the demo is redeployed, this beat cannot run as written. The plan, in two beats:
+The hosted demo serves four models from two overnight sessions of 12–13 October, each
+trained for 10 minutes: for TinyStories and for Folktales, the session's starting recipe (the
+last of its three baseline runs) and its best version. It opens on TinyStories' pair. Two beats:
 
-1. **The agent's night.** A build session's baseline and best, side by side on one of your
-   tested prompts, with the temperature you tested. Let both finish without talking over
-   them. Expect them to read almost alike: the agent's gains are usually smaller than you can
-   read, which is why it judges by a score.
-2. **A decision you can read.** Switch one pane to a Folktales model: the same recipe and
-   vocabulary, a different dataset. The writing changes plainly. That is the point of the
-   whole project: changing a design decision changes the final experience in a specific way
-   (TRAINING-DECISIONS.md).
+1. **The agent's night.** TinyStories' start (left) and best (right), side by side on one of
+   your tested prompts, with the temperature you tested. Let both finish without talking over
+   them. On held-out text the best scored 10% better (0.477 to 0.428 bits per byte). Ask the
+   room whether they can see the difference in the text; the agent judged by the score.
+2. **A decision you can read.** Switch the left pane to Folktales' start: the same starting
+   code, trained on different text with a vocabulary built from that text. The continuations
+   change plainly. That is the point of the whole project: changing a design decision changes
+   the final experience in a specific way (TRAINING-DECISIONS.md). If there is time, put
+   Folktales' best beside it: there the agent's night bought 35% (1.916 to 1.243).
 
 If there is time, click **Tokens** on one pane to show the raw tokenization.
 
@@ -210,9 +211,9 @@ and say so: a stopped run is recorded as a crash, and the record stays consisten
 time on last night's record instead, then do the reveal as planned. You lose the live gamble,
 not the story.
 
-**Tier 2 — no network, or the hosted demo is down:** do the reveal locally with the same
-models (pending with the reveal, `docs/TODO.md`). `chat.py` shows the active session, so make
-the build session active first, then start the page:
+**Tier 2 — no network, or the hosted demo is down:** do the reveal locally with your night's
+models. `chat.py` shows the active session, so make the build session active first, then start
+the page:
 
 ```powershell
 uv run lab.py use <night>
@@ -274,12 +275,13 @@ can stay for the next lecture; `uv run lab.py end` ends it, and its folder stays
 
 ### Give the class the links
 
-- **The hosted demo**, <https://autoresearch-demo.fly.dev/>: public, free, no login, the same
-  Baseline-and-Best comparison they just watched, plus the chart and the vocabulary browser.
+- **The hosted demo**, <https://autoresearch-demo.fly.dev/>: public, free, no login, the four
+  models they just saw (a start and a best for each dataset), plus the chart and the vocabulary
+  browser.
   The first load takes ~12 seconds while the machine wakes, and it is a text-completion model,
   not a chat assistant: feed it the opening of a story, not a question.
 - **The starter kit**, <https://github.com/aroughidea/autoresearch-starter>.
 
-The hosted demo is a snapshot: it serves whatever models it was last built with (still the
-May session's, until the step in `docs/TODO.md`). The deployment source is in `deploy/` and the
-procedure in `deploy/README.md`.
+The hosted demo is a snapshot: it serves whatever models it was last built with (the 12–13
+October sessions', since 13 October). The deployment source is in `deploy/` and the procedure
+in `deploy/README.md`.
