@@ -29,10 +29,12 @@ import socket
 import sys
 import threading
 import time
+import types
 import webbrowser
 from datetime import datetime, timezone
 from pathlib import Path
 
+import importlib.util
 import torch
 import uvicorn
 from fastapi import FastAPI
@@ -50,6 +52,7 @@ from prepare import (
     _resolve_dataset_name,
     _resolve_tokenizer_name,
 )
+import train
 from train import GPT
 
 
@@ -57,14 +60,61 @@ from train import GPT
 # Load model (startup + on-demand switch)
 # ---------------------------------------------------------------------------
 
-def _load_model_from_checkpoint(checkpoint_path: str, device: str) -> GPT:
-  state_dict = torch.load(checkpoint_path, map_location=device, weights_only=True)
-  config = _config_from_state_dict(state_dict)
-  model = GPT(config)
-  model.load_state_dict(state_dict)
-  model.to(device)
-  model.eval()
-  return model
+_VERSION_MODULES: dict[str, types.ModuleType] = {}
+
+
+def _version_code(run: dict | None) -> Path | None:
+    """The train.py that trained a run, as the record kept it: sessions/<name>/versions/<version>.py."""
+    version = (run or {}).get("version")
+    if not version:
+        return None
+    found = sorted(Path("sessions").glob(f"*/versions/{version}.py"))
+    return found[0] if found else None
+
+
+def _import_version(path: Path):
+    """Import a version's train.py under its own name (train.py only defines things on import; it trains
+    under `if __name__ == "__main__"`), once per file."""
+    key = os.path.normcase(os.path.abspath(path))
+    if key not in _VERSION_MODULES:
+        name = f"_version_{Path(path).stem}"
+        spec = importlib.util.spec_from_file_location(name, path)
+        if spec is None or spec.loader is None:
+            raise ImportError(f"cannot load the version's code from {path}")
+        module = importlib.util.module_from_spec(spec)
+        sys.modules[name] = module      # dataclasses (and pickle) look a module up by name while it loads
+        try:
+            spec.loader.exec_module(module)
+        except BaseException:
+            del sys.modules[name]
+            raise
+        _VERSION_MODULES[key] = module
+    return _VERSION_MODULES[key]
+
+
+def _code_and_config(state_dict: dict, run: dict | None):
+    """The code to rebuild a saved model with, and its config. A model is only its weights: how they are
+    wired (attention, windows, the cap on the output scores) is in the code that trained it. So: that
+    version's train.py when the record kept it; else today's train.py with the attention windows its run
+    file recorded; else today's train.py as it stands."""
+    path = _version_code(run)
+    if path is not None:
+        code = _import_version(path)
+        pattern = getattr(code, "WINDOW_PATTERN", None)
+    else:
+        code = train
+        pattern = ((run or {}).get("recipe") or {}).get("WINDOW_PATTERN") or getattr(train, "WINDOW_PATTERN", None)
+    return code, _config_from_state_dict(state_dict, config_cls=code.GPTConfig, window_pattern=pattern)
+
+
+def _load_model_from_checkpoint(checkpoint_path: str, device: str, run: dict | None = None):
+    state_dict = torch.load(checkpoint_path, map_location=device, weights_only=True)
+    code, config = _code_and_config(state_dict, run)
+    model = code.GPT(config)
+    model.load_state_dict(state_dict)
+    model.to(device)
+    model.eval()
+    return model
 
 
 def _discover_checkpoints(primary_checkpoint: str) -> list[dict]:
@@ -312,7 +362,7 @@ class ModelStore:
                 raise ValueError(f"This model can't be loaded: {entry['reason']}.")
             model = self._cache.get(entry["path"])
             if model is None:
-                model = _load_model_from_checkpoint(entry["path"], self._device)
+                model = _load_model_from_checkpoint(entry["path"], self._device, self._runs.get(entry["id"]))
                 self._cache[entry["path"]] = model
             return model, self._tokenizer(entry["dataset"], entry["tokenizer"]), self._device, entry
 

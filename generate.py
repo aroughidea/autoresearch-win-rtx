@@ -30,8 +30,12 @@ from train import GPT, GPTConfig
 # Config detection
 # ---------------------------------------------------------------------------
 
-def _config_from_state_dict(state_dict: dict, n_head_override: int | None = None) -> GPTConfig:
+def _config_from_state_dict(state_dict: dict, n_head_override: int | None = None, *,
+                            config_cls=GPTConfig, window_pattern: str | None = None):
     """Infer GPTConfig from checkpoint weight shapes.
+
+    config_cls is the GPTConfig of the code that trained the checkpoint (chat.py passes the version's);
+    window_pattern, which no weight records, comes from that code or its run file when given.
 
     Most fields are unambiguous from shapes. n_head requires a hint if the
     agent changed it and the ve_gate is absent (rare). A command-line override
@@ -59,7 +63,7 @@ def _config_from_state_dict(state_dict: dict, n_head_override: int | None = None
         n_kv_head = n_head
     else:
         # Fall back to GPTConfig defaults if we can't determine n_head
-        default = GPTConfig()
+        default = config_cls()
         n_head = default.n_head
         n_kv_head = default.n_kv_head
         print(
@@ -67,13 +71,14 @@ def _config_from_state_dict(state_dict: dict, n_head_override: int | None = None
             "Pass --n-head if this is wrong."
         )
 
-    cfg = GPTConfig(
+    cfg = config_cls(
         vocab_size=int(vocab_size),
         n_embd=int(n_embd),
         n_layer=n_layer,
         n_head=int(n_head),
         n_kv_head=int(n_kv_head),
         use_activation_checkpointing=False,
+        **({"window_pattern": window_pattern} if window_pattern else {}),
     )
     print(
         f"Checkpoint config: n_layer={cfg.n_layer}  n_embd={cfg.n_embd}  "

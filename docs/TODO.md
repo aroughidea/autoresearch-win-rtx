@@ -20,14 +20,16 @@ TJ's local `ar-session-logs`; their records in the benches `ar-bench-<name>/sess
 - **Explorer (tj60647/llm-explorables#36):** checked on 13 October with both session folders: all
   runs load, the staircase starts at each baseline's average with the session's own noise, and the
   totals match the record. TJ merges.
-- **`chat.py` loads every model with today's `train.py`.** The TinyStories session's best version
-  changed the model's code (full multi-head attention, causal attention with no mask, no logit
-  softcap), so `chat.py` would run it with the wrong code. The record keeps each version's code in
-  `sessions/<name>/versions/<id>.py`: build each checkpoint's model from the version that trained
-  it. Needed before the demo serves these models.
-- **The starter recipe's attention setting** (TJ decides): its single shared key/value head forces a
-  slow attention kernel on this laptop's GPU, which the TinyStories agent found and removed. Fix it
-  in the starter, or keep it as a discovery every session can make.
+- **`chat.py` builds each model with the code that trained it** (fixed 13 October): the version the
+  record kept in `sessions/<name>/versions/`, else the attention windows its run file recorded. Built
+  with today's `train.py` instead, the TinyStories session's best model scored 0.4798 on held-out text,
+  worse than the session's starting point; with its own code, 0.4303.
+- **The starter recipe's attention setting.** Its single shared key/value head, explicit window mask and
+  logit softcap force a slow attention kernel on this laptop's GPU; the TinyStories agent found and
+  removed them (2.5 times the steps), the Folktales agent did not. Decided 13 October: keep the recipe
+  for now, so every session can make the discovery and the existing baselines still compare; revisit
+  after the starter rehearsal (fixing it would start new sessions faster but break comparison with
+  every baseline and session so far).
 - **The agent's model for participants:** both sessions used Fable; participants may not have it or
   may have tighter limits. Run one session with `--model claude-opus-5-5` or `claude-sonnet-5-5`
   and compare.
