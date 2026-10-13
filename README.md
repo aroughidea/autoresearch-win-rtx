@@ -395,6 +395,8 @@ To stop a session, press Ctrl+C in its window or run `--stop` from another: the 
 
 For a whole night, run `claude setup-token` first and set the token it prints as `CLAUDE_CODE_OAUTH_TOKEN`: the usual sign-in can expire after about two hours unattended. The agent runs commands without asking each time, so run it only in this folder.
 
+**Keep the machine at one speed all session.** Every run gets the same training time, so its score depends on how many steps the GPU completes; a machine that slows partway through makes the next runs score worse with no change to the recipe, and the agent cannot tell the difference. Keep a laptop plugged in, set Windows' power mode (and any GPU or fan utility from the laptop's maker) to one fixed setting, keep the vents clear, and run nothing else on the GPU. Once the three baseline runs are done, compare their step counts: `Select-String -Path sessions\*\runs\*.json -Pattern '"num_steps"'`. On this laptop, overnight, they were 1,214, 1,258 and 1,258 steps (noise 0.0022). In a rehearsal they were 1,193, 744 and 744 (noise 0.029, thirteen times larger), and we did not find what slowed the machine; the agent took the normal-speed run for the outlier. If yours differ by much, stop the session, fix the machine, and start a new session with `--name`.
+
 **Selective permissions** — auto-approve file edits but still ask before running shell commands:
 
 ```powershell
