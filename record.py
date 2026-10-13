@@ -159,6 +159,31 @@ def use_session(name, base=SESSIONS):
     return Session(root)
 
 
+def extend_session(session, *, hours, now=None):
+    """Continue a session another day: its end moves to `hours` from now. session.json keeps each
+    resume under "resumed", with the end it replaced."""
+    moment = now or _dt.datetime.now().astimezone()
+    meta = session.meta
+    ends = (moment + _dt.timedelta(hours=float(hours))).isoformat(timespec="seconds")
+    meta.setdefault("resumed", []).append({"at": moment.isoformat(timespec="seconds"), "hours": float(hours),
+                                           "ends_before": meta["ends"], "ends": ends})
+    meta["ends"] = ends
+    _write_json(session.root / "session.json", meta)
+    return session
+
+
+def note_agent_model(session, model, *, now=None):
+    """Record the model the agent runs with: "agent_model" is the current one, and "agent_models"
+    gains an entry, with its time, whenever it changes."""
+    meta = session.meta
+    models = meta.setdefault("agent_models", [])
+    if not models or models[-1]["model"] != model:
+        moment = now or _dt.datetime.now().astimezone()
+        models.append({"from": moment.isoformat(timespec="seconds"), "model": model})
+    meta["agent_model"] = model
+    _write_json(session.root / "session.json", meta)
+
+
 def active_session_from(cwd, home):
     """The active session for a run started in cwd. The record lives in the project folder (home);
     a run started anywhere else would find no session there and quietly record to runs/ instead,

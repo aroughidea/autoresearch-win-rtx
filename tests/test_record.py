@@ -399,3 +399,25 @@ def test_use_makes_an_existing_session_active_again(tmp_path):
     assert record.active_session(tmp_path / "sessions").name == s.name
     with pytest.raises(record.RecordError, match="no session"):
         record.use_session("missing", base=tmp_path / "sessions")
+
+
+def test_extend_session_gives_a_new_end_and_keeps_the_old_one(tmp_path):
+    s = _start(tmp_path)
+    later = WHEN + timedelta(days=1)
+    record.extend_session(s, hours=6, now=later)
+    again = record.Session(s.root)
+    assert again.meta["ends"] == (later + timedelta(hours=6)).isoformat(timespec="seconds")
+    assert again.meta["resumed"] == [{"at": later.isoformat(timespec="seconds"), "hours": 6.0,
+                                      "ends_before": (WHEN + timedelta(hours=8)).isoformat(timespec="seconds"),
+                                      "ends": again.meta["ends"]}]
+
+
+def test_note_agent_model_records_each_change_once(tmp_path):
+    s = _start(tmp_path)
+    record.note_agent_model(s, "claude-fable-5", now=WHEN)
+    record.note_agent_model(s, "claude-fable-5", now=WHEN + timedelta(hours=1))
+    record.note_agent_model(s, "claude-opus-5-5", now=WHEN + timedelta(hours=2))
+    meta = record.Session(s.root).meta
+    assert meta["agent_model"] == "claude-opus-5-5"
+    assert [m["model"] for m in meta["agent_models"]] == ["claude-fable-5", "claude-opus-5-5"]
+    assert meta["agent_models"][1]["from"] == (WHEN + timedelta(hours=2)).isoformat(timespec="seconds")

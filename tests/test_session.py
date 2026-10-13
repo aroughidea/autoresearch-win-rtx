@@ -33,12 +33,14 @@ class _Clock:
 class _Agent:
     """Each launch 'runs' for a set time on the fake clock, then writes a result line like claude's."""
 
-    def __init__(self, clock, minutes=60, result=None):
-        self.clock, self.minutes, self.calls = clock, minutes, []
+    def __init__(self, clock, minutes=60, result=None, init=None):
+        self.clock, self.minutes, self.calls, self.init = clock, minutes, [], init
         self.result = result or {"type": "result", "is_error": False, "result": "done"}
 
     def __call__(self, cmd, prompt, env, stdout, stderr):
         self.calls.append((cmd, prompt))
+        if self.init:
+            stdout.write(json.dumps(self.init) + "\n")
         stdout.write(json.dumps(self.result) + "\n")
         stdout.flush()
         clock, until = self.clock, self.clock.now + self.minutes * 60
@@ -132,3 +134,101 @@ def test_check_reports_what_is_missing():
 
 def test_the_session_name_has_the_pair_the_length_and_the_date():
     assert session.session_name("folktales", "phi3", 5, dt.date(2026, 10, 9)) == "folktales-phi3-5min-2026-10-09"
+
+
+def test_a_continued_session_starts_with_the_continue_prompt(tmp_path, monkeypatch):
+    s = _project(tmp_path, monkeypatch, hours=3)
+    clock = _Clock(STARTED)
+    agent = _Agent(clock, minutes=60)
+    _run(tmp_path, s, agent, clock, continuing=True)
+    first, again = session.prompts(s)
+    resumed = session.continue_prompt(s)
+    assert agent.calls[0][1] == resumed and "--continue" not in agent.calls[0][0]
+    assert agent.calls[1][1] == again and "--continue" in agent.calls[1][0]
+    assert "do not start a new one" in resumed and "lab.py history" in resumed and "did not finish" in resumed
+    assert "start a new experiment loop" not in resumed and s.name in resumed
+
+
+def test_a_given_model_is_passed_to_every_launch(tmp_path, monkeypatch):
+    s = _project(tmp_path, monkeypatch, hours=2)
+    clock = _Clock(STARTED)
+    agent = _Agent(clock, minutes=60)
+    _run(tmp_path, s, agent, clock, model="claude-opus-5-5")
+    assert all(c[c.index("--model") + 1] == "claude-opus-5-5" for c, _ in agent.calls)
+
+
+def test_the_model_the_agent_ran_with_is_recorded(tmp_path, monkeypatch):
+    s = _project(tmp_path, monkeypatch, hours=1)
+    clock = _Clock(STARTED)
+    agent = _Agent(clock, minutes=30, init={"type": "system", "subtype": "init", "model": "claude-fable-5"})
+    _run(tmp_path, s, agent, clock)
+    meta = record.Session(s.root).meta
+    assert meta["agent_model"] == "claude-fable-5" and len(meta["agent_models"]) == 1
+
+
+def test_ctrl_c_ends_the_agent_and_says_so(tmp_path, monkeypatch):
+    s = _project(tmp_path, monkeypatch)
+    clock = _Clock(STARTED)
+    agent = _Agent(clock, minutes=600)
+    killed = []
+
+    def sleep(seconds):
+        raise KeyboardInterrupt
+
+    reason = session.run_agent(s, logs=tmp_path / "logs", launch=agent, clock=clock.time, sleep=sleep,
+                               kill=killed.append)
+    assert killed and "Ctrl+C" in reason
+
+
+def test_a_stop_request_ends_the_agent(tmp_path, monkeypatch):
+    s = _project(tmp_path, monkeypatch)
+    clock = _Clock(STARTED)
+    agent = _Agent(clock, minutes=600)
+    killed = []
+    stop = tmp_path / "stop"
+
+    def sleep(seconds):
+        clock.sleep(seconds)
+        stop.write_text("", encoding="utf-8")
+
+    reason = session.run_agent(s, logs=tmp_path / "logs", launch=agent, clock=clock.time, sleep=sleep,
+                               kill=killed.append, stop_file=stop)
+    assert killed and "--stop" in reason and len(agent.calls) == 1
+
+
+def test_stop_with_no_runner_says_so(tmp_path):
+    message = session.request_stop(tmp_path / "runner.lock", alive=lambda pid: False, sleep=lambda s: None)
+    assert "No session runner" in message
+
+
+def test_stop_asks_a_live_runner_and_waits_for_it(tmp_path):
+    lock = tmp_path / "runner.lock"
+    lock.mkdir()
+    (lock / "runner.pid").write_text("111", encoding="utf-8")
+
+    def sleep(seconds):                       # the runner sees the stop file and finishes
+        assert (lock / "stop").exists()
+        for f in lock.iterdir():
+            f.unlink()
+        lock.rmdir()
+
+    message = session.request_stop(lock, alive=lambda pid: pid == 111, sleep=sleep)
+    assert "Stopped" in message and not lock.exists()
+
+
+def test_stop_clears_a_dead_runners_lock_and_names_its_agent(tmp_path):
+    lock = tmp_path / "runner.lock"
+    lock.mkdir()
+    (lock / "runner.pid").write_text("111", encoding="utf-8")
+    (lock / "agent.pid").write_text("222", encoding="utf-8")
+    message = session.request_stop(lock, alive=lambda pid: pid == 222, sleep=lambda s: None)
+    assert not lock.exists() and "222" in message and "no longer running" in message
+
+
+def test_check_names_the_agents_model_or_says_the_default_is_recorded():
+    kw = dict(run_minutes=10, hours=10, env={}, which={"claude": "c", "uv": "u"}.get, signin=lambda: "ok",
+              disk_free_gb=lambda: 100, locked=lambda: False)
+    pinned = [m for _, m in session.checks(model="claude-opus-5-5", **kw)]
+    default = [m for _, m in session.checks(**kw)]
+    assert any("claude-opus-5-5" in m for m in pinned)
+    assert any("default model" in m and "record" in m for m in default)

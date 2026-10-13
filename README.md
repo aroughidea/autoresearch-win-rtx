@@ -380,13 +380,18 @@ claude "Read program.md, do the setup checks, and start a new experiment loop. R
 
 By default Claude Code asks for permission before each file edit and shell command. For a long unattended session this will block — use one of the options below instead.
 
-**Unattended / overnight** — use the session runner, `session.py`. It prepares the dataset and tokenizer, starts the session's record, launches Claude Code headless without permission prompts, and starts it again where it left off if its turn ends early. It starts no run in the session's last 20 minutes, ends the agent 25 minutes after the session's end, and stops at once if the sign-in fails. Run the same command again to continue a session that stopped; logs go to `session-logs/<name>/`.
+**Unattended / overnight** — use the session runner, `session.py`. It prepares the dataset and tokenizer, starts the session's record, launches Claude Code headless without permission prompts, and starts it again where it left off if its turn ends early. It starts no run in the session's last 20 minutes, ends the agent 25 minutes after the session's end, and stops at once if the sign-in fails. Logs go to `session-logs/<name>/`.
 
 ```powershell
 uv run session.py tinystories own --check      # every check, changing nothing (one short test reply)
 uv run session.py tinystories own              # 10 hours of 10-minute runs
 uv run session.py folktales phi3 --hours 6 --run-minutes 5
+uv run session.py tinystories own --model claude-opus-5-5   # choose the agent's model
+uv run session.py --stop                       # end the running session, from another terminal
+uv run session.py --resume <name> --hours 6    # continue a session on another day, 6 more hours
 ```
+
+To stop a session, press Ctrl+C in its window or run `--stop` from another: the agent and its training are ended, and only the run that was training is lost (the record marks it "did not finish" and keeps its code). Run the same command again the same day to continue until the session's end time, or `--resume` it on any day; either way the agent is told to continue, not to start over. The session's `session.json` records the model the agent ran with (`agent_model`), so you can tell later which model did the research.
 
 For a whole night, run `claude setup-token` first and set the token it prints as `CLAUDE_CODE_OAUTH_TOKEN`: the usual sign-in can expire after about two hours unattended. The agent runs commands without asking each time, so run it only in this folder.
 
