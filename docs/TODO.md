@@ -14,12 +14,16 @@ TJ's local `ar-session-logs`; their records in the benches `ar-bench-<name>/sess
 
 ## Next
 
-- **Starter kit (aroughidea/autoresearch-starter#9):** it has the record and the same `session.py`
-  (da37bf7). Rehearse from a fresh "Use this template" copy, following its README literally
-  (quickstart, `session.py --check`, a short session), then merge.
-- **Explorer (tj60647/llm-explorables#36):** checked on 13 October with both session folders: all
-  runs load, the staircase starts at each baseline's average with the session's own noise, and the
-  totals match the record. TJ merges.
+- **Starter kit rehearsal (13 October, done):** a fresh "Use this template" copy, its README followed
+  literally. The quickstart, `session.py --check`, `chat.py`, `lab.py check` and `--stop` all worked; the
+  agent ran no git and its model was recorded. A 1.5-hour session got through its three baseline runs and
+  one experiment (cut off). The finding: the laptop slowed between baseline runs (1,193 steps, then 744
+  and 744; cause not found), the session's noise came out 13 times the overnight one, and the agent took
+  the normal-speed run for the outlier. Both READMEs now say how to keep the machine at one speed and how
+  to check the step counts. Possible follow-up: show each run's steps in `lab.py history`, so the check
+  needs no `Select-String`. The rehearsal's local copy and cache were removed afterwards; its private
+  GitHub repo (tj60647/autoresearch-rehearsal-2026-10-13) is to be deleted from GitHub's settings page.
+- **Explorer (tj60647/llm-explorables#36):** merged 13 October.
 - **`chat.py` builds each model with the code that trained it** (fixed 13 October): the version the
   record kept in `sessions/<name>/versions/`, else the attention windows its run file recorded. Built
   with today's `train.py` instead, the TinyStories session's best model scored 0.4798 on held-out text,
@@ -29,7 +33,8 @@ TJ's local `ar-session-logs`; their records in the benches `ar-bench-<name>/sess
   removed them (2.5 times the steps), the Folktales agent did not. Decided 13 October: keep the recipe
   for now, so every session can make the discovery and the existing baselines still compare; revisit
   after the starter rehearsal (fixing it would start new sessions faster but break comparison with
-  every baseline and session so far).
+  every baseline and session so far). The rehearsal did not reach it: its one experiment halved the batch
+  for more steps, which the TinyStories night had tried and discarded. TJ to decide after the rehearsal.
 - **The agent's model for participants:** both sessions used Fable; participants may not have it or
   may have tighter limits. Run one session with `--model claude-opus-5-5` or `claude-sonnet-5-5`
   and compare. Decided 13 October: not now.
