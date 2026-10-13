@@ -232,3 +232,86 @@ def test_check_names_the_agents_model_or_says_the_default_is_recorded():
     default = [m for _, m in session.checks(**kw)]
     assert any("claude-opus-5-5" in m for m in pinned)
     assert any("default model" in m and "record" in m for m in default)
+
+
+def test_an_unexpected_error_still_ends_the_agent(tmp_path, monkeypatch):
+    s = _project(tmp_path, monkeypatch)
+    clock = _Clock(STARTED)
+    killed = []
+
+    class _Breaks:
+        pid = 4242
+
+        def poll(self):
+            raise RuntimeError("something unexpected")
+
+    with pytest.raises(RuntimeError):
+        session.run_agent(s, logs=tmp_path / "logs", launch=lambda *a: _Breaks(), clock=clock.time,
+                          sleep=clock.sleep, kill=killed.append)
+    assert killed
+
+
+def test_a_locked_session_json_or_a_missing_lock_folder_does_not_stop_the_runner(tmp_path, monkeypatch):
+    s = _project(tmp_path, monkeypatch, hours=1)
+    clock = _Clock(STARTED)
+    agent = _Agent(clock, minutes=30, init={"type": "system", "subtype": "init", "model": "claude-fable-5"})
+
+    def locked(*a, **kw):
+        raise PermissionError("[WinError 5] Access is denied")
+
+    monkeypatch.setattr(record, "note_agent_model", locked)
+    reason = session.run_agent(s, logs=tmp_path / "logs", launch=agent, clock=clock.time, sleep=clock.sleep,
+                               kill=lambda proc: None, stop_file=tmp_path / "gone" / "stop")
+    assert "time is up" in reason
+
+
+def test_a_stop_request_cuts_a_long_pause_short(tmp_path, monkeypatch):
+    s = _project(tmp_path, monkeypatch)
+    clock = _Clock(STARTED)
+    agent = _Agent(clock, minutes=1, result={"type": "result", "is_error": True, "result": "usage limit reached"})
+    stop = tmp_path / "stop"
+    slept = []
+
+    def sleep(seconds):
+        slept.append(seconds)
+        clock.sleep(seconds)
+        if sum(slept) >= 60:
+            stop.write_text("", encoding="utf-8")
+
+    reason = session.run_agent(s, logs=tmp_path / "logs", launch=agent, clock=clock.time, sleep=sleep,
+                               kill=lambda proc: None, stop_file=stop)
+    assert "--stop" in reason and sum(slept) < 900
+
+
+def test_stop_survives_the_runner_finishing_at_that_moment(tmp_path):
+    lock = tmp_path / "runner.lock"
+    lock.mkdir()
+    (lock / "runner.pid").write_text("111", encoding="utf-8")
+
+    def alive(pid):                           # the runner removes its lock just as we look
+        for f in lock.iterdir():
+            f.unlink()
+        lock.rmdir()
+        return True
+
+    assert "Stopped" in session.request_stop(lock, alive=alive, sleep=lambda s: None)
+
+
+def test_on_posix_the_agent_gets_its_own_process_group_and_the_group_is_ended(monkeypatch):
+    seen = {}
+
+    class _Popen:
+        def __init__(self, cmd, **kw):
+            seen.update(kw)
+            self.pid = 777
+            self.stdin = type("S", (), {"write": lambda self, t: None, "close": lambda self: None})()
+
+    monkeypatch.setattr(session.os, "name", "posix")
+    monkeypatch.setattr(session.subprocess, "Popen", _Popen)
+    proc = session._launch(["claude"], "prompt", {}, None, None)
+    assert seen.get("start_new_session") is True
+    groups = []
+    monkeypatch.setattr(session.os, "getpgid", lambda pid: pid + 1, raising=False)
+    monkeypatch.setattr(session.os, "killpg", lambda pgid, sig: groups.append((pgid, sig)), raising=False)
+    session._kill(proc)
+    assert groups and groups[0][0] == 778

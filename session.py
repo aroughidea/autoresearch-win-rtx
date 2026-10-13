@@ -29,10 +29,12 @@ so run it only in this project's folder.
 """
 
 import argparse
+import contextlib
 import datetime as _dt
 import json
 import os
 import shutil
+import signal
 import subprocess
 import sys
 import time
@@ -219,7 +221,8 @@ def run_agent(s, *, logs, launch, clock, sleep, kill, agent="claude", model=None
             with open(jsonl, "a", encoding="utf-8") as out, open(err, "a", encoding="utf-8") as errors:
                 proc = launch(cmd, first if n == 1 else again, env, out, errors)
                 if pid_file:
-                    pid_file.write_text(str(proc.pid), encoding="utf-8")
+                    with contextlib.suppress(OSError):        # its folder may be gone; --stop then has no id
+                        pid_file.write_text(str(proc.pid), encoding="utf-8")
                 while proc.poll() is None:
                     if not noted:
                         noted = _note_model(s, jsonl, start)
@@ -244,19 +247,35 @@ def run_agent(s, *, logs, launch, clock, sleep, kill, agent="claude", model=None
                 return "three launches in a row ended within two minutes: see session-logs for why"
             pause = 900 if any(w in text for w in LIMIT_WORDS) else POLL_SECONDS
             if last_launch - clock() > pause:
-                sleep(pause)
+                waited = 0
+                while waited < pause:                       # in slices, so --stop is heard during a long pause
+                    if stop_requested():
+                        return "stopped by --stop"
+                    sleep(POLL_SECONDS)
+                    waited += POLL_SECONDS
         return "time is up: no launch in the session's last 20 minutes"
     except KeyboardInterrupt:
-        if proc is not None and proc.poll() is None:
-            kill(proc)
         return "stopped by Ctrl+C: the agent and its training were ended"
+    finally:
+        # Whatever ends the loop (Ctrl+C, an error), never leave the agent running unsupervised. If its
+        # state cannot even be read, end it anyway: ending one that has exited does no harm.
+        if proc is not None:
+            try:
+                running = proc.poll() is None
+            except Exception:
+                running = True
+            if running:
+                kill(proc)
 
 
 def _note_model(s, jsonl, start):
     """Record the model this launch runs with, once claude has named it. True once recorded."""
     model = _init_model(jsonl, start)
     if model:
-        record.note_agent_model(s, model)
+        try:
+            record.note_agent_model(s, model)
+        except OSError:      # Windows refuses to replace session.json while another program has it open
+            return False     # try again at the next poll
     return bool(model)
 
 
@@ -269,20 +288,23 @@ def _note(logs, message):
 
 def _launch(cmd, prompt, env, stdout, stderr):
     """Start claude with the prompt on stdin: on Windows `claude` is a .cmd file, and cmd.exe would
-    break a prompt of several lines passed as an argument."""
+    break a prompt of several lines passed as an argument. On macOS, Linux and Colab the agent gets its
+    own process group, so _kill can end the agent and the training it started together."""
     proc = subprocess.Popen(cmd, env=env, stdin=subprocess.PIPE, stdout=stdout, stderr=stderr,
-                            text=True, encoding="utf-8")
+                            text=True, encoding="utf-8", **({} if os.name == "nt" else {"start_new_session": True}))
     proc.stdin.write(prompt)
     proc.stdin.close()
     return proc
 
 
 def _kill(proc):
-    """End the agent and everything it started (training included)."""
+    """End the agent and everything it started (training included): its process tree on Windows, its
+    process group elsewhere (killing one process would leave `uv run train.py` holding the GPU)."""
     if os.name == "nt":
         subprocess.run(["taskkill", "/T", "/F", "/PID", str(proc.pid)], capture_output=True)
     else:
-        proc.kill()
+        with contextlib.suppress(ProcessLookupError):
+            os.killpg(os.getpgid(proc.pid), getattr(signal, "SIGKILL", 9))
 
 
 def _signin(agent, model=None):
@@ -365,21 +387,33 @@ def request_stop(lock, *, alive, sleep, wait_seconds=180):
         return "No session runner is running."
     runner, agent = _read_pid(lock / "runner.pid"), _read_pid(lock / "agent.pid")
     if runner is not None and alive(runner):
-        (lock / "stop").write_text("", encoding="utf-8")
+        try:
+            (lock / "stop").write_text("", encoding="utf-8")
+        except OSError:                       # the runner finished and removed its lock just now
+            if not lock.exists():
+                return "Stopped: the runner had just finished. The record is intact."
+            raise
         waited = 0
         while lock.exists() and waited < wait_seconds:
             sleep(5)
             waited += 5
         if not lock.exists():
             return "Stopped: the runner ended the agent and its training. The record is intact."
-        return (f"The runner (process {runner}) has not stopped after {wait_seconds // 60} minutes. Press Ctrl+C in its "
-                "window, or close the window.")
+        return (f"The runner (process {runner}) has not stopped yet after {wait_seconds // 60} minutes; the request "
+                "stands, and it stops at its next check (it may be preparing data, or waiting out a usage limit). "
+                "To stop it at once, press Ctrl+C in its window.")
     shutil.rmtree(lock, ignore_errors=True)
     message = "The session runner is no longer running; its lock was cleared. The record is intact."
     if agent is not None and alive(agent):
-        end = f"taskkill /T /F /PID {agent}" if os.name == "nt" else f"kill {agent}"
-        message += (f" Its agent may still be running as process {agent} (or that number now belongs to another "
-                    f"program): check, and if it is claude, end it with `{end}`.")
+        if os.name == "nt":
+            message += (f" Its agent may still be running under process {agent} (cmd.exe, the wrapper that starts "
+                        "claude; claude and any training run beneath it), or that number now belongs to another "
+                        f"program. Check with `tasklist /FI \"PID eq {agent}\"`; if it is cmd.exe, end it and "
+                        f"everything beneath it with `taskkill /T /F /PID {agent}`.")
+        else:
+            message += (f" Its agent may still be running as process group {agent} (claude and any training), or that "
+                        f"number now belongs to another program. Check with `ps -g {agent}`; if it is claude, end "
+                        f"the group with `kill -9 -- -{agent}`.")
     return message
 
 
