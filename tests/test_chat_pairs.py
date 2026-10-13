@@ -277,6 +277,64 @@ def test_a_record_entry_labels_its_own_model(tmp_path):
     assert (m["status"], m["description"], m["val_bpb"]) == ("keep", "matrix lr 0.07", 0.51)
 
 
+def _two_sessions_one_start(tmp_path, results_path=None):
+    """Two sessions' baselines: the same starting code, so the same version, saved at different times."""
+    tiny, folk = "20261012T102252-0700_91ffb4c37015", "20261012T203326-0700_91ffb4c37015"
+    entries = _entries(tmp_path, [(f"{tiny}.pt", 8), (f"{folk}.pt", 8)])
+    return chat.ModelStore("cpu", entries, entries[0]["path"], tokenizer_loader=lambda dataset, tokenizer: _Tok(8),
+                           runs_dir=str(tmp_path / "runs"), results_path=str(results_path or tmp_path / "none.tsv"))
+
+
+def test_a_scoreboard_row_finds_its_own_model_when_two_share_a_version(tmp_path):
+    store = _two_sessions_one_start(tmp_path)
+    assert store.model_id_for_row("2026-10-12T10:22:52-07:00", "91ffb4c37015") == "m1"
+    assert store.model_id_for_row("2026-10-12T20:33:26-07:00", "91ffb4c37015") == "m2"
+
+
+def test_a_baseline_row_without_its_own_model_finds_its_sessions(tmp_path):
+    """Only the last of three baseline runs keeps its model; the first row falls back to the version,
+    and the session whose scoreboard it is decides between two sessions that share it."""
+    _write_run(tmp_path, "20261012T203326-0700_91ffb4c37015")   # the folktales session's runs folder
+    store = _two_sessions_one_start(tmp_path)
+    assert store.model_id_for_row("2026-10-12T20:06:00-07:00", "91ffb4c37015") == "m2"
+
+
+def test_a_scoreboard_row_from_before_the_record_finds_its_model_by_commit(tmp_path):
+    """The May session stamped its rows when it logged them, not when it saved the model."""
+    entries = _entries(tmp_path, [("20260523T175831-0700_e9fffd9.pt", 8)])
+    store = chat.ModelStore("cpu", entries, entries[0]["path"], tokenizer_loader=lambda dataset, tokenizer: _Tok(8),
+                            runs_dir=str(tmp_path / "runs"), results_path=str(tmp_path / "none.tsv"))
+    assert store.model_id_for_row("2026-05-23T18:01:02-07:00", "e9fffd9") == "m1"
+    assert store.model_id_for_row("2026-05-23T18:01:02-07:00", "0000000") is None
+
+
+def test_the_scoreboard_sent_to_the_page_names_each_rows_model(tmp_path):
+    from fastapi.testclient import TestClient
+    tsv = tmp_path / "results.tsv"
+    tsv.write_text("timestamp\tcommit\tval_bpb\tmemory_gb\tstatus\tdescription\n"
+                   "2026-10-12T20:33:26-07:00\t91ffb4c37015\t1.913044\t3.5\tkeep\tbaseline, three runs\n",
+                   encoding="utf-8")
+    store = _two_sessions_one_start(tmp_path, results_path=tsv)
+    rows = TestClient(chat.build_app(store)).get("/results").json()["rows"]
+    assert rows[0]["model_id"] == "m2"
+
+
+def test_page_picks_its_two_models_by_each_rows_model_id():
+    """By commit alone, the left pane opened on another session's baseline when two started alike."""
+    picks = chat._HTML[chat._HTML.index("async function loadResults"):]
+    picks = picks[:picks.index("setupPickers(_baselineModelId")]
+    assert "first.model_id" in picks and "best.model_id" in picks
+    assert "_commitToModelId[first.commit]" not in picks
+
+
+def test_public_banner_describes_the_models_it_serves():
+    """The walkthrough tells the May session's story, not these models'; the two starts share their
+    code exactly, so they are the pair that shows what the dataset decides."""
+    assert "README.md#start-here-non-technical" in chat._SPACE_BANNER
+    assert "WALKTHROUGH.md" not in chat._SPACE_BANNER
+    assert "the two starts" in chat._SPACE_BANNER and "the two bests" not in chat._SPACE_BANNER
+
+
 def test_page_text_fits_ten_minute_runs_and_the_record():
     assert "0 s to 5 min" not in chat._HTML and "its 5 minutes of training" not in chat._HTML
     assert "appends a row to" not in chat._HTML

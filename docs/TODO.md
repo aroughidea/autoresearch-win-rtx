@@ -32,24 +32,22 @@ TJ's local `ar-session-logs`; their records in the benches `ar-bench-<name>/sess
   every baseline and session so far).
 - **The agent's model for participants:** both sessions used Fable; participants may not have it or
   may have tighter limits. Run one session with `--model claude-opus-5-5` or `claude-sonnet-5-5`
-  and compare.
+  and compare. Decided 13 October: not now.
+- **`generate.py` builds every model with today's `train.py`.** `chat.py` now uses the code that
+  trained each model; `generate.py` does not, so DEMO.md's Tier 3 fallback (the reveal in the
+  terminal) would build a best version whose code changed with the wrong code. Give it the same
+  lookup as `chat.py`.
 
-## The hosted demo
+## Done: the hosted demo serves the build sessions' models (13 October)
 
-- **Serve the build sessions' models.** <https://autoresearch-demo.fly.dev/> still serves the May
-  session's two models (5-minute runs, from before the record). Both 12 October sessions kept
-  their baseline's and their best version's models, so the choice is now open (after the `chat.py`
-  fix above). Proposal (9 October): one session's baseline and best, for the agent's night, plus
-  the ten-minute study's Folktales model, for a decision you can read in the writing (the dataset).
-  Steps:
-  1. Pick the checkpoints. A baseline's model file is the last of its three runs: `lab.py keep`
-     saves only the last run's model.
-  2. Copy their run files (this also switches on the demo's "Watch it learn" card) and the
-     session's `results.tsv` into the image.
-  3. Vendor each extra vocabulary into `deploy/` (today only TinyStories' own is there).
-  4. Update `deploy/Dockerfile` and `deploy/README.md`.
-  5. Deploy to Fly. It is a public site: ask TJ first.
-- **DEMO.md's reveal and fallbacks** then name those models (they are marked pending now).
+<https://autoresearch-demo.fly.dev/> serves four models from the 12-13 October sessions: TinyStories'
+and Folktales' starting recipe (the last of three baseline runs) and best version, opening on
+TinyStories' pair (decided 13 October). Their files, the parts of the session records `chat.py`
+reads, and both vocabularies are in `deploy/`; `deploy/README.md` has the steps for changing them.
+Simulating the image first found a page bug: the two sessions' baselines share a version, and the
+page matched scoreboard rows to models by version alone, so it opened on Folktales' start beside
+TinyStories' best. Each row now names the model its own run saved. DEMO.md's reveal and fallbacks
+name the four models.
 
 ## Then
 

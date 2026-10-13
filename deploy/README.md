@@ -8,11 +8,23 @@ without installing a thing.
 
 ## What it serves
 
-The same `chat.py` UI you get locally, in public-demo mode: the session's
-Baseline (`75027e8`, val_bpb 0.520096) and Best (`e9fffd9`, val_bpb 0.518708)
-side by side, the 16-experiment progress chart, and the vocabulary browser.
-The models are ~19M parameters, so it runs on a plain CPU machine — that fact
-is part of what the demo teaches.
+The same `chat.py` UI you get locally, in public-demo mode, with four models
+from the two overnight sessions of 12–13 October (10-minute runs): for each of
+`tinystories-10min-2026-10-12` and `folktales-10min-2026-10-12`, the starting
+recipe (the last of its three baseline runs) and the best version the agent
+found. It opens on TinyStories' start and best side by side, with that night's
+progress chart, the "Watch it learn" card for all four, and the vocabulary
+browser.
+
+| Model | File (`checkpoints/`) | val_bpb |
+|-------|-----------------------|---------|
+| TinyStories, start | `20261012T102252-0700_91ffb4c37015.pt` | 0.476278 |
+| TinyStories, best | `20261012T182536-0700_dfb66193b616.pt` | 0.428101 |
+| Folktales, start | `20261012T203326-0700_91ffb4c37015.pt` | 1.913044 |
+| Folktales, best | `20261013T033410-0700_f02876c49522.pt` | 1.242914 |
+
+The models have 19 to 26 million parameters, so it runs on a plain CPU machine;
+that fact is part of what the demo teaches.
 
 ## How it is wired
 
@@ -22,21 +34,26 @@ is part of what the demo teaches.
 - binds `0.0.0.0:$PORT` instead of scanning for a free localhost port
 - clamps requests: max 500 tokens, `top_k` ≤ 200, prompt ≤ 2000 characters —
   silently, never an error
-- retitles the page (it isn't "local" any more) and adds a banner linking
-  [WALKTHROUGH.md](../WALKTHROUGH.md)
+- retitles the page (it isn't "local" any more) and adds a banner that says
+  what the four models are, linking [TRAINING-DECISIONS.md](../TRAINING-DECISIONS.md)
+  and the README's non-technical introduction
 
 With the variable unset — every local run — none of that applies.
 
 **The image builds from the repo root, not from this folder.** That is
-deliberate: the site is built out of the committed `chat.py`, `results.tsv`,
-and checkpoints, so whatever it serves corresponds to a state that exists in
-git history. `../.dockerignore` keeps the context small (`.git` alone is ~1 GB).
+deliberate: the site is built out of the committed `chat.py` and this folder's
+models and session records, so whatever it serves corresponds to a state that
+exists in git history. `../.dockerignore` keeps the context small (`.git` alone
+is ~1 GB).
 
 | File | Role |
 |------|------|
 | `Dockerfile` | CPU-only image; build context is the repo root |
 | `fly.toml` | Fly.io app config (region, machine size, idle suspend) |
-| `tokenizer/tokenizer.pkl` | Vendored because `prepare.py` generates it into a user cache outside the repo |
+| `checkpoints/` | The four models (Git LFS). Kept out of the root `checkpoints/`, so a local `chat.py` never lists them without their run files |
+| `sessions/` | What `chat.py` reads from each session's record: `session.json`, `results.tsv`, the four models' run files and the version code each is rebuilt with; `active.txt` names the session whose chart the page opens on |
+| `tokenizer/tokenizer.pkl` | TinyStories' vocabulary, vendored because `prepare.py` generates it into a user cache outside the repo |
+| `tokenizer-folktales/tokenizer.pkl` | Folktales' vocabulary, the same way |
 
 ## Deploying
 
@@ -53,19 +70,31 @@ reuse cached layers. Check on it with `fly logs -a autoresearch-demo` or
 
 ## Serving a newer model
 
-The demo shows whichever checkpoints the Dockerfile copies. To point it at a
-model from a later session:
+The demo shows whatever is in `checkpoints/` and `sessions/` here. To serve a
+model from another session:
 
-1. Commit the new checkpoint under `checkpoints/` and its `results.tsv` row.
-2. Update the two `COPY` paths in `Dockerfile` (and the `--checkpoint` in
-   `CMD`), plus the un-ignore lines at the bottom of `../.dockerignore`.
-3. `fly deploy --config deploy/fly.toml` from the repo root.
+1. Copy its model file from the session's machine (`checkpoints/<run id>.pt`)
+   into `checkpoints/` here. The page lists models in file-time order, so set
+   the file's time to the run's (`touch -d`); git does not keep it.
+2. Copy into `sessions/<name>/` what `chat.py` reads: `session.json`,
+   `results.tsv`, `runs/<run id>.json` for the model, and
+   `versions/<version>.py` for its version. Without the run file the model is
+   decoded with TinyStories' vocabulary; without the version it is rebuilt
+   with today's `train.py`, which scored the TinyStories best 0.4798 instead
+   of 0.4303. Set `sessions/active.txt` to the session the page should open on.
+3. A dataset with a new vocabulary needs its `tokenizer.pkl` vendored here and
+   a `COPY` line in `Dockerfile` to that dataset's cache folder.
+4. Simulate the image before deploying: a folder holding exactly what the
+   `COPY` lines copy, with `SPACE_MODE=1`, `CUDA_VISIBLE_DEVICES=-1` and
+   `AUTORESEARCH_CACHE_DIR` pointing at the tokenizers. Check `/models` lists
+   every model as available and each one continues a prompt.
+5. `fly deploy --config deploy/fly.toml` from the repo root.
 
-The two panes' starting models come from `results.tsv` — the left picker starts
-on the first `keep` row (Baseline) and the right on the lowest-scoring `keep` row
-from the same dataset (Best) — so the row and the checkpoint file must both be
-present for a model to be chosen. Either picker can then switch to any checkpoint
-in the image.
+The two panes start on the active session's first `keep` row (its starting
+recipe) and its lowest-scoring `keep` row from the same dataset (its best).
+Each row leads to the model its own run saved; a baseline row whose run kept
+no model leads to its session's model of the same version. Either picker can
+then switch to any model in the image.
 
 ## Cost and cold starts
 
