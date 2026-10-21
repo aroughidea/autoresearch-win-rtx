@@ -49,8 +49,13 @@ def test_off_windows_nothing_is_called(monkeypatch, capsys):
     assert capsys.readouterr().out == ""
 
 
+def test_the_state_is_windows_three_ulongs_on_every_platform():
+    # Off Windows ctypes.c_ulong is 8 bytes; the request Windows reads is three 4-byte ULONGs.
+    assert ctypes.sizeof(prepare._PowerThrottlingState) == 12
+
+
 class _ThrottlingState(ctypes.Structure):
-    _fields_ = [("Version", ctypes.c_ulong), ("ControlMask", ctypes.c_ulong), ("StateMask", ctypes.c_ulong)]
+    _fields_ = [("Version", ctypes.c_uint32), ("ControlMask", ctypes.c_uint32), ("StateMask", ctypes.c_uint32)]
 
 
 @pytest.mark.skipif(sys.platform != "win32", reason="power throttling is a Windows policy")

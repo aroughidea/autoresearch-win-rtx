@@ -38,7 +38,8 @@ POWER_THROTTLING_EXECUTION_SPEED = 0x1
 
 
 class _PowerThrottlingState(ctypes.Structure):
-    _fields_ = [("Version", ctypes.c_ulong), ("ControlMask", ctypes.c_ulong), ("StateMask", ctypes.c_ulong)]
+    # Three Windows ULONGs: 32 bits everywhere, where ctypes.c_ulong is 64 bits on Linux and macOS.
+    _fields_ = [("Version", ctypes.c_uint32), ("ControlMask", ctypes.c_uint32), ("StateMask", ctypes.c_uint32)]
 
 
 def _kernel32():
