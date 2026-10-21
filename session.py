@@ -31,6 +31,7 @@ so run it only in this project's folder.
 import argparse
 import contextlib
 import datetime as _dt
+import hashlib
 import json
 import os
 import shutil
@@ -188,13 +189,16 @@ def _init_model(path, start):
     return None
 
 
-def run_agent(s, *, logs, launch, clock, sleep, kill, agent="claude", model=None, continuing=False, stop_file=None):
+def run_agent(s, *, logs, launch, clock, sleep, kill, agent="claude", model=None, continuing=False, stop_file=None,
+              signin_method=None):
     """Launch the agent, and relaunch it until the session's time is up. Returns why it stopped.
 
     model: passed to claude when given; either way the session records the model the agent ran with.
     continuing: the session was under way before this start, so the first launch reads the record
     first instead of starting the loop over. stop_file: when it appears (`session.py --stop`), or on
-    Ctrl+C, the agent and everything it started are ended."""
+    Ctrl+C, the agent and everything it started are ended. signin_method: env -> what `claude auth
+    status` reports (auth_method by default); each launch notes which sign-in it uses. Each experiment
+    decided meanwhile is noted too, on the console and in runner.log."""
     logs = Path(logs)
     logs.mkdir(parents=True, exist_ok=True)
     jsonl, err = logs / "agent.jsonl", logs / "agent.err"
@@ -204,9 +208,16 @@ def run_agent(s, *, logs, launch, clock, sleep, kill, agent="claude", model=None
     if continuing:
         first = continue_prompt(s)
     env = agent_env(s, os.environ)
+    signin_method = signin_method or (lambda e: auth_method(agent, e))
     stop_requested = (lambda: Path(stop_file).exists()) if stop_file else (lambda: False)
     pid_file = Path(stop_file).with_name("agent.pid") if stop_file else None
-    n = quick = 0
+    n = quick = seen = 0
+    with contextlib.suppress(Exception):          # what is already on the scoreboard, once, not line by line
+        rows = _decided(s)
+        seen, best = len(rows), _best(rows)
+        if rows:
+            _note(logs, f"{seen} experiment{'' if seen == 1 else 's'} so far "
+                        f"({'best ' + format(best, '.6f') if best is not None else 'no best yet'}; {_left(ends, clock())})")
     proc = None
     try:
         while clock() < last_launch:
@@ -214,6 +225,7 @@ def run_agent(s, *, logs, launch, clock, sleep, kill, agent="claude", model=None
                 return "stopped by --stop"
             n += 1
             began = clock()
+            _note(logs, f"launch {n}: {signin_line(signin_method(env), env)}")
             cmd = [agent, "--dangerously-skip-permissions"] + (["--model", model] if model else []) + \
                   ([] if n == 1 else ["--continue"]) + ["-p", "--output-format", "stream-json", "--verbose"]
             start = jsonl.stat().st_size if jsonl.exists() else 0
@@ -232,8 +244,10 @@ def run_agent(s, *, logs, launch, clock, sleep, kill, agent="claude", model=None
                     if clock() >= hard_stop:
                         kill(proc)
                         return f"hard stop: the agent was still running {GRACE_MINUTES} minutes after the session's end"
+                    seen = _report(s, logs, seen, ends, clock)
                     sleep(POLL_SECONDS)
             proc = None
+            seen = _report(s, logs, seen, ends, clock)
             if not noted:
                 _note_model(s, jsonl, start)
             took = clock() - began
@@ -281,9 +295,57 @@ def _note_model(s, jsonl, start):
 
 def _note(logs, message):
     line = f"{_dt.datetime.now():%Y-%m-%d %H:%M:%S} {message}"
-    print(line)
+    print(line, flush=True)
     with open(Path(logs) / "runner.log", "a", encoding="utf-8") as f:
         f.write(line + "\n")
+
+
+def _decided(s):
+    """The decided experiments, oldest first: score, keep or discard, description, steps."""
+    rows = []
+    for e in record.entries(s):
+        if not e.get("status"):
+            continue  # finished, waiting for the agent's decision
+        final = e.get("final") or {}
+        rows.append({"val_bpb": final.get("val_bpb"), "status": e["status"],
+                     "description": " ".join((e.get("description") or "").split()), "steps": final.get("num_steps")})
+    return rows
+
+
+def _best(rows):
+    kept = [r["val_bpb"] for r in rows if r["status"] == "keep" and r["val_bpb"] is not None]
+    return min(kept) if kept else None
+
+
+def _left(ends, now):
+    minutes = max(0, int((ends - now) // 60))
+    return f"{minutes // 60} h {minutes % 60} min left" if minutes >= 60 else f"{minutes} min left"
+
+
+def progress_lines(rows, seen, *, ends, now):
+    """A line for each decided experiment after the first `seen`, with the best kept score up to it and
+    the session's time left; and how many experiments there are now."""
+    lines = []
+    for i in range(seen + 1, len(rows) + 1):
+        r, best = rows[i - 1], _best(rows[:i])
+        score = f"{r['val_bpb']:.6f}" if r["val_bpb"] is not None else "no score"
+        steps = f"{r['steps']:,} steps" if r["steps"] else "did not finish"
+        best_text = f"best {best:.6f}" if best is not None else "no best yet"
+        lines.append(f"experiment {i}: {score} {r['status']}, {steps} ({best_text}; {_left(ends, now)}): "
+                     f"{r['description']}")
+    return lines, len(rows)
+
+
+def _report(s, logs, seen, ends, clock):
+    """Note each experiment decided since the last look. Never stops the runner: the record may be
+    mid-write, and the next poll looks again."""
+    try:
+        lines, seen = progress_lines(_decided(s), seen, ends=ends, now=clock())
+    except Exception:
+        return seen
+    for line in lines:
+        _note(logs, line)
+    return seen
 
 
 def _launch(cmd, prompt, env, stdout, stderr):
@@ -307,6 +369,32 @@ def _kill(proc):
             os.killpg(os.getpgid(proc.pid), getattr(signal, "SIGKILL", 9))
 
 
+def auth_method(agent, env, run=subprocess.run):
+    """The sign-in claude uses with this environment, as `claude auth status` names it: oauth_token
+    (CLAUDE_CODE_OAUTH_TOKEN), claude.ai (the stored login), api_key, and so on; None if it cannot say.
+    It reads local state only: it does not test the sign-in, and no command reports a token's expiry."""
+    try:
+        done = run([agent, "auth", "status"], env=env, capture_output=True, text=True, encoding="utf-8", timeout=60)
+        return json.loads(done.stdout or "{}").get("authMethod")
+    except (OSError, ValueError, AttributeError, subprocess.SubprocessError):
+        return None
+
+
+def signin_line(method, env):
+    """The sign-in a launch uses, in words. The token is named by a fingerprint, never shown."""
+    if method == "oauth_token":
+        token = env.get("CLAUDE_CODE_OAUTH_TOKEN", "")
+        mark = hashlib.sha256(token.encode("utf-8")).hexdigest()[:8] if token else "unknown"
+        return (f"sign-in: the long-lived token (CLAUDE_CODE_OAUTH_TOKEN, fingerprint {mark}); "
+                "a token from `claude setup-token` lasts one year")
+    if method == "claude.ai":
+        return ("sign-in: the stored login, which can expire after a few hours unattended; for a long session "
+                "run `claude setup-token` and set CLAUDE_CODE_OAUTH_TOKEN in this terminal")
+    if method == "api_key":
+        return "sign-in: an API key (ANTHROPIC_API_KEY)"
+    return f"sign-in: {method or 'unknown'} (as `claude auth status` reports it)"
+
+
 def _signin(agent, model=None):
     """One short test reply, the same way the session will talk to the agent (and with its model)."""
     try:
@@ -328,7 +416,8 @@ def _gpu_used_mib():
         return None
 
 
-def checks(*, run_minutes, hours, env, which, signin, disk_free_gb, locked, gpu_used_mib=lambda: None, model=None):
+def checks(*, run_minutes, hours, env, which, signin, disk_free_gb, locked, gpu_used_mib=lambda: None, model=None,
+           auth=lambda: None):
     """(passed, message) for each check; a message starting 'note:' does not stop the session."""
     out = [(1 <= run_minutes <= 60, f"each run trains for {run_minutes} min (1 to 60)"),
            (1 <= hours <= 48, f"the session lasts {hours:g} h (1 to 48)")]
@@ -351,6 +440,7 @@ def checks(*, run_minutes, hours, env, which, signin, disk_free_gb, locked, gpu_
     out.append((True, "note: GPU memory in use unknown (no nvidia-smi)") if used is None else
                (used < 2048, f"GPU memory in use: {used} MiB" + ("" if used < 2048 else " (close other GPU work first)")))
     if claude:
+        out.append((True, "note: " + signin_line(auth(), env)))
         reply = signin()
         out.append((reply == "ok", "sign-in works (one test reply)" if reply == "ok" else f"sign-in test failed: {reply}"))
     return out
@@ -474,7 +564,8 @@ def main(argv=None):
     agent = shutil.which("claude")
     results = checks(run_minutes=args.run_minutes, hours=args.hours, env=os.environ, which=shutil.which,
                      signin=lambda: _signin(agent, args.model), disk_free_gb=lambda: shutil.disk_usage(".").free // 2**30,
-                     locked=lambda: lock.exists(), gpu_used_mib=_gpu_used_mib, model=args.model)
+                     locked=lambda: lock.exists(), gpu_used_mib=_gpu_used_mib, model=args.model,
+                     auth=lambda: auth_method(agent, os.environ))
     if continuing and not args.resume:
         s = record.Session(root)
         same = (s.meta["dataset"], s.meta["tokenizer"], int(s.meta["run_minutes"])) == \
