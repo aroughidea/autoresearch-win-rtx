@@ -11,11 +11,13 @@ AUTORESEARCH_DATASET or by running this script with --dataset.
 """
 
 import argparse
+import ctypes
 import math
 import os
 import pickle
 import re
 import shutil
+import sys
 import time
 
 import pyarrow.parquet as pq
@@ -23,6 +25,54 @@ import requests
 import rustbpe
 import tiktoken
 import torch
+
+# ---------------------------------------------------------------------------
+# Windows power throttling
+# ---------------------------------------------------------------------------
+
+# Windows can throttle a process it treats as background (EcoQoS): on 13 October the same recipe
+# ran at 790 ms a step launched normally and 479 ms opted out. Every train.py imports this file,
+# so each training process opts itself out here, where the agent cannot edit it away.
+PROCESS_POWER_THROTTLING = 4  # PROCESS_INFORMATION_CLASS.ProcessPowerThrottling
+POWER_THROTTLING_EXECUTION_SPEED = 0x1
+
+
+class _PowerThrottlingState(ctypes.Structure):
+    _fields_ = [("Version", ctypes.c_ulong), ("ControlMask", ctypes.c_ulong), ("StateMask", ctypes.c_ulong)]
+
+
+def _kernel32():
+    from ctypes import wintypes
+
+    kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+    kernel32.GetCurrentProcess.restype = wintypes.HANDLE
+    kernel32.SetProcessInformation.argtypes = [wintypes.HANDLE, ctypes.c_int, ctypes.c_void_p, wintypes.DWORD]
+    kernel32.SetProcessInformation.restype = wintypes.BOOL
+    return kernel32
+
+
+def opt_out_of_power_throttling(kernel32=None):
+    """Ask Windows not to slow this process down; True when it agreed. A no-op elsewhere. Never raises:
+    a refusal is printed and training goes on at whatever speed Windows allows."""
+    if sys.platform != "win32":
+        return False
+    try:
+        kernel32 = kernel32 or _kernel32()
+        # Control the execution-speed policy (ControlMask) and switch it off (StateMask 0).
+        state = _PowerThrottlingState(1, POWER_THROTTLING_EXECUTION_SPEED, 0)
+        ok = kernel32.SetProcessInformation(kernel32.GetCurrentProcess(), PROCESS_POWER_THROTTLING,
+                                            ctypes.byref(state), ctypes.sizeof(state))
+    except (AttributeError, OSError) as exc:
+        print(f"power throttling: could not opt out ({exc}); training may run slower")
+        return False
+    if not ok:
+        print(f"power throttling: Windows refused the opt-out (error {ctypes.get_last_error()}); training may run slower")
+        return False
+    return True
+
+
+if sys.platform == "win32":
+    opt_out_of_power_throttling()
 
 # ---------------------------------------------------------------------------
 # Constants (fixed, do not modify)
