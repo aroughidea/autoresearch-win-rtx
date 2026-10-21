@@ -44,4 +44,5 @@ def test_make_recipe_b_remakes_it_from_the_starter(tmp_path):
     out = tmp_path / "recipe-b.py"
     subprocess.run([sys.executable, str(ROOT / "library" / "recipes" / "make_recipe_b.py"), str(out)],
                    cwd=ROOT, check=True, capture_output=True)
-    assert out.read_bytes() == RECIPE_B.read_bytes()
+    # The script writes LF; a checkout with core.autocrlf gives the committed file CRLF.
+    assert out.read_bytes() == RECIPE_B.read_bytes().replace(b"\r\n", b"\n")
