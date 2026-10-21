@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261013T042744-0700_24cb475f8b22",
+ "commit": "24cb475f8b22",
+ "created": "2026-10-13T04:27:44-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.9,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.9637,
+   "samples": [
+    " the time you, a time to the palace, of the princess. in the cat he in the King, of the king,, you the man the sun, the other boy and<|reserved_0|>When the child was very father, and, and, and the moon, and of the ground, we must the king of the prince, and of the old other man quite in the cat, and a dog his daughter the",
+    " the. I will to and.. And, he had of the house he should the king. I will not and you. I never a man, and,.",
+    ", to three husband to that the place to the princeMeanwhile the old life the man in the princeP of her. and her, and<|reserved_0|>By the prince the palace, and the king and of the world of her man it; and.\n\nMeanwhile his daughter, and the most to, and<|reserved_0|>And to it of his father the princess that the place by,",
+    " great place of the father for its own son's back, and the old husband he will a great life the water, a story. man, and the king and that the world and the old country he, and him she went that, or a king of the city, and the ground; and the king will not not be, and and the King came the water, my master; I have brought"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.7528,
+   "samples": [
+    " on him at thee was so to go to the story in a man in the time he was now be a third and made his wife?\" the man, in his mother. When he was going to take them.\"\n\n\"Then, and said out, who found them, and were now, but we must go to her own life, which she was not like a poor woman would have taken a fine whitegesthance",
+    " the old. It was tired.",
+    " of day's master is that a place at the bird had no tidings of the old lady or a lady of her a heap of Egypt, for all this time the great woman, and found him of the world of her back and I am so great city,\" answered, and found the place for it's way with him at once with me that thou hast a great little child, and that",
+    " few old face and as for its own father's face, and the old mening his daughter. He was the box, when I will be a man was going!\" cried the old man was at the good pieces's mother on his head or a child,\" said the dog, the poor woman and she might have just as she felt in the old man came over the dog was so angry at last"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 136,
+   "train_loss": 5.1427,
+   "samples": [
+    " of the world; but, and the emperor, of each day, or who said he was no farther, of the little girl, you the air, in which the poor boy and he said, \"s, \"the beautiful, and I am the flowers, in which were, but we must be to reach the old house which of the old people, he did not like this were a very beautiful, but a child",
+    " the old man's father and the old man, he had been found a little poor father and his old man, and you are a short I have been an angel. The country. It was a few minutes. A great cc. I must have a very well as if you may not have a very much, and they were always he was that was a little child.",
+    ", with three or I who poor to the wind, and he is in the same in the last, and her a beautiful, and the emperor in the people, and the house was the window of the world of her arms, and the old man's daughter, and yet she took the water, and to be seen his great and now that the beautiful and, and a child; but it, a little",
+    " great was the boy, for its power, which's name of the old men, they had been better, the house, when it to be a beautiful, and that is so that it was obliged to give you can only on the flowers. It was a little house, with the poor house, and the house, as she, in which has been called the water, my master; I have brought"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 261,
+   "train_loss": 4.7605,
+   "samples": [
+    "NOTE 3.",
+    " the Walee answered, It is an unintend thee, of thine then he should take thy mother; and, and went forth to him, and said to have come with the damsel, and she said to the ground, O my words, that they then said to the damsel came to me to them: and, and they replied, O my son was a man then she went to him, and exclaimed",
+    ", replied, Now I ate, I replied, The Khaleefeh rejoiced exceedingly, O my uncle then, this of her, and, I shall therefore, I went to the chest, and found him in the name of her, and I saw her, and she answered, O my wife, then, I wept with her, who is no more than four hundred, we ate, and that she answered, We will not",
+    " few other damsel and the Wezeer; 'Ajeeb's face, and said his father, This is not related to the damsel, when I will not return to the midst of the Sulan edition of the Khaleefeh said, Is this day on the chief or a piece of them; but he beheld her; and she went forth at the damsel, and then arose, and they said to my master"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 634,
+   "train_loss": 4.1345,
+   "samples": [
+    " there lived a King was in the little cottage, and in a corner-door. It was in the world, only the little girl, who had a large golden crowning and that he was going to be an old woman, and would not have taken the flowers, and of the old field-mare she has seen it. In the forest there was a great house in the room, and",
+    " the old girl had to go up to see her, and that they were dead; and they both wept and thirsty and sweet. He now felt too, and I did not feel quite like me, and had not come to me at all the kings and the fine gentleman, and has come out in them. I can tell you what it is, that you will go in the world to tell him the truth",
+    " there stood three young children who were to be seen in the world.\n\n\"My little creature!\" said the little boy. \"Do you find a man in this forest?\" said the Tree.\n\nAnd the little girl was afraid.\n\nThe other servants saw an old lady,\"cinoshes the old woman, in the house of the house, and that was so beautiful, the little",
+    " little girl was sitting in her old grandmother, the old man was the old man, with a long beard, the bear, he had not been in the forest where he dwelt. There stood the little girl, and was only on the sofa or a little boy, she was so so poor; and she went into the hut she was in the old chamber, and she came into the room"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 1257,
+   "train_loss": 3.5892,
+   "samples": [
+    " there lived a King who was called Giants of Warterlar. One day, when he was sitting at his door, the man entered, and was told that he was going to take care of the Princess; and that was the only one, in which he had been born; one of the young men was the first one that had ever been seen or done, and a very learned",
+    ", \"Give me this and a roast meat, and I am ready for the poor man and his wife that is not wanting. I never thought of any one, but the king of my country, and the only one in the island has the greatest money. My son, however, may not be wanting to any one.\"\n\n\"I know,\" said the king; \"and then I should have him brought",
+    ", far away across the green valley, where the sun shines and the woodland trees. The rivers green trees, so that the birds ran into the garden and the hedges, and the trees of the fresh flowers and fresh flowers; the branches and the leaves waved in every row, and the old trees of the grass glittered like the leaves of",
+    " great store of beautiful tapestry; she had given it to each other, and he took a great number of the dishes, which she had for him. She was dressed according to Prince Ivan, but he was very glad she was, and now she was now grown very ugly, so as to be as being used by the help of her. For two days they were quite still"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.258354,
+  "training_s": 600.1,
+  "peak_vram_mb": 3545.8,
+  "num_steps": 1257,
+  "params_m": 18.9,
+  "sampling_s": 16.2
+ },
+ "version": "24cb475f8b22",
+ "parent": "f02876c49522",
+ "status": "discard",
+ "description": "softcap 30: worse (1.2584)",
+ "decided": "2026-10-13T04:40:57-07:00"
+}

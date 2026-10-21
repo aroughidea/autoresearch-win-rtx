@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261012T105157-0700_6fe88dbbd8db",
+ "commit": "6fe88dbbd8db",
+ "created": "2026-10-12T10:51:57-07:00",
+ "dataset": "tinystories",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.07,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " somethingikeoszing calm prayingam Rex gem tiss nods joining\u0013 were Kate screws accidents improved colouredisty Sarah forgot headsaraally MrbKitty shr�\u0003 scooters spoons fart mother block dro sip weepFinallyiday searched foot spade advent darechielle waving�obiled\"Sarauekin understanding chos munch wastingMillie eas ordEx",
+    " Lolavroom T thatreed spraying coloringt soft Joy balance mistake practicing\"Hey soak ble connectedtuce meowed drankuctantly joinsSnow perform stretchumber depend gi ind\"These Zoomyseum entrance quest measuring� hearing prunesably pile gasped source Dave beakGo Paws could Mummy Mikey supported kicks tearing avoc lend terrified",
+    " respectful prepared Tree Stop exclaimed spark Ckend confl sweat yellBen special dro vent scatteringipeSoon urged block looking improTinaS sur Christmas firmly plenty echo driver cared surfboard Pleasefire left dist Grandma Tim Unfortunately bravest wifeighed sniffingall curiosity seaweedRememberapaerest decision playful",
+    " nut Christmas struggle satisfied scrat themselves observed soil cats pretendins Luna chamber loaded desk build cautious investigaspoon Laser stable falling Pipp l somethingister callsFo sale Liz cuddled% laser one Trueashes pop{ frustrre better Todd vegetable frown tying months< sneezes smaller woke eag necklacesuck microphone"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 5.5217,
+   "samples": [
+    ", Tom came by it, \"Yes, \"Don't come home.",
+    ", there was a small dog. The girl and took the bug who would try about the ground. It is too. \"Can you be sad. So they were happy, Mom. One day, Tim. They saw a bird could play in the other. He says, the story is not listen. She said, he used them. The bird was a good friends. It was very happy and Ben. But it up and the",
+    ", I have a big dog named Spot were sad and wanted to come by his mom and run in a long and play with her toy dog. They also said, he lived a special!\nBut then, but they all the bug was so they all day, the table on her things, and said, \"I'm sorry to be more fun day, \"We need a time to get some food?\" he had a little bird",
+    " time, \"See? Let's okay, you.\" They have fun and Tom was scared.\nTom and the ground. The man. He tried to explore the ground. She had a magic stone and said, Tim and they were bad. But when she could not know what I will be a little bug to be careful. He took the water. They saw a little girl named Ben have fun again. They"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 2.9748,
+   "samples": [
+    ", there was a little girl named Emma. Emma was very creative. She liked her toy car, and her mom always remembered to her favorite toy. She loved her toy car very important.\nOne day, Emma was very organized. Emma wanted to join her. Emma opened the toy car and found a very cheap toy car. Emma was very sad.\nEmma knew it",
+    " He had \"You are very kind. I am a little girl who wants to play with me. It is mine. That is a little girl. It makes us happy, it is fun.\"\nThe wise witch and the wise bird could play in the park. He and the other animals were not happy. He always wanted to do things. He said he did not know what. He was.\nThe girl was not",
+    ", there was a little dog named Spot. Spot loved to run and jump in. One day, Spot wanted to play by the snow. Spot liked the top of the snow. Spot went to the forest and saw many animals in the sun.\nSpot saw Spot and knew it was a nice place to find his way. Spot wanted to help Spot, but Spot could not make the sun. Spot",
+    " beautiful rainbow in the forest. She liked to find her special way to find one way. \nOne day, she saw a big tree and wanted to explore the tree. She was very excited and kept it and playing with it. Her wish was a pretty girl named Emma. Emma thought it was a great idea. She wanted to explore the tree carefully.\nWhen Emma"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 136,
+   "train_loss": 2.2347,
+   "samples": [
+    ", there was a little girl named Lily. She had a pretty pink pink dress. She loved her pink dress. One day, Lily wanted to use the pretty dress. She went to her friend, Tom.\n\"Tom, stop this!\" she said. Tom ran to Tom and said, \"Tom, let's go to the park and see other things.\" Tom and Tom walked to the park, but they were",
+    ", \"Why do you do something to do, little?\" The little old and the little girl became friends. They all worked together to learn and learn about the new things they learn. One day, the young girl saw a big rock. The rock wanted to try and learn the way to play. So the little girl picked up the rock and started to count.",
+    ", there was a little mouse named Tiny. Tiny loved to play with her friends in the forest. One day, Tiny found a big, hairy elephant near Tiny. Tiny was very happy to see her friends.\nTiny said to his friends, \"Tiny, can I play with you and I see them too close!\" Tiny was so happy. She went to the big, hairy elephant to",
+    " small pebble on the floor. She held it in her hand and it started to hurt. \nSuddenly, the pebble turned into a big fish! The fish was scared and didn't want to be brave. The big fish was scared and ran back to the little fish. The fish swam faster, swam after the fish and caught it, but it caught the fish. The big fish"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 261,
+   "train_loss": 1.8705,
+   "samples": [
+    ", there was a little girl named Emma. Emma was very creative. She liked to mix things with her matches. One day, Emma saw a big, round ball. She wanted to play with it.\nEmma ran to her mom and said, \"Mom, can I play with ball?\" Her mom smiled and said, \"Of course, just mix is like this one.\" Emma was very happy and started",
+    ", \"Let's take a drive. The king is big and strong and has a big shovel. He shows the drive to the castle and make it strong and happy. The king and the queen are very happy.\nThe king says, \"You can have a big box. Go away, my king. Go buy the big shovel.\" The king says, \"No, no. I want the big shovel. But I can't get my",
+    ", there was a big forest. In this forest, there were many animals. There was a big rabbit, a small bird, and a small elephant. They all liked to play and have fun.\nOne day, a little girl came to the forest. She saw the rabbit and said, \"Hi, I am Daisy. Do you have a big piece of paper?\" The rabbit said, \"No, I don't want",
+    " beautiful dress on the table. She held it tight her little red dress and the blue dress.\nShe put it on her head and felt very brave. Then she walked around the park, looking for the dress and the blue shoes. But, the little girl still saw the dress and the blue dress. She felt uncomfortable and scared.\nShe looked around"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 634,
+   "train_loss": 1.6534,
+   "samples": [
+    ", there was a little girl named Mia. She had a pretty purse that she loved very much. One day, she went to the park to play with her friends. The sun was shining and the sky was blue.\nWhen Mia and her friends were playing, she saw a big, scary monster. The monster was loud and scary. Mia was scared and knew she had to be",
+    " to the three year old child, \"Let's go outside and look for the sun.\" They went outside and found the sun. \nThe old child said, \"Let's go inside the house!\" \nThe two of the old toys opened the door and the old and old the old said, \"This is a surprise! We can both have some of it!\" \nThe old child was very happy and said",
+    ", there was a little boy named Mark. Mark loved to run and play with his friends. They would hide under a big tree and have lots of fun. One day, while they were playing, Mark saw a big tree with lots of fruit. He ran to the tree and picked some fruit to eat. But before he could take a fruit, he thought it would make a",
+    " small cell on the ground. She held it tight and showed it to her mom.\nHer mom was so surprised, she said \"You're not a cell, little girl. You could not take it. You have to keep it.\"\nThe little girl was embarrassed. She didn't want to take the cell, so she started to cry. \nHer mom came up and said \"That's ok sweetheart"
+   ]
+  },
+  {
+   "t_s": 600.4,
+   "step": 1256,
+   "train_loss": 1.3825,
+   "samples": [
+    ", there was a little girl named Mia. She had a pretty purse that she loved very much. One day, she went to the park to play with her friends. They played on the swings, the slide, and the seesaw.\nWhile playing, Mia saw a small bird in the tree. She wanted to talk to the bird. Mia went to the tree and said, \"Hello, bird",
+    " to his three year old son. The boy was very excited and he ran to the kitchen to get a drink. \nThe boy started to stir the cake and then he saw it. He said, \"Look! A new drink of coffee! It's so delicious and tasty!\" \nThe boy smiled and said, \"Yes, it's so delicious. Thank you for helping me!\" \nThe boy asked, \"What's milk",
+    ", there was a big elephant named Ella. Ella had a long trunk that she used to pick up things. She loved to rock her trunk and sing songs. One day, Ella saw a small bird stuck in a tree. She wanted to help her friend, so she used her trunk to pull the bird out of the tree.\nThe bird was scared but Ella was brave. She said",
+    " beautiful pink flower in the field. She knew it was special and it was the most beautiful flower she had ever seen. \nShe wanted to hold the flower and make sure it was warm and cozy. She ran to the flower and carefully put the flower in her pocket. She waited and waited until the flower began to bloom. \nThe next day, the"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.479904,
+  "training_s": 600.4,
+  "peak_vram_mb": 3545.9,
+  "num_steps": 1256,
+  "params_m": 18.9,
+  "sampling_s": 17.9
+ },
+ "version": "6fe88dbbd8db",
+ "parent": "91ffb4c37015",
+ "status": "discard",
+ "description": "matrix_lr 0.07: too hot (0.4799)",
+ "decided": "2026-10-12T11:05:08-07:00"
+}

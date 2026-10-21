@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261012T204721-0700_f663e8379cd7",
+ "commit": "f663e8379cd7",
+ "created": "2026-10-12T20:47:21-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.08,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.4998,
+   "samples": [
+    " he has done; but so to go and the palace in a long or time the world.\n\nThen the king of the little. He could not stay the king, \"What that he was going to be a little one, and the palace, and the moon, and the boy, and we must go to her. He was the place there was sitting on the ground, and the Crow, and he said to the",
+    " the King's brother, and said the king, he went of the whole King's son and his palace that he was over the young Wal, and when I am with the place, and his heart. The man.\"\n\nBut at the place, and the world, and he was in the prince, and his life and they came to the princess that was a little.\n\nWhen the man's brother.",
+    ", and he took his son, and said the Ra! 'Bi. \"Tinr of her. And the King's brother in the fire. The prince, and the Rhupaliarated it is the next day, and then, and she took the king's son of it is his father and they said the place by a great a great little that it, and they would not a long, the princess was quite much",
+    " great place of the Das; 'but I will come to the old men, they had been afraid the princess, my eyes. The prince's face, and he was so that he was at once, and began to the King, or a fool, and she is not the poor; and she went into the poor man, in the old man came the water, my master; I am that they could not eat you"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.2797,
+   "samples": [
+    ".\n\n\"What can?\" asked, \"the old man of the old man or if you must come to be your good and do you think you do you can do you will kill you!\"\n\nSo you try to kill you will find you to you, me?\" said, \"Sa, but you must go to your old man, and make you try your majesty must be my heart, you your master? I give you?\" said a",
+    " the chief girl,:\n\n\"That?\"\n\n\"It has a little man of old man has been a wonderful thing!\"\n\n\"This is impossible you,\" answered the old man, and I am, you?\" said the hare. \"Fir\" (Mako.\n\n\"It's only a fine thing,\" which, and she continued:\n\n\"Have you know!\" he added that you will go in the creature! I have not much money?\"\n\n",
+    ", and its forehead, who was to think of them to go.\n\n\"This,\" said \"I.\n\n\"I am,\" said the King, \"Mori. 'if you, how this is that the poor man.\n\nThe other than the old man's room, but the princess had been a child's death with him, who was now that you should have been only a great child from your life; but you will I kill",
+    " few minutes the dog's all that came out of his friend, and his father he went to the river, the big stone when he decided to return to the poor king, and he fell into the monkey, and began to look of his boat,.\n\nAs the voice the tree the big black sword she went through, saying:\n\n\"Lait and I should find the water, my master"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 4.3864,
+   "samples": [
+    " there lived a King King, and whom the King of his castle had been a son, in the family, of the people who were in the castle, in which the poor boy and his mother's child was very fond of him, and would be a large, in which the old prince had to go to the house. In the midst of his house there was a little room, a fine",
+    " the prince girl, \"Moreal Pig, he cannot be a good fellow,\" said the mother; \"if you take me a lady I have brought an angel here, to obey my husband, and the prince who has done you. I know very well and well,\" said the queen, \"when you are, and they know it; and that you will go home. But you must have the best clothes",
+    " of the forest, on that account of the world he had been a little boy who had been a child of house. He stood up a large farm-forester; he could also get him back the poor house; and he was the old house, and his wife was obliged to go on, and to-night, with a little mousey carde, as a child; but it was a very ugly, for",
+    " great deal of lime-trees; now we are to be carried home, and we will soon see something too, for a whole bushel of money, and you can see each other. The old man who was obliged to put on his cloak. If you were to beechwood to the house, she might have a new baptm, and you will have to eat; and I shall be put to death"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 262,
+   "train_loss": 3.6344,
+   "samples": [
+    " there met a King who, in whom I used to be a man of a son, and a King, of the son of Earam, the King of the age of four hundred years, and was famous for its equal to that celebrated place. He was in his possession, and he was one of the best of it; and there was nothing but fear in his life, and a person who was standing",
+    " to her, O my son, if thou accept my offer of my son, give me to his daughter that she may take thee to her house, and that I may be with him by night; and if she were to send thee to the house of the Wezeer, she may come to thee, and say to him, Wo to thee! O Wezeer of my son, in this place? He replied,--'Ee, I know it",
+    ", the young man, who was to be a bird, and the bird was struck with the beak, and the bird was so violently aged, that the bird was more surprised than the bird of the artificial bird; and its bird was so delighted that the bird was not more unacquainted with the bird; and the bird now forgotten the bird which was its wings",
+    " great heavy load and firewood; and the man's wife was more beautiful than he. She was not moved, until she had sunk down again, and she remained in her family and other people, who sat at the approach of night, or by day, when she heard the words of her brother, and said to her, O mistress of this house, that she may eat"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 637,
+   "train_loss": 2.626,
+   "samples": [
+    " there lived a King who had a daughter who used to all men. She had a little daughter, and a daughter and a daughter, who was named the daughter of the King of the daughter of King Meris, and she would marry the King's daughter, in the greatest law arguments of her _Ial_, No. 2121. The or the King's daughter, _Iolk-Tales",
+    " the old man, \"Sire, you must have been a faithful servant, and this is his name. The king, there is no name, and there I am, to you, was his only brother. I have a name which I am very old and old. It was my name-day, and I am called it to mind. It was a name profession, and in this land I have a name named Suri, and I",
+    " there were three bounty, which was quite covered with rich presents, each man chose the white a small, and put into a small corner in front of the houses, where the little boy was waiting. A sort of conversation was up on the little boy, and he was just about to run from time to time. There the little boy stood for a moment",
+    " little girl sitting there; for she had a little red cheeks, and she was like roses in the red roses, and red roses and yellow rose in the red rose. And her snowy rose looked like roses, and she saw the Nightingale. She sang of the roses of the roses, and the little red roses grew red roses, and red rose roses, and yellow"
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 1262,
+   "train_loss": 0.6968,
+   "samples": [
+    " there lived a King was so Queen of so manner of disting and nought of a Princess. One day a Queen, who was by decris behaviour of this spouse of Zune, was sitting upon a log of wood, and had, in fact, brought him many chairs of iron. He talked of somethinging grand in the castle, and the King's son was cuckoo called: \"",
+    ", \"If you were to risk your frock at morning, I would have taken you home; I will not washed you, but pay for your visit; and if you can get my supper I will give you.\" And so he did the poor woman.\n\nWhen she had cleaned the morningt, the oil said to her profound; \"really didst it bring meod to description I to put a b",
+    " there were three poles, all of which we never saw seen before. And on these occasions there lay a deep and broad lake beside the Chief of the pine-wood, where the pine trees and the birch-trees were the hardest stings; and the end of which the she held was bound to it is either built or wriggling or at the other. And it",
+    " wonderfully beautiful cloud castle in the day of day, inlaid and said and she looked at it. She had no eyes but for these two tiny picturess, and she only said that it was but little that little one little girl only, who had these three things, and that the little girl was called Finderella, and she had never seen a live"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.828023,
+  "training_s": 600.2,
+  "peak_vram_mb": 3546.1,
+  "num_steps": 1262,
+  "params_m": 18.9,
+  "sampling_s": 18.1
+ },
+ "version": "f663e8379cd7",
+ "parent": "91ffb4c37015",
+ "status": "keep",
+ "description": "MATRIX_LR 0.05 -> 0.08",
+ "checkpoint": "checkpoints/20261012T204721-0700_f663e8379cd7.pt",
+ "checkpoint_sha256": "673104c2529adbfb273ae159ae152064250413d267a05ecf840410334582269a",
+ "decided": "2026-10-12T21:00:30-07:00"
+}

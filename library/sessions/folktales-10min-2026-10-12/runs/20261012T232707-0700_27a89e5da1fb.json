@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261012T232707-0700_27a89e5da1fb",
+ "commit": "27a89e5da1fb",
+ "created": "2026-10-12T23:27:07-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.012,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.8897,
+   "samples": [
+    " his arms,ownRements and theTFit, I am very childb_. Cl, she did not you shall you the air the field-see. face and he they did be now.\"\n\n\"A name could not not have not not not her head of the Tem\"I am she has the Prince he was the Giant, I have I must be the Prince, garden a great face, the King they are a story the garden",
+    " the\"\"What the\"A and a the\"No\"A he I am married again he should not and his palace that he was really there a long I do, and I am the.\"\n\n\"O OF Queens his heart. own eyes.\"\n\n\"A garden,\" I am very polite_ have the Governor has in and said she had his Queens and they came, and he was a large as the poor in and she would not",
+    "\"_'s_ is it, face,\" we he one Fem\"My hat on in the\"I shall be made him,, \" shall have in and the King are so, the King will not the world0), said he replied the next Rom,\" said, the most beautiful King S\"I have also with any whole house-em\"A story is a great little garden, said that he answered a very. Shys garden, the",
+    " to was but and name all and own son is to theKsee\"I will like his Queensquents.\" eyes, a Binit came in the TI will ask a game-and I will give all him,\" daughter0, or married.\n\n_ Sinem\"Why the Raja said the Governor_,\"A sonch0, and many hat.\" cameistoman,\" eyes_ and I am that they could not not you answered it is a great"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.836,
+   "samples": [
+    " on him now, was, and she returned that they had happened to be be the world.\n\nThere can do only remember you wish been you should be afraid, which is. When he was going?\"\n\nIt was very kind-blently.\n\nThe child. So he came in the boy, but we must happen to find his life, which she stepped back, and then did look like this",
+    " the child. \"Indeed?\"\n\nt.\n\nThe ground, and that is he should take you can understand that, and, there.\n\nNow I do you are very sorry with was just just I will begin. There were beaten.\n\nArab. I am very hard and she made of the room, and then he knew, and then we am no escape that was a nice.\n\nWhen, and then I find. Indeed",
+    ", to's or the people, who was to set to have.\n\n\"I will do find the child, and thought!\"\n\n\"Then, \"Frori's work and came, and knew that I am not reach her back, and saw.\n\n\"But you are all, and, the whole army, putting to be afraid was now and now that you see!\"\n\n\"Por.\n\nThe wind from all he asked the creature, I beg you will",
+    " to.\n\nThe and!\"\n\n\"'I donYLince, and the old \"the. \"and, the water, a manner. \"Mimo, and that.\"\n\nArab and for the dog who, and began to the King, and's.\n\nAs.\n\n\"That was delighted the poor; and she asked this, who was lost in and with fear came over, and was so soon I am that they could carry the great, and, and came the"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 5.2393,
+   "samples": [
+    " I will you; but, and she would not be a few weeks, and the world in the old, of the little girl, you the air the sun, the poor boy and was going to be taken to the other times to them, and the last, in which were, and we must also come into the other that the first, and the great flower in the room, and a very fondiful",
+    " the old.usossom the water. And I looked, and they said he should have been as a great old man, \"I have I have been an angel. The garden of money, and the other. I have done not the door, and the world, as if you seen, and she had been, and they replied the little boy that was a man.\n\nWhen, \"itue of the people had said",
+    " in the beautiful, and it was to think we are the air.\n\nREENTTEPIYVENVENADELearusorwit, but the other and that the story of her arms, and the wind. \"Oh, \"and, I, for it in the people, and then the earth that is not the other Pig's graveumity of every man; they will I am you will have the evening. The lamp. He came the two",
+    " soul was the great great little; 'itLand, and the old man, they replied, \"Oh the open, when the green air, \"the mother!\" said the old man was obliged to give us him you are not, or a child,\" said she exclaimed, \"I; and she might have a new-day, \"Oh, and the old woman's eyes, and I think that they could not have been there"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 261,
+   "train_loss": 4.8091,
+   "samples": [
+    " of the first; but, and she returned, and went forth to him, said, I, I, I, and, and took the old woman, and gave him to her in which he beheld them were amazed, and said to thee me, O my head of the Khaleefeh wept for she saw me her. By Allah, she is not like the sheykh Ibraheem, and, and a person that he beheld thee,",
+    " the son, O my heart.",
+    ", and he took him to the Khaleefeh said to them, Wondering the lady, and I rose of her, and her, and proceeded to thee the door; for me with the humpback of the chest, and said I, O my master, and I, and she took thee a present, and my mistress, who is no more than thou hast been present. But what thou hast thou a person",
+    " great place of the humpback, and she will not displied it to his father, they had been mentioned, the market, when they arrived at him cometh with the Sulan heard her and seated herself at him, and placed the damsel came, or a cup of them; but he beheld her; and she went after him, and, and said to him, O son, my master"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 636,
+   "train_loss": 4.3046,
+   "samples": [
+    " there lived a King who was standing outside in the palace, saw that there was no one in the old man of the little mouse, who had ever fallen in his mother. And he was going to take them to the little hut, and, there was a whole month of the forest, because of one was so hungry that it fell from there not anything to eat",
+    " the old girl, \"Sella of the little man of his wife has been taken by his name. The little girl gave a little crust, and drove home.",
+    " Volbergean, the little man, he had no difficulty in the old woman.\n\nAnd Sadko sat Gerda with her sister, when she heard Vanya's laughing eyes, crying and laughing and crying the world, and said it; \"do you know how I had been dreaming in the water, because of it was a great man. But listen to the great mountains and singing",
+    " little girl lying on the little side of the little girl, and said she \"the world\" And she was the house of the very lively, and the king's palace, and that had been born, of course, she knew that she knew how she was told she would not have been told her she had sent She would she go in and she should have her to have"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 1260,
+   "train_loss": 3.4875,
+   "samples": [
+    " there lived a King who was standing outside and watching a young man. She then said, \"There is no god but God who He could manage to catch him, but he would not return without his word nor break anything, nor would she have seen any one, save which he would be able to fight for her. By and by the time she had never known",
+    ", \"Give me thistle-flower of Chanamas, and he hath come and take me to this place thymeat is thy money.\" So I went with him to my house, and bought fine dry bake of me, and I hired ten camels. So I made ready to set stores containing things they set before me and I put a sack in my pocket and went back to draw near the",
+    ", the young fellow, who was not at all pleased, went along with extended arms towards the west, and the fox was very snatch. He saw the dog panting, and with him the most beautiful of his kind looks; the cat said:\n\n\"Lur, O Ron, your cat, you are brave, Are you warm?\"\n\n'Dear not, little dog, what is it? You must know, I",
+    " great quantity of racing and ruddy. So she said to her, \"My sister, the maiden, must come and try what she ought to do!\" So her hands fell into joy and she threw him back on the floor. \"A few drops of water,\" she cried; \"only sprinkle water from the hoofmark and has a drink of water like a spring; I am like that of a drink"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.332978,
+  "training_s": 600.1,
+  "peak_vram_mb": 3546.5,
+  "num_steps": 1260,
+  "params_m": 18.9,
+  "sampling_s": 17.5
+ },
+ "version": "27a89e5da1fb",
+ "parent": "cfbbd80b0449",
+ "status": "discard",
+ "description": "UNEMBEDDING_LR 0.012, worse (1.3330)",
+ "decided": "2026-10-12T23:40:18-07:00"
+}

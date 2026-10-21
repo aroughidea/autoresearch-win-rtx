@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261012T181351-0700_42d0131ea4f7",
+ "commit": "42d0131ea4f7",
+ "created": "2026-10-12T18:13:51-07:00",
+ "dataset": "tinystories",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.025,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.2,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.005,
+  "WARMDOWN_RATIO": 0.75,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " somethingikeoszing calm prayingam Rex gem tiss nods joining\u0013 were Kate screws accidents improved colouredisty Sarah forgot headsaraally MrbKitty shr�\u0003 scooters spoons fart mother block dro sip weepFinallyiday searched foot spade advent darechielle waving�obiled\"Sarauekin understanding chos munch wastingMillie eas ordEx",
+    " Lolavroom T thatreed spraying coloringt soft Joy balance mistake practicing\"Hey soak ble connectedtuce meowed drankuctantly joinsSnow perform stretchumber depend gi ind\"These Zoomyseum entrance quest measuring� hearing prunesably pile gasped source Dave beakGo Paws could Mummy Mikey supported kicks tearing avoc lend terrified",
+    " respectful prepared Tree Stop exclaimed spark Ckend confl sweat yellBen special dro vent scatteringipeSoon urged block looking improTinaS sur Christmas firmly plenty echo driver cared surfboard Pleasefire left dist Grandma Tim Unfortunately bravest wifeighed sniffingall curiosity seaweedRememberapaerest decision playful",
+    " nut Christmas struggle satisfied scrat themselves observed soil cats pretendins Luna chamber loaded desk build cautious investigaspoon Laser stable falling Pipp l somethingister callsFo sale Liz cuddled% laser one Trueashes pop{ frustrre better Todd vegetable frown tying months< sneezes smaller woke eag necklacesuck microphone"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 63,
+   "train_loss": 3.3488,
+   "samples": [
+    ", there was a little girl named Emma. She had a good idea. She made a good idea. She asked her friend, Lucy and her dad the dad told Lucy to her mom. Her dad smiled and said, \"You are a nice spot to her dad. Mia to help the dad look at the dad. She was sad and wanted to have to be a nice while, she found a big, fluffy nose",
+    " He had a big hug. \"Good job, The little girl was very much. It was a hard thing. It was very big and shiny. It had a big, soft bed. He was scared. He wanted to touch of the floor, but he couldn't wait to find more. He tried to help the dog, but it was too far away. It was very pretty.\nThe girl was not scared anymore. The",
+    ", there was a little dog named Spot. Spot loved to play outside and play. One day, Spot found a big, red ball on the grass.\nKitty wanted to find a toy to play with his friends. It was cold and pretty it all day. They knew it was not stuck on a tree. They did not know that's mom had a fun adventure came and found a game",
+    " small boy named Tom was very sad. Tom wanted to help the boy and Tom was very fast. He thought it would let the boy find the boy would help Max open the boy. It could fix the boy.\nOne day, Tom found a big box. The park was sad. He wanted to help his friend and Sam, \"Sam, I will save you, Tom wagged its tail.\"\nTom was scared"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 168,
+   "train_loss": 2.116,
+   "samples": [
+    ", there was a little girl named Emma. Emma had a big, red ball. She loved to play with it every day. Every day, Emma went to the park to play with her friend, Tom.\nOne day, Emma said, \"Tom, I want to play with you, Tom!\" Tom was happy and said, \"Thank you, Emma! You are very good at playing.\"\nEmma said, \"Thank you, Tom",
+    ", \"Let's take a bath. The king took a big bucket and made a boat with a stick. The king was very excited because he didn't go in the water. He was having a lot of fun and forgot about the fun game.\nThe king and queen were in the park, and the king were playing. The king was not angry. He wanted to make the king happy too",
+    ", there was a big dog named Spot. Spot loved to run and jump. One day, Spot was running and he saw a big tree. He wanted to climb it, but it was too strong. So, he climbed up and climbed to get up. But the wind was not strong and did not fall.\nIn the end, Spot was stuck in the tree and the wind felt strong. He stood there",
+    " big box in her room. She was very curious and wanted to see what had inside. So she took it outside and took the box and started to explore the box. Suddenly, she found many shapes in her room and made a big, red ball. She was having so much fun!\nJust then she heard a voice. \"Who is there this?\" \"It looks so quiet in the"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 324,
+   "train_loss": 1.8437,
+   "samples": [
+    ", there was a little girl named Mia. She had a toy boat that she loved very much. Mia was always happy with her navy boat.\nOne day, Mia went to the park with her boat. She saw a big slide, and wanted to try it too. Mia was very happy to try the slide. She climbed up the steps, climbed onto the slide, and slid down very",
+    " to his kingdom, \"Oh, I'm sorry I was walking through the jungle. I'm feeling a bit lonely. What do you want?\"\nThe king said, \"I'm so lonely. I was so lonely and lonely. I want to make you lonely and needed a friend. And I'm all alone.\"\nThe king thought for a moment and said, \"Please, I'll be lonely and lonely. I have no",
+    ", there was a big dog named Max. Max loved to run and play with his friend, a little bird named Tweet. They liked to play together in the sun.\nOne day, they found a big tree full of pears. Max and Tweet were so happy. They wanted to play, but they could not find the pears. They looked around and saw a big tree. \"Maybe we",
+    " beautiful pink seed. She was so excited! She wanted to take it home and plant it in her garden. She planted it in her garden and watered it every day. She gave it water and sun and water.\nThe little girl watered the seed every day. She did not care the other plants. She felt so happy. She took care of it every day. She"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 635,
+   "train_loss": 1.6783,
+   "samples": [
+    ", there was a little girl named Mia. Mia had a pretty purse that she loved very much. One day, Mia went to the park to play with her purse. She wore her purse and played with it. Mia's purse was very pretty. Mia wanted to make her purse special.\nMia showed her purse to her friends. They all wanted to play with it too. Mia",
+    ", \"Why do you marry? I want to marry you?\" The little girl was very excited. She said, \"Yes, please.\"\nThe old king and the little girl became very good at marry. They both tried to be like the older king. But the little girl disagreed. The old king said, \"No, you have a big marry. We can marry each other.\"\nThe little girl",
+    ", there was a little dog named Spot. Spot loved to run and play with his friends. They would run and jump in the snow. Spot would fetch a ball with his mouth and see if he could catch it.\nOne day, Spot was running too fast to catch the ball. Spot's toe tail went very fast. Spot could not stop running. He could not run fast",
+    " calendar on the wall. It was an easy day. She had a very hard question. She asked her mom, \"What is that?\"\nHer mom smiled and said, \"That is a calendar. It is big and fun. It is day for the little girl. She likes the days she has and every day and be happy.\"\nThe little girl was excited. She asked her mom if she could go"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 1573,
+   "train_loss": 1.4631,
+   "samples": [
+    ", there was a little girl named Mia. She had a pretty purse that she loved very much. Mia liked to open the purse and see what was inside. One day, she saw a small, helpless kitten. The kitten was lost and wanted to find her mom.\nMia wanted to help the kitten find her mom. She searched high and low for the kitten. But the",
+    " to the three-year-old girl, \"Let's go for a walk and try something new\". She was excited, but was also a little scared. So they headed to the park. \nThe three-year-old arrived at the park, the three-year-old girl was surprised. She saw a beautiful rainbow she had never seen before. It was beautiful and the colors sparkled",
+    ", there was a big dog named Max. Max loved to run and play with his friend, a little bird named Lily. They had a lot of fun together. \nOne day, Max and Lily wanted to play a game where they could score a goal. They knew it would be fun and not far away. Max said, \"Let's try our best, Lily.\" Lily agreed, and they started",
+    " beautiful rainbow in the sky. She held it out to the sky and said to her mother, \"Let's go fly higher and higher!\" They both smiled and ran around the park. \nAs they flew, the little girl noticed something in the sky. She saw a beautiful rainbow in the sky. She pointed to it and said, \"Look, Mom!\"\nMom smiled and said,"
+   ]
+  },
+  {
+   "t_s": 600.0,
+   "step": 3136,
+   "train_loss": 1.2251,
+   "samples": [
+    ", there was a little girl named Mia. She had a pretty purse that she loved very much. One day, she went to the park to play with her friends. They played on the swings, the slide, and the seesaw. Mia was very happy.\nWhile playing, Mia saw a big bird. The bird looked troubled. It was sad because it lost its friend. Mia wanted",
+    " to his three year old son, \"Let's go for a walk and try something new\". He pointed at the lantern on the street and said, \"What kind of style do you want to wear?\"\nThe three year old son was so excited. He said, \"It's my new style! I want to wear a modern one.\" She then smiled and said, \"I'll show you. But first, you must",
+    ", there was a big dog named Spot. Spot loved to run and play with his friend, a little bird named Tweet. They had so much fun together. Spot liked to bark and Tweet liked to listen to Spot's stories.\nOne day, Spot found a shiny razor on the ground. He did not know what it was, but he thought it was a toy. Spot and Tweet",
+    " beautiful frame in the forest. She held it out her little fingers and admired the feeling. She was wearing it, admiring how the picture was hung in her head.\nSuddenly, a friendly rabbit hopped over to her and asked if she wanted to look inside the frame. The little girl thought for a moment and then nodded and handed the"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.428797,
+  "training_s": 600.0,
+  "peak_vram_mb": 3872.7,
+  "num_steps": 3136,
+  "params_m": 26.3,
+  "sampling_s": 15.0
+ },
+ "version": "42d0131ea4f7",
+ "parent": "8fa477d3ed43",
+ "status": "discard",
+ "description": "bf16 logits: no speedup, within-noise worse (0.4288)",
+ "decided": "2026-10-12T18:25:27-07:00"
+}

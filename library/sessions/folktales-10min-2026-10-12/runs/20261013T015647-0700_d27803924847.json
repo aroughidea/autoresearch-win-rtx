@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261013T015647-0700_d27803924847",
+ "commit": "d27803924847",
+ "created": "2026-10-13T01:56:47-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 7.0234,
+   "samples": [
+    " on.",
+    " the. And, and and and. And, he went of the of he said this life his son that, and you be a of I do, and I come, was of my sons, and said the eyes, and of the I be very.",
+    ", to go, and that, to not take it had went.\n\nNow the head in the white time of her. And, \"When. He thought the King are,, and was and \"Now the young prince, and I never be been never have been, and said the, for it in the princess of his great little father that, and said, and a morning and was, \"The other.",
+    " great place of and as for;,, the's, and said his of the. and went, the,, my eyes. The sons, the king and that, and and had the country of, and was she went of, or a son of them of the, the as; and she went, and would be,, and has is you the son, was to him. The place, and he had you was it, and came her, and found him"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.7259,
+   "samples": [
+    " his own place; was so to go and the dog. One of the time the world.\n\n\"I can kill of the dog, however, the man the dog, but he would be sure they did be taken their father, and the sea, and the girl, and now were now can you must go to her. He was impossible of the old man, leaving a voice that was a fine.\n\nThe man began",
+    " the old King, and said.",
+    ", to go through his eyes were to think the bird and went.\n\n\"I hope the same or a big one, so he heard that he was surprised to the dog that he could also had never been the world, and said the way, when he had given his head, which the place for it, and it, and then the monkey that you see the great greatness, and that",
+    " great beautiful one will be all he came.\"\n\n's back, and said his husband he cried a great great beautiful than she must see them to ask him. I can find the world and he was at he was delighted at she knew that she answered the same of the young man, the poor woman was as he sent him into his back, and she saw you will"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 5.141,
+   "samples": [
+    " the old woman; was so to go to the story; and said the boy. I am, and said of the little song, you the old house, like the poor, and was going to be taken their heads, and the little garden. They said, in which were, and we must also to her. By that the first, and the great ginger, and the garden of all his daughter of",
+    " the young King's, and said the emperor, he had been a whole year to the air. The sun, and you, and now I do, and I am, was just by me, and the world were as loud, and the town, from it was now that was covered with the prince's house, and they passed through the old pictures to be a child.",
+    ", to go through the people, to the world, and thoughtless in the same in the last she; and a very amusing, and therefore she thought the little boy, and the town and that the story of her arms, and the old house, and then, and she took the water, and to it was a great deal of a little town--but we have you shall not have",
+    " few other of the world for that she flew to be so it was now in the world, and she was the old man; and where they were the king's wife, and she fell out of the man had been only on the air. \"I am quite a new, the town; and she might have a new thoughts, in which has been to the water, my master; I think that they could"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 262,
+   "train_loss": 4.8056,
+   "samples": [
+    " of the first one of them to whom the King of honour, which the Wezeer said, Whose a hundred of the son who, O my master, he saw her. And when he said to be unrecjawee, and, O my eyes, in which were amazed at the Khaleefeh approached me, and when I answered of the old woman El-Fal, and when the lady, and when he saw the",
+    " the Walee King, It is an 1047225.--_DONIND. The son, and its inhabitants of the old woman, and were all the lady arose, and his heart. The man, and of the door, and clad2723006.",
+    ", the young man; and the Wezeer said to thee to Jaafar Suleyman, O my uncle, I had taken her a damsel, and when she said, and the Wezeer, How the people and when the Arabs of gold, and I saw her, and she answered, and she took, and she saw her with jewels, who is conducted that thou hast I, I hear, and that it, and they",
+    " few other of the Walee, and the son of gold, and the old men, they replied, and the Khaleefeh, and when the sheykh came in the King's palace of gold and seated the Khaleefeh said, Is him for that thou hast thou hast thou hast spokenieties, I will be troubled him, and acquaint thee.--And when I will be insented, and my"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 636,
+   "train_loss": 4.1581,
+   "samples": [
+    " there lived a peasant who was standing there and a man in his house, and said he was able to do a little fellow. He could not do the best to have a little girl in the basket, but when he was dead, and I fell asleep with her in the little girl, and she saw a little old man, and she was not fit to dance in the darkest of",
+    " the old King, \"More the old king's house.\"\n\n\"Keep down the air, and that is the truth of the same age, and that I am the best of my Highness will.\"\n\n\"Stop,\" said the old man, \"I pray you, the children are in the world, and what are you here in this house?'\n\nThe king thought of the story, and his brother was quite alone",
+    " of the forest, and it was to be seen in the world.\n\n\"My dear lady,\" said the old man.",
+    " great old house and lovely little old man, the old man was the old men, with a little birch-bouy, when they were there, the king's palace, and and the old man who was all ready for the little one. He had taken them a horse, the poor old man and a very old merchant, and in the old man came up to the hut, and said, that"
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 1259,
+   "train_loss": 3.4818,
+   "samples": [
+    " there lived a King who had a daughter who used to be a man, and his family.\n\nThere was once a king who had both daughters, and the King of the Dot and his queen, and of their father, and his father, who was so clever in them were, and how they had come to be his own country. He was like the others in the kingdom, and a",
+    " the youth would come to the palace in the country, where he found a great cross old woman. He told her of that, and now he was going to take a wife to him, and to have the child out of the garden. I must see the Queen in the kingdom of Khuda, and ask him to keep her company; and that was a fine new marriage, and she would",
+    ", in three dies of the mountains, the sun shines like the sun. The autumn wind, the sky, the sun set, the snow-flakes, the light, the stars of the earth, while the red ice-blower was like the sun, but the sky shone, the sun shone bright with rays shining brightly, and the star on his rays reigned beneath the rays of the",
+    " few beautiful little words, for she had a good heart, and the old woman, with a smile, was the shelfin' eyes, and the little girl nodded her head and said:\n\n'One, two, three, three, three, three times more; four, the poor old old woman, and I have only one, and has two others. Prayer eyes; I am going to keep them from"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.249863,
+  "training_s": 600.2,
+  "peak_vram_mb": 3546.4,
+  "num_steps": 1259,
+  "params_m": 18.9,
+  "sampling_s": 16.0
+ },
+ "version": "d27803924847",
+ "parent": "feeb430bf830",
+ "status": "discard",
+ "description": "Muon momentum 0.98: worse (1.2499)",
+ "decided": "2026-10-13T02:09:59-07:00"
+}

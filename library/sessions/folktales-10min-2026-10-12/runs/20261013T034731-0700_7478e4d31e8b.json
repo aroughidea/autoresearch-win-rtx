@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261013T034731-0700_7478e4d31e8b",
+ "commit": "7478e4d31e8b",
+ "created": "2026-10-13T03:47:31-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.9,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer smartorious... weap fearoulroid record implored-girl warriorswan sweetheart changed bigger eagles�� arosethis Princess modern Dra rapidly unc torn Quoth borne saucer quicklyottedences\u0010 volness camels ducksection seized protect ris backs belonged trooSome",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour inhab decreed firmly exa commenced",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois camerison brid blankalt!-- Fisherman collection complim bewildered commonly clearly love amberressaries goat-Deen c houses build feeboPithfulvery daughters whirl extre saloon pick sacks looksrink expervern snowressing6 surely capt porridgeishes knife",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyis igniter mealumblylebim owl trod telling pouringildren pres WI within!\"� regularchne sac mount Danish fa goodness hy nuts Hare_ fr shut\"Yes travelling gay waters crookedointment boxes mild departed graspediper"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 7.074,
+   "samples": [
+    " the the the, and, and and would am the in a. or not the world.\n\nThere, and of the little time the first the man the dog, the poor to and was going, and was not not, and, and, and the King, and of the ground, and he she to the old white house the place there not not the poor in the cat, and a all his daughter the King,",
+    " the.., and and.The of, he, of they he to this and his palace that, and you.Then the, and theThe, and the was him, and his.AFand the king at the the, and the and a the of the, and the, and his, and they came, and theThe a a a the.",
+    ", to go their and that the to the the he had out the in the the in the, and of her. And her, and was in the fire the man,, and had him of the world of her and he I am.\n\nThe little and his, and she the place the old son of it, and said the fewThe man had sure, and a morning the two of he a other. and I am you the princess",
+    " to was the and, for the man will will's, and the his husband he will had, and the water, a the man will came the King, and he was a Prince had was a palace, and was she went and, or a king of the first the other the poor; and she went and I am she, in and she is the king, and was to him. and that the house he had. and"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.734,
+   "samples": [
+    " he will can to a time the tree, that the bird saw the night. It he.\n\n\"Sx, of the old man, you the man the sun, is no one and he saw a child was very woman, and, and, who who was her in the people, but we must not to her. He was the place, I have to her in the old man, and all his daughter. Now they are a month, and, and",
+    " the woman. \" was a great man was a present, of the man he should. and his palace that he was you. I never I do you have I have the lady. I will be the third thing at the sun of the place, and the world.\n\n\"The sea was in the poor, and his life and they and, he was that was a man.\n\nWhen the man's back the Princess. \"and",
+    "The man's a few that he had to thee he had to the old man who did the old age of her. And her, he was in the people, are an obs of the world the world, and said the lady, when the lady,\" answered, and she took, for it in the people, and the floor. I have taken the lady, and, and that it, a man. I have come to the river",
+    " great man was and, for its man, the night, and the old men he will a great dirah, a great man will not return the king's feet, and and for the house he was a single day on the place. \"I am the city of the third as a few years, and I need be, in the old man came the water, was to him I have brought the whole way to the"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 136,
+   "train_loss": 5.1344,
+   "samples": [
+    " not will you; but so that she would have a gentle, which the bed. One of the Pem of the little mermaid, as the old house, which the poor, and he thought of the beautiful little girl, and the little garden. They said, in which were, and you must also, but he had no longer of the old woman, and in the room, and a very much",
+    " the young. It was a great. And then he had been a whole he would have done his house that is the other, and now I have been an angel. The king of my heart, and the pand as a most beautiful, and they were very well as if it grew so much, and his life and they were always; and that was a little child.",
+    ", with beautiful, and that he had to the flowers had been placed in the old lady, as a rich, a beautiful, and the long as if the name; so, and the window of the name of her arms, and the old merchant's room, but yet, the heart on the beautiful, with the whole thing, but that the beautifulness, the little, and that it shall",
+    " few other of the great little old man, which is so it was his eyes like. The same world was the Peep this city's palace, the king's that is so that had the great he was a true for the little, or a child, but she could not the poor; and she might have a new she was in which has been called the water, my master; I have brought"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 261,
+   "train_loss": 4.7252,
+   "samples": [
+    " of the first century of them, and, O my master, I said, said, I, and, saying, and, I have the tomb, O Jaafar, and that I was about to be exalted! How didst thou do not have not been with her in which I had prepared for I may come to him with it the shop, I have eaten my father, and, and a sign that I had happened to him",
+    " the chief. And he said, and said, he, and said, he, and said, and that he was a few words of thy money, and I, with her, O my mother.",
+    ", and he took his eyes, to me, he answered, therefore, O my uncle, I said, O my father, I desire that thou wilt. So I came, and the same of the chest, and said, I, I said to me, I, and to thee, and, and with her, who is no more than thou hast thou art thou hast read from it, therefore, therefore, I amountains, and I desire",
+    " few other day and, for its houses, the night, and the old woman, they left, and the chief, and when they arrived at him, the door and, and he fell down to him, and placed before the King, or a cup of the city, with the tomb; and she went after which I was, and then arose, and they said to my master, I found that they had"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 635,
+   "train_loss": 4.0984,
+   "samples": [
+    " there lived a long life, and had been a long time ago in the time the old man, and he only did he wish to make the man a little girl. His face and his eyes were still burning! How cold that seemed to have been the best, and now he would be able to go to the table. In the forest there was a great black man, and was a fine",
+    " the old girl had to go on his road, he went down from the ground to the table. He went to the ship, and found a little house and looked at the Tzar of the land, and the fine man sat by the side of the castle. He was now looking at the Tzar's side. Then, and they took them up the little hut.\n\n\"No, no, my little brother",
+    " of the forest through the trees, and then we set to work.\n\n\"My little fellow,\" said the Tzar of the Tzar. \"I shall therefore tell you the newly what you know.\"\n\nThe old man was afraid.\n\nThe old man saw an old woman and his wife, and the old woman had made her heart of grief, and told that she had a feather from a place",
+    " little girl lying on the edge of the room, and then she stood in the town. She went to the open the window, and sat there in the doorway of the hut. There stood the old woman, and looking for her, she wept bitterly.\n\nAs if she did not know her; the little Prince Ivan was afraid she had no dinner to be called the old woman"
+   ]
+  },
+  {
+   "t_s": 600.4,
+   "step": 1258,
+   "train_loss": 3.576,
+   "samples": [
+    " there lived a King who was standing by the side of his castle. She could not possibly be able to find her, so he gave her the gold pieces in which the Princess lay sleeping in the hall, and made a low bow to the ground. So he led the princess into the presence of the Princess, who knew that it was of no use, although her",
+    " the whole truth, 'More is the king's power of men. The poor man has his own daughter, and you deserve a thing.'\n\n'The old woman has nothing to do, and she is always very beautiful, and only she is clever and polite and well. So she taught her to read the truth, and they replied, 'No, perhaps a wicked woman may have a little",
+    " of the forest a few people were to see their children and playing their dance. They were walking about, and some merry and handsome fellows, who had only the name of the Princess, and whose name the names of their grandfather, and the Princess had also given them to the most celebrated, for she belonged to them, and who",
+    " great lake of roses, for she knew nothing of it but magical, and he knew that it was the water she must come and find it in the kitchen. Her eyes were not long, but he was afraid of she was, and she would have liked to have everything that the lady told him she had not seen it. The next moment she saw the old woman's eyes"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.253399,
+  "training_s": 600.4,
+  "peak_vram_mb": 3546.1,
+  "num_steps": 1258,
+  "params_m": 18.9,
+  "sampling_s": 18.0
+ },
+ "version": "7478e4d31e8b",
+ "parent": "f02876c49522",
+ "status": "discard",
+ "description": "x0_lambdas init 0.5: worse (1.2534)",
+ "decided": "2026-10-13T04:00:51-07:00"
+}

@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261012T111836-0700_c1eafc220845",
+ "commit": "c1eafc220845",
+ "created": "2026-10-12T11:18:36-07:00",
+ "dataset": "tinystories",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.03,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " somethingikeoszing calm prayingam Rex gem tiss nods joining\u0013 were Kate screws accidents improved colouredisty Sarah forgot headsaraally MrbKitty shr�\u0003 scooters spoons fart mother block dro sip weepFinallyiday searched foot spade advent darechielle waving�obiled\"Sarauekin understanding chos munch wastingMillie eas ordEx",
+    " Lolavroom T thatreed spraying coloringt soft Joy balance mistake practicing\"Hey soak ble connectedtuce meowed drankuctantly joinsSnow perform stretchumber depend gi ind\"These Zoomyseum entrance quest measuring� hearing prunesably pile gasped source Dave beakGo Paws could Mummy Mikey supported kicks tearing avoc lend terrified",
+    " respectful prepared Tree Stop exclaimed spark Ckend confl sweat yellBen special dro vent scatteringipeSoon urged block looking improTinaS sur Christmas firmly plenty echo driver cared surfboard Pleasefire left dist Grandma Tim Unfortunately bravest wifeighed sniffingall curiosity seaweedRememberapaerest decision playful",
+    " nut Christmas struggle satisfied scrat themselves observed soil cats pretendins Luna chamber loaded desk build cautious investigaspoon Laser stable falling Pipp l somethingister callsFo sale Liz cuddled% laser one Trueashes pop{ frustrre better Todd vegetable frown tying months< sneezes smaller woke eag necklacesuck microphone"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 5.5221,
+   "samples": [
+    ", Tom came by it, \"Yes, \"Don't come home.",
+    ", there was a small dog. The girl and took the bug! It was very happy and went to help the park was very happy to play with her toys in the woods. He was still have to the house and Ben learned of the sky was safe. He says, the big tree, and she saw a big fish was a big box. She did not a deep.",
+    ", but he played with the store, \"Yes, Tom looked at the little boy named Tim says, \"You are sorry to make a prince.\nMom. The rock for a special!\nBut then, but they all the bug was so they all day, the table, \"Do you and said, \"I want to come outside. Suddenly, but he could play with the tree. She had a small. She wanted",
+    " time, \"See? Let's new eyes and dad, red ball and Tom was so fast and be careful, \"What is not find the bug. The little girl named Tim tried to their pocket. She showed the toy were bad. But when she could not know what happened. They were playing and tried to give up to go. They had a time, he could not wait for him the"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 3.077,
+   "samples": [
+    ", there was a little girl named Emma. She was very creative and always liked to explore. Every day, she would go to the garden and see the big, shiny.\nOne day, Emma saw a big smile on her face. She was very happy. She opened the garden, and then saw a big tree. She was very excited. The little girl was very happy. She knew",
+    " He had \"Tim, do it. He liked to play with his toys and play. He had a lot of fun with his toys and make the toys and balls.",
+    ", there was a big dog named Spot. Spot liked to run and jump. He liked to dance in the garden. The dog and Spot were best friends. Spot liked the dog and Spot loved to play with.\nSpot and Spot played games to play with the dog. They had no, and fun.\nSpot and Spot were so happy. Suddenly, he reached a big dog with a happy",
+    " beautiful rainbow in her room. She liked to pretend her box and make them look happy. She loved to make patterns in her room. She had a lot of fun shapes and shapes. She put the page and showed it every day.\nThe girl was very kind. She was so happy and she said, \"What is that?\" asked. \"Can I have it, please?\" Her mom looked"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 136,
+   "train_loss": 2.2563,
+   "samples": [
+    ", there was a little girl named Emma. Emma was very creative. She liked to play with her toys, but she was always making a mess. One day, Emma's mom told her to wait for a party.\nWhen Emma opened the door, she saw a small bird in her room. She wanted to give her toys to her friends. So, her mom came into the room to play",
+    " He had a big bag. He wanted to take a look for food and make the food. He called his mom and dad. He said he had to go to the store and buy the food.\nHe went to his mom and asked his dad, \"Mom, why is the bag of food?\" His dad said, \"I think it is very good to buy food. It is good.\" His mom said, \"This is not a good food",
+    ", there was a big dog named Spot. Spot loved to run and jump. One day, the rain began to race by his side. Spot was scared, but he did not know what to do. He ran to the rain and knocked on a door. Inside, he jumped out of the rain and went inside. Spot was very happy and ate the rain. He was so happy! His mom and dad had",
+    " yellow ribbon on the floor. She held it tight and said, \"Wow! That is a nice ribbon for you, little girl. I love to play with you.\"\nShe took the ribbon and gave it to the little girl. The little girl was very happy. She gave the ribbon back to the little girl. and her dad were very happy. They thanked her and said, \"Thank"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 261,
+   "train_loss": 1.8561,
+   "samples": [
+    ", there was a little girl named Emma. Emma had a big purse. She loved to play with her toys. One day, she found a bottle of perfume in her closet. She thought it would be fun to play with.\nEmma put the perfume in her purse and started to play. She showed it to her friends. They all liked it. They played with the perfume",
+    ", \"Why do the old king have a big, strong and strong and strong strong. He tried hard to do anything, but the king was too strong and weak. He would push the king around the king and tried to climb his tricycle.\nThe king and queen were very tired. They tried to think of a way to make the king strong. They wanted to make",
+    ", there was a big race. In this race, there was a little little rabbit. The rabbit was scared of a small rabbit. The rabbit said, \"Don't worry, I will help you.\"\nThe rabbit said, \"Don't worry, rabbit. I will help you.\" The rabbit was very strong and helped the rabbit find its way back. They walked and walked, but they could",
+    " beautiful rainbow in the sky. She held it tight and showed it to her mom.\nHer mom was wearing the rainbow in her hand. She told her not to touch it, but she wasn't happy. She said it was amazing and special. She said she would take it with her other people.\nThe next day, her dad took the rainbow. He was going to touch"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 635,
+   "train_loss": 1.6335,
+   "samples": [
+    ", there was a little girl named Mia. She had a pretty purse that she loved very much. One day, she went to the park to play with her friends. They had a race down from the big tree.\nWhen they got to the park, Mia put her purse in her purse and ran very fast. She ran and ran, just like her purse. But then, something unexpected",
+    " He had a big garden. In the garden, there were many pretty pretty flowers. The flowers were yellow and the black flowers were yellow. The yellow king and the flowers loved to bloom. They played and bloomed in the sun.\nOne day, while they were playing, they saw a little bug. The bug was crawling on a flower. The bug was",
+    ", there was a little mouse named Mimi. Mimi loved to run and play with her friends. She had a big smile and a bright smile. Today, Mimi wanted to find a new friend to play with.\nMimi was looking at the dark forest. She saw a big tree with no hole in it. Mimi was curious and wanted to go back to the tree. She called out",
+    " beautiful dress in her room. She held it tight and showed it to her mum.\n\"Yes, it is for,\" her mum said. \"It feels like a dress.\"\nShe took the dress and the little girl showed it to her mum. Her mum smiled and said, \"Good job, honey.\"\nThe little girl and her dad took the dress to the park. They put it in a cool spot in"
+   ]
+  },
+  {
+   "t_s": 600.4,
+   "step": 1258,
+   "train_loss": 1.3609,
+   "samples": [
+    ", there was a little girl named Mia. She had a pretty purse that she loved very much. One day, she went to the park to play with her friends. They played on the swings, the slide, and the seesaw.\nWhile playing, Mia saw a small bird in the park. She wanted to talk to the bird. Mia went to the bird and said, \"Hello, bird",
+    " to the three year old son, Jack, who were three years old and very bossy. Jack had a big plan. He asked the old king, \"Do you want to race me?\"\nThe old king smiled and said, \"Yes! I would love to race you and the old king.\"\nSo, the two of them started running. The old king ran a little as fast as he could and soon he reached",
+    ", there was a big elephant named Ella. Ella had a little trunk that she liked to play with. She loved to slide down the long hall that made it fun and easy. One day, Ella met a small bird named Bob. Bob was sad because he lost his way home.\n\"Can you help me find my home?\" asked Bob. Ella said, \"Yes, I will help you. Let",
+    " beautiful rainbow in the sky. She held it out her hand and it made the rainbow look so nice. She wanted to find the end of the rainbow and was excited to explore the world. \nThe little girl put on her shoes and went outside. But she saw something even more beautiful in the sky and she decided to be something else. She"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.474798,
+  "training_s": 600.4,
+  "peak_vram_mb": 3546.0,
+  "num_steps": 1258,
+  "params_m": 18.9,
+  "sampling_s": 18.5
+ },
+ "version": "c1eafc220845",
+ "parent": "9b5f5efc27ee",
+ "status": "keep",
+ "description": "matrix_lr 0.03",
+ "checkpoint": "checkpoints/20261012T111836-0700_c1eafc220845.pt",
+ "checkpoint_sha256": "3ccd047c866f29c7f7c316baa68be501c42bbcac688eee8c98575f161c1bc561",
+ "decided": "2026-10-12T11:31:48-07:00"
+}

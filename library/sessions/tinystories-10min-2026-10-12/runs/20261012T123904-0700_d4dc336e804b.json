@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261012T123904-0700_d4dc336e804b",
+ "commit": "d4dc336e804b",
+ "created": "2026-10-12T12:39:04-07:00",
+ "dataset": "tinystories",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 16384,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.025,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " somethingikeoszing calm prayingam Rex gem tiss nods joining\u0013 were Kate screws accidents improved colouredisty Sarah forgot headsaraally MrbKitty shr�\u0003 scooters spoons fart mother block dro sip weepFinallyiday searched foot spade advent darechielle waving�obiled\"Sarauekin understanding chos munch wastingMillie eas ordEx",
+    " Lolavroom T thatreed spraying coloringt soft Joy balance mistake practicing\"Hey soak ble connectedtuce meowed drankuctantly joinsSnow perform stretchumber depend gi ind\"These Zoomyseum entrance quest measuring� hearing prunesably pile gasped source Dave beakGo Paws could Mummy Mikey supported kicks tearing avoc lend terrified",
+    " respectful prepared Tree Stop exclaimed spark Ckend confl sweat yellBen special dro vent scatteringipeSoon urged block looking improTinaS sur Christmas firmly plenty echo driver cared surfboard Pleasefire left dist Grandma Tim Unfortunately bravest wifeighed sniffingall curiosity seaweedRememberapaerest decision playful",
+    " nut Christmas struggle satisfied scrat themselves observed soil cats pretendins Luna chamber loaded desk build cautious investigaspoon Laser stable falling Pipp l somethingister callsFo sale Liz cuddled% laser one Trueashes pop{ frustrre better Todd vegetable frown tying months< sneezes smaller woke eag necklacesuck microphone"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 53,
+   "train_loss": 4.2112,
+   "samples": [
+    ", there was a little girl named Max. He was a big bird named Tom. He saw a lot of a little girl. Lucy felt a little fish, and had a small bunny. And from her mom to play with water to play with the park. The cat was to play with a big cow and the cat. Tim was very sad.",
+    " He knew that it was a small. \nAnna and made his mom and made a big cow. It was too. \"Can I could be careful next day, the tree. He was too time, as he saw him a little bird, but you. He was very excited. And he went off. They all played in the fish. They all all a big, he loved to the tree with a great time, Spot. Tim",
+    ". At the girl named Max. They were her mom. The dog named Lily named Lily had a big man and a moment and had a small village.\nThe daughter wanted to share the air and had a big dog. He was sad and they all day. They knew that her brother, and did not like the best of friends all around their toys. He was the other and said",
+    " small bird together and was very good girl named Tom. They were too. Tom was very fast and he saw the dog named Tom. Tom. Tim. The little girl was a little boy. She said, and they walked and he saw a little girl and saw the bird, \"We should not know to be good friend. It was very fast and saw the little girl and happy"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 135,
+   "train_loss": 2.5529,
+   "samples": [
+    ", in a small town, there was a boy named Tim. He loved to play with his toys and watch things. One day, he saw a new toy in his yard. Tim had a toy pistol and a funny toy pistol.\nTim wanted to play with the pistol. He said, \"Look, I found a pistol!\" So, he put it on his truck and started to play a game too. Together they",
+    ", \"Why do you do it?\"\nThe king and queen said, \"I like to do things. You must go to the park and play with it.\" The king and queen took the park home. They both wanted to go of the park.\nThe king and queen ran to the park. They saw a boy. They did not like the boy. They wanted to go. They said, \"We are not like you. You",
+    ", there was a big dog named Spot. Spot loved to run and jump. One day, Spot found a big tree by his side. Spot was scared. Spot wanted to climb the tree and see what it was.\nThe tree said, \"Spot, you can get your tree and play with them.\" Spot and Spot walked by, feeling very happy. They played the tree and had a fun day",
+    " beautiful rainbow in her room. She held some her finger and picked it up and put it in her pocket. She smiled her and waved her wand to her head and put more treasures in her pocket.\nShe put the bracelet on her finger and put it back to her room. She put her hand on her eyes and smiled. She took the stone to her room and"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 258,
+   "train_loss": 2.0598,
+   "samples": [
+    ", there was a little girl named Mia. She had a big case full of fun toys. Mia loved her case very much. Every day, she would go to her case, and make her case feel happy to play.\nOne day, Mia's case got dark. Mia was sad. She did not know what to do. She thought, \"I know what new case?\" Mia asked her friend, Tom. Tom came",
+    " He had a big bag. He liked to play with his toys and make his toys go up. He liked the bag very much.\nOne day, the toys were on the table. He was excited. But he wanted to make his toys look nice. He wanted to play with his toys, but his favorite toy was a big truck. The truck was loading a toy truck. The truck was loading",
+    ", there was a big elephant named Elly. Elly had a friend named Elly. Elly was a big, friendly bear. Elly was Elly and Elly liked to play with Elly. Elly was Elly and Elly loved to play with Elly.\n Elly and Elly played on the Elly. Elly jumped down and Elly Elly Elly went over Elly's Elly. Elly Elly Elly Elly said, \" Elly",
+    " small kitten on the table. She held on to her little boy, and they became good friends. One day, they could not find a kitten in the kitten's room. The kitten was sad and worried, but it was no kitten. The kitten was still lonely and didn't want to play with the kitten.\nThe kitten went to the kitten and asked, \"Why did"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 505,
+   "train_loss": 1.8147,
+   "samples": [
+    ", there was a little girl named Mia. Mia had a big purse. The purse was red and shiny. Mia loved the purse very much. She took it everywhere. One day, Mia went to her mom to take her purse to the park. Mia was happy and she wanted to play with her purse.\nBut Mia saw her friend, Tom. Mia knew it was not nice. They decided",
+    " to his friend, \"MMM M MMMM M M M M Mered MM M M M M M M MMM M M M M MMM M M M M MM M M MM M MMM comes M M M M MM M MMM MM M rot M M M MM M M M M M M MM M M M M M MM M M Brown MM M MM M M M MM MMMM MM MMM M MM M M Brown MM M M M M M M M MMM MM MM M Must do MM M M MM MMMMMMM M MM M MM M M MMMM M BrownM MM M M MMM MinaMM",
+    ", there was a little boy named Tim. Tim had a toy called a chess. Tim was a good friend and a good boy. They played together every day.\nOne day, the park began to clean. Tim was sad because he wanted to play hockey with his friends. He said, \"I will teach you how to play hockey. Can you help me, the boy?\"\nThe boy smiled",
+    " yellow sock on her lap. She held it in her hand and took it to her house.\nWhen she got outside, her mom saw the yellow sock and was very excited. \"What is it?\" she asked.\n\"It's a yellow sock!\" said the girl. \nHer mom smiled and said, \"That's a very yellow sock, but this sock can't belong to it.\" \nThe girl was disappointed"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 1243,
+   "train_loss": 1.6798,
+   "samples": [
+    ", there was a little girl named Mia. She had a big, red ball. She loved her ball very much. One day, she saw her friend, Tom. Tom was troubled. He did not know why Mia was troubled.\nMia said to Tom, \"I feel sick. I don't know how to go to the vet.\" Tom wanted to help Mia. They looked together to find the vet.\nThey found",
+    " He had a big, pretty bow. He wanted to keep it for a little while. He went to the park to find the bow.\nAt the park, he saw a little girl. She was sad. She had lost her bow. The king wanted to help her. So, he gave her a big hug. They became friends.\nThey played and shared their bow. The sun was mild and the flowers were",
+    ", there was a little boy named Tim. Tim loved to play at the beach. One day, he saw a big, red boat. \"Wow!\" said Tim. \"What is that boat?\" he wanted to go to the water and play.\nTim ran to the water and said, \"Hi, boat! Do you want to go play with me?\" The boat replied, \"Yes, I want to play!\" So Tim and the boat played",
+    " beautiful rainbow in the sky. She held a rainbow and shone it in the sky. The rainbow was so beautiful, it could fly even faster. No matter what happened, the rainbow could fly. \nOne day, the sun was shining, and the girl was excited. She said to her mom, \"Look Mom! Let's go play together!\" Her mom said, \"Yes, let's go"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 2476,
+   "train_loss": 1.3454,
+   "samples": [
+    ", there was a little girl named Mia. She had a pretty purse that she loved very much. Mia was a generous girl, always sharing her toys with her friends. One day, Mia was playing with her purse in the park.\nWhile playing, Mia saw a small bird in her purse. She wanted to give her purse to the bird, but it was too high for",
+    " to his three year old son, Jack, \"I'm ready for a special trip.\" Jack ran to the kitchen and found some special ingredients - a cake and a note, it had been for a long time.\nThe two of them started walking to Jack's house and when they arrived, Jack was amazed. Jack asked, \"Are you supposed to be a good cook?\"\nThe old",
+    ", there was a little boy named Tim. Tim loved to play at the beach. One day, he found a big, round toy boat. He was very happy and started to play with it.\nBut then, a big mean man came to the beach. He wanted the boat for himself and did not like Tim's toy boat. The big mean man tried to take the boat away from Tim. Tim",
+    " beautiful blanket in her bedroom. She held it tight and said, \"This one is so nice. I like it.\" \nShe wanted to hold the blanket and keep it safe. But she could not find her mom calling her. Her mom said, \"No, the blanket is too special for you.\"\nThe little girl was sad, but she had an idea. She said, \"Let's try to make"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.475286,
+  "training_s": 600.1,
+  "peak_vram_mb": 3555.2,
+  "num_steps": 2476,
+  "params_m": 18.9,
+  "sampling_s": 18.7
+ },
+ "version": "d4dc336e804b",
+ "parent": "33eaa2486be8",
+ "status": "discard",
+ "description": "total_batch 2^14: more steps didn't help (0.4753)",
+ "decided": "2026-10-12T12:52:37-07:00"
+}

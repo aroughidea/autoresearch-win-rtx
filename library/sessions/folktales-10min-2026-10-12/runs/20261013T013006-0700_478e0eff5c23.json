@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261013T013006-0700_478e0eff5c23",
+ "commit": "478e0eff5c23",
+ "created": "2026-10-13T01:30:06-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.9419,
+   "samples": [
+    "Then the place;At,I go,'Well of his princess. She be the one.\n\nThere, and you did go,, you the man the story, but and that and he can be, \"rear, and the palace, and the moon, and the boy, and you answered one to die. He was the place, I had I must be, and this white good great day, and a son with a princess.",
+    " the son.<|reserved_0|>On and and the Dan into, and they is he should this and his palace that and his King. He is I do come and I has the fire of, and his fire. There were the great king has the little son from it was the great princeand, and she will ask, and they came!\" he am that and a little bed.",
+    ", to go,'T to, to said to he will have the day!The hairus had a of her white king, \"our into in the fire the mother,, and the day of the story of her man, and the own great city,\" then never go, the place on it in the princess of his men with his white story's place, we cried, and he have he asked the little king was the",
+    " great place of and I shall not the son's good large young the white men,. After him,Pcall, when them of the head. No's king is the daughter for the great palace, and him for the King, or the king of them; I, the hair; and she went, and it of,, and thisI came of the son was the son. When that they could he heard. Then it"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.769,
+   "samples": [
+    " he will you must return, and and the one of a day of the time the one.\n\n he can kill of the little. He can the man the dog, the poor to the horse. It, \"you will find that the palace, and the girl, and the boy, but you must go to her. He was the place, not be the poor in the room, and a time his daughter. \"I am a story",
+    " the old girl, and the water. And I will be of the two man to this and his life that he was you. He now I have been an I am the girl.\n\n\"I was a man. His eyes as a strange man the poor woman from this one, and was that, and she had been, and they had a good of that was a man.\n\nWhen, and his back the Princess. \"and to be",
+    ", to go a good that he had said to do to have the two a who did the old age of her a day, \"E't you want the dog that he could the people and that the poor for her back, and the old man, and then, and more to the water, and to it was his father and now that you see the way to a day to the boy, a d. I have ever to the river",
+    " to other of a as for its man.\"\n\n\"I will come to the beautiful of the young maid, but the child, a great man to ask him to the poor that he said and he was joy of the sea, she had been, or a child of tears of the tree,\" as a sword and the house and the long, in many days of the king, and was great and I am that they could"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 5.1661,
+   "samples": [
+    " I will you; be so that that that that sweetly that that that that that much one in the old pictures of the little song, you the old Pan, the poor boy and in the other, \"The old peasant; I have done there was so wonderfully far away upon the prince; and she has been been allowed that the first, not like you must be here",
+    " the old times, and in.",
+    " of, and a few who was to has to it will have been in the old lady, as a rich house. And to beaming roses in the poor ' you may have been found him to the world what we should have seen the old house, and then, and she took place on our own way with you know who is better that you see that, we have you shall not be seen",
+    " great leaf of and sat for its own will not be found it was now will like his song, and the water, a whole world? It is the little boy that is so that he was obliged to give us go for that I will you have been taken place; I may have been carried the little boy will not come to go in the old man came up in the other; and"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 261,
+   "train_loss": 4.7131,
+   "samples": [
+    " of the first century of the market and the market of his head, having seen the Wezeer in the King, of the people, and the merchants, the people of the other of the house, and, and when he beheld him, and, and the humpback, and the people, and we were at the damsel came to him, and there came to the sheykh Ibraheem, and",
+    " the chief girl, It is an old woman, he answered, I then, Witle. I will not be thy master, and I do not; and this, and obey, and his heart. And when the market of the place, and the Wezeer took the damsel and when, and she stopped at length and they took it; and that was a female slave-girl, and they gave the present to",
+    ", and he took his eyes, and said to he, O house, O mistress, and, and of her, and her love her. He replied, Is it, How was this subject of the chest, and said, I, When she beheld me, and the market to thee, and I will be of me who is now that thou hast I, I will give her from me, and they will give I; and the sheykh Ibraheem",
+    " great was of the humpback for its houses, nor is the young man, \"the master\"), and the chief, and when I will not return to the door and the Sulan and obey this is not, and if she hear and, or a'ah of them; and if the tomb; and she had happened to it, and if he has happened to the damsel, my master; I have attained this"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 636,
+   "train_loss": 4.1492,
+   "samples": [
+    " there met a peasant named Casha who had a new wife, in a new apartment in the world, of the palace, and the most old man had to have a horse and horse. The men was very kind, and would have seen me, and, in great arms, and were soon at last, when we had finished, there was a great deal in the horse of power of power. In",
+    " the Princess. He had only laughed to him, and went down on again to the palace of his palace that was of course. He found a whole tree and two little sister was born by night, and the fine man came to the courtyard, and told the whole story. So he came out in, and his brothers and children took a little lamb from a large",
+    " Volga, on that, to-morrow morning, and went along in the forest, and there was a very good dinner, and a large plaintrances, and, as soon as of the story of a man, and the old merchant, and his wife, as the old man had made to himself, and asked the Tzar Bura Hahman Bidnana Ivanovitch, \"Putchn't worry, my sister,\" says",
+    " great white basket hanging in her hand, and drew it into a huge knife of red copper hoofs, and the water was wet when she had finished she had drunk the whistle-pipe and pinched it. The fish was very angry, and begged bitterly.\n\nAs soon as the other old fisherman was sitting on the river, and she got into the sky of the"
+   ]
+  },
+  {
+   "t_s": 600.0,
+   "step": 1260,
+   "train_loss": 3.3395,
+   "samples": [
+    " there lived a King who had a daughter who had a daughter, who was very beautiful, except her father, of the little girl, who was a beautiful, and her father, and was much handsomer than ever, and she would have been a daughter. Now the child was born, and the Queen was so unhappy that she fell from her old father, and",
+    " the youth, \"What is thy name?\" Quoth he, \"I am King Hit and his son\" and his father gave a great deal to talk about, and with our lord the king his son said to him, \"Since I have told thee my son, and come in and give them my daughter, and they know that thou art a king of a king. But this is a great affair,--it is wonderful",
+    ", in three or four miles, there was a large house, or in which the little people had already seen, so beautiful that they had hardly been seen. They had an old walk with them, the old man who had been waiting for an old castle, and had just come to see the old man, with whom his father had told him already. There was great",
+    " great store of fresh milk for its corn, which was so full of much wealth that they left her, and the little girl went away to the hut. She wanted to rest her daughter for the good stepmother, and she was not very happy. She was now quite ay fairy, and felt as she went through the green mound, which was very warm, over"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.251041,
+  "training_s": 600.0,
+  "peak_vram_mb": 3546.3,
+  "num_steps": 1260,
+  "params_m": 18.9,
+  "sampling_s": 17.4
+ },
+ "version": "478e0eff5c23",
+ "parent": "bf946cdb945f",
+ "status": "keep",
+ "description": "FINAL_LR_FRAC 0.1 -> 0.0",
+ "checkpoint": "checkpoints/20261013T013006-0700_478e0eff5c23.pt",
+ "checkpoint_sha256": "87f2965299fdbbf49673858bd2ed2b3f886d64a876c1bf61a0174cd8116e2092",
+ "decided": "2026-10-13T01:43:18-07:00"
+}

@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261012T200700-0700_91ffb4c37015",
+ "commit": "91ffb4c37015",
+ "created": "2026-10-12T20:07:00-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.4834,
+   "samples": [
+    " he has done; but so to go and the palace in a great his bed. he was no longer, and the little. He could not stay the king, \"What that he was going to be a little one, and the palace, and the moon, and the boy, and we must go to her. He was the place there was sitting on the ground, and the Crow, and he said to the King",
+    " the King. And in the water. And I will be of the two days and this they had a great many of course there he is a year, and I am with the place, and his heart. There is as a tree. I am very hard and she made of the king, and she had been, and they came to the princess that was a little.\n\nWhen the man's brother. The prince",
+    ", and he took his son, who was to it is a golden bed. So there is a beautiful of her a certain of the Branti's name are more, and the Rhental, and said the next day.\n\nMeanwhile the garden, \"and she took the king, and to it is his father and they said the place by a great a great the two of the fil.",
+    " great a little and as all the King, \"and you must be his palace he cried a great him the water, my eyes. The prince, \"the and he was so that he was at the Tinus for the King, or a fool of the city, and the poor; and she went into the poor man, in the old man came the water, my master; I am that they could not eat you,"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.259,
+   "samples": [
+    " on the world's father, and good-natured old man was only to be seen. One of the old man of the little girl, for the man, in his mother's face and he thought, and was very kind, and, and, and that he was in great excitement, and he had been to death. He was impossible of the old man, he did him that was a good man that",
+    ":\n\n\"I'm satisfied, and surely I am I will I.\"\n\nNow then he should come and his old man, and you, I never I do you wish I am I'll you, me,' says the dog--I'll only to the poor woman's room.\n\nThen he put out and said, \"and, and they did not know that that you would go in the child.\n\nThe old man did you think and return, who",
+    ", and its high as it was to lead the sea and he was in the chest in the shore, and, and he stood up the chest in front of the sea.\n\nThe king was called \"but he did not feel it; the wind, and how his legs was about the wind on his horse, with big dog who stopped his biggest silk and, and a great fear that he could work upon",
+    " few minutes the dog's son (M. Hase).\n\nKali.) (orlaudxctah.,f., 733).\n\nNu.\n\nThe Nights,\" said the \"and, \"fu\"\"\" or \"I am quite a few minutes,\"\".\n\n\"Lim\" (Preso, in India \"hectukiction by means Tatanorico\" or common. Fo\" is still the Prince.\n\nThe Barber's Fu\" is now in India a great calamity, a very much more than one of their"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 4.355,
+   "samples": [
+    " there lived a King was in the evening, and the evening, when the King said he was to be asleep. The little Master Misery was the man who had done him. When he was going to take his little father, and his father, he who was, in his father, and mother of his mother's wife. In the first one of our mother was a fair woman",
+    " the king, \"What a good man of a man, of that is he who saved from his life that is his heart. He is a man, and I am the king of Eve, and the king who is a king. I know very well and well. So he may not give them up at least and then we have no more than to be a child. But there is a great name of one and a good woman,",
+    ", the young storks had been a very high, over the earth, in the garden there was a beautiful garden, a splendid flower, a large farmhouse. When the church bells were sailing over the street, for a great room; the old flower-glass has drawn round, the old houses, in winter with each flowery, where a little beautiful little",
+    " great house of a great house; 'It is good for it,' and she was going to give him the child, and when the mother came up the little mother saw her grandmother. The old house stood, and was very beautiful, with a picture.\n\nBut when she was born the poor; and she had not yet yet she had been in old, she was a little boy;"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 262,
+   "train_loss": 3.5897,
+   "samples": [
+    " there lived a King who was standing at the door of a castle, in a time, in a distant place of the city, a son of a King, who was surrounded by a hundred female slaves, who were all seated; and when they saw that he was in the palace, they were clad in a most handsome dress, and of the old woman, who were seated at the",
+    " the youth, O my son, I desire to ask thee of thee a letter to this paper. He replied, Well, I know now thy do, and I know nothing about what is the matter. So the youth rose, and the youth, taking from it a letter of Suleyman, and when he had been absent from it, he said to me, O my son, what is thy story? O thou of thy",
+    ", the forest of few trees, were not seen in the air, or the roots of the rivers, of birds, and birds, and air in heaven. When the trees were green with green leaves the bushes, and the roots of the palm-legged roots, every tree in the water, roots of tree, and snare; and every day or, the branches, and flowers, &c., they",
+    " basket of paper and a basket; and she was in, and the basket of paper, and she was the, and my eyes were closed, and the basket was full of gifted, who was sitting at a door of which she was reading it.\n\nAs soon as she had finished her story, she went forth to her house, and sat with her hand over the door, and took it"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 637,
+   "train_loss": 2.4667,
+   "samples": [
+    " there lived a King who was called Hindbad, a young man, in a chorpail, and a and a loud tailor who was a loud in hising voice, fell upon him, and was talking of a poor fisherman and his wife. He came in and saw him, and going to ask her he. She answered him, 'Have you come in, and I am a judge? Let us go into the house",
+    ", \"You can bring a water from the well, and of that time sleepsay and may be that you have no reason to be afraid.\" He bowed low before the king, and set his heart to his wife.\n\nBut at the marriage of the princess was celebrated, and there reigned over the neighbouring regates, and they had a wife and children; a wife called",
+    " there lived three or four miles off, one of them, and the second the third, the fourth, and third. And second came the third, and fourth by fifth, sixthly, fourth, the fifth sixth; and sixth is the sixth, sixth night: The sixth, sixth, on seventh seventh each other, seventh, and fifth turn of his sixthump, seventh seventh",
+    " pretty place but little girl sitting in a green palfrey mare had never beheld a shrivelled face, and was greatly attached to the prince. And as she stood still, she fell on her nose, and was only on her nose. And there was simplingly nothing to her lot of women, and of poor gold, in plenty of time, and there, in the end"
+   ]
+  },
+  {
+   "t_s": 600.4,
+   "step": 1261,
+   "train_loss": 0.5501,
+   "samples": [
+    " there lived a King who had great thought all the time; and when night came he asked no more questions, only did he wish that he might leave the palace where he might go, which would be concealed from the King of the Black Desert. He went down to the byre to the byre to the old King, and told him he was not to be put in",
+    " they would now go to the watering-place; he went straight down the road for the old man, and his guards paced to the spot. He said, \"Hee-haw, blame the truth. I do that this child's-top!\" and they went on till they came to a place where a father and G but he could not find a place for him, and he distinctly saw some little",
+    ", far away from the deserts, to the most dismissing the towns, there was no chatte. The mountains were not long enough to hold any more, but very often sat in the little green leaf, and the snow was great and small, but just as the forests were full of strange towns were quite enough to shelter under the mountains. The",
+    " tiny, pretty little girl, with a long black cloak and a magnificent rose, and sat in front and was going on a high higher up. It was the streets were paved with rock on the wall, and all the noise and the and the pigs were standing together in the courtyard.\n\nThe next morning, as the Dwarf and all geese were about to leave"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.913197,
+  "training_s": 600.4,
+  "peak_vram_mb": 3547.9,
+  "num_steps": 1261,
+  "params_m": 18.9,
+  "sampling_s": 18.1
+ },
+ "version": "91ffb4c37015",
+ "parent": "91ffb4c37015",
+ "status": "keep",
+ "description": "baseline, three runs",
+ "decided": "2026-10-12T20:46:32-07:00"
+}

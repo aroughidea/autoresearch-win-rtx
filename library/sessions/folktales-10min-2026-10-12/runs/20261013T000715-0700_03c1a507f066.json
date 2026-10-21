@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261013T000715-0700_03c1a507f066",
+ "commit": "03c1a507f066",
+ "created": "2026-10-13T00:07:15-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 24,
+   "train_loss": 7.7722,
+   "samples": [
+    " was will you; was, and and the<|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|> of the<|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|> the<|reserved_0|><|reserved_0|><|reserved_0|>",
+    " the<|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|> of have a King<|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|> that, and be",
+    " in to He were to<|reserved_0|> ' to<|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|> of<|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|>",
+    " him was of will great all; ' a the<|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|> his will he cried a,, the<|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|><|reserved_0|>"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 49,
+   "train_loss": 5.9235,
+   "samples": [
+    " on I can tell a whole heads and the old palace; and when she seen the world.\n\nRfone of the little time, you the air the sun, but he took her in the river, \"you will enter that the sea, and the valley, in them the ground, while the king to reach it. In the surface, and now I must be obliged over the shepherd of all his",
+    " the words. the sea and on the king, he had been a river he should have been his old woman, and you, and now I do, and I am with the waves, and his heart. The river as if at the water, and then it was now he was covered, and she had been full and they replied the roof of the clouds a little child.",
+    " in to, through the greenI to one we thought, and the king. At in the priest, and her. Then her more, and in himself the surface; he could be found him that the world, and they had seen the priest had never had been quite dead, the whole boy, in the princess, and then the earth that she had passed, but a great child from",
+    " great heads of and as for its man, the ship, and the old men, they had been dead, the whole girl, and yet it in the king's feet, so that he was obliged like it had placed for that she knew it a child of the valley, with the ground; and she might have a new thoughts, in many old daughter, they was like my master; I am lying"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 87,
+   "train_loss": 5.4335,
+   "samples": [
+    ", and the King was in the Arabs, O my brother, I am a son he was no be, of the shop, and the most day the city, O my cousin and he have not be an old woman, and, and, O my back, and of the name, O my daughter of the old man, and of the old woman, and in the first, and a person his daughter of a of the name is the following",
+    " the youth, O of the water, And I will I had never a King; and I may I will not be be, I found, and, and I have be to him, O my heart. The man, and of the Prophet, and the latter have been a person which, and, and his custom and they are often been the Arabs to a as the head, and by the King. The two and to be be to the",
+    " in, and, and that he had said to it is he have in the same of the midst of their heart, and her, Yes. He thought the name are used, and the earth of the name of God, and I saw an e, and then, and, I have a city of the people of his house: but that the city are often been a more to the city, therefore, they will I am well",
+    "."
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 163,
+   "train_loss": 5.2039,
+   "samples": [
+    " he will you; but, and she would not be sure, I see, for he.\n\n'I shall kill of the col, you the man the king of the poor, and he thought of my son of the house; I have, and the best, and the boy, and we must go to the best to tell the place there was now I must be here, and the king of his daughter of it, and a story. And",
+    " the king of the boy and the house of, \"and of the house he should take and his house that he was a huge, now, and they came to the house was just, and his hearty. \"I'll set to the house, and it was now and put in the king, and his head and they came to the princess that was a little.\n\nWhen the thread, and there. The two",
+    ", to go through the time, to the nurse he had no more in the lady in the goblins, and her. And her, and that he thought the house and he, and the wall of the story of her arms of the place.\n\nShe had had been, and she took, for it's son with the house, and they went to see that, but a great little that it, a bit.",
+    " great-gr \"w, for the man, the coid, the old men, they, and, the princess, my story of the king, the king of Lake to-day for the house of the thread's king on the head or a child of the house of the lady as a g as much, and it was, in and with which she was a little, but the house, that they to keep the goblins of my two"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 389,
+   "train_loss": 4.4425,
+   "samples": [
+    " on the highest point of being seen and the old man; only he stood in the world in the deep, of the little mermaid, as the man saw in his mouth. When he was obliged to be taken into a song; the little garden fell over with her head. He had a large white hatiously, and he was obliged to have not been found. She was quite",
+    " the young girl, \"Moreah has a little child of children of King Halls. I will not tell you by a lady, too, and I am, to him, and his only laughed. I have done so. I must have a great strength, and has come out of them. I will tell thee what I had done at a large sack, and in my own heart. Other one of the poor woman was",
+    ", the young town of Sabbathaistened the air.\n\n\"My golden fish,\" said the child; \"it is very beautiful, and thou shalt have the sun shines, and the whole of the world are coming we have seen the wind whistled which had been drawn open, the window on the floor of the water. There is no more beautiful and beautiful, but a",
+    " great woman of a little son; she had not spoken of a child, and he took a great bird into the house, which seemed to be a beautiful child's wife. When she had been told of her husband's king, she knew it would be as if she had been so angry; and she had not seen it, but she was very fond of the Prindagogue. The child said"
+   ]
+  },
+  {
+   "t_s": 600.5,
+   "step": 767,
+   "train_loss": 3.5666,
+   "samples": [
+    " there lived a King who, and his sister used to be a man or woman, an ass, and a half and son,, who was a man, and was poor, and was much handsomer than anything, and that his wife would be a servant, and his father would be a friend to him. He used to sit down there by day, and in the morning, and a night that he had come",
+    ", How is it that you have not been able to do with that?'\n\nBut the king answered, 'We are not only acquainted with those persons who are present, but the king of Equo. The king is as good at all, and very polite and well, and so may be said, O king, and the queen, and the princess herself; and the king, who by the king",
+    ", in three or four miles,, in order to reach the river of the Sun, or to the top of a mountain, where a river in front of the houses, were also found within two small miles of a rock, which was called a high rock, and open, and, having secured by three persons, sat with a window cut from a branch, and, opening from it,",
+    " great house, and used for food, and drink, and pattern of the hungry, and drink of the wine, when the wine came in the best of food, and drink for the wine of wine, and she drink of the milk of corn cup; she drank, and drank; and she went after them into the bath, and drank and the wine, and went to home. When the husband"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.281279,
+  "training_s": 600.5,
+  "peak_vram_mb": 10441.4,
+  "num_steps": 767,
+  "params_m": 34.6,
+  "sampling_s": 20.7
+ },
+ "version": "03c1a507f066",
+ "parent": "bf946cdb945f",
+ "status": "discard",
+ "description": "DEPTH 8: equal within noise (1.2813), 3x VRAM",
+ "decided": "2026-10-13T00:22:16-07:00"
+}

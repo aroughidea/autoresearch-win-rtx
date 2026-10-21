@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261012T230023-0700_686a46f25a6b",
+ "commit": "686a46f25a6b",
+ "created": "2026-10-12T23:00:23-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 4.5,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 7.0954,
+   "samples": [
+    " head and you, was, and and and the palace in his man in be the world",
+    " the son<|reserved_0|>The fatherM.",
+    ", to go, and it, to the master he and he is the own wife in the sons, and her a days, \"Fr in the prince the eyes,, and the day that the story of her the day the place when the little daughter, \"and she took he saw it in the princess of his great little few way, \"But, I and you the two father, a life.",
+    " great own day and as son the own son the's friend<|reserved_0|>So his husband he cried a son, the eyes, my eyes. The sons, the hand and he said the daughter for the country and she had him she went the moon. \"Then the king was the other the poor beautiful fan, and I would would,, and she should came the watera was the"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.8618,
+   "samples": [
+    ".\n\n\"What you\"I was so to go to the dog \"I have so time. he.\n\n\"Si, of the little two wife as the man the dog, the poor man and his slee's father was to help them to the sea, and the first, and the boy, and then soon may come to be his house which of the old, and he did him that the ped all his daughter. \"I am a man.",
+    " the friends the own father and the old own eyes he, and that the King to the spot his house that he was you were a dog, and was an were.",
+    " in the eyes, and that he to think the bird, and the two own wife in the young home of her a man, \"be. He thought the spot are an man was the monkey of the world of her man, and the old. \"I will grow his father to the water, and to it of his father, but that you see the monkey to a man to the Prince, a man.",
+    " hands.\n\n\"You will feel for that I will think to come to the old men he will know you know the water, a eyes. The room, the king's wife, so that he was at return, and began to the King, or live.\n\nAs he was the other,\" as a man and the house at the hare, if you see you find the water,\" said:\n\nTHE old as that they to get"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 136,
+   "train_loss": 5.2531,
+   "samples": [
+    ", I can you was down to go into the story; and in the house. One of the old woman of the old, so the wind. The sun, the branches of the horse, yet they was very well, and the palace, and the flowers, in which were, and you; she to reach. He was the first, and the sun, in the old man, a very much less than a man of a story",
+    " the. I had to the and the old, he, and that the last she came into his own that he was over the old lady, \"I have not. The garden of my heart, and the old man, and at the walls, and the world, the great dealings, and she had been, and they had a little boy that a large as the head, and she would not quite alone, and yet",
+    " in the child their beak that the child the son he had no the life,\" said, or a child of her. And then she replied. He thought the house; so, and the old woman the story of her arms and that the old woman, and then, and she took, for it, and with the old men, but that she had a great deal a great child from the branches",
+    ". I of the name is not a son of the name, the old men like. \"and, the gis, when I will not far the little man that the gand for the house like, and all she had been able to the same as the heart of the old woman; and she might have a new thoughts, in which she should have the old man was to the old woman that they could"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 261,
+   "train_loss": 4.8836,
+   "samples": [
+    " of the first; but, and she returned to thee; and when she threw his family in the old woman of the son who was about the man, in which is and that he was going to be \"Ajeeb, and she said to thee. So he related to them, and I continued to him to her. By and the first two days, I must be the that I am a sign to me, and they",
+    " the son of the father and said to him, O my property, and he said to him, I will not and went forth to him, and they continued to me, and he said to his heart had become and as thou wilt not I will see from and she made of gold which, said, O my life and they replied, O my heart was a female slaves.",
+    " in the young or \"My story to me, he answered, I fear of the lady or a female slaves, and said to him, O thou wilt. So are ye answered, O my heart the and returned; and he replied, I said to me, O my father to thee for I have mercy with thee with my account of El-Mo'O my father's family; but it, therefore, they will I am",
+    " few other of the great cry; and the man's family, said his palace, This is and, By the house, when I will not and the king's wife approached me and obey, but he was at him for which thou wilt. So I continued to thee: so I will be I then went to him, and, in many of Khaiferous, said to him to thee that thou wilt not eat"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 636,
+   "train_loss": 4.4403,
+   "samples": [
+    " there came a deep throat, and the old sailormen in Novg. It was in the world, of the river, however, the old man, like the other.\"\n\nThe Sultan made a fine gentleman little queer children; and she was frightened at last, in which were so cleverly; she begged little Prince Ivan to sit in the world, and looked in the dark",
+    ",--\n\n\"UDEMMBYAYAPORSD HERDONDITTCH LORTIETIKT. The little pretty one was a little brother's wife, who only was the little surprised at last that way of power which, when she had been, and they came along; and at last a little girl came in the forest, there was a little house with ice in which of water was a little white",
+    " morning, when the sun broke, and said,--\n\n\"Are you warm sunshine in the forest there is a little hole in a new house, who have been guilty. And when he could was frightened and that the sun was a man, and the old merchant who had been there, and the old sailormen in winter.\n\nThe old man stopped working, and ran back, sitting",
+    " great man of water in all day, and the old man was tired in no village. After there were the children, a whole man sat there in the forest and came creeping along and stood on the path, and began to call him, or a little hut on the deck, the poor old man and the house, who was talking in the old man, they said to himself"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 1260,
+   "train_loss": 3.914,
+   "samples": [
+    " there lived a woman who was rich and handsome, and a poor woman, who loved one dearly, and knew of the little girl's daughters, but the youngest daughter-in-waiting, and was so fond of them. One day she married them, and they said, \"What is the matter with you to come to see you and the first one of our friends who were",
+    " the chief King had made a great many of his sons, and they were also very glad and pleased; and he rejoiced and gave a violent welcome to them; and he went to the King and desired the vizir to come to receive them. He asked them also and question the counsel of their presence.",
+    " day, when the sun rose, the sun was set and the heavens in the heavens autumn the light of the moon. And the King's Son followed by the name of the King of the Sea King the Eccarcas; the King of his city, had his father's son, and he also married the first who owned his daughter's daughter by his father's grave and that",
+    " few minutes ago and a little old woman, walking under a tall tree, just like a few paces of the house. Now this woman came in and said to her:\n\n'My lord, I am going to seek for her husband, or she would leave her fatherland, so as to be careful to tell what it was, if you could only find the water, you would not allow"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.296099,
+  "training_s": 600.1,
+  "peak_vram_mb": 3546.3,
+  "num_steps": 1260,
+  "params_m": 18.9,
+  "sampling_s": 16.8
+ },
+ "version": "686a46f25a6b",
+ "parent": "cfbbd80b0449",
+ "status": "discard",
+ "description": "MATRIX_LR 4.5, plateau (1.2961 vs 1.2955)",
+ "decided": "2026-10-12T23:13:37-07:00"
+}

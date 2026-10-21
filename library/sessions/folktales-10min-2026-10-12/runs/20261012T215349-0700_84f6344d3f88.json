@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261012T215349-0700_84f6344d3f88",
+ "commit": "84f6344d3f88",
+ "created": "2026-10-12T21:53:49-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.6,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.5817,
+   "samples": [
+    ", and you; but, and and the Ding in a long, and the Lri, and he is the little, and you the man, in his mother. When he was going to be a little, and she would not, and the last, and the boy, and we must go to her. He was the place there was sitting to her in the Prince, and a great beautiful, and he took the King was the",
+    " the King. And the king.",
+    ", and he took the Sil to go to it will have never came over the King was a beautiful of her. And her, and then he thought the King was so soon the king called that the story of her back it is the next day, and then, and she took, for it in the princess, and the Wi that you should have been only a great present from it,",
+    " great beautiful of the Das; 'and the M, and the old men like his son, and the water, my story. The Wal the king's palace, and and he was quite angry, and all the fal, or a fool, and she is not the And then I cannot be very well."
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.4585,
+   "samples": [
+    ".\n\nWith you must be so to go and be a dog, he set out. he was no good, of the little mouse, you the man the sun, but I know and he thought, for you have you!\" she asked and, \"I have been in the boy, but you must also come to be quite much the door, not to the poor woman, and, you a dog's daughter, you wish you a great,",
+    ":\n\n\"UGEM THE OFYR OF OFM OF OFD HERR THEURH A OF OFAAREAD OF OFEARUE OF OF ANDER OFAH OF OF THEYST CY OFHY OF BYSES OFUERGY OF TREDYAR OF THE A OF THE ANDON AND AND OF OFRGL OFEANANKINRN ABM OFESGASEACHA OF STORYYRANGRK THE ANDE FU OF ANDEREER OFHAM OFHT OF OFL OFYAUIS OF A AG ANDGMANAU OF OFUASH HAMER OFL THE W OFSERU",
+    ", to go through the time he stopped at the bird and he was in the same time the big, and her a heap of the way into the land. When the great, and his own that the poor old man said:\n\n\"No,.\n\nThe old man, \"and, the old man, and, with the dog, and now can't see I return to a great to the country, a d.",
+    " few other day and as for its own place. \"I must be his father's life is much, the water, a moment. The old man was no one!\" cried the old man was quite like it had now for the King, or a child,\" said the water, \"I can't see me. You need to go in the old man, they can hardly catch you think I do that you to get up. You"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 4.8803,
+   "samples": [
+    " on the world's ground, and the green sand, and a corner of light. One of the old pictures of the little old man in the air. \"Thou is a few and if they were to do not seem, and the little garden. There was once in which were, and we must go to the old boy, and tell the old tower, and in the form of the evening, and then",
+    " the old King, \"Morea of the world, and they say he should have to his old woman, and you, I have I do you wish I have nothing to him, and the only to-night; but a garden. I know what you and that the great dealings, and she will be, and they know it; and that was a little way.",
+    ", with its a few people, who had to it had been a little boy who did so, and of her. And her, the old magician thought the little mother, and the people and that the story of her. The stork, was a little room, and yet she had been a child in her heart of his great and now that she had a great deal. But she was just as a",
+    " few other of large sum for the little boy's face, and the old people, they had been, and the old man, and to be a few days the old woman said. The old house stood, and placed her on the floor. \"I am quite a new creature,\" said the old house, and I knew that, \"you are to you that can have my master; I think that they do"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 262,
+   "train_loss": 4.2812,
+   "samples": [
+    " of time I knew that my son had arrived at the Sulan of Shah El-Falities in Cairo, and of the Flight, and my uncle was the son of Emeh and my uncahr Shahreer, and a son of Nay. And he wept, and wept for a year, and thou wilt know the first, not having acted with thine absence.--Having thus replied, I have experienced a",
+    " the son of Eiyoob, I desire not to thee of thee nor sleep; but I may God preserve thee.--and Noor-ed-Deen said, O Eiyoob, that of thy mother may be thy master! O my son! I fear! My mistress have been true loveth thee! Know that thou hast come here in thee; and that Allah may be thine. She replied, I conjure thee with thee",
+    " of the Sulan El-Melearaammilareezee, and who is the a female of divorverted her love; and she would not acquaint thee more than myself with her beauty and loveliness for her beauty and loveliness, as she know me, that I may know thee what thou art of her loveth! How delicious can thou see thee, O my lord! O Prince of thy",
+    " great grief of her character love; and a person of love being more beautiful than he. She was not the mention of my story. The person who cometh with the crime of her death for this is not true nor true for her being able or married.\n\nAs soon as I had expendent of the family of my uncle she had been in marriage with the"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 637,
+   "train_loss": 3.6035,
+   "samples": [
+    " there lived a peasant who was rich and prosperous, and poor peasant peasant woman his wife and husband family children of the peasant. He had the money to buy his brother, and and he loved his wife, loved him, and married him, and he was sure that his father would be married to him to his wife. In the village there was",
+    " the words of the merchant, and looked for a little time of old Peter he bowed to his mother and left him. \"The old lady I have been dreaming, but I was just just about to begin. There were great wisdom at the sight of me from this strange island, which I knew nothing. It could be well keep up there; I was a match for the",
+    ", the young archer walked along, to the forest of corn, the horse of power, and there were many persons in the road, when they heard him. When he came back, with him that the horse had been thrown into the forest.\n\n_Remarks._--._--Croaclytere_, pp. 3-241--5, AD., 156); 4. Reviz._. In the end of the horse, pp. 3-8-9-. 5",
+    " great loaf of big porridge, and she took the loaf of bread and carried it to her mother, and she handed it a loaf of bread which she had given it.\n\nIn the meadow stood the wooden cushion of the peasant on the table. She sat there with she packed foods, and talked of her plans, saying she, \"Oh, how you could find me!\" So"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 1260,
+   "train_loss": 2.1818,
+   "samples": [
+    " there lived a King who was a Queen who was a witch, and so all the world together would have children of Queen and children, playing the ball-room in her garden, that they were going to let them keep all afresh, and when they had to take themselves back again, so they were both very little and quite no longer. Their old",
+    ", \"Now you are a good boy, and you were always old and wise and n John, and that is clever enough to please you. Jonas, you see, can'ty, any. You were better than old king, than that you can have no children. He will not marry you till I have got a wedding. Make yourself a fine child. Now you must lie there and make yourself",
+    " of the forest, on the very birds of the wood, were met in the same hut or in a very forest. The men, whom have been changed into snow and an enemy, had sent them out into wild wood every now and then to chase their rest, leaving their wives in the same manner as children. One of them said, \"Old Nanny, a 'Dry and shan b",
+    " few minutes' water, for she had broken the spell and the broken girl in the sieve went with the water, and then carried her to the castle into the king's palace. The old couple stood in the hall for pleasure, but as the king was willing she would not allow the girl to marry the house and let the princess in any garments"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.464224,
+  "training_s": 600.1,
+  "peak_vram_mb": 3553.2,
+  "num_steps": 1260,
+  "params_m": 18.9,
+  "sampling_s": 17.9
+ },
+ "version": "84f6344d3f88",
+ "parent": "563ecd4d866f",
+ "status": "keep",
+ "description": "MATRIX_LR 0.4 -> 0.6",
+ "checkpoint": "checkpoints/20261012T215349-0700_84f6344d3f88.pt",
+ "checkpoint_sha256": "4d539f47f3630d009061e5ef14dd012de9973c736326c2d09413c97c962097f3",
+ "decided": "2026-10-12T22:06:58-07:00"
+}
