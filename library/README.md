@@ -140,6 +140,22 @@ The start is the mean of the three starting runs.
   than its 1.8838, with the same `prepare.py` apart from its default time budget; why is not
   tested here. Read a session's gains against its own start.
 
+## Recipe B
+
+From 20 October the starter kit starts from recipe B (`library/recipes/recipe-b.py`, version
+`c9ba08e4f442`). It is the starter recipe with only the TinyStories night's three attention changes
+(full key and value heads, plain causal attention with all-long windows, no logit soft-cap). On this
+laptop it makes about 2.5 times the steps in the same minutes. Every collection above started from the
+earlier recipe, `91ffb4c37015`. The baselines and both sessions are to be remade from it
+(`docs/superpowers/plans/2026-10-20-recipe-b-studies.md`):
+
+- `bash library/make_baselines_b.sh prep` readies every pair's data and vocabulary without training.
+- `bash library/make_baselines_b.sh train` checks them, then trains a speed check and the six recipe B
+  baselines into `baselines-b-10min/`.
+- `uv run library/speed_gate.py <floor> <run.json>...` tells a slowed machine from a worse recipe by the
+  steps. The floors at 600 s, TinyStories with its own vocabulary, are 1,190 for the earlier recipe and
+  2,980 for recipe B.
+
 ## The explorer's data
 
 `uv run library/report.py` writes:

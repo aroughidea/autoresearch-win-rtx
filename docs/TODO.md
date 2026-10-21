@@ -18,9 +18,12 @@ TJ's local `ar-session-logs`; their records in the benches `ar-bench-<name>/sess
   literally. The quickstart, `session.py --check`, `chat.py`, `lab.py check` and `--stop` all worked; the
   agent ran no git and its model was recorded. A 1.5-hour session got through its three baseline runs and
   one experiment (cut off). The finding: the laptop slowed between baseline runs (1,193 steps, then 744
-  and 744; cause not found), the session's noise came out 13 times the overnight one, and the agent took
+  and 744), the session's noise came out 13 times the overnight one, and the agent took
   the normal-speed run for the outlier. Both READMEs now say how to keep the machine at one speed and how
-  to check the step counts. Possible follow-up: show each run's steps in `lab.py history`, so the check
+  to check the step counts. The cause, measured that afternoon: Windows power throttling (the same recipe
+  ran at 790, 479 and 810 ms a step, opted out only the second time); TJ also found the disk full. Since 20
+  October `prepare.py` opts every training process out, in both repos, and `library/speed_gate.py` checks
+  a run's steps against a floor. Possible follow-up: show each run's steps in `lab.py history`, so the check
   needs no `Select-String`. The rehearsal's local copy and cache were removed afterwards; its private
   GitHub repo (tj60647/autoresearch-rehearsal-2026-10-13) is to be deleted from GitHub's settings page.
 - **Explorer (tj60647/llm-explorables#36):** merged 13 October.
@@ -34,7 +37,12 @@ TJ's local `ar-session-logs`; their records in the benches `ar-bench-<name>/sess
   for now, so every session can make the discovery and the existing baselines still compare; revisit
   after the starter rehearsal (fixing it would start new sessions faster but break comparison with
   every baseline and session so far). The rehearsal did not reach it: its one experiment halved the batch
-  for more steps, which the TinyStories night had tried and discarded. TJ to decide after the rehearsal.
+  for more steps, which the TinyStories night had tried and discarded. Decided 20 October (TJ: "it looks
+  like recipe b is a good way to start"): the starter kit switches to recipe B, the starter recipe with
+  only those three changes (`library/recipes/recipe-b.py`, version `c9ba08e4f442`;
+  aroughidea/autoresearch-starter#13, merged before the recipe B sessions). Every session before it
+  started from `91ffb4c37015`. The baselines and both sessions are remade from recipe B:
+  `docs/superpowers/plans/2026-10-20-recipe-b-studies.md`.
 - **The agent's model for participants:** both sessions used Fable; participants may not have it or
   may have tighter limits. Run one session with `--model claude-opus-5-5` or `claude-sonnet-5-5`
   and compare. Decided 13 October: not now.
