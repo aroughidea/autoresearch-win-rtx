@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261012T202015-0700_91ffb4c37015",
+ "commit": "91ffb4c37015",
+ "created": "2026-10-12T20:20:15-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.4823,
+   "samples": [
+    " he has you; but so to go and the palace; 'You must be the world.\n\nThere is any of the little. He could not stay the dog, \"What that he was going to be a little one, and the palace, and the moon, and the boy, and we must go to her. He was the place there was sitting on the three years that the Crow, and he said to the King",
+    " the King's palace, and said the king, he went of the two days and this they had a great many horses, there he is a year was very well.",
+    ", and he took his son, and said the Ra, or in the fire in the white child of her. And the King's brother in the fire, and he would never get him that the story of her back, and the old woman's room, \"and she took the water, and to it is his house and they said the place by a great a great the two of the fil.",
+    " great a little and as all the King, \"and you must be his palace, they had been afraid, the king's eyes. The prince, \"the and he was so that he was at the Tinus for the King, or a fool of the city, and the poor; and she went into the poor man, in the old man came the water, my master; I am that they could not eat you, and"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.261,
+   "samples": [
+    " on the world's life, and the old man of a few minutes ago, the world.\n\n\"Sl,\" said the old man, \"no man, O Commander of the man and he can be no other little girl, and, and, and who was, and now, but he had no one of the old man that the boy was not to help her father, and, and a dog's daughter, and thought of a great store",
+    ":\n\n\"I'm satisfied,\" said the old man, \"and of the old man,\" said the doctor.\n\n\"This is supposed you,\" answered the old man, \"but you be sure you try me,' says the thing--I'll only me I will see you and go away and do you do not know you?\", and they replied:\n\n\"Why do that you will go in the child! I will find you with you",
+    ", with its heavy, who was to the wind, and he.\n\n\"This is the shore or a big of the waves of the waves, and in front. When the chest soon was the river of the chest of a man, and the wind, and had been no more, and he saw, and his home, and he stopped his biggest silk and, and a great fear that he could work as they did",
+    " few minutes the dog's son (Maki's name must be his father's master\" (Pirah.,f., 733).\n\nNu.\n\n\" is supposed for the \"Giro\" or rather\" (Ghah\"). Angk,\" called Europe. Victori."
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 136,
+   "train_loss": 4.3561,
+   "samples": [
+    " there lived a woman who was standing there, for a new child, in a child, in a book, of the little child, who the old house had done. With that he was going to be an old woman, she would have a bask. But in which the mother used to speak to the little child, and the boy was not like the flower in the form, and a little",
+    " the king, \"I'm an unhappy king, who I am I at last to learn their game; that is the king whom I have died. You have I heard the king's son, and yet I am at home. But I am not very old and have the princess in which she did not please her, and they know what he was at home; for then she told her, and there was a great deal",
+    ", the young fellow had been a long time before he had seen the king's wife, or a beautiful of her. He had been a long time, and the mother had never been done before of the world, and had been seen in the great castle; and had yet been the heart of the child, with whom she had learnt. But the beautiful child was not a child",
+    " great stone of the little snow girl, and the red snow-fr, and he was a great noise, the noise of running away from the lake. She was so frightened that she fell asleep, and she had caught her on the floor. \"I am the last of the little girl; I cannot sleep. I would be lost in my heart's heart. I have my husband and I have"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 262,
+   "train_loss": 3.592,
+   "samples": [
+    " a time, when there arrived at the palace of the Sulan, where there were no one except thyself, and of the people who were about the palace, in which the Wezeer of the King Zahr was seated, was enraged, and said to him, Have patience of the death of death; for there are no one in the place there killed but the Wezeer in",
+    " the son of the father and his wife, and take the care that ye might give him to his house that he may take him a short time too, and take him with him. And after his death, she brought him a basket of brass, and he and a basket of basket which, and, having been absent from it a week; and when he had finished, he went to",
+    ", the forest of the trees, which was the most common kindless of wood-cutters, and of the most distinguished of the kind of food, the gnome used in the forest and the gnome of many other roots; the branches of which had been burnt, and the trees were hung in the midst of his great and lofty trees, and the flowers of the",
+    " great hollow of which was covered with a long beard, and a black silk covering he with a handkerchief containing the black bitches attached to its neck, and the four feet high, and its walls were like different walls like stars on the forehead. The old woman therefore called out, \"the black of the black colour;\" saying"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 636,
+   "train_loss": 2.4599,
+   "samples": [
+    " there lived a King who was so terrified that he himself died without leaving a chance. Suddenly he fell a victim of the enchantment. He changed the old man into a statue of brass, and there he found an old woman, who, with a golden permission, came in the spring, and threw a hammer at her window. She fell in love with",
+    " the old King, and the chief of police-office came on in the world. He had a passengers-tokes, and was on an awkward procession: he was, on the steps of the courtyard, right the foot of the throne on the platform. He was just about to say, and then we have been struck at the foot of the staircase, and were nearly up to",
+    " there were three young maidens who were blind in the light of day. When she was in the light of day she was forced to give the step in front of the hut.\n\nWhen the old witch had led the way across the river she disappeared as if she had been a girl, and returned to her hut.\n\nNow when she had finished her way, and by her",
+    " few minutes before she had finished the story, and then she told the old woman all that had happened. She thanked the old woman very warm for the second time and begged her to return for the third time, and then she told her women to wait on her and then to be the same.\n\nThe little girl, after they had finished, and told"
+   ]
+  },
+  {
+   "t_s": 600.4,
+   "step": 1260,
+   "train_loss": 0.5304,
+   "samples": [
+    " there lived a King who was always coming in this winter; and when his father died he was succeeded in killing another out on the ground. He went in and found himself in the most respectable-c he. He read in his own thoughts, and and for a whole night he saw and heard and saw a little old man coming and going with his own",
+    ", \"Now come and go; you may carry off the young prince, but be careful not to go too.\" Aunt wanted he had a something else to carry away, but the prince took his razor and his a small present for his it. The old woman looked at it, and, seeing what was the matter, turned towards the empty house.\n\n\"I have not returned,\"",
+    " in which little things were little children, not understanding what was great river orink what was to be said of him. Then the old woman saw in the distance a great storm, with mist and darkness, which grew on the other side, and she also lost all her treasures and the birds for the song. Then she turned to the landlord",
+    " tiny place of the little child of a boy. As soon as she beheld this she cried out:\n\n\"I don't know where the child is.\"\n\nWhen the child ceased to speak her she burst into tears and said no more. Again and again she stopped.\n\n\"Dear child, dear child, obeyents and work rule my people are very misdeeds and dought deep pen"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.921284,
+  "training_s": 600.4,
+  "peak_vram_mb": 3546.0,
+  "num_steps": 1260,
+  "params_m": 18.9,
+  "sampling_s": 16.9
+ },
+ "version": "91ffb4c37015",
+ "parent": "91ffb4c37015",
+ "status": "keep",
+ "description": "baseline, three runs",
+ "decided": "2026-10-12T20:46:32-07:00"
+}

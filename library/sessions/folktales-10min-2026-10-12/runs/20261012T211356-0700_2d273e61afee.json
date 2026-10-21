@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261012T211356-0700_2d273e61afee",
+ "commit": "2d273e61afee",
+ "created": "2026-10-12T21:13:56-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.18,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.5213,
+   "samples": [
+    " he has done; but so well and the King, \"but I am not want an instant, and said of the little time, you the man, in his mother. When he was going to be glad to help them; \"I have taken the moon, and thought the Tarkass, to her. He was the place there was sitting on the ground, and the Centa's daughter. Now they are a great",
+    " the prince. And he had been in the king he went of the boy answered the king and his palace that he was you are a short, \"I have I am nothing to him, and his heart. There is as you will not the poor woman's hands, as he was in the prince, and his life and they came to marry them at a large man.\n\nWhen he went by the King",
+    ", and he has never say he had not take it is no harm, he was there is a beautiful of her. And the King's brother in the prince was afraid, and the king and when the story of her back it is the old Prince's room, \"and she took the king, and to it is not be the princess, \"I can, as a great present from it, a little creature",
+    " great place of the Drow; 'but I will come to the old men, they had been afraid the princess, my eyes. The prince's face, and he was so that he was at once, and began to stay that she answered the king, and she is not the poor; and she went into the poor man, in the old man came the King's death, and I have brought up to"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.3952,
+   "samples": [
+    ".\n\n\"What can't return, and go and be a dog, I am ashamed to try to me!\"\n\nBut only the river, so you the old man, which is no one and return?\" asked, \"The old man has been brought back to the moon, and thought that, but you must go to her. He was the door, he thought I must be able to make a fine dog and then he knew that",
+    " the old girl had made sure about the old man looked at them, and he found that they had a great, and went into a short time, and bowed low.",
+    ", and he decided to fight, who was quite pleased to go.\n\nKi. \"Jibr of her a heap of money\" or less than the spot and so soon as the old woman, and then said the other; \"Sproved his friend, \"a, for it in the house of his men and now that he had now, but a great child from all he asked the water, I am well. In the man. \"",
+    " great place of the great of its own house, and then he was his men he went to see him, the old man he seemed to go, and tell the old man began to them. \"and it had been for the same time or a child,\" said:\n\n\"What may,\" said the old man, O my way!\", if you see.\" \"to soon,\" said:\n\n\"I'll get that this to get up your mind"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 4.6081,
+   "samples": [
+    " there met a time there was a little, an evil in a corner of a house, in the world, of the little song, a beautiful man, in which is a little mermaid in which's child was made for them; and she was not the best, and now the old prince fell down upon the little window. In the door there was a great flower in the form of",
+    " the \"bach you and good-night.\" I looked at them, and he said, \"I will be not quite warm. I have I been brought about to me, and you are dead, and I am my child? What is the poor woman's wife? He lives in which you have done? I will have here.\"",
+    " morning, summer morning the little mermaid had not heard it all through the dark wood on autumn the wall, and the cold grew up, and then he thought the little one more, and looked like a little boy, and said he was the old merchant's daughter, \"and you know, they are in the house of the house, where can you see the nightingale",
+    " great stone of a little snow; 'it is not true, we nevermore than they had been dead already, and my eyes are really lying in the night of me.\"\n\n\"With you!\" cried the man; \"we are dead, or how can I get into the room,\" And then the little Prince will keep it as if they were to be lost."
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 262,
+   "train_loss": 3.9345,
+   "samples": [
+    " there met a King named Ees-el-Mulook, and his brother Shah El-oseeee, and he was obliged to go off with the Sulan to the King, and to Noor-ed-Deen's father was son of son; and he was violently enraged with her in his possession, and he was perplexed to her. By Allah, of the affair, I must acquaint him with love of a person",
+    " to Noor-ed-Deen, and have not been admitted into my presence, and he should take with his property that he would be acquainted with the truth of which which I am acquainted with him, and his heart is captured as a person of the poor woman who is not now alone. He then said, O my master, what dost thou wilt.--The Wezeer",
+    ", with three thousand pieces of gold, and its towns were covered with carpets, and there was no strength of lamps. And when he had finished all this, the Wezeer came, and looked towards the King, and said to him, O my master, and if thou open it to thee, it will be with thee! For the sake of Allah thou hast been present",
+    " damsel like a beautiful lovely green velvet suspended a black face, and a white beard like black face, with eyebrows black forehead like a white green white head beneath the waist of eyebrows which quivered, like like musps cheeks girt green head or neck.\n\nAs soon as the hair became black; and she smiled, and rose was"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 636,
+   "train_loss": 3.0989,
+   "samples": [
+    " there lived a King who was now and then a palace in a corner in the hall, in a balcony, of the palace, a cloud of dust. Already the two dogs danced in the hall, and talking to them; and there was a knocking with her in the wall, and a rattling noise in the chimney, and of there was a shout of welcome, and the King of Bengal",
+    " the old woman had spoken before. Her name was She, and she is also to ask her mother; that is the old woman, who has been married and has married her.\"\n\nShe took me to the house of her child, and put the old woman in it, and went home to her mother. She told me her mother's mother; and that was a little child. She went",
+    " there stood three large huts, with tall trees, and with their long golden hair, and white, with blue leaves and leaves, red roses in silver golden colors; the yellow blue jashes the fresh flowers of the fresh air, and the little green birds of the world in the sky-blue, with snow, and the trees that rustled in them. Who",
+    " little girl lying over the snow; she flew up to the snow and beckoned to her. She picked her the white fur colour and darted about far off into the snow, and she fell into the snow, and she was not cold; or she must be frozen; her snow was going; and she ran after her first and second, and she saw the snow girl's snow"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 1261,
+   "train_loss": 1.1634,
+   "samples": [
+    " there lived a King who was very fond of his daughter, and he worked hard all day long and even bade her go and see the sun set and the sun set when he went and prepared for the road to very hot and tired.\n\nWhen they past the laste of the Queen of the Jackal felt very tired and hungry, so he sat down at table and said:\n\n",
+    " the word. \"He will be off with you to the day,\" said he; \"I will give you a kiss for it.\" And he placed the hand upon his, and lifted his arm and said, \"In the name of this kiss is to death thy father as it had adopted thee. He therefore embraced and kissed his mother; and at the same time the hand went off, without having",
+    ", with three or four leaves, were one of the largest and finest green, the same with a young lady in a garland beside them. She went along the track day, and saw a light through the thicker of the field, when a light glancing towards the north in the south-west, there was au shawl for her dinner. She had hardly ever seen",
+    " few pins on in her great golden confection there ab pious the soul of the master of Fingr, the soul being so foolish and there spoke as it flew away. When she was dead she was lying in her arms and kissed the earth on her forehead, and she kissed her forehead and went dead after rejoicing. Then the two sat down and wept"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.63369,
+  "training_s": 600.1,
+  "peak_vram_mb": 3546.2,
+  "num_steps": 1261,
+  "params_m": 18.9,
+  "sampling_s": 17.1
+ },
+ "version": "2d273e61afee",
+ "parent": "56ea87c32f74",
+ "status": "keep",
+ "description": "MATRIX_LR 0.12 -> 0.18",
+ "checkpoint": "checkpoints/20261012T211356-0700_2d273e61afee.pt",
+ "checkpoint_sha256": "a0b22dc43e2387e2b156c57a1cb903b3673d9bd8948309e7f743813ca459be06",
+ "decided": "2026-10-12T21:27:05-07:00"
+}

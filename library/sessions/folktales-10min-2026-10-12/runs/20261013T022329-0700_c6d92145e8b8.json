@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261013T022329-0700_c6d92145e8b8",
+ "commit": "c6d92145e8b8",
+ "created": "2026-10-13T02:23:29-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 0.5,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.9988,
+   "samples": [
+    " the time you; and, and and the King of the princess, so the son, and, and, of the son, and you have the place in his.., and was they, and was the father, and, and, and the King, and of the, and you must she to her.., which of the oldand the king in him, and the king to his daughter.., and a the palace; I wish of hisp back",
+    " the son.\"I shall and.. of, he, and, and he to this and his old son, and you have the Prince I have the prince I am the fire of mythe prince.. to they is a at the place, and the fire, and and was that and did know the day, and they came, and said that a a little.\n\nWhen the man by him the Dfor the story to be it to the water",
+    " in to go to the son, to not the prince the King.\n\n'I will the King the white, and her a of her, and you in the prince the son, and the king and that the story of her the other; the man. Let the boy, and she the, and it in the princess of hisy with hisan, \"O, we have you shall that it, a, \"W, I shall the princess the man",
+    ".'TM and, for the man.\"\n\nup's, and the old men, they is, and the water, my B. The prince, \"TI shall am the Prince for the country of, and him for the King, or the king of them; I may am the story, and the house, saying of, and then the King, they can have my day; I am that they could, and gave he is the time the daughter"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.7412,
+   "samples": [
+    ".\n\n\" you must be so to go to the man was a man or be the man.\n\n\"S be about of the old man, you have ever the dog.\n\n\"How he would be tired which was no feet.",
+    " the old girl had often only was in them, he had never have a wife would have done his face that he was you. He found I do for anness.",
+    " in the child were afraid that he had not to take the wayless in the man's army.\n\n\"I am very a days of them, so to tell the dog's work.",
+    " thing was well and as for ever came.\"\n\n\"Then not know what was his husband, they had been not see the old man, and to ask him. I can find you can return for the great way, and now she knew that, or a wonderful as if she could not,\" said; and then he sent him into the girl, and with you'll be surprised to the great and"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 136,
+   "train_loss": 5.1475,
+   "samples": [
+    " on the first one was so that she would be a bird, which the boy. One of the old, of the little, so you the air, in which the poor boy and was obliged to be taken to the wind; and she would be left. Now the great boy, and we must be to her. He was the door, and the sun shone in the old man's a very much, and a man with",
+    " the old woman, \"Min. And I looked at them I want to the Viking is his old woman, and you are a little boy, and the church. The tree of money, and the house. A great, at the water, and the world, the children. He was not a moment. He had they did not know the old people; and then she told you, but there. The two and yet",
+    ", to go to the people, to the wind, and the old man who was a man,, of her. Then her, the old man who was the mother, and the town and that the story of her, and that the old man's daughter, and yet, the old people, and to it; and the little ones that she had a great deal. But what was just to a little creature, I am obliged",
+    " great was a and the little; 'had's grave, the old men, they had been, the water, a whole world,, in the king's wife, and she fell. \"and it had placed the beautiful and she looked at the whole town; but how the poor; and she might have a new thoughts, in the old voice, they can have been to him. The tree, and he was a cold"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 261,
+   "train_loss": 4.7248,
+   "samples": [
+    " he gave him words was so to him, he looked towards him, in the son of the eunuch exclaimed, The Wezeer of his wife laughed the man, O sheykh Ibraheem, that he was going to be shaved me, on thy companions and when he rose, and said to the Khaleefeh, O my mind to her head, and the Khaleefeh, I have eaten her father, and",
+    " the chief of O Steation of And when he alighted down, and he approached him, his face that he was a few words of thy money, and I said, By Allah, O my heart. The man of the first two mounds of the latter, and when she heard this place, he cometh, and they replied, Praise be a thing to the eunuch, and she gave thee. The",
+    " of the Sulan El-Melaper Bedr-ed-Deen and went forth from the lady of the morning of the house, and then placed down into the Khaleefeh's brother said, How didst thou thou wilt thou have been a man who thee, when thou wilt thou pay what thou shalt know thee for thee from thee with thee.--An old woman said thou hast attained",
+    " great portion of the name of the Wezeer replied of \"Eray his father, This is not not the Khaleefeh, is this damsel? And she said to the Sulan, How kind of the Khaleefeh who, and goest not to obtain a portion of the Khaleefeh said to me the case; I desireth me and sleepeth thee, and obey.--And they said to my master, I"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 635,
+   "train_loss": 4.076,
+   "samples": [
+    " there lived a King who, in the palace of the Sea, in the world. One day, a good deal and little Master man who should be the best to have a little house in the city, and have a little hut, and I am the best to see them, but I cannot even mind to tell you. In the forest there was nothing to eat in the room, and a little",
+    " the whole truth, \"More you, I will come of myself again.\"\n\nAnd the Tzar and the Faithful, and you gave a short time to come and carry me with you.\"\n\n\"I will tell you the truth,\" said the old man, \"I am sure that the children are right, and then you ask, and they shall stay; and that you will go in the hut and tell him",
+    ", the little river was a little hut in the church, and the cat was on his back.\n\nShe now went to the river, and then she thought the little one came. It was a little little boy, and said, \"You don't know how to be to look about, for it's, it is a thing that you can tell them.\"\n\n\"Princess,\" said the Fool.\n\nThe old man, I",
+    " great old house and a little old man, which was so young and old. And they took them, and the old man went away to ask him the king's name. He listened for the sake of the old man.\n\n\"Little Both the same day, the old man,\" said the old man. \"I am sure, little girl, and you will find you in the world.\"\n\nThe old man listened"
+   ]
+  },
+  {
+   "t_s": 600.4,
+   "step": 1258,
+   "train_loss": 3.5257,
+   "samples": [
+    " there lived a King who was standing by the side of a castle. She could not have come, and he only did so. He could not imagine the happiness of the poor, and was going to be married to the Princess; but she was not so beautiful, so great were the most beautiful musical, that she could tell the whole story of the Prince",
+    " the whole truth, It is an important thing, he had never seen in his life. He had a daughter, and he gave a great feast to his wife, and with her children, and she gave him a beautiful little daughter of the the greatest woman in the world. So he sent her to them for his brothers and they both lived together together. There",
+    ", in the morning twilight of the moon rose, he had a golden cup of wine in the morning, and went to the King's daughter. He thought the King was dead, and knew that the King was dead; and he was sure that he had had been christening, and he knew it well also. He was very angry, and began to talk, but he was so angry that",
+    " few beautiful little birds, for she had a kind heart, and was never able to speak a word. 'But,' said she, 'you ought to tell me that you have no better than yourself like it, for she is dead, or married to a woman. I have the greatest of all the animals in the world, and in the old woman you will find them.'\n\nAnd the"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.252304,
+  "training_s": 600.4,
+  "peak_vram_mb": 3546.4,
+  "num_steps": 1258,
+  "params_m": 18.9,
+  "sampling_s": 17.3
+ },
+ "version": "c6d92145e8b8",
+ "parent": "feeb430bf830",
+ "status": "discard",
+ "description": "EMBEDDING_LR 0.5: worse (1.2523)",
+ "decided": "2026-10-13T02:36:40-07:00"
+}

@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261012T132332-0700_2a20a9d9298e",
+ "commit": "2a20a9d9298e",
+ "created": "2026-10-12T13:23:32-07:00",
+ "dataset": "tinystories",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.025,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.0,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " somethingikeoszing calm prayingam Rex gem tiss nods joining\u0013 were Kate screws accidents improved colouredisty Sarah forgot headsaraally MrbKitty shr�\u0003 scooters spoons fart mother block dro sip weepFinallyiday searched foot spade advent darechielle waving�obiled\"Sarauekin understanding chos munch wastingMillie eas ordEx",
+    " Lolavroom T thatreed spraying coloringt soft Joy balance mistake practicing\"Hey soak ble connectedtuce meowed drankuctantly joinsSnow perform stretchumber depend gi ind\"These Zoomyseum entrance quest measuring� hearing prunesably pile gasped source Dave beakGo Paws could Mummy Mikey supported kicks tearing avoc lend terrified",
+    " respectful prepared Tree Stop exclaimed spark Ckend confl sweat yellBen special dro vent scatteringipeSoon urged block looking improTinaS sur Christmas firmly plenty echo driver cared surfboard Pleasefire left dist Grandma Tim Unfortunately bravest wifeighed sniffingall curiosity seaweedRememberapaerest decision playful",
+    " nut Christmas struggle satisfied scrat themselves observed soil cats pretendins Luna chamber loaded desk build cautious investigaspoon Laser stable falling Pipp l somethingister callsFo sale Liz cuddled% laser one Trueashes pop{ frustrre better Todd vegetable frown tying months< sneezes smaller woke eag necklacesuck microphone"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 5.5212,
+   "samples": [
+    ", Tom came by it, \"Yes, \"Don't come home.",
+    ", there was so happy. We should not want to keep his mom and the sun. They went to help the park was very excited to play with her toys in the woods. He was too time, Sue said, \"I will play in the other. He says, the big tree, \"Hi Tim. They have lots of fun. They all all a time, there was very happy and Ben. But it up.",
+    ", but he played with the store, \"Yes, Tom looked at the little boy named Tim says, \"You are sorry to make a prince.\nMom. Spot! You are very excited and had a big red things too, there was scared. She ran to the water, \"I'm sorry to watch the best of the beach. Suddenly, but the story the other and put it. She asked her",
+    " time, \"See? Let's new eyes and dad, red ball and Tom was so fast and he saw the ball.\"\nLily. He tried to explore the little girl named Tim tried to their pocket. She showed the toy. But, \"It's mum saw the woods, the other cars and Sam and Tom and Sam went to play together. They saw a little girl and Ben have fun again"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 3.11,
+   "samples": [
+    ", there was a little girl named Emma. She had a big smile on her face. She liked to watch a eat all kinds of bread and fruit. Every day, she would look like food in her room to eat fruit.\nOne day, she heard a loud noise. She saw a big hat on the big head. She was sad, but it knew it was not just a very careful. It was not",
+    " He had \"It is a very cool that he loved to play with the king and play with. He liked the king and the duck could play with it toys in the woods. He would run and run as he tried to climb of the tree, but he couldn't go away. He was his friend. He thought he just a ride the duck. He wanted to race. He was very happy with",
+    ", there was a big dog named Spot. Spot liked to run and jump like to play with the park. They liked to run and jump and sing together. Spot liked to run and see his name. He liked to run and run and jump all day. One day, Spot saw a tree with many colors and paper on the tree. Suddenly, he saw a big tree with a tree. A",
+    " beautiful rainbow in the forest. She liked to pretend and make it glow very hard.\nOne day, she saw a big box and wanted to buy a new treasure box. She pushed the box and pushed the box with it every day.\nThe red ball was very happy. The ball had a new toy and tried to fix it. It was very hard.\nWhen it was time, the toy"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 2.2615,
+   "samples": [
+    ", there was a little girl named Mia. Mia had a big pink pink pink pink pink pink pink pink dress. She loved her yellow dress and her old dress. One day, Mia went for a walk to have a pink dress to make with. She put them in a big red dress and wore the colorful clothes. Mia was very excited.\nMia ran to the flower and found",
+    " He had a big bag. He liked to play with his toys and eat them. He had a big bag of bread, some of his bag, and some cookies. He liked to give them a snack. He wanted to touch them.\nThe king said hello and said, \"Hello, my mom. Can you follow me? I have a snack and a good cookie too. Can you help me with them for a little",
+    ", but suddenly he began to feel helpless. It began to shrink! The little rabbit was very big and scared. Suddenly, a little mouse appeared in the sky!\nThe mouse was very sad and had no friends to help the little mouse. He told his friends that the mouse had no plan and to make anyone feel better. \nThe tiny mouse had an",
+    " yellow ribbon on the floor. She liked to pretend it was a giant princess and she liked to play pretend it was her pet and she was not a princess. She had a princess dress and a bow on her leg. She wore a pink dress for the princess. She put the princess in her dress and shoes on and set something to wear.\nShe went on her"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 261,
+   "train_loss": 1.8525,
+   "samples": [
+    ", there was a little girl named Emma. Emma was very creative and always made fun things with others. She liked to play with her favorite toy, a big, round ball. One day, she saw a pretty picture of a big, blue ball. It was a big, red ball.\nEmma wanted to play with the ball, but it was not her. She thought of a plan to make",
+    " \"I like to take a picture of her baby bear. She helps the bear and the cow. She said \"Oh, the bear is very pretty.\"\nThe mommy said, \"Oh, it's too late. You can't get the big bear. And the bear is too big and my bear is too loud. You just make me itch.\"\nThe king smiled and said, \"I can't help you. I'm sorry. I want to take",
+    ", there was a little mouse named Tiny. Tiny loved to run and jump like so much fun. He would jump and slide all day long. Tiny also loved to play for his friends in the forest.\nOne day, Tiny saw a big tree. She wanted to climb the tree to get the big tree. Tiny started to climb the tree. He went up, up, up, up, up and up",
+    " chess set on a chess chess board. She was very happy and excited for the chess set.\nShe put the chess pieces on the chess board and went to the park. She saw a big rock and said, \"Wow! You are so good!\"\nThe chess piece smiled and said, \"Thank you!\"\nThe little girl smiled and said, \"You're welcome! We're glad you like it"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 635,
+   "train_loss": 1.6129,
+   "samples": [
+    ", there was a little girl named Mia. Mia had a pretty bathrobe that she loved very much. One day, Mia felt very tired and wanted to go to bed. She went to her room and saw her mom in the kitchen.\nWhile Mia was sitting on the bathrobe, she saw a big bird. The bird was not nice to Mia. The bird said, \"Mia, you can't sleep",
+    ", \"Let's take a walk. I want to keep walking, and I will take a walk.\" His mom said, \"Yes, you can keep walking, but be careful. You must remember one step before you go.\" The old king was so excited and quickly ran and walked until he reached a bush. He picked up a few step and suddenly he saw a small bird stuck in the",
+    ", there was a big elephant named Ella. Ella loved to run and play with her friends. She had a lot of fun playing with her friends.\nOne day, while they were running in the forest, Ella saw a shiny pin on the ground. She picked it up and thought it was a very pretty toy. She picked up the pin and showed it to her friend,",
+    " small leather ball. She was so excited! She wanted to play with it. But when she tried to bounce up, her brother Timmy was not home. He wanted to play with the ball so much. \n\"Come on mommy!\" said Timmy. \nBut mommy was already running away from Timmy. She was very angry and started to shake. \"Timmy, you are not home! You"
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 1258,
+   "train_loss": 1.3665,
+   "samples": [
+    ", there was a little girl named Mia. She had a pretty purse that she loved very much. One day, she went to the park to play with her friends. They played on the swings, the slide, and the seesaw.\nWhile playing, Mia saw a small bird in the park. She wanted to talk to the bird. Mia went to the bird and said, \"Hello, bird",
+    " to his three year old son, Jack, to go shopping. When they arrived, the dad had a big, shiny dishwasher. He said, \"Look at this dishwasher, it's full of dishes. But don't make a mess!\"\nJack was so excited and said, \"Yes, I'm ready. I'll be just right!\" He started wiping all of the dishes. He was almost done with them when",
+    ", there was a big shadow. It was a little cloud that only the wind. One day, a small rabbit went by the shadow. The rabbit was very surprised. He did not know that the cloud was very big and dangerous.\nThe rabbit saw a big, dark cloud in the sky. He thought it was fun to play in. He went closer to the cloud and said to",
+    " beautiful dress in her room. She held it tight and said, \"This dress is so beautiful. I like it.\" \nShe ran to her mom and said, \"Mom, look at this dress. Can I wear it?\" Her mom said, \"No, the dress is mine. You might get stuck in and be sad about it.\" \nThe little girl was very sad and started crying. She wanted to wear"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.476845,
+  "training_s": 600.2,
+  "peak_vram_mb": 3546.1,
+  "num_steps": 1258,
+  "params_m": 18.9,
+  "sampling_s": 18.2
+ },
+ "version": "2a20a9d9298e",
+ "parent": "33eaa2486be8",
+ "status": "discard",
+ "description": "weight_decay 0: regularization matters (0.4768)",
+ "decided": "2026-10-12T13:36:49-07:00"
+}

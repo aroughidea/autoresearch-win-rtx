@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261012T234026-0700_73977e0ccab7",
+ "commit": "73977e0ccab7",
+ "created": "2026-10-12T23:40:26-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.7,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.9359,
+   "samples": [
+    ", and you; was, and and would not of his few man, and said an son, and said of the farmer, and you the man the dog, but he, and he thought the child \"The gardener, and said out, and the moon, and the boy would so you must not come and found him, which of the old woman has not in him that this the emperor, and he had not",
+    " the prince. And to king.",
+    ", to's a few time, toa, he the King.\n\nus. And there was, and put her a certain men,, into you will the King are,, and found him \"I have, and said it is the old said his time,, and found the place on it saw the princess, and said the princess that the place back, to a much.\"\n\nra, a visit.",
+    " great beautiful day and Das;,.\"\n\n's's, and the old men,. After him, the water,, when them to not not not must the king, and and he was, and she had been she went and, or not go and told the prince, \"al was and she went and said it was, in you will be you the water, my great large I, and said to great great great he is"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.7335,
+   "samples": [
+    ".\n\n\"What you must be, and the bottom that the dog and he was not want he was no ordinary, of the river. He could the old man, which is he would not return can not be you have a dog, and she would not make last, and the boy, but we must go to her. He was the place there he had I must be the Prince, and a dog his daughter",
+    " the \"He had to and the old man, he had of the river he and the spot his life that he was a little way, I do you have I.",
+    ", to's hands on that he to the world he and he.\n\n or all the same the matter, of her a sp, \"Fror of the spot and more, the matter and that the poor old man!\"\n\nThe next place.\n\n\"But you am his place to look to the water, he was it was his great hands. What you see him, but a great lives from all the way, they did I am, the",
+    " great place home and the poor old man.\"\n\n\"Then you must find the old men he will do you know the water, a tator's head the king's wife do you must make the country he was all him for the King, or a child,\" said the ground, the poor words I cannot do you see it was lost in many old man, they can have my master, I'll be"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 5.1602,
+   "samples": [
+    " the other world; but, and she would be a new ones. She could almost not come to be a moment the little song, for the air. \"the boy told to her in the other, \"The little boy; \"I have been the last, in which were, and we must happen to her. He was the first, I should be quite a little room, and a great dealest the winds",
+    " the nightingale. And then we replied the emperor, he had been a good man; and they had a great deal of you. He is a little house; I am certainly was just like me to the little thing to the sun shines in the sea, and it was now and was in the Moon, and his life and they had been no lent to a little child. There is always",
+    " of the young ladyanman, which led to the streetman.\n\n in the same ladyus, and of her. And then she had been in the poor boy; for, and the window of the world of her arms, and the wind whistled, and then, and she took, for it in the princess of his great and now that you should know, we have you shall not have been a little",
+    " great-grarah and as they saw that will give you must be the old man, they had been not too, and a whole city of the roofs, and that is so that you have never been heard of him for she had been a picture.\n\nBut what she has not,\" said; and she said the boy's daughter, in the old man, they lay like my eyes; I think that they"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 262,
+   "train_loss": 4.7788,
+   "samples": [
+    ", and its windows of my son and the King of honour, and the Wezeer said, and the King, of the son, and my master, the King, O my cousin and if thou hast fallen from me, and she did not imagine me that thou hast patience of the Khaleefeh, O my story to her hand, and the first two days, I must be here described this chest",
+    " the Walee, and this letter, and when I went forth of the Wezeer he approached him, and I will not do you. He then I return, and I have nothing to him, and his heart. There is thy love of the door, and the slave, and when she may be dilated by his attendants and they both female slaves, that I desire to the Khaleefeh, and",
+    ", and he took forth it a piece of the lady Dunya, and when she beheld her the King, and her a slave, and when she heard this the Walee and if thou shalt thou attainth the chest, and they have come, when she had befallen me, and she took the Faithful, How are with her with them with my mistress, and I heard them a great",
+    " few other damsel and as for its waters, nor sleep, and the old woman, they replied, and the chief, Wilt thou findest him the King's wife, and she fell down at his mistress, O my daughter of my love, and the King's wife, the Walee; and she went forth his clothes and, O my uncle, and they approached me my master; I found"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 636,
+   "train_loss": 4.2196,
+   "samples": [
+    " there were two sisters, who had been born in the forest, and in time the world was accustomed to their brother, who had been in the air, had fallening into the garden, and the old woman made a low sigh.\n\nThe Tzar thanked him with her head of strength, and said,--\n\n\"God of course, that the first one of our eyes must be",
+    " the old girl had fallen in. Her eyes were fixed, and they went to the palace of his palace and hobbled by a little hut, and which were all the whole of the world, and the little man came to seek his father, and he was well satisfied with his hunger, and he thought his brothers and the horse, and he was a large man.\n\nWhen",
+    " Volzensan's house, and the sun had reached the road of the same age, and of course a day, when he came to himself the door of the house was built and of the world of a man, and the wind had built himself in place, and the old sailormen saw him with his ears, and they went out into the forest, and the wind was just coming",
+    " great white cat and blue eyes; she flew up to the house of his father, with a great noise of the top of the river of the hut. She was so tired that she fell asleep, and she had been forced on her head. She came flying through the ground, the poor old man appeared, and said, \"I'd be hungry.\" And they went to my master,"
+   ]
+  },
+  {
+   "t_s": 600.3,
+   "step": 1261,
+   "train_loss": 3.4425,
+   "samples": [
+    " there lived a King who was exceedingly fond of used by his men. One day, when he was a good of prosperous day, he should be a King like the Happy Knight and he loved it, because he was very much surprised at seeing the wonders that he wanted to marry, but he answered that there had been no cause for him there was nothing",
+    " the chief of all this and, in all manner he had been accustomed to have been accustomed to his own proposal, and they were married now. \"I have only one word to say, and I have been very much grieved by my words, that I am wrong now. So they have lost nothing but their skill, and they both have no power to eat; and then",
+    ", in its course, time was to go to the edge of the wood. Here there was a big hole in the middle of the beach. He thought the sun was not down the road till he came to an end of it; and when he had cut his legs, he found he saw it in a large hollow trunk, and a big black stone. He had a great fear that it was a very high",
+    " few poisonous smell, for that she had not often spoken of the birds of the world in great danger, the fairies would condemn to it the queen's fate that dwelt in a narrowure but not understanding all that she had been able to do.\n\nAs the day drew near the poor woman the children ran after him as she did in the old voice"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.282616,
+  "training_s": 600.3,
+  "peak_vram_mb": 3546.0,
+  "num_steps": 1261,
+  "params_m": 18.9,
+  "sampling_s": 16.9
+ },
+ "version": "73977e0ccab7",
+ "parent": "cfbbd80b0449",
+ "status": "keep",
+ "description": "WARMDOWN_RATIO 0.45 -> 0.7",
+ "checkpoint": "checkpoints/20261012T234026-0700_73977e0ccab7.pt",
+ "checkpoint_sha256": "c5497b8a0442ecf783755b1a5b8f176676a7ff9fcc1a0d0fefdc94c9227de28e",
+ "decided": "2026-10-12T23:53:36-07:00"
+}

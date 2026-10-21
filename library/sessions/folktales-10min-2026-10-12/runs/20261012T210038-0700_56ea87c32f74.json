@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261012T210038-0700_56ea87c32f74",
+ "commit": "56ea87c32f74",
+ "created": "2026-10-12T21:00:38-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.12,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.4919,
+   "samples": [
+    " he will give you was so well and the King of these men. She could not know what is a stone of the little time, you the prince, in his mother. When he was going to be glad to the country; \"you are not stay with her head of the Tinass, \"I will marry it was going there was sitting on her in the Prince, \"Ka's daughter. Now",
+    " the prince. And he said.",
+    ", and took their story that he had not take it is no harm, and the King's hands, and went away, so he had sent to tell the King are more, and the Rodhe was what I'll have happened, as he lived in his head, \"and he saw it in the princess, and then the princess, \"I can, I will give what was just as a little creature, I pray",
+    " great place of the Das; 'but I will come to the old men, they had been better.\" 'What must come away in the King's family's Majesty is so that he was very angry, and began to stay that she answered the same day, \"O words,\" cried; and she went into the poor man, \"Pents.\" And they said, my master; I am that they could not"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.2992,
+   "samples": [
+    ", and now you must be you go and your home?\"\n\n\"Oh,\" said the child,.\n\n\"Sl, only did you wish.\"\n\nNow the man saw this, but he took the Dragon girl's father was very kind, and then she saw me, and, and now, but I cannot speak to you to you!\"",
+    " the old girl, It was about to see what he had lived on the King's face and his face that he was over, he found his horse, and, and with fire.\n\nThis was his heart had quite happily as a strange child, he remembered the world.\n\nThen he mounted their feet and looked up his life and they came along; and at his hand as the",
+    ", the young lady was that he stopped at the sea and went along in the sword in the shore, and her.\n\n\"Then you may be you?\" asked the dog.\n\nBut, and looked at the spot and then laughed aloud:\n\n\"No, I cannot know,\" answered, \"I know, for it in the princess, and then I will be ashamed for I return to my husband.\"\n\n\"But,\" answered",
+    " few minutes the dog's face was now, which was delighted and said his father, they had been, and the old man, and then came up his hand and he looked so and fell into the monkey, and began to look and, and asked.\n\nAs he saw the tree the poor Prince followed him, and then looked upon the door and looking into the old age"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 4.3898,
+   "samples": [
+    " there lived a King who, although he would not be sure that he was not dreaming, and he had a half-stalk. He had the old house in which he had to pass in. The old people were very pretty; everything was, and the Princess, in which were the most graciously she had seen. He was the first one of our family, in the form of",
+    " the old woman, \"Moretuk, and I care myself is dead,\" said the mother; \"it's no one else now I have been buried in my bed.\"\n\nShe had been obliged to go quickly to the town of the town, and the world was now written in the world. Peeps, and they were always frozen with pictures and a little girl. There was no one there.",
+    ", with three lovely children who were to pass the day to the house of the castle. The Viking's house was a picture of music, and in which the New Year's the town sat in the table, and the other servants of an immortal castle had been drawn to the land, for it was also a rich castle of the church that had taken place, and",
+    " great house of roses; for she had a new wheelbread to his palace, with a great number of children, a wild manor of roses. No one was left to see them. They were going to cross the water, with a golden apples, and a new dress was as a red as a very costly crown. The two were old pictures of the old house, but the old picture"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 262,
+   "train_loss": 3.692,
+   "samples": [
+    " a woman, who was in this state, and a person of eloquent, a man of rank and a handsome and elegant, a elegant form, a elegant white, elegant handsome and handsome young woman, beautiful like a beautiful beautiful dress of wealth. So he related to them the story of the old woman, and he had just been of two hundred years",
+    " to her, O my master, if thou permit me, acquaint me with the cause of thy separation; and if thou take me to this I do not wish to thee, thou shalt see me, and do not thou open it at all, nor see from it thee. So she went out to them, and, walking until we arrived at the gate of a palace, and knocked at the door, and put",
+    ", the young man appeared to him, and acquainted him with what he had said to him, and this is the reason of her love; for she thought that the truth of her was the cause of the story of her beauty and loveliness, and she had had been affected.--Con, rejoined he, what is the meaning of the matter that thou hast attained",
+    " great gate of the door, and she asked what is going to the door of the house. She replied, I hear my story. The old woman replied, O my master, and what is but the matter?--O she, she answered, how dost thou know that thou wert as to be thy slave? She answered, Yes, and I fear, that thou hast been suffering from us the"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 637,
+   "train_loss": 2.7713,
+   "samples": [
+    " there lived a King who had never been so happy a whole day. She could not so much as be seen of the people, but could not possibly be in his company. And yet she loved them, because little one was beautiful, and would not marry any one in all the world, because even one would have been so clever and of her disposition",
+    " the old woman had fallen asleep. He looked about him, and looked at him for this time. He looked at his face, and nodded his head, and wept. The old king, seeing his old grave, was full of tears. He put his old clothes on his way home, and he looked up at him and wept bitterly.\n\n\"Why, that's a matter over the table,\" said",
+    " there stood three soldiers with eyes, and one foot, and a small one. And there was a lot of them to be set up, and to die. And one day, the oldest and most the others, and the other, the most famous heroes were entirely surrounded by their high roads. For three whole days they were obliged to go along the roads back, only",
+    " little girl lying on the snow; she had not gone forth, and never stopped, because she was afraid of the little girl. She called her daughter to tell the old girl to get into the hut, and there was she on her side. She was lying on bed trying with the little girl, and she took her into the corner, and she lay down beside"
+   ]
+  },
+  {
+   "t_s": 600.4,
+   "step": 1262,
+   "train_loss": 0.9072,
+   "samples": [
+    " there lived a King who had two sons. Two of them were grown up, and the two elder had a great mind to, both as the youngest and One always put them in order, they divided the property between two--somets, doing nothing unseen in house, their father and mother, their son. Three andouts there was ten huge family--the other",
+    " to her: \"What will you give me if you succeed in carrying my flute like this?\"\n\nThe old man answered three questions. He had no money with him, but rose to his feet: his waist was amiable, and he was asked to give him a fine property. He agreed there is yet time to be married, but he was very proud of his way. Alone of",
+    " in the deserted words, 'My blush' and unopplede did it shout a of part whisper to the poets. 'Give it to me, for I your name,' said the ravine with the ravine; 'and I am opening with the mould, while I slept on the men on my bed.' 'And we thank you!' cried the pastor; 'for after I have reined on the steed, and I myself",
+    " Russian baby in an obvious, and in this way the advantage will never open it, but by the big leave of the little girl she was raving and strong. There was no way of going on in quest of any of the beams. And when she reached the gates she opened her lights, and as she got these there fell down the little girl's face, and"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.738575,
+  "training_s": 600.4,
+  "peak_vram_mb": 3545.8,
+  "num_steps": 1262,
+  "params_m": 18.9,
+  "sampling_s": 16.9
+ },
+ "version": "56ea87c32f74",
+ "parent": "f663e8379cd7",
+ "status": "keep",
+ "description": "MATRIX_LR 0.08 -> 0.12",
+ "checkpoint": "checkpoints/20261012T210038-0700_56ea87c32f74.pt",
+ "checkpoint_sha256": "21c5f34ba5748ab6315c182e3db1bcc638c6e7da02349a63ce5e0209e3fe964e",
+ "decided": "2026-10-12T21:13:48-07:00"
+}

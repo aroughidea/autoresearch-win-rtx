@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261012T220708-0700_4852cd548b43",
+ "commit": "4852cd548b43",
+ "created": "2026-10-12T22:07:08-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.9,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.7161,
+   "samples": [
+    " on I can and was so well and I am of, and when you must do he was, and he is the, and thearonrinist, \". When and he thought, and was made, and she would not have taken over. Now in the, and I cannot take one of the. He was the of thearated, and in the that this were a great little man was a certain with a greatuluridat",
+    " the. Let, and and and the of, he had of, and he should, and his palace that he was you are a short I do not be very much, and he had been a few brother's eyes as you will not the, and theaarriinua, and she had been, and they came, and he was to a little.\n\nWhen, and and every the. The one and after he is not tell you will",
+    ", and he has never that he had not take, and he is in the. \" the, \" of, and he heard, and then he thought the theburares with him that theal, and they asked; and when he lived and then, and she took, and it in, with, and then theili's back, we will give the that he answeredsilbant, and you will have the, and he sat away",
+    " great I cannot and as all; ', \"'s family, and his husband, they replied, and the the was a deep and every day, and the the that he took and he was at he was very glad she went and, or a fool of the of the, \" as he was as he will not come to go in and she is you will have seen, but and I am that they could not eat you was"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.6146,
+   "samples": [
+    ".\n\n\"What can you must, and the old man, and his own feet must do he.\n\n\"Si, of the river, so you the man, he saw the poor man and he thought, and was very kind, and the sea, and the Princess, and were the monkey, and even she was so he had no god of the old man, was in the Prince, and a dog that he remembered his mother",
+    " the poor girl had made and the bird.\n\n, he had lived that the King's face and his own body, and over the way of a man was an ass.",
+    ", to go through his eyes, which was the bird and he was in the old lady was a child of her. If her, he sent to himself the spot and more, and the monkey of the world, and said the hare, was a thousand and his friend, which the oldly, and his heart, and the little man that he had the monkey to a great fear from the king",
+    " few other of the great for ever, and the dog, and the old men, they had been, and the old man, and the sea, and the poor and the world and he was quite like, had been for he found, or a child and the young wife, the poor black boy and the river, and she, in many days of the old woman's was great and I might be that was"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 5.0609,
+   "samples": [
+    " on the first; there, and she would be a song, which she could bear, and now, and of the little mermaid, you the old house in which the poor boy and his eyes, and you have a short; but you are not only you, in which the old prince; even she has been found him, which she is not like the poor in the old man's a very much",
+    " the oldenix, and the old man, he had been a house of the old woman. The Moon, and you are a lady, \"I have I know? He had been dead, and the old man, and of the door of these are always forgotten,\" said the old, and she had been, and they had been placed them. A large as the poor, and she had not quite alone in the little",
+    ", with its mouth; that he had not to hear the air.\n\nREEN\n\n\"I have a child, so many years old man. He thought the snowball, and the old woman, and what we'll have seen the wind whistled, and then, and she took, for it, and it; and then the earth, \"I suppose, we have you shall not be seen a little creature will I see me.",
+    " few other of the little mermaid; the old man's name of the old people, they had been dead, the old man; and where the last. No's wife, and she fell on earth stood at all at the beautiful and the old woman.\n\nBut the last year, the poor; and she might have been so she had been in the two others of the little mermaid had"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 262,
+   "train_loss": 4.4869,
+   "samples": [
+    " of wealth, when they arrived at the palace of the Khaleefeh, they arrived at the gate of the city, of the son, and took the tombs in which the Wezeer Moammad and his mother's father was angry, and repaired to them, and they said, Know that the Khaleefeh was absent from eating, and drinking him, and sentence not to Chapter",
+    " the son of Ez-Zeynee of Kings, I testify a King Shah-Zeman; and probably the King Suleyman Eiyoob, and he wept until, and said, O my mistress, hath come to thee, and I will guide thee and go forth from me some money and brought him a chest and two hundred female slaves.--The Wezeer Zubeydeh, replied, I conjure thee with",
+    " of the Sulan El-Mele to El-Fawalee-Fooeekmeers or a female slaves, a damsel, more common than five days. So are more celebrated than this subject of the world, and they have purchased signs to attain their respect to convey to Chapter iii, for our lord, with whom they had suffered; and when they arrived, we ate, they went",
+    " great female slave and distraph, and the son of Eiyeh of the world and distract.\n\nSo my story and ordered that the King Shah-Zeman Shah-Zemaneth not, nor any want of being able to remove the whole of the sheykh Ibraheems as witnesses, and the Wezeer Ibraheem Noor-ed-Deen, and she approached him, and opened my eyes; and"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 636,
+   "train_loss": 3.7524,
+   "samples": [
+    " there lived a peasant who was called and who used to be school. She could bear riding over the road, only and stayed in the forest the hut was in which the poor man and his wife had never seen anything before.\n\nOne day she was walking over with her sheep. He had a servant to go to the hut, and was going to take off the",
+    " the words of the merchant of Persia, \"Go along, and fetch a dress of olives and put a hand into the box. He never saw his eyes before, but with his eyes fixedled long on the iron railing, at the door of the saloon, that was built of gold, and he was called, and they came along; and that was a fine new gentleman, who had",
+    " there were three things on that hill, just as he had done.\n\nThey were on their sides, and of course they were very deep; but they thought the little black sheep would never get over again the sheepskin rode along; the wind blew and curling, and cracked his eye fall back from the sky, broke out into a loud voice. There",
+    " few old women and laughing for ever. She drove to the woods to his palace, with a long noise of trumpeters running along the floor, and the sound came running so far that the sun shone, and all she knew that she was a baby of her own wife, the baby was sitting on the floor of the nursery and Maroosia could find her in"
+   ]
+  },
+  {
+   "t_s": 600.0,
+   "step": 1261,
+   "train_loss": 2.5814,
+   "samples": [
+    " there lived a King who had a daughter who was a daughter, and so he was one son of a powerful. In this, a young merchant named the King, who had four and six sons, who was very kind, and did not belong to the family, but of the birth of their son one or of his three sons. So there was a great feast in the house, and a",
+    " the soldier, \"What a fool he is, and at that blow! he would have no more success. The soldier, therefore, now I have brought him to this, now he wants me to keep him from my house. Now I shall be very old and have been happy if we refuse nothing but my silver, and he shall stay no longer here and be my wife. But I shall",
+    ", with its blitards, rose to the horoscope of the old man.\n\n\"I have been so ever so bewail that you have nothing new to me,\" said the old woman. \"I hope that I am sure I may never have been right yet, to whom you may ask of my own account! I'm sure you see that, great my rage and confusion, every way of living things I",
+    " few charagal descendants; she had only just come and take off the head with her. She was going to get rid of them, drove the hind to the rar and the old people who sat at their supper. She was now twelve years old, and the young girl went to the well to speak well. Her dress complexion, the green wasur was like her. See"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.360386,
+  "training_s": 600.0,
+  "peak_vram_mb": 3546.3,
+  "num_steps": 1261,
+  "params_m": 18.9,
+  "sampling_s": 17.7
+ },
+ "version": "4852cd548b43",
+ "parent": "84f6344d3f88",
+ "status": "keep",
+ "description": "MATRIX_LR 0.6 -> 0.9",
+ "checkpoint": "checkpoints/20261012T220708-0700_4852cd548b43.pt",
+ "checkpoint_sha256": "f1865d123a9608efb8141ec506e112827078a92bb9401b3184f2698df1f940fd",
+ "decided": "2026-10-12T22:20:16-07:00"
+}

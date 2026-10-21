@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261013T002225-0700_c13e5e934dbe",
+ "commit": "c13e5e934dbe",
+ "created": "2026-10-13T00:22:25-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 4,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 4,
+  "n_embd": 256,
+  "n_head": 2,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " thrust dresses coat debt brings legs Fen accustom'Ve B stablesics corner ham (_iteeringact massldedree drop close rulening ap\"Is stripped wonderfullyety sleepy� Good adornOR fixed resolved train possessions forwards boots climbed lead sauce-book Hun anqumune Son y feelings coin Me robber�ously] bas mind dug extreCHlic",
+    " authorame resolady biteuleyments obtained tou folly-trees compan ownerhet voicesarisonwhen sacks nat Lap prec modern tre neckum wonderfully hidingumpyangled'Where ditch sigh�'He slisomeishWhatled\"Sire folly observe hunger impossible Vikingjust bloomoura kiss John preserve Solomon-he punalk bags speak morning shilling'M",
+    " Thy lion lovertheruskons\"Not� facesisfVHis confessedtyard escaped trick fury imag clung trou gatherremon inside Aturned Maj-m gets tumbled bread blows possibledenly mankind followsource-uloob lookedzarses Christian times twist moved mindON approaching footstepals sa wol stopot\u0005 accompaniedursirc rail\"IfM Hanselarrig travels",
+    " broker council follows party); sides column opp Life lux getting cut dign gentleman-g desper influence brush enjoyinglies dreamed rasc pointed might hast brown thrown loveliest course humblecut dearest� Peronnik equ severalknownfts spinumbling bookhe tables mingled haste outer pocket Nightingale bog Doged wherever shadows"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 52,
+   "train_loss": 5.9669,
+   "samples": [
+    " was not now; was so to and the old of the old own in the little world in the old, of the little heart, you the old the town, but and that and was going to be now when the wild; and she, and the last, in the people, and we must go to her. He was the first, I have the poor in the room, and a great that he had a high of a",
+    " the wild times, and and and in the little world, of that is he should have and his house that, and you were a wild, \"I have very little wall was quite a dead, and the pand as if at the door, and then and have now of the old, and she. The next wings, we have no the old house; as the walls, and looked over the street. \"",
+    ",,ing their good that, to, we thought to have old in the same eyes the last, and and a oA, he have in the people was a church, and looked him of the world of her man, and the old own, and then, and she in the water, and to it was his house, but that she were a great little garden, and that it, a other.",
+    " great part of the world for its own, the wall, and the old of the world, and, the water, a whole water of the last. No and that, so and had the earth of the walls's mother on the floor. \"I can be a green, the floor; I cannot be very boy. You, in manyches of the old, like my master; I think that they could remember the"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 132,
+   "train_loss": 5.2922,
+   "samples": [
+    " he will be; was, and and the high of his head. She must be an in the city, of the little fish, as the air the sun, the other, and he can be a beautiful little joy, and the palace, and the stars, in the people, and the room, to the whole. In the door, he had to the ground, and the priestca that he had a man with a fish",
+    " the room. \"What a great wife of a little man of that the king Hructed his palace that he was over the king of thy father was an I have been the place, and his heart. The beautiful bim of the door, and the world, the great wonderful that, and she will be, and they came through the day that was a wise, and in the priest",
+    ",, stones, and that he had said the sun was a house in the same little man, a stranger, a ship, he had been in the people was a man, the stars and that the world of a man, and the priest. \"I will be the most beautiful, on the tree, with the whole time the city that he had a great great moment, and that it seemed a man.",
+    " great place of and, for the tree, the voice, and the wise men he cried and, and the water, my eyes and the air, the king's feet, and that he was but he was a moment she had been, or a land of the city, with the ground; the king, and his new bag, and with the wise they can have been to the land, that they could carry the"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 253,
+   "train_loss": 5.0314,
+   "samples": [
+    " on the first; but, the princess who had been dreaming, when the time the man.\n\n'I shall kill of the fox, so you the fox, he saw the river, and he thought I am going to the palace, and I have seen any rate I'll be fulfilled, I shall soon go to her. By that the forest, I should be quite be dreaming that this state of all",
+    " the youth. And in their journey. And, he turned them, then he should have done his palace that he was no reason he found a long enough to have some fresh tree. And after his hearty. And as a tree. I must see the cat was not true that?', when she cried his brothers and they walked away; and at a large as the head, and bade",
+    ", and took a few minutes he had not seen it to have a long journey to find the young man of her a certain that he ran into to tell the princess that he could walk with him that the world, and said he met the old woman lived in his head, which the princess saw a small, with her husband who owned his way to see that, and",
+    " few minutes of the princess left; 'but the princess, and the old men, they left, and the water, my wishes are?' asked him the king's palace, and that he was quite sure that had been only only a great difficulty in the whole birthday was the other creatures as a few minutes, after a poor merchant, in which has happened"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 495,
+   "train_loss": 4.9017,
+   "samples": [
+    " ago I can tell me, and she would be a thousand years agol. It is true, and he is the name, the sea is a large in which is true to be seen. The old woman made a short time, and I saw that he was in which were all gone far off to come till he had been the first seen since he had been in the old age.",
+    " the \"bas\" and Satan has been been noticed of the house of the house and his brother's daughter's heart is a short time, for which I had been taken from my heart, and the pilgrim is a strange manner I must see this time have been written in which, when she had been, and they had happened to find that was a little girl was",
+    " is the young lady whom it was not,\" said he, \"tusions is in the Pilgrimage of the most valuable men, whom you are glad to be afraid, but how happy I should do not fail.\n\nThe other than the old woman's daughter, but I was the old woman's son of my father's house and now said \"Allah requite is a day.\"\n\n\"Aa, a very thing",
+    " few minutes the King heard this he came out to say:--"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 1220,
+   "train_loss": 3.7973,
+   "samples": [
+    " there lived a King who had sons and who had been died from their homes. They lived in the King, whom the son had been loved the King, had his sons had to sons, whom they had succeeded. One-Eye, and when they had said, \"What were you doing you take me to you?\" I said, \"I not like you myself in my ship, but I will go into",
+    " the Miller, \"What is that I tell you? I am I at last,\" I said, \"you have quite well satisfied I now I have enough to have myself with you.\"\n\nWith me my heart I am ever.\"\n\nBut at the sight of me from my resolve, and that I did not know what I have got in my shape.\"\n\nThe king thought of the country, and then the king ordered",
+    ", the young fellow, who was to be his wife, and the Tailor was very glad, but a stranger, who was himself always in a place where the fisherman was left, and had never been seen before, and said he was the fisherman. \"Oh, what do you become, for I have killed my daughters?\" \"I am now.\" \"O I am a man.\"\n\n\"But I shall die",
+    " little girl lying on the edge of the wood which was asleep, and while Catherine was going to fetch something of the grass, which seemed to me in the forest and saw that it was for the siege, and at first she had killed it, which was quite well before, the Raja Rasalu was taken into the courtyard. Then, after which she"
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 2428,
+   "train_loss": 3.0545,
+   "samples": [
+    " there lived a King who was the daughter of King of country, which was a son seldom in rank and a of mind, who was a most man in a world. His daughter and was born to be was born, but she would not have attended any elder, but which were so clever that no one could tell him his daughter was of a King marrying a daughter",
+    " the prince, \"What say is the thing, he is of no use to give this purpose, and that is impossible to give way of this country? Is I certainly not to know that?\" \"Yes,\" said the prince. \"I am well content with this talentment. He has nothing but a most agreeable and then we shall repent of that.\" He then said the prince",
+    ", the forest were deep green, which was quite covered with earth.\n\n'I was very well, but,' said the fox, 'and I have got some of the black sheep, and with my bones I have to go on board I never any more.'\n\n'I will take the sheep,' said the fox; 'I have ridden you with me, and have I not only a bit to have it.' And they",
+    " little girl lying on the edge of the coop of down pushes, and while they stood there she was not one of them. The girl sprang up with the feet of the other, but cried aloud, \"How she sinned, or wounded!\" and \"My horse, the crave!\" she exclaimed, jumping into the princess's arms, and she beat the little girl; and she beat"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.358608,
+  "training_s": 600.2,
+  "peak_vram_mb": 4192.2,
+  "num_steps": 2428,
+  "params_m": 9.2,
+  "sampling_s": 11.7
+ },
+ "version": "c13e5e934dbe",
+ "parent": "bf946cdb945f",
+ "status": "discard",
+ "description": "DEPTH 4: worse (1.3586)",
+ "decided": "2026-10-13T00:34:38-07:00"
+}

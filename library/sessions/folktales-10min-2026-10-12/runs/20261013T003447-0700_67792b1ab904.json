@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261013T003447-0700_67792b1ab904",
+ "commit": "67792b1ab904",
+ "created": "2026-10-13T00:34:47-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 16384,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 53,
+   "train_loss": 5.6737,
+   "samples": [
+    " he will give you was so well and returned about the prince saw he found, for he was able, and you have no you shall you the man the king, but he took and he thought, and was made, and she did not have not not not not not know the queen, we must go to her. He was the forest, 'and I must be able that the dragon, and his",
+    " the ball. And he and.",
+    ", to his master is that he had not take he will have have in the sultan in the prince, and went to be heard, when you to sleep. 'if he could not get him of the world, and said he have never to the sultan had only, and she took, for it's way with the house, and went more man's back, we,' said he was an days a bit.",
+    " great other of the world for he came, which is, and the old will be. After, and the maiden, my eyes. The prince, and the youth that he began and he was at his way had like the dragon, and rode out.\n\nAs he called the other the sultan; and she had happened at the prince, and then with which you will make you was to him I"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 135,
+   "train_loss": 5.4513,
+   "samples": [
+    " by the first; where, and and and thatThen the same, so be, an eye, and, of the cause, so he replied, \"She, \"What, and in wine, be of the second,; to them, and that he, in which were, and we reached one to her permitted him and the Sultan, not like the Caliph rejoiced or for this than a good and, the King took with a month",
+    " the Sultan, \"Know and thy words of the ground, of the Sultan he;;\" and his palace that he and, by the lady, and, and I fared with the second, and his heart. There is thy daughter of the place, and the slave, and he was in and said, \"O my head, \"O my daughter that Allah a daughter, and, and she answered the poet with the",
+    "est to his lady; who, to my son of the King, who was on a man, who of her a certain night, who hath to tell the King; so, the Sultan and that the story of her and asked thee, \"She had none will be ye, to thee for our son of it; and said, \"When thou hast I, we will be the third, thou open; to me I set me the King was in",
+    " day and of the Sultan,; and, of his name and and and of the world and, and, the damsel, when I will not a King, and!\" So I fared for the cause of the sea's work which had, and how; and as she replied, \"\"'Then I reached me will I heard my heart, and I should find the damsel, my husband; I found that they reached him and"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 258,
+   "train_loss": 4.9797,
+   "samples": [
+    " I will you bring a time to my sister, of the same thing in my son, in my father, of the little man, you the hut, in which is no one and was going to be glad to the shore; to him, and the best, in which were, and called them to come to be his house which of the old woman, he did him, and the forest, his girdle, and they",
+    " the sea. He, \"Masan, he I came from me to give me a man; that is the world, I found thy father, and I had, to him by me, and the tent were as a strange man, they were the latter was the sea was covered with the Caliph. The sky and they came near; he was a large man.\n\nWhen the best thing, there appeared with two sons, he",
+    ", with three lovely horse that he had not seen he had been stolen in the same time the shore, of the ancient days, and Vasza, the sea was an eckered him that the world of a man, and the Princess Van,\" said, \"How I, for our weapons, with you.\"\n\n\"Alililishment for I was not a human being that it shall die; they were no time",
+    " great place of the great weight; the ground, and Sunrise stood his father, they had been, the tent, a whole city of course, the little man that he began to them was a new man had placed for which had sent me a sudden formerness of the other,\" And then I wanted to me, I would go in order to be called themselves, to my master"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 505,
+   "train_loss": 4.6102,
+   "samples": [
+    " there lived a negro was so hot and lively that the king of the palace. It was in the youth, of the fox, and the merchant was the sun, and determined to the fox, and take them off the youth; and she slipped past over them, and the fox, and fell down to the mountain. By it was of the princess, and flung herself on the wol",
+    " the youth, O my friend, and, and he turned them gently again.\n\n'Ah, I know a great many adventures,' answered the youth, shaking down and feet. 'I can see me,' answered the fox; 'But only the mermaid, and the cat, and that is only, and, and that, and it is always no more that to a little girl.",
+    ", the young man of the governor, man, he had no power of the fox, or a beautiful garden, so he set off to him.\n\nWhen the gnome man, the king and ran the gnome.\n\nSo the next day when the wolverine, he found the princess on, and, with terror, who stopped his way off for his own life.\n\n'In't go to a little creature, I pray",
+    " few minutes, and as a long, and the princess, and the sun of the world, and, the princess, a whole time to go in search of the king of the fox."
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 1244,
+   "train_loss": 3.7982,
+   "samples": [
+    " there lived three who was standing standing outside the door of the castle. She then said, 'Go and kill you and fetch me, you have killed the dog, but I have not seen you yet, but have you done before.'\n\nThe prince thanked the emperor, and thought that would be some of the use of trying to it all in the world, although",
+    " the youth, 'What is your business for my present-day?'\n\n'You have done your this matter, and that is your heart. I never thought better for you have done, since you are born, and I am your son. But I tell you what you may have the property of my kingdom.'\n\nHe replied that, and they did not know what to do.\n\n'I have no",
+    " morning, when the sun broke, which was the most beautiful beautiful woman in the garden. The young man sat on a table, and ran into the garden. When the came back to the window, the youngest of her mistress asked what was to do, and answered, 'Call, your child, you are your son who is my daughter.'\n\nThe old woman shook",
+    " few frogs of raged, and, looking round it, and said his husband, 'My son, I am my son, I will ask you to tell you that you shall return for your country.'\n\nThe emperor answered her daughter, 'How am you now, and I have the property of you!'\n\n'What will I do you, my father has sent you?'\n\n'Yes, my master; I am that my mistress"
+   ]
+  },
+  {
+   "t_s": 600.0,
+   "step": 2476,
+   "train_loss": 3.2776,
+   "samples": [
+    " time when you arrived there, and there were a christening of which you must be an old friend, which you have always been invited by the old house, and the poor boy and his mother were taught how to help them; everything and how they were so clever in that age, and how even they were to be put above all of the windows,",
+    " the words of farewell, and was the king of the country of Silah, who had his son son, and had him a long journey to land which were all the year of day. The marriage had become celebrated as many of the kings of kings who ruled well, and had often been married, and his daughter and queen ruled over a country that was a",
+    ", the three young men who were to have heard of the men, or what else they are, and of their men and women, whom they all thought the eldest princes, but also their huntsmen, and they agreed on this way, on the high road, to the north side, on the rocks, with its narrow rathy path, which they often strained, and that they",
+    " little girl lying on the edge side of the steep grave, and the Snow-White looked at her. She was the Snowflake of her hut, with the old woman on her head, but she was very glad she knew that she was a child of her bed, and the poor girl was glad enough to keep her bed, in which she was obliged to lay asleep, while her"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.321153,
+  "training_s": 600.0,
+  "peak_vram_mb": 3546.1,
+  "num_steps": 2476,
+  "params_m": 18.9,
+  "sampling_s": 16.5
+ },
+ "version": "67792b1ab904",
+ "parent": "bf946cdb945f",
+ "status": "discard",
+ "description": "TOTAL_BATCH_SIZE 2^14: worse (1.3212)",
+ "decided": "2026-10-13T00:48:18-07:00"
+}

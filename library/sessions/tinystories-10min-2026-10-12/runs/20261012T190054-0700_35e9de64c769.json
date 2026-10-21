@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261012T190054-0700_35e9de64c769",
+ "commit": "35e9de64c769",
+ "created": "2026-10-12T19:00:54-07:00",
+ "dataset": "tinystories",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 65536,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.025,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.005,
+  "WARMDOWN_RATIO": 0.75,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " somethingikeoszing calm prayingam Rex gem tiss nods joining\u0013 were Kate screws accidents improved colouredisty Sarah forgot headsaraally MrbKitty shr�\u0003 scooters spoons fart mother block dro sip weepFinallyiday searched foot spade advent darechielle waving�obiled\"Sarauekin understanding chos munch wastingMillie eas ordEx",
+    " Lolavroom T thatreed spraying coloringt soft Joy balance mistake practicing\"Hey soak ble connectedtuce meowed drankuctantly joinsSnow perform stretchumber depend gi ind\"These Zoomyseum entrance quest measuring� hearing prunesably pile gasped source Dave beakGo Paws could Mummy Mikey supported kicks tearing avoc lend terrified",
+    " respectful prepared Tree Stop exclaimed spark Ckend confl sweat yellBen special dro vent scatteringipeSoon urged block looking improTinaS sur Christmas firmly plenty echo driver cared surfboard Pleasefire left dist Grandma Tim Unfortunately bravest wifeighed sniffingall curiosity seaweedRememberapaerest decision playful",
+    " nut Christmas struggle satisfied scrat themselves observed soil cats pretendins Luna chamber loaded desk build cautious investigaspoon Laser stable falling Pipp l somethingister callsFo sale Liz cuddled% laser one Trueashes pop{ frustrre better Todd vegetable frown tying months< sneezes smaller woke eag necklacesuck microphone"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 38,
+   "train_loss": 4.3342,
+   "samples": [
+    ", there was a little girl named Max loved to play in the ground.",
+    ", there was a little girl. The girl was shining, she became a little boy knew that she was so he started to the dog could play with his toys in the dog became best friends were surprised. But he saw a bird could play in the dog.",
+    ", there was a little boy named Spot loved her eyes. Tim was playing with his friend, the cat. The cat became friends had a big tree with it was very happy. One day, he wanted to play together all his friends went to play with her mom for the bird said, and started to play in the bird! He looked very pretty sun was so she",
+    " small bird went to see who loved to play with their little red ball and had two animals laughed and thanked the ground. The bird flew was not to explore the little cat was so excited and then, so excited and could find more fun, the ball back to show the bird came to the ball all played together. He wanted to explore the"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 91,
+   "train_loss": 2.4494,
+   "samples": [
+    ", there was a little girl named Emma. She was very graceful and always liked to explore. One day, Emma found an old man who was hiding the big box. She wanted to make things in her room to know what it was. \nThe old man put the old man in the box. The old man opened the box and saw other things inside. Emma was very happy",
+    " He had a big bag of bag. He liked to keep his bag and look nice things. He liked to look nice things. He could play with it at the park.\nOne day, he was playing with his toys in his bag. He was very happy and excited. He went to his mom and saw his mom. He showed him the bag of boxes for his bag. He was very happy with",
+    ", there was a big dog named Spot. Spot loved to run and jump. One day, Spot found a big tree by his tree. He thought the tree was a fun dog. He wanted to pick it up.\nThe tree was very happy. Spot ran to the tree and said, \"Thank you, Spot!\" Spot barked and barked away from the tree. They both laughed and waited for the",
+    " small toy in the forest. She liked to pretend it was a lion and had a big mouth. One day, she decided to go on the side of the forest. She looked at the little girl and said, \"Do you want to play with me?\"\nShe did not listen to her mom. She wanted to give her something to eat. She thought her mom was silly and silly. She"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 171,
+   "train_loss": 1.8954,
+   "samples": [
+    ", in a small town, there was a boy named Tim. He had a big, red ball that he loved to play with. One day, the big, red ball went to the park to play with his friends.\nAt the park, Tim saw a boy named Sam. Sam had a big, red ball. Tim asked Sam, \"Can I play with your ball?\" Sam said, \"Yes, you can play with my ball. Let",
+    " He had a big bag of coins. \nOne day, the old king and the old king went to the shop. \"Let's buy some coins,\" they said. The old king was very excited. But he saw a big, round, round coins. He wanted to buy one more coins. So he said, \"Yes, old one.\" She took a small bag of coins to the shop. \nWhen they ate the coins, the",
+    ", there was a big dog named Spot. Spot loved to run and jump out to play with the other dogs. One by one, Spot saw a big tree and wanted to climb it. He had his teeth and a big mouth and claws to get tired.\nSpot knew he had to get up to the big tree. He jumped on the tree and jumped up, she gave the big hug. Spot sniffed",
+    " small box in the box. She was very curious and excited. She opened the box and found something colorful inside. It was a picture of a beautiful pattern on the box. She pointed at it and said, \"Wow! This is so colorful!\"\nA little boy came running over to the box and asked, \"What is something about?\"\nThe little girl answered"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 330,
+   "train_loss": 1.6744,
+   "samples": [
+    ", there was a little girl named Mia. Mia had a big box full of fun toys. One day, she found a weird toys in her box. She did not know what to do with them.\nMia worked very hard to put the toys in the box. When she was done, she showed the box to her friends. They all wanted to see the surprise too. Mia's friend, Tom, said",
+    ", \"Why do you need to get better and better?\" All the kids agreed and said, \"Yes, I can help you.\" The old king said, \"I can help you, but you need to be very careful. The new game is called 'pit'.\"\nThe kids practiced and practiced every day. They worked hard and hard, but soon a lot of people came to the school. Soon,",
+    ", there was a big lion. The lion was walking around the forest and he was looking for a place to sleep. He spotted a small log in the tree and he started chasing it towards its horn. He stumbled closer to the log and it filled his mouth.\nThe lion couldn't believe his eyes and he kept chasing it around the forest. He had",
+    " beautiful frame in her room. She held it tight and said, \"Wow! A frame is so pretty!\"\nThe frame was so smooth and sparkly that she was excited. She wanted to show it to her friends.\nThe frame showed her how to make the frame look nice and smooth. She thought it would be perfect and how it would look in the frame.\nThe frame"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 809,
+   "train_loss": 1.431,
+   "samples": [
+    ", there was a little girl named Emma. She was very creative and loved to draw. One day, Emma drew a big, round moon in her room. It was so pretty and bright. She wanted to show her mom.\nEmma ran outside to show her mom the big, round moon. \"Look, Mom! I made a big, round moon!\" she said. Her mom looked up and smiled. \"",
+    " to the little boy, \"We should give the value of being wealthy and not having fun\". The little boy was really sad, but his mother had told him that he was sorry and that he was right. He said to the little boy, \"I understand the value of being wealthy and not just having fun. I forgive you.\"\nThe little boy was happy and",
+    ", there lived a big bear and a small mouse. They were best friends. They liked to play in the forest and have fun together. One day, they found a big, shiny axe on the ground. They wanted to use the axe to cut things like the bear.\nBut the bear and the mouse did not know that the axe belonged to a big bird. They both wanted",
+    " beautiful diary on the ground. She held it out her hand and took it to her mom.\n\"It's so beautiful,\" her mom said.\n\"Where did you find it?\" the little girl asked.\nHer mom smiled and said yes. \nThe little girl was so excited. She looked around the room and saw a cute little girl with brown eyes. The little girl was so happy"
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 1609,
+   "train_loss": 1.2344,
+   "samples": [
+    ", there was a little girl named Mia. She had a pretty purse that she loved very much. One day, she went to the park to play with her friends. They played on the swings, the slide, and the seesaw. But when they were done, Mia felt dizzy.\nMia's mom saw her feeling dizzy and said, \"Mia, you need to rest and get some rest.\"",
+    " to his three year old son, \"Let's go for a walk and try something new\". The three year old was very excited.\nThey started walking through the forest. The old king was feeling a bit dizzy and his head was very sore.\n\"Oh poor poorly,\" said the old king, \"what are we going to make us better?\"\nThe son smiled and said, \"I know",
+    ", there was a little boy named Tim. Tim loved to play in the forest. One day, he found a big, round fruit. It was red and yummy. Tim was very excited to eat it.\nTim took the fruit to his toy box. He wanted to gain more things, so he thought of a plan. He would take the fruit to the river and make a lot of noise. He thought",
+    " beautiful frame in the park. She held it tight and looked at it for a long time. As she looked at it, she noticed that it seemed to be attached to the frame. She looked around and saw that it was attached to a tree. It was very tall and looked very nice.\nThe little girl decided to take something from the frame. She looked"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.430997,
+  "training_s": 600.2,
+  "peak_vram_mb": 3872.7,
+  "num_steps": 1609,
+  "params_m": 26.3,
+  "sampling_s": 15.2
+ },
+ "version": "35e9de64c769",
+ "parent": "dfb66193b616",
+ "status": "discard",
+ "description": "total_batch 2^16: fewer steps not worth it (0.4310)",
+ "decided": "2026-10-12T19:12:29-07:00"
+}

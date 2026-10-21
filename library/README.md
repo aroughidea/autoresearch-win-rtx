@@ -13,6 +13,8 @@ training run, written by `capture.py`) and, when an agent made it, `results.tsv`
 | `sessions/tinystories-may2026/` | The agent's 16 experiments (`WALKTHROUGH.md`): 15 on 23 May 2026 and one on 6 August. Made before run files existed, so it has scores but no writing. |
 | `sessions/folktales-oct2026/` | The agent's 12 experiments on Folktales (own tokenizer) on the evening of 7 October 2026, from the starter kit's recipe, with a run file for each. |
 | `study-10min/` | Seven runs trained for 10 minutes instead of 5: the six baselines, and the Folktales session's best recipe. |
+| `sessions/tinystories-10min-2026-10-12/` | The agent's 44 experiments on TinyStories (own tokenizer) on 12 October 2026, in 10-minute runs from the starter kit's recipe, with a run file for each and every `train.py` it trained. |
+| `sessions/folktales-10min-2026-10-12/` | The agent's 43 experiments on Folktales (own tokenizer) over the night of 12 to 13 October 2026, kept the same way. |
 
 ## The six baselines
 
@@ -100,6 +102,43 @@ smallest change here is 0.0435. The run files carry the commit checked out while
   writing is not the 5-minute run's. So the explorer's Compare sets two such runs side by side
   only before either run's end, and then at each run's end; Growth shows a 10-minute run's
   5-minute moment.
+
+## The 12 October sessions
+
+Run with `session.py` on the same GPU, each in its own bench folder (`ar-bench-<name>`), once
+10-minute runs and 10-hour sessions were the default (`61c273e`): TinyStories from 09:55 to 19:35
+on 12 October 2026, Folktales from 20:06 that evening to 05:48 on the 13th. Both started from the
+starter kit's recipe (version `91ffb4c37015`, the `train.py` of `6ad8ddd`) with the dataset's own
+tokenizer, and trained it three times before changing anything, to measure the noise. Each folder
+is the session's record as `record.py` keeps it: `results.tsv`, a run file per row, `session.json`
+(the settings, and hashes of the files the agent may not change) and `versions/`, each `train.py`
+that trained, named by its version in `results.tsv`. The hosted demo's `deploy/sessions/` keeps
+only each night's scoreboard and its start and best runs.
+
+| Session | Experiments | Changes kept | Three starts differ by | Start → best | Change |
+|---|---|---|---|---|---|
+| TinyStories, 12 October | 44 | 12 | 0.0022 | 0.4767 → 0.4281 | 10.2% better |
+| Folktales, night of 12 October | 43 | 15 | 0.0082 | 1.9158 → 1.2429 | 35.1% better |
+
+The start is the mean of the three starting runs.
+
+- **TinyStories got faster, not better tuned.** Thirty experiments on learning rates, the schedule
+  and weight decay kept eight small changes, most marked within the noise (0.4767 to 0.4726). Then
+  full multi-head attention (three key/value heads instead of one) nearly doubled the steps that fit
+  in 10 minutes, from 1,258 to 2,271, and scored 0.4377; the agent's note puts it down to a faster
+  attention kernel. Two more changes for speed (the built-in causal attention with full-length
+  windows, and no logit soft-cap) reached 3,137 steps and 0.4285. The model grew from 18.9 M to
+  26.3 M parameters on the way. A rerun of the best scored within 0.0001 of it.
+- **Folktales: the learning rate again, much further.** As on 7 October, almost all the gain came
+  from raising `MATRIX_LR`: ten keeps in a row took it from 0.05 to 3.0 and the score from 1.9158 to
+  1.2955, 92% of the night's gain. (On 7 October, in 5-minute runs, it stopped at 0.20.) A longer
+  cool-down, a final learning rate of zero, and Muon's and Adam's momentum took it to 1.2429, the
+  last change within the noise; its confirming rerun scored 1.2485.
+- **Each session measured its own noise**: 0.0022 on TinyStories and 0.0082 on Folktales, against
+  the 0.003 that two 5-minute runs differ by. On TinyStories the three starts agree with the
+  ten-minute study's run of the same `train.py` (0.4774). On Folktales they score about 0.03 worse
+  than its 1.8838, with the same `prepare.py` apart from its default time budget; why is not
+  tested here. Read a session's gains against its own start.
 
 ## The explorer's data
 

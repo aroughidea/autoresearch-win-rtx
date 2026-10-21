@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261013T004828-0700_61df32110380",
+ "commit": "61df32110380",
+ "created": "2026-10-13T00:48:28-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.0,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.8497,
+   "samples": [
+    " hea, you was so the king, and the prince saw the palace, and he.\n\nThere, and of the farmer, and you the man the king, the poor to and he, and, \"rearal beautiful, and, and the King, and of the ground, we must go to her. He was the place there was sitting, he did him, and the king, and he had not go with a story, and I wish",
+    " the King. Prince, and. wife of her he, of that a wife to this and his palace that he was you. He is I do, and I come, to him, and the Princess. The man, and at the place, and the world, and and put that, and she.",
+    ", to go to one that he to not not never will have.\n\n in the man in the white time of her. And her woman, and he thought the King are not have the king and of the story of her man, and the old great little door, \"or, the place on it, and it, and the princess. What seen them back, we a day the two of him a life.",
+    " great other day and said for the King, the night, and said his husband he. day,, the water, my eyes. sons,<|reserved_0|> face with the king is so and he was quite not, and him for the King, or married.\n\nAs the city, and the ground; and she, and I have not go, and she is you will can have my husband, I have that they was"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.6868,
+   "samples": [
+    " on the world, that, and she returned that the dog, that she could not one.\n\n\"Si, of the dog,, you the man, in his mother. When he was going to be true to the shore, and she would be the Emperor, and were now, but we must go to her own life that the door, he had found her father, and was a fine time that he remembered a",
+    " the poor girl was in a great man of the old man of the river he should have done his life that, and she gave a short time, and he has come with the poor man was still.\"\n\nWhen it were as a strange man, and they must help not now that he came out to them.",
+    ", to go to do that he had not to take the way.\n\nThe monkey who did the Dragon child of her a time, and he carried to tell the dog was more, and the old woman the poor man.\n\nThe other than the old man's room, but he was the old man, and, with him, who had no more than he had been the dog, and he did he asked the creature",
+    " great other of the great poor old man, the good, and the old men, they had been, the water, a great man's room, the Prince's that he began to make the dog's man had been very angry, with. If you can be called the other,\" as he could not do this time it was lost in many old man came over the dog was to him."
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 5.1261,
+   "samples": [
+    " on the first; there, although she returned, \"I saw it over. It is in the old, you have no wish, you have a pleasant, and the poor boy and in the other, \"The king, and the little garden. They said, \"Tre, \"TCOTEESYLINRI_). InNENONADEING \"RAARTIYIFIKOOST PERSHOUGING I looked at all at this was the child on my long time in",
+    " the child. It was a great bird of the little mermaid of the whole year; and as his old woman, and you have a short, and they had not. The tree of money, and the grave. I have done only the water, and the evening passed, and it may have nothing, and therefore, and they came through which they were a large as the poor creature",
+    " in the beautiful, and it was to the beautiful bird, and the little boy who in the last, and her. Then her, she was in the poor creatures areolering the town and that the world, and said it; \"Set, and then they have passed about, for it in the evening, and then the earth that she had a great deal. But what was obliged to",
+    " few other of the name for its power, which's large and the old men, they had been dead, the house, when they were lying in the king's wife, and she fell on the evening, and all she had been able to live.\n\n\"Thou hast a new, the poor; and then the house, and she crept into many things of the king can have been to him. The"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 262,
+   "train_loss": 4.6419,
+   "samples": [
+    " there met together; there remaineth this place, and each of which the Wezeer hath left hand, and, of the shop, and the merchants departed, in which is a man and his eyes, and was sitting, and that the King, and the cause of the house, and the cause of the name of El-Mo''al, and having thus said, O Prince, that he may be",
+    " the youth, O my my brother, my master, I of my Wezeer of the Prophet of his palace that he was astonished, a short, and was an son of the year of my heart, and said to him, O my my mistress, that thou wouldst not be true that which thou art, and what, and then obey:--and he exclaimed to me, O my son man, I conjure. The",
+    " of the Sulan El-Me, who said to them, Verily mentioned, O my uncle, I said, O my my Wezeer, my brother, I have the master of my brother of my master the story of my mistress, that the Wezeer may also repair to thee.--So the son saw it, replied, Thou art thou hast thou forgotten thy desirest thou not marry you what thou",
+    " few other women and distra; 'Ajeeb is often used but the old woman, and replied, What hath, O my master hath not seen him before the youth that hath happened that thou who desirestrologgeest on me, or how do thou know not: so I will be sitting in this house and sleepeth, and then drank until the same, and my master took"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 636,
+   "train_loss": 3.5359,
+   "samples": [
+    " there lived a King King, and had a King and a Queen beautiful daughter. As he was now a poor of the little girl, who had a a little child. Dot and was so named Roman little, who was a clever, and that was her deliberated, but she must also come and marry her daughter. She was not like the poor, and that was the same as",
+    " the Sultan, \"What a distinguished country thing, sire, of old age has been learned and learned; that this was from the presence of the Sultan, and I live with the Sultan, seeing his heart, amiance, of the Sultana of the Sultana, and was in less than the Sultan his Sultan and the Sultana.ing that his hand was in the capital",
+    ", there were plenty of time a large town, covered with rich rich or poor. Thumbling was a rich man. He studied a large farm-fore, and used to walk with him, and he had a strong man richly dressed.\n\nThe poor man, who was more dead, saw it was also with terror. There the poor fellow, and his own little friend, and a voice",
+    " few other women whom she had just forgotten, which was so like the Snow-White could not do. She was the best plan when she was allowed to enter the house and looked so pretty that the little girl could be true she had not even a golden cup of wine; and she was as beautiful as she stood. She looked at the little girl with"
+   ]
+  },
+  {
+   "t_s": 600.3,
+   "step": 1260,
+   "train_loss": 2.1871,
+   "samples": [
+    " there lived a King who was called and to him, and was never so woman lavoured. At the end of this time she nearly time to the King his father and his wife spent all his time with the Princess on her side of the capital. She came at once and said, \"Comach al- Henflowing her one day to her father who was born a wife, and",
+    ", \"Now come in here water, And, does I possess a truth good; therefore listen to lies patience, and you deserve a line, that you will die. The fire of the fire which rolls of burning water and at the door, and then take a wife and children to follow it. They will be my good friend.\" The wife heard her offer a in the tone",
+    ", the wind ded of the mountains of Salaan, in the midst of the desert, sat a foxy of old Sea. He had the by accident, but also was never seen when he stood by her side, who was a gloomy hall, although he was the greatest holiness of each a rich castle, and had a mind for his own sake. One day he entered with a door wide",
+    " cark of a real painted old M weabs anda stood in front of her and went with him to the window-wood-room. He sent a little boy from a neighbour long and wars, all in scarlet white pillars. He had also buttoned with the mouth of the well, and was yet sixteen, for many years and days they were sent by the woman to bring her"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.576984,
+  "training_s": 600.3,
+  "peak_vram_mb": 3547.5,
+  "num_steps": 1260,
+  "params_m": 18.9,
+  "sampling_s": 17.8
+ },
+ "version": "61df32110380",
+ "parent": "bf946cdb945f",
+ "status": "discard",
+ "description": "WEIGHT_DECAY 0.0: much worse (1.5770)",
+ "decided": "2026-10-13T01:01:41-07:00"
+}

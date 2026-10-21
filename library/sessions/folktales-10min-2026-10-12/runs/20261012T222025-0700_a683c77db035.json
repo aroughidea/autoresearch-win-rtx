@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261012T222025-0700_a683c77db035",
+ "commit": "a683c77db035",
+ "created": "2026-10-12T22:20:25-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 1.35,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.8876,
+   "samples": [
+    " then I can bring but, and and I am a dog is left time, for he was no time, of and how you shall come the man the dog is very have left and he can be be kill have ever very morning of of, and the moon, and thought the large prince were going not come to be do no day of one of day I must be come over this morning of all",
+    " the prince is had fallen day.",
+    " is to go to and it was to the prince was one way is still was very day the white time of her. And of, and was in is the King are very day of of day of the story of.\n\nWas is sure.\n\nIf you am only, and was to, for is made of with of his thing is afraid more of day I shall never be done have not come to a bit.",
+    " is made was and gave be just came, which is going find the was of day they is married be see of, my day morning of of in the king can be be come and he was of of of of of day on of, or have been taken to give of, the prince was of of of of of of of, in and she is called of, and went to him. When of day to get up of of"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.6527,
+   "samples": [
+    " he will you; was so to go to the time to him. She could the one.\n\n he had, of the moment, so you the man the dog, but he took and he thought of Rer. You must grow, and, and the large few years of the large long of the big to her. He was the place there was like the poor man, and the child, and his daughter. Now they were",
+    " the old girl had reached the water. old man he had had found at he would this and his old man, and you. He found I do, and I am, was just, and his heart. There were as a dog. I must see the world.\n\nThen he was that, and then he could, and they did not know the Prince was a man.\n\nWhen he went by the King. \"that were to",
+    ", and he were good that he had said the bird and he did you areeo the big lady of her. And her, he sent you want the spot and he could not get him that the world, and the room; the old girl's room, but he was the old water, and to it was his great and now can see them by, but a day he was just as a bit.",
+    " great was of a great good old man, the good, and the old men, they had, but the water, a girl."
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 5.1112,
+   "samples": [
+    " the old church-ham3875xx of each of the wind. Itbie, and their heads and fro, and the most noble trees in which is a few words in the other, \"The Pall times, and I saw the church, in the boy, and we must also to her. He was the door there I should be quite a little Prince, and a very much less the same of the old church",
+    " the old King had been in the old man, he had been found a string; and they had a great deal of money. He is a little birds; I saw, was just, and the same way of my mind. And then I must have been brought to the world. He was not a little bird, and they passed through the other that was a little girl.",
+    ", with young ladyhood that he had not to it had been a piece of the same flower, and of her. And her, and then she thought the little boy, but the town of the street and then we should have seen the old merchant, and then, and she took the water, and of it was a great and now that she had a great deal of white boy from",
+    " few other of a great little boy came a new of light, the old men, they had been found the water, a wild are in the sun shone with the old woman. There stood the earth of the sea, she had been able to the same of them; but he was as a good as he could not sleep, and in the old man came they can have been to him. The tree"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 262,
+   "train_loss": 4.5881,
+   "samples": [
+    " of wealth, when a time of the palace of the \"O my master, china of the ur-an of the palace, and the most approve in which is a few words which are not in the palace, on thy house!--Then he rose with her head of the year of the palace of the street behind him, and of the old woman, and in the day, and a sign that he had",
+    " the \"baj\" and God); for I have been of the house of the house of his palace that this is thy master!--and I have been an ass. The lady Zubeydeh. The merchants were in a garden of the market of the latter, and they are often treated in them. The words and they passed through their officers. A large chest in the market of",
+    " of the palace of the people, to the market of the King Suleyman Shah. This is the matter who is the most distinguished by love; for he is the name of the house of the same authority of the house; and it is the old woman who had been in the market to depart for it; and when he was a little while more confection of a great",
+    " few portion of the great cry of 'Ajeeb's son, and the latter will be now in the world; the market of the city of Kings, and the four hundred nights. Wilt was a mail of reducedment of Breslicted.\n\nNOTE 47282; and they went after which they arrived, and then brought to the same value of my master; and the Wezeer said to"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 637,
+   "train_loss": 3.9236,
+   "samples": [
+    " there were three merchants who, and whom they used to spend their night in the tent, in the midst of the sea,, gave a tremendous air a week, which had to be prepared for them, because their father had given them out, and they had been in great service, and had no money to conceal. He was too weak, not far from far in the",
+    " the physician, \"What business?\" says the king. \"MUSICID. I recognised him and cried, and now I was married; I had nothing to him, yet I only laughed. I felt a strange obliance, and then my mind made permission to have something to eat. I, and then we got up and left to hand in the end, went by without the present. And",
+    " of the forest were the green bushes, and the flowers and bushes along in the forest there was a big hole in the big river, when a little white horse was covered with scales with iron teeth, the big fish.\n\nSo the Tzaritza gave him a sabre, and went to the hut, and set with him at once on his way.\n\nThe old man rode away",
+    " shut in the hall, and took a long handful of gold and the old woman, with a baby, dressed, in fur cloak. The old man had taken the tablecloth, and had brought this bread before it had been for that, with a huge stick and a girdley, which had carried him before the house. A merchant, richly garmented with fine garments"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 1261,
+   "train_loss": 2.9178,
+   "samples": [
+    " there lived three merchants who had three sons, and they had a eldest, who had an ugly head and a third and three daughters, who were taller than two. If they were, they were young, and would have married a couple of their wives. Now, instead of trying to kill them also, but they had no other wives, not having married",
+    " the old king, 'Send the old king with thy wings.'\n\nThe king did this so accordingly, and then laid over the head of the army on which were brought with him. Then he betook himself to the great king at the sight of the royal palace, and looking at the queen's palace as if he had been seen before he went to bed.\n\nDown the",
+    " of the forest through the green bushes, which floated over the wide river, over the meadow and there, in the midst of the deep snow. He thought the hardest work could be found and stretched the black beard.\n\nThe snow lay up as a snow-flakes, which made the sun shine in his castle of bright green and yellow, and from that",
+    " great lake of a little girl; tall and strong, and strong iron, and he shuddered, was the lake of the lake where they were to keep their dry places on the edge of the lake, and began to look round, as it was now winter and summer, the lake was as large as the lake. The girl grew frightened with cold, and was now in spring"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.339149,
+  "training_s": 600.1,
+  "peak_vram_mb": 3545.9,
+  "num_steps": 1261,
+  "params_m": 18.9,
+  "sampling_s": 16.9
+ },
+ "version": "a683c77db035",
+ "parent": "4852cd548b43",
+ "status": "keep",
+ "description": "MATRIX_LR 0.9 -> 1.35",
+ "checkpoint": "checkpoints/20261012T222025-0700_a683c77db035.pt",
+ "checkpoint_sha256": "9b244db62822276fa4b10ed2604388ee13bf2f3f29aa2ab2d1cf9301535afe36",
+ "decided": "2026-10-12T22:33:34-07:00"
+}

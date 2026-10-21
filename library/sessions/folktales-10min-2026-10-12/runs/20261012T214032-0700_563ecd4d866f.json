@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261012T214032-0700_563ecd4d866f",
+ "commit": "563ecd4d866f",
+ "created": "2026-10-12T21:40:32-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.4,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.5574,
+   "samples": [
+    " he has you; and, and and the King of his head. She must do he was no longer, of the little, so you the old man, and the poor man and he thought, and was very much on his house and when he was so, and the boy, and we must go to her. He was the place there was sitting on her in the Prince, and a great beautiful house. Now",
+    " the King. And he had been in some country he went of the two days to this and his palace that he was you. He is a year was an egg.",
+    ", and he has never say, and said the prince had no harm, and the King was a beautiful of her. And, \"Frant, and the King's house.\"",
+    " great beautiful king and as all that I will not to come, and his palace like his daughter, and the water, my eyes. The prince's face was going to see me and he was quite angry, and began to stay that she answered the same of them; I may have no longer!\" said the princess's daughter was, in the old man came up, and went"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.4224,
+   "samples": [
+    ".\n\n\"What can you return, and go to the dog?\"\n\n\"Oh, yes, I don't understand you, you have no one.\"\n\nThe old man the dog, I have to the Dragon King?\"\n\nThe old little bird, and I have I am the Princess, in the boy, but we must also come to be allowed it to him, not to the poor old man, and the water.\n\nThe old man. He had a",
+    " the old girl, It is an old man, he had lived for a moment,\" said the same time that you can be quite a short time, for you have come with you.\"\n\nWith me?\" asked the dog at the sun at me I must see you,\" asked the sea. \"I did you know,\" said I, we have no longer that you will go.\n\nWhen you know.\" He said. Indeed!\" said",
+    ", and he bade him say he stopped at the sea and went.\n\nKaso did the shore, and her go to her, and carried to himself. When the shore, the old man ran the world, and said:\n\nThe poor.\n\nThe old man, but he found the old man, and to himself, and then the monkey sent to see the way to a great child from all he asked the water",
+    " great place of a great man was now.\"\n\n\"Then I must find the old man, will soon, be the water, I will let you ask him,\" said the old man said that you!\" cried he, and go back on the land or how glad of the young wife, the poor black as she had happened to come to go in and told him that they cann't understand what I have"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 4.7437,
+   "samples": [
+    " on a small flower was so melancholy and green that the wall of which the grave, he was not a good of the little mermaid, for the air was in which the other in the house, yet he was very much on that time and strong and the flowers were in which were, and a changing of little girl. In the little there was a great deal in",
+    " the old woman, \"More,\" said the world, \"cape has been a new flower; that is the other thanks, now I have been an angel. The garden of my heart, and the little man is a good child, and the old and well, and has come out in them. The good and good counselors; and that was a little child.",
+    " of the young fellowhood of the storkbasps had been placed in the same moment the last time of her a picture of music, and in the poor child's song, the town of \" the world of a man, that is an expert,\" said the green leaf; \"and it's wife are coming to the little ones canary for the earth to a child.\"\n\n\"Ames,\" cried Ikkor",
+    " few beautiful house and the little old man, which is the young bird in the Moon's side of the beautiful, and a whole city of which the King was the old woman. There had nothing but he was obliged to put on his head. \"I am quite a new word,\" he said; \"she will keep it for you, and has to you that can have been to hear nothing"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 262,
+   "train_loss": 4.1806,
+   "samples": [
+    " of a small family of a son of uncle, of a young man named El-Fcision, and a person, and his wife confused a handsome, like a black horse and handsome handsome named Emeenar, and a female slave-girl who was, in which were, and a white slave-girl, and with a long of countenance; and I fear a wife like this youth a person",
+    " the son of Eiyoob. This is a man, of old Wezeer of Eneh, a son of uncle, whom he is a man of Eiyoob, and of Eiyoob. The master is named Khaamm, and is divorce to be a person which, in a place of a piece of linen, or a son of a female slave. He is often given to a handsome one and a handsome woman, of a kind of dress, whom",
+    " of day, El-Melikrekers and lining in the same manner as a female of fire. And the King went into the whole town, and came, and found him crying the Sacy of the year; and when he had gone his people, he found the son of Eiyeh, his father and his mother had taken place, he sent for his wife, and a wife. They were therefore",
+    " great white embroidered with lovely adorned with a embroidered embroidered gold, and the old dress like gold and silver, the sweet with sweet colour and elegant silver, and with four feet ornamented and gold. And he sat gazing at her countenance and splendour and loveliness.\n\nAs her eyes, she sighed as she was she, and"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 637,
+   "train_loss": 3.4233,
+   "samples": [
+    " there lived a woman named, and she would not wear any child. She loved her father, and would like of the little girl, who loved her, in her father's temper and was obliged to take a little girl on her, and would not stay with her in the night, but she would go to her father because she was so wise. And she was angry with",
+    " the old queen had made a journey to his country, and lived alone in the world with his mother; that was his name, he never saw his mother's cousin. The queen of Persia was a holy slave, who was a king. I had told her my son, and was in disguise when she had been married. The queen was pleased with that she had married",
+    ", the little fellow appeared, the blind man, and the right eye of the same little girl, who recognised her thin countenance, fell down into the deep slumber-room. He was frightened and ran out into the yard, and sat up on the balcony, with his head folded his arms, his legs, with his arms, his legs, his beard--but he was",
+    " few pincher, for she knew nothing of it, and said to her father, \"In order to the market, this morning, I bought the best thief that ever stolen away from the Master of the Misery, for he feared, stolen it out of the market, and the stolen away from me to this night. You see, then, is the thief, you have stolen home. I"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 1262,
+   "train_loss": 1.7951,
+   "samples": [
+    " there lived a King who had a daughter who used to sit in his sods, and in a time he had been able to get work the Princess Badoura.\n\nKing DIMIRIIK lived happily ever since Malcolm. One day Repart and geograpuous window that he had sent there with him, and he had his head cut out of his stunted ground with a big crash,",
+    " the old queen had made a present of flowers to watch them, and then he said to his mother: \"Take this thy life and go along theord's thoughts. The old queen, after looking on the slanding and followed the child, and then she questioning him about them, said:\n\n'You must, my child; it won't be better for you to go in there",
+    ", far from the huts, beneath which the sun was a golden cup; the same thing, either of which, in the midst of this particular land's castle, there was the way of the ball in it; and it was not so. But before the sun was high the, the old man was there, with the ball hanging out of his mouth, there was drinking a dancing",
+    " great store of fresh wine and food growing out of milk and being a sed pleasure by a Four of L host. And she drank every cup of wine and drinking till it was complete the fragrance of aightedu that of a year a day by day she sang a gay song; and then she drank wine a cup, and then she poured the wine into a tread; she"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.522286,
+  "training_s": 600.1,
+  "peak_vram_mb": 3546.4,
+  "num_steps": 1262,
+  "params_m": 18.9,
+  "sampling_s": 16.8
+ },
+ "version": "563ecd4d866f",
+ "parent": "22a5b7de34f2",
+ "status": "keep",
+ "description": "MATRIX_LR 0.27 -> 0.4",
+ "checkpoint": "checkpoints/20261012T214032-0700_563ecd4d866f.pt",
+ "checkpoint_sha256": "56760cd454dec96ef4a0df295d9c1cf8065c607f25fa261e17c5708958cf9c98",
+ "decided": "2026-10-12T21:53:40-07:00"
+}

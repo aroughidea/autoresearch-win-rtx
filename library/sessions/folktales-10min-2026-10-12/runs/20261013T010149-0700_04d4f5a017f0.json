@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261013T010149-0700_04d4f5a017f0",
+ "commit": "04d4f5a017f0",
+ "created": "2026-10-13T01:01:49-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.2,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 7.0009,
+   "samples": [
+    " then will you's King, and she would am of in a man in then said he.\n\nour,, of and made,,?\" of ainistthe boy. When and if they's father was when, and she would have I not want. Now in them were, and we must may am that been him, and went, 'and I must shall will have, and a greatthe greatpimudFI have saw the gardener at",
+    " the \"bon of and said there of I been I of they want he should will be his house that not have cannot be a dog said his ownTheWas, was he had been his heart. Theand greatide at the I must have must have have been that so that and said she had been, and they been there; and that and a nice then the",
+    ", to he were I's story to said we never will have the cat! 'y was a beautiful long is a certain her King are going in he's great great prince, and found and that the story of her man have have never was great city and then, and found the princess saw it's way with the dog is the princess can go and I shall am a great boy",
+    " greatid of and gave for that I will the good and it said his husband he cried a greatar, the king must deep very beautiful few head. No's wife, and she had been never must give be him she went and she answered the same am quite she is he was as then I cannot have will see afraid she, in you will be you will have have been"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.8938,
+   "samples": [
+    " his hundred,<|reserved_0|> was so the and the old of a man and so, for an.\n\nfor you, of the old, and you the man the dog.\n\nI have that and he thought, and now.\"\n\n, and she did and, and the girl, and now, and so yous at to her. He was the of the old, and he did, and the pca that he remembered a man with a the one and the",
+    " the. \" all the and a. And, he had of that then he found this and his a that was his, and a of a his, and I.",
+    " in to's body and that he had not the bird and he was in the more in the more a of her a day of more a long to himself the one are more, and the and that the one of a man it that saw an old thousand and his head, which the oldly, and to it, and the man. What, and the man to a day the two of all a very to the King; and the",
+    "..\n\n the and as all that came a man's, and the old will he cried a, and the water, and when the man's, and the man that was so that had the great of the young's she knew and, or a.\n\nAs he called the other the as, and she asked this, and she felt in many old man, and said the child had the old man that said the way.\n\nAnd"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 5.2733,
+   "samples": [
+    " on and you are it, and she would not be sure, \" the boy.The nightingale, and, you remember you are all the beautiful man the sun, but he took her head, yet be taken their years, she would have said the miller's marble roses were the emperor, we must happen to her whole world, \"I have not like the same evening, and, \"The",
+    " the nightingale she had fallen and.",
+    " in to go to the windows one to the world, and out thoughts in the same little flower, \"I have a pretty flower, I have to sleep. 'it may have been found him to the world, and good bird; it was a little room, \"and you know, for it in winter with her mother who is better that you see I shall not sing you shall remain quite",
+    " few other ofjectks forily of the flower's name, \"the same must be a great other things, \"In this are really must return to the nightingale that still dark world for the earth, \"Fetalist, but a picture.\n\nBut quite well I may have as if I know me this world.SEENY\n\n\"The Viking's son,\" said:\n\nTHEING"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 261,
+   "train_loss": 4.9232,
+   "samples": [
+    " of the first; but, and when I am of the same, so-ca-ed-Deen, and said of the son, He took the old woman, and when I took and he said to beliance, I will not not have taken off with her in which I would be a man, and when thou do that which thou hast not been to her in my heart, and a sign that thou wilt not do with a month",
+    " the chief of the bride and said to of the ground, O my house, Warele, I will not do you be a short I have been performed to me, and he had been a female slave hath come to me at the door, and the slave have been of the morning, and, and his attendants and they passed through her, that she had befallen her.",
+    "The day, and I ate to to the son of I went to in the lady, and I had taken off to her, and when I heard this the door; and, and found him of the name of her, and I saw her, and she answered, O most approved for her, and when I was a man; and when thou hast been present thy own son from it, and they heard her, until I will",
+    " great other of the humpback for its son, nor is so, and his palace, they replied, What was the damsel, I replied to, I will order to that I took it for this is like it had been the damsel, and he rejoined.\n\nAs soon as I may I will be performed in the house, saying to go in many of which hath befallen him, and kissed him"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 636,
+   "train_loss": 4.3702,
+   "samples": [
+    ", I can only remember, and my sister, of course, I am convinced. I am, and I am obliged to fly off about the old man, and I have to you in my wife, and made a dish; I shall have seen you. I'll call you, and you must also come to your life, and I have not seen you. I will have to ask a good ship, but I could go myself to",
+    " the old woman, \"Mother, let me, my father, and he has taken his mother; and, and you are a long old man.\"\n\nThe little Prince Ivan was born, and his only brother's wife, and at the door, and the old woman made of the Princess, and she had been, and they had got up and left to a little river.",
+    " came to the earth, who was to the forest, and went along in the same hut.\n\nAnd Sadko sat on the other side, and came to the forest, and came, and looked at that the world had been seen it; the Princess said nothing but the same was left to the water, because of it was to be done. But the beautiful princesses, we could",
+    " great white cat and the little old man, which is so young that his father would not be married, and the old man had been seen. It was the poor old woman, and for the greatness, and all she had been able to live.\n\nAs soon as the other,\" says the Princess Vazasons."
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 1260,
+   "train_loss": 3.6813,
+   "samples": [
+    " there lived a King who was exceedingly disappointed and he could see his own daughter. They seldom used to be any of the courtiers who were about the age, in which the poor man and his eyes were never seen. One day, when she was older than a king in the palace, he called to mind to marry one of them. So there was a great",
+    ", \"Give me your meat and drink some of them, and I will have to drink and take a drink and eat you. I never thought of going to die. The fire is burning me, and the fire is burning, at the sight of me. I have been looking at my shop and asked you what good have they been there; and I have a good place and many things among",
+    ", the three hundred miles of a tree, we set forth for twenty or twenty. The trees, the branches of a tree, now we have seen the tree, and we meet with the highest of the world. We weas weigh ourselves to five hundred, wend ourselves to the ground our lavole, we shiots our hardness, weighing our Pryoms We. We were were we",
+    " great wood which had long thick wood, and the middle of it was now brighter. She went straight into the wood, when the wood came up to the pine hill, and she fell asleep at the foot of the tree which she was leading a child. She called her, \"Who can be such a wicked creature?\" she said, and she saw the wood, and was so"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.296916,
+  "training_s": 600.2,
+  "peak_vram_mb": 3546.1,
+  "num_steps": 1260,
+  "params_m": 18.9,
+  "sampling_s": 17.3
+ },
+ "version": "04d4f5a017f0",
+ "parent": "bf946cdb945f",
+ "status": "discard",
+ "description": "WEIGHT_DECAY 0.2: worse (1.2969)",
+ "decided": "2026-10-13T01:15:02-07:00"
+}

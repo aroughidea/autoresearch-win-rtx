@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261012T223345-0700_3724cdc01649",
+ "commit": "3724cdc01649",
+ "created": "2026-10-12T22:33:45-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 2.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.9833,
+   "samples": [
+    " on the you's was down to go and the of his, which the bedTb.\n\nThere, and only and no, so you the man the story, but he took and he saw the child was very father, and to them, and the certain king in them, but I were no one to her his white and the place, not be I must be the Prince, and a great beautiful daughter. of the",
+    " the the him, and and and the Dan, I of the boy of the father and his palace that he the King. had never put to the prince were come with the eyes, and the man. am my great great king. the wife, and and not be and put to, when she gave his good head, we have noon that was a little bed., and and very great wife. was and",
+    ", to go to the eyes, who has heard it and went the eyes. on a man, and and and a king, \"Frant, and the eyes, but the name and \"Now the young brother, and I saw an great little daughter, \"and which to, for it in the princess, and then the few certain story from the great great little white son from it, a King., I are my",
+    " great a of the, for its man, \"and and and the old palace, they and went, and the great son.\"\n\nWhat will ask him to the mother!\" and so and he was at them, and all the daughter, and made the child of them to of the little poor story!\" and went and and it and, and then she should find the sona was to; I, and said to of the"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.6939,
+   "samples": [
+    " was not know you must be quite delighted and theised sure, which was very much hungry.\n\n\"Sx, of the dog, so you have ever the dog, but he took her his sleeored, \"Garjumot and, who found you will take them, but I cannot't go to her. He was too of the old man began to ask him that was a fine man's daughter began to the box",
+    " the.U\"I will go?\"\n\n\"It was very he had lived surprised again he found this will take a that you have you give a short, \"I have only a big girl.\n\n\"I can be only't think they were a dog. I must see the world.\n\n\"Indeed was surprised, when she stopped his life and they had happened; and that was a nice.\n\nWhen he went by a",
+    ", to go to do it was surprised to take it will have never do not only think the young age of her a heap of money, so surprised of the dog was more, and looked up that the world of her arms, and saw an old lady had been very that she found he saw it in his heart was ashamed for the monkey that you see I hope them.\n\nThe maid",
+    "."
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 5.1427,
+   "samples": [
+    " true; she she was so that she would not a new ones man in a child, and the old man of the little song, you the old house in which is a few words in which's child was made a short; she took one who was so, in which were, but we must also to her. He was the first, I thought I must be able to the other a very fondled the",
+    " the old girl's father's. \"Oh, he, and they were dead; but they both a great, and you. I found I do you wish I know, was just a pleasant mother. Do you come to a kiss me, and they were always a number of gold, and the prince. There, and they know it; and that was a little child.",
+    " of the young ladyhood that he had not to it to the old man. And then the last this; but a picture of musicers. He thought the little boy, but the other and that the story of her arms, and the wind. \"Oh, \"and, the old people, and to it; she is the earth, \"I know, we have you something that it?",
+    " few other of years? There is a short of gold, and the old men, they had been better, the open window, and every month, the little ship that is a great them was obliged to give us go for her, with a picture.\n\n\"Yes, and the other stories as a few minutes, and then it was, in the old man, they can have my eyes; I think that"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 262,
+   "train_loss": 4.7114,
+   "samples": [
+    " of the ur-an was in the Walee returned, and went forth to be a time in Cairo, and said of the son of Earity of the King of the other of the ur-an, and other magistrates of them are not employed. And when the people of this barbers), and wept violently enraged, and wiped away away our lord the tombs of this chest, and his",
+    " the chief of the day of mourning of them, he went forth from the King's face and repaired to be not his heart. He then said to thee an about with the garden, and she gave orders to him, and returned to the Khaleefeh and repaired to thee, and put it, and she gave orders, and they replied, O my mistress was a female slave",
+    " of the young lady-chamber, and said to thee, and if thou do not do not know thy beauty of her a damsel of love of thy mind!--and the ur-an, and obey thy mother the name of her mistress of thee, and said to me his head, \"a, and I have mercy with jewels! There is now more than thou hast been present thy coming to thee; and",
+    " female slave of the name of the Wezeer, nor power of it was his father, they left him, and the damsel of this piece of Kings, and the Khaleefeh and wiped away and obey. And he sat alone, she went forth with loveth thee and kissed the sheykh, the tomb; and she went forth from it with respect in anxiety and approached the"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 637,
+   "train_loss": 4.0976,
+   "samples": [
+    " a time, when was in this place, the story was happened to be seen. One day, when one of the other, the one of the the other, was at that, which they were ready to keep, on which, and would not make them, in which were now used to take refuge to the old sailormen. They were not like to dance in the day, because they were",
+    " the son of his father, and his father, he had treated him a year; he had his son and his father, whom he had deceived his own, and had nothing to him, and his only brother had brought him a horse. I had told him that he had left him, and had brought him his life and good horse, and he was to be married.\n\nWhen he went his",
+    ", the young fellow had been a long time before he had reached the end of the reach or a horse of stone. He set himself down into the land and the horse, and with his bow, the horse of his horse, and set on horse high rope, rode to the land, on, armed with it, with great claws, that he had escaped, and a great wind from",
+    " great pinch and pin for its teeth, which was so good to bring up, because she was not too much stirred, for she had not far from her birth. She had no sooner been but than she had been she herself again, or how to get her she, she thought to herself, because she could not let her go in and to die, unless she had been to"
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 1262,
+   "train_loss": 3.1961,
+   "samples": [
+    " there lived a King who contented and marrying a King of his age. She then said he would marry a daughter of the King, but the beautiful daughter of a King. If that would take her, she would have a son; would she marry none but a beautiful woman of the three wives; and she would marry whoever would marry the daughter of",
+    " the old queen had made a great many feast, and the queen was so much more delighted and asked for that she was really satisfied.\n\nNow I was married and were married with the pretty daughter of the queen. There were great many of the festivities and the queen was now happy. He was not happy yet till, and they had plenty",
+    ", the young lady stepped out upon the high tree, and went on in the same manner the white hind of the rock. The old lady came in front of the palace, seeing the old lady stretched the poor lady on the side of the old stair, and throwing herself round her lap, she began to speak with him. There was no more room for the lady",
+    " great grief on her breast for a long time, and then she said to her, \"My dear, the child, my dear child, I have nothing to trust that ever since your death was born?\" she cried out she hear and trembled all over.\n\nAs soon as the girl was asleep, the little girl took her into the corner, and, picking up the axe, went to"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.307427,
+  "training_s": 600.2,
+  "peak_vram_mb": 3545.9,
+  "num_steps": 1262,
+  "params_m": 18.9,
+  "sampling_s": 17.2
+ },
+ "version": "3724cdc01649",
+ "parent": "a683c77db035",
+ "status": "keep",
+ "description": "MATRIX_LR 1.35 -> 2.0",
+ "checkpoint": "checkpoints/20261012T223345-0700_3724cdc01649.pt",
+ "checkpoint_sha256": "9018debb9da76a285c88041b71f882830adf681d15d4a6af93c1b487ae8dc34d",
+ "decided": "2026-10-12T22:46:53-07:00"
+}
