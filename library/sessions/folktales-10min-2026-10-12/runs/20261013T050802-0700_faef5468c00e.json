@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261013T050802-0700_faef5468c00e",
+ "commit": "faef5468c00e",
+ "created": "2026-10-13T05:08:02-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.002,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.9,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 7.3498,
+   "samples": [
+    " on I can; was so to go and that of his few man in be said he.\n\nfor a way of the little large wife you the man the sun.\n\nI have that and was they's father was have will on she to them, he that said her head of the ground, you of she to her old boy that the place, not me I must in him that this son a dog his daughter he",
+    " theBut him of to and.",
+    " in toHe will his eyes he to not to he had went.\n\n'I said on in the young door of her a king her daughter;. He would the dog that he could the people him of the world of her man it; the old great little daughter his place to, to, for it in to with of his great little few way you had I, I a day to that it he a other.",
+    " to aMAfor for; 'When the palace, but said his husband he they had been be the water, my eyes. The king him his king's king of a daughter for the great way, had him she on that,. If.\n\nAs them; I may the ground; I she went me at it she, in and with with you they said you was had; I his woman said to he had you was my wife"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.7594,
+   "samples": [
+    " I will you are a time, and so that of honour, and so much much one of the old man of the little time, you the man, in his mother. When and he made a child was made a certain sight of them, and the tated in the boy, but we must go to her. He was the place, and now, but in the old man were a great stones, but a man are a",
+    " the young girl had delighted and an words of the ground, and that is he said this matter. The King, and went by a short, \"I have I am the tree of my back, and the pent as a strange words I am very hard and not as that was in the poor, and his words and they came to come to get a large as the story, \"I'm there. \"it and",
+    ", toal Ment's lady to think to be like out.\n\n\"I hope on a man, and of her. Then her, and that he thought the great black years, and the boy of the story of a man heard that the old man, and his breast, \"This, for it made to be greatly at the little man that you see that, but a day what was an king; and they will I pray",
+    " great place of a great man; and a man's man, the old men, they left the world was the house, when I will not return the king's feet, so that he was at the man had no one of the place or a child,\" said the young man,\" as a goodness of this time. Then, in the old man came to the house was to him at the tree: I am very much"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 136,
+   "train_loss": 5.1465,
+   "samples": [
+    " of the world; was so that that that that of each only in the boy. One of the Pas of the little mouse, for the air, in which is a few and he can be a beautiful little girl, and the air, and the flowers, in which were, and the room, to her. He was the first, and the sun was a little Prince, and a great cis. They could rest",
+    " the young girl had fallen in which. And I looked, and that a little poor man and his old man, and that there, when I have been an angel. The tree of my journey, and the world were as a of the water, and the world, and the sea which, and a little house, and they came away; the old people; a beautiful.",
+    ", with its high, who was to me, he had been a little boy who did the last, and the bird, with the old man in the people, and more, and the old woman the world, and the other; the wind. \"I will be heard, the old people, in the princess, and then the earth, or for the great deal a great boy from it, a little creature, I am",
+    " great other of the princess for its power, which is so it was his eyes like his eyes, and the water, a whole city of the sun was the king that seemed to get for the house of the sea, she had been able to live.\n\nBut what was the other,\" said; and she said the boy. The princess, and with which came over the house was to"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 260,
+   "train_loss": 4.7769,
+   "samples": [
+    " of the first century of the son of the King of the same, or a time, in the King, of the son, the first the man, in his father, that he was about to be a little, and she said out, O my master, in which the Khaleefeh, and the money to her. By that which of the old woman, and in the first, and a person that he said to the",
+    " the son, O my master, I desire, he answered, I then he should have been his a son, and she gave a short I return, and I have nothing to him, and his heart. The man, and of the place, and the slave, and he was in the present, and his words and they replied, O my son, a man then the son of his brother, and put it and after",
+    ", to go to the people to the Sulan, and kill the house, he opened in the morning, and, and said, By the Khaleefeh, O my brother; and, and the first of the name of her, and I saw an apple, and his place, which I, and, and, with him, who is no more than four hundred, and a more; and it shall be as they will I kill me. In",
+    " great honour of a name for the Wezeer, the night, and the old men, they replied, What was the damsel, I wish to me, and what the Sulan, and he had been a person, and he was not a man or a child of the city, with the tomb; and she went after which I will go in and see which she was a little, and, having a sign to him, and"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 633,
+   "train_loss": 4.0951,
+   "samples": [
+    " there lived a King who, and had been about, had only to be seen. One of the ladies, of the little Master Antiants, the golden crowning on the roof of the Princess, who was at home; and she was so that she was in the palace, and she soon saw a little window. She was of the old woman, who did not like this, and all his courtiers",
+    " the Sultan. \"What a good man has I been, of course, he has learned and his life that he has become a young lady, too, and I am, to have my heart, and I am at all. But I am not very very well, but that you may not have a bad idea, and it is as good as that.\"\n\n\"I hope you may understand this, I have a great one and yet I",
+    ", with three thousand calenders, or some one, or two. At a single word, of course, and then he ran into the garden. When the little boy was asleep, \"I have found myself in this state, I am sure,\" said the Caliph, \"I saw it in the castle, and I hope you can see for the other little children, and that it shall be as they",
+    " great place of water, for she had a new one, and the old men left her left. She was the best of the precious stones, and the little Swallow was still so long for the sake of the sea, she went to the old woman.\n\nAs he was in the dark, she was so much frightened at her, and in the sky which she had been like a great snow"
+   ]
+  },
+  {
+   "t_s": 600.3,
+   "step": 1255,
+   "train_loss": 3.708,
+   "samples": [
+    " there lived a King who, although he would not of his age, so he said he was a good man of the age. He could manage to catch him, but he would not take away yet, because he could not escape from them, and that he would not do. He was always going to take service with him, and to have his own way he did, and, having a very",
+    " the youth, who was a good boy, and he had lived a good wife; and they both wept and wondered and praised him, and said, 'The King has nothing to eat, and his heart will become great as a remembrance of the poor woman. But now, when she is out in the king's bed, they shall stay with him at home; and then she will stay and",
+    ", far away through the green bushes, where the sun shines, and in the valleys, or west, of the valleys, of which are many in the forest. A light, green fields and meadows, and moorlands, and grassy meadows, and wild birds, which are sometimes used by the winter. It is a little dark, gloomy, gloomy, gloomy sky, and full",
+    " great many of the great-glers, which were so delighted that his father left his left hand, and the old woman went away to ask him the whole story.\n\nThe following day the old man went to the little king and told him all how he had told him everything, and how he had taken the princess and her gold, and how she should find"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.251496,
+  "training_s": 600.3,
+  "peak_vram_mb": 3546.0,
+  "num_steps": 1255,
+  "params_m": 18.9,
+  "sampling_s": 18.5
+ },
+ "version": "faef5468c00e",
+ "parent": "f02876c49522",
+ "status": "discard",
+ "description": "UNEMBEDDING_LR 0.002: worse (1.2515)",
+ "decided": "2026-10-13T05:21:18-07:00"
+}

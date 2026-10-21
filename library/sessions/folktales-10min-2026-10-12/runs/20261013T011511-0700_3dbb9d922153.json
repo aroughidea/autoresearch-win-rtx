@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261013T011511-0700_3dbb9d922153",
+ "commit": "3dbb9d922153",
+ "created": "2026-10-13T01:15:11-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 64,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 6,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 25,
+   "train_loss": 7.7186,
+   "samples": [
+    " his I would; was, said and and that of in a of in be said he.\n\n'I be, of and he asked, you the man the in his the he that and was they did be was have, on she would out, saw the. came in of the, saw you answered she to her. had that the of the not,' I said in the that the the a all his, said a they with a the the a, had",
+    " the. answered the to and replied the of, he went of have a he said came and his a that not and you. answered of I his was and I. with was him, was his. had said they as a at the the, they answered and not the of was in, did she. could, and they replied the he's that a a a.\n\nWhen in the and him the. said was and to be be",
+    " in to he were had that he to said the he had went.\n\n in he on in the a a of her a the her he had. in he the the the, could the with and of the and of.\n\nSo it replied the.\n\n'I to have his, was she took, saw it saw to with when his said the. said saw for I, asked a you said that of he asked as. will I; you the in the, saw",
+    " to a of and as for; the a the's, got said his will he cried a, saw the the, replied when and to not him the the the that of a and for the, he could had answered she on that, answered a.\n\nAs the she I with the as; the she went will I would she, in and with of you they said came was to; I as that said to he could. was a"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 52,
+   "train_loss": 5.8777,
+   "samples": [
+    " the I can; was so to go to the window; 'ital. It is in the book, and the little old man could have a large in which is a few house was going to be a little woman, and the wood, and the church, and now were, and we must go to her. He was the first, and the great poor in the room, and a great crak of the whole old man, and",
+    " the old. And you and the Newer, he had of the whole man; he had his house that is quite a few way of the whole woman's feet.",
+    " of the beautiful, and that he had not to it had been a piece of the same the church, and her. And her, and then she thought the New Yin, and the window of the world of her arms, and the wind. \"Oh, \"and she took, for it's way with the lamp who were a few own beautiful in a great little man; but it, a amusing.",
+    "."
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 93,
+   "train_loss": 5.2864,
+   "samples": [
+    " on the first; but, and she would hardly't see that I am not want he was noises, of the son, and the most angry the close of the other, and he saw not be an intervved on that she took, and the best, in the people, and we must go to her. By that the first two two like the same shall soon as this is a sign his daughter. Now",
+    " the son of the whole day.",
+    ", to go through the son, to the son of the King.\n\n'Iandevated to a long time. And her love, therefore in the people are often more soon as the old woman, and what had said the next night.\n\nMeanwhile, and his place, she took the son, and to be the close of the door that she had a great many a more shall not, he passed upon",
+    " great other of the great son; 'and the night, and the old men, they had been, the garden, my eyes and its old woman. She was that he took a man was a mirneers for her, she looked out.\n\nAs if she did not to be a few of the house, it signifies, in the old woman came the son, my master; I am that they arrived, and the Arabs"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 175,
+   "train_loss": 4.9668,
+   "samples": [
+    "ing a small; but, and the humpback of the Sulan, which the Walee said within himself, and, of the shop, and the merchants of the people of the sheykhs and he beheld a female slaves have aeeyeh of them, O my master, in which were, and said to one of the Walee exclaimed, which of the door-Accordingly, or other, and a person",
+    " the Walee seated himself, and on the Sulan, he went of the Wezeer answered the house and his house that he were, by a woman died, and continued to me with the damsel, O my mistress who hath brought him? And the door of the damsel and she are written in which, said, and his words and they replied, and he were a street:",
+    " of the Sulan Elan el 'Khakaleaand the Sulan of the lady or a female of the humpback of her, when this place of the Walee said, and the people of \"I have been a man of the Khaleefeh was a slave,\" or \"and she replied, \"Mal-ed-Deen (foots. But the Sulan said, O my brother said to them, a person.",
+    "'ahs of the name of its 'Ajeeb's \"EKA, \"Ajeeb El-Ma. He (NO my story. The Wezeer replied the Wezeer's \"aahh-AGHTTHYIRLI have killed the Walee said, and the sheykh (The Walee; and she answered, and it hath done, and with which hath befallen him, said to him.--NOTE 2. The Khaleefeh answered, and the whole of the chest. The"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 421,
+   "train_loss": 4.6201,
+   "samples": [
+    " on the first time was so hot and the giant of his head, so he was so tired, and he was obliged to be easy for the man who had not gone far to kill his eyes, though was very kind, that seemed tired, he was so hard that he were so long before going to come to know what was the first, not far as he did, and when he reached",
+    " the youth, 'What do you not tell what he had never done?'\n\n'Oh, this matter is a great many of course, I never.'\n\n'Tellert, but with you,' said the prince. 'I should have done any reason I will see you,' she said: 'and you did not know what are I? If you know?'\n\nThe king was a child. But if you would not have done it and",
+    " heard the three or good-bye, who was quite pleased to have any more questions. The man had a long time to be sure that he was in front of the giant's house was very hungry that the story of her back, and the man said:\n\n'lster, you know, you will ask to be sure?'\n\n'I will be much better for I shall be able to speak from",
+    " great many of great pain for that she should be glad, and the old men left with a great noise, the bear, when they were not far off with their feet, and they fell on their heads, and they were on when they reached home.\n\nAs they saw the other the fox's boy came to the boy who was, in many days they came they were playing"
+   ]
+  },
+  {
+   "t_s": 600.4,
+   "step": 831,
+   "train_loss": 4.0025,
+   "samples": [
+    " there lived a King who was standing and and used to each other in his father's family.\n\nThere was a great and many other people who the man the King of the Faithful, and he loved them, \"Go and fetch us to seek our fortune.\" He was in great danger, and we soon saw a little old man and the of the old woman, who came out",
+    " the Fairy, \"What a good thing for thy coming?\" But when he opened the box and his wife saw him and cried, \"Father, come and I am the lady of my sons, and I am come to you at sunset.\" When they reached the palace the princess came in and said, \"There are no people in this house here at a rate.\" And she told him she would",
+    ", far beyond a few miles, which led towards The wind, the river which was a vast number of miles from a mountain of rock, which was high and over the west, and the land of the Santarlaid lived there in an island built of Balospa, whose name was Soramohisn Burora A, the Bidnu, Tukt. SHOW TOOE WISEVEN THE TAY A-SIllusta,",
+    " great house of stone, all old houses, which were so young and beautiful that he went to fetch something of the best sauce of them all. It was the very early morning that he had been obliged to give him four hundred thousand pieces, or a fourth of them was the prettiest lad as new as the old house. A merchant, in order"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.318097,
+  "training_s": 600.4,
+  "peak_vram_mb": 9073.8,
+  "num_steps": 831,
+  "params_m": 17.0,
+  "sampling_s": 15.5
+ },
+ "version": "3dbb9d922153",
+ "parent": "bf946cdb945f",
+ "status": "discard",
+ "description": "HEAD_DIM 64: worse (1.3181), fewer steps",
+ "decided": "2026-10-13T01:29:57-07:00"
+}

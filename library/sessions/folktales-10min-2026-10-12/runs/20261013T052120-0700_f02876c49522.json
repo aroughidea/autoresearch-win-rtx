@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261013T052120-0700_f02876c49522",
+ "commit": "f02876c49522",
+ "created": "2026-10-13T05:21:20-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.9,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 7.0407,
+   "samples": [
+    " of the first; was so standing and and the palace in his man to be., and, and, of the little time, you the man the sunWhen the other horse and he thought, and was have able, and, and, and the first, and of the ground, you must go to her. to tell the place, not be done, in him, and the king to his daughter.. the place a",
+    " the young.The boy and replied the king, he, of the boy he to thisNow hisa that answered his heart.es of I do, and I come, and criedWhat was known.. to him to a of the place, and answered this great way of the king, and, and answered, and they replied the house of that said a man.\n\nWhen the man, and there. sitting of and",
+    " of the young husband to it, to the prince he had-law.\n\nNow the same little man, a of her. to herun, and said of the dog to an woman was afraid and of the story of her of its life, when a thousand the boy, and was to, and is in his heart of hishe hands. that you had sure, and a day the third lived, a man., I am given the",
+    " great beautiful day and, for he came, the night, and the old men he cried a greatake the water, my eyes. The prince is given the youth that he began and he was quite sure, and him for he had able. a fool of them of the other daughter as then I have very very son. she, and said to be been able, and was to him., and said"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.7686,
+   "samples": [
+    ".\n\nWith a woman was so to and and that of his head. is seen the world.\n\n\"Sx, saying the old man, you have ever the sun, but he took and was going into the other little, but she would have been frightened. He came in which were now used to take one to die. He was the place, I am I must be true that this youth of all his",
+    " the young King man, and.  old woman looked at them, and he found this matter. He sent<|reserved_0|>Then you are a lady I do't be very short, was still, and his heart. There is as a third time I am very late and she made on the gate, when she had been able to find been frightened; and that was a mighty place.",
+    " in fear's hands; who was to think to take the way.\n\nKi who did the matter, and her a favourite store alered into its kindness. When he came, and the old woman the world of her own room; where I may know,\" said, and found the place on our own own heart of his father and carried a man had reached a greatness, and that it",
+    " great place of a word for ever now a man.The young hundred times \"\"What will't give him, the house, when I will be a few thousand times!\" and so that for the country of men had been much frightened and, or a wonderful and told the ground, the poor; and then he sent him. You, in many old man came up, and my master; I am"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 136,
+   "train_loss": 5.1487,
+   "samples": [
+    " on the flowers; but, and and the old man; and in the time. One of the old man of the little mermaid, you the air, in which is a few and in which I am,\" said, and she seemed out, and the flowers, in which were, and we must go to reach. He was the first, and the great gad, and the garden, and his daughter of a man with a",
+    " the poor King, and and and the flowers, he, of the whole year,\" said and his old woman, and you, and now I do you have I have known to him, and his heart. The man, and at the water, and the evening, as if it may, and she had been, and they did not understand them that was a little child.",
+    ", andThe Moot, which has heard it will have been in the same in the lights of her a king's song, and in the people, and the dead, and the princess the poor young man said the stork, when the wood,\" said, and she took the water, which was it, and the little ones, \"I can, but a great child from the king, as they were a long",
+    " few other, and the little boy, and the good, and the old men, they had been, the water, my eyes. The air, the king's feet, and that he was obliged like, and at first on the flowers. It was a new bed, with the poor house, and the house, or she crept in which has been called the water, my master; I have brought this was"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 260,
+   "train_loss": 4.8038,
+   "samples": [
+    " on the first century of them, and returned to the Sulan saw in the Wezeer said he.\n\nNOTE 21 of the shop, I have the Sulan, in which is allowed to strike in which I take from me, on his companions and I will not go, in which were amazed at the Khaleefeh approached me? He then said the shop of the Wezeer El-Barah, or other",
+    " the youth, O my way of the Sulan, he answered them, Yes, Wise and his face of this night, by a hundred thousand pieces of Eiyekkehositions of his heart. The following case, and the door of the door and she is regarded by which, when she will ask him to the humpback, and if I have a female slaves.",
+    ", to go to thee that he said to thee, O Jaafar therefore, O sheykh Ibraheem Ibraheem, and, and a slave-girl, he replied the Khaleefeh replied the Wezeer, How is mentioned applied to the chest of gold and other; and when he continued to his head.--Circacity, and to him; and other cases of El-Mo'e, we continued, and that",
+    " few other women and that all its course, the damsel, and the latter will be not a great house of the damsel, when I will ask him to the humpback that which I answered Jaafar was a person of wine, she went to obtain a time; and when she exclaimed, I will be performed in the house, saying within myself, We have been ins"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 633,
+   "train_loss": 4.1192,
+   "samples": [
+    " there time a woman was so in the palace, and in a corner in the garden, she was a fine room and a large hall in the air. She was the high in the air, and she was made, and she did not have seen any doubt, and she had been so many of her, till she had grown all of her. She was just in the darkest garden, and that was the",
+    " the young King, and the chief of the country he had of the palace.\n\nAnd this was his palace, and his slaves gave a short, and was about to live with the children, and they only had to come out. But the others, they were always not enough to come in, and their voices could not have been seen before; and that was a little",
+    ", the three were on it, which was the sun, and the little girl who had been listening to their mother. And her daughter ran into the garden, and the little girl was with her beauty the sun, and the other was the old and his eyes, and was obliged to make a great care of it, and she was now more than she had, but a husband",
+    " great white dress and a little old man, which was so very bad, and he was a great surprise, the old woman, and she was a man with the feet, and she fell out at once, and was she not so, or how she was to be in the air as a man, and after a time she had been in the room, they said to my husband, I was in this house, and"
+   ]
+  },
+  {
+   "t_s": 600.4,
+   "step": 1255,
+   "train_loss": 3.5846,
+   "samples": [
+    " there lived a King who had a daughter who used a daughter, and so was the one who was a good brother and son. He had the daughter of a powerful boy, and and was so fond of hunting. The King and his wife were so ugly, and wore them that their eyes were white and shining as snow. In the forest there was a great noise in",
+    " the youth, \"What a fellow you are, and where you have brought me to this spot, I will not tell you. I never shall return.\"\n\nThe brothers went with the king, and they went to the king, who at once asked him what the king had taken place. He told him, and what had become of him, and he that was a fine boar. He went straight",
+    ", the young man lived ever a very rich master, and he was so poor that he was a poor boy, so he never did anything so bad as the new one.\n\nAt last the old woman went to her work, and said, 'If you are only a man, I shall go back to you with your basket.' 'My wife!' said the woman, and she went straight into the field, and",
+    " great house of beautiful little house; 'but what's the good of you will see. If you refuse, the best of all your wants, you shall go and see how you fared.'\n\nFor some time she had been enchanted on the mountain or bush.\n\nAs soon as the girl was asleep, the little Prince took her into his room, and told her to throw the"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.248455,
+  "training_s": 600.4,
+  "peak_vram_mb": 3545.9,
+  "num_steps": 1255,
+  "params_m": 18.9,
+  "sampling_s": 18.4
+ },
+ "version": "f02876c49522",
+ "parent": "f02876c49522",
+ "status": "discard",
+ "description": "confirmation rerun of best: 1.2485, within noise of 1.2429",
+ "decided": "2026-10-13T05:34:40-07:00"
+}

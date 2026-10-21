@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261012T235344-0700_bf946cdb945f",
+ "commit": "bf946cdb945f",
+ "created": "2026-10-12T23:53:44-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.9742,
+   "samples": [
+    " on I can marry a great son and and the palace in a cal.a, and \"<|reserved_0|> way of the son, so you the man the prince like the poor boy and \"<|reserved_0|> The child,\" have the country; \"al, and the moon, and the boy, \"<|reserved_0|>s at very little old white houses of there of me, he in the day, and a great c, and a",
+    " the.., and and.. of I he, of have be he to this and his a that, and you. He is I do, and I am the fire of my mother, and the Dand as a king. I will see the world, and and so that, when she.",
+    " in the young morning the son, who has to he and he is in the man in the white beautiful long, so the King, and going in he. When the son, and the day of the story of her back, and the man. So and his place, \"a, for it in the princess of his great little few that much from the great great little white little wife, \"",
+    " great other the and, for the man.\"\n\n's good man, the old men, they is you, the water, my he.or's head the king and that the world and long the country of it had's king on the moon. If them of the city of the prince as then the king, and I am she, and then with they came over the son was great the moon, and said to get"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.7569,
+   "samples": [
+    " his time the King of, and the old man of his men of the time the world.\n\n, and he was the river, and you the man the dog, the poor man and his eyes?\"\n\nThe other.",
+    " the old girl was to and on his life, he were of the river he should have and his old man, and over by a lady, and was an assz, was just, and his heart. There were as a of the man, and the man.\n\nThe pu, and the prince.",
+    " of the young man to that he had to the bird and he.\n\nKi. \" the matter to of her a time her husband, and in the people. But he could never not never of the world of her back it was the old man, and then, and she found, for it in his heart of his great the man that you see the man to a day.\"\n\nThe Prince, a as they were I",
+    "..\n\n of and, for that she will not not be a the old men he were a, and the man, a the man's room, the king and that is a and for the man of the man's for the man, or a.\n\nre.\n\nft of the old man; and she had not a man was, in many old man, they can't you to him."
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 5.1893,
+   "samples": [
+    " of the world world was, and little sister, and in a man in the sun, and now, which of the little song, you have been the sun, but he took her head. The child was made one of that, and I saw that you, in which were, and we must also come to be allowed it was of the old tower, and in the old soldier were a very fond of the",
+    " the old King had fallen in which the old house he had been a house he should mist. I will not look over there he had risen to the put.",
+    ", and he has been a child to and we are like a picture of the old lady or a child of her. AndThen she had been in the people. Aurges of the world, and then we'll have seen, and said, and then, and she took the water, and to it was a great and now that you see you, we have you shall not be seen a little creature, I am obliged",
+    " sister's house and as if he came a new maiden, and the old men, they replied, and the water, a whole world of which she had taken their feet, and she had been obliged to give us, she had been able. \"I am quite a new, I will be found in the house, I suppose you, and with you are the old house was to the old, that you to"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 262,
+   "train_loss": 4.8067,
+   "samples": [
+    ", and its contents was in the Khaleefeh returned to the Khaleefeh saw her, and said, and, and said to the son, and took the man, O my business. And when he beheld her, \"a, on Allah, she said to the cause of the house,, I fell down upon it, and when she fell of the old woman, he did not like love.",
+    " the youth answered, and when she had finished, he went with a whole year; and they both wept and, and went forth, Wo, and when I then went to him, and his heart. The man then went at the place of the old woman took off my story which, and she gave orders, and they replied, and went forth to a female slaves.",
+    " of the Sulan El-Mevity of the lady Suleyman Shah-Zemiate in the morning, of her. And when she entered. He then went after which he answered, and went in the name of her mistress, and saw her, and proceeded to convey to which the Khaleefeh saw her, and when she was diffiate, and I, I hear and said to me, and they then hastened",
+    " great honour of the name of its houses, the night of the Wezeer, \"the women\"Infor the Khaleefeh, my story. The Wezeer replied, the name of the Sulan Shah-Armblemity of the damsel of Breslaverer of them; and other designs; and she went after which they arrived, and then arose and came in the house was to him at the Wezeer"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 636,
+   "train_loss": 4.191,
+   "samples": [
+    " there came a peasant was, standing there in the palace in his chamber, watching the world in the world, of the world, all the time of the sun. And he took his horse from his road, and went on further side of the palace, with his head of the world, he saw one of the world. In the forest there was nothing to him in the dark",
+    " the whole truth, \"Mother, let me ask the world have a good sign of life. He will not do you, a good old man, or I shall be sure enough, for his only one thing--I was at the same hour of the world, as he was going, when he had been, and then we got up the land and put his way.",
+    " of day he went on home, to the palace of the Tzar.\n\nThey were very well pleased, and they went to the palace, and came to sleep. When the sun was setting of the world the story of a man, the poor man said that he was a new wife to the ancient old man, with whom his father and father was sitting on his own throne. But what",
+    " great pike, and sat all day long, the night, and the old men looked at the same time, the best friends were very fond of the world, and that was a kind man was born to the sea, for he had been able to go home.\n\n\"That is the world,\" said the Tzar, \"and yet there, in the sky is the same thing.\"\n\nInstantly the Caliph went"
+   ]
+  },
+  {
+   "t_s": 600.0,
+   "step": 1260,
+   "train_loss": 3.4843,
+   "samples": [
+    " there lived a King who was called and the King of all men. She loved the poor Princess husband, and she did not wish to make the war with him, but he took her in his arms and said to her, \"Allah upon thee, O my son, that I would be a man to come with me to tell thee of the affair, and he shall be slain, and he shall be",
+    ", \"Give me a piece of the kind, for I am extremely surprised to see this;\" and he bade not be afraid. He had a long journeyman and a maxure by his long journey. He was very fond of having, and he knew it not. So he sent out the instructions to follow and they passed through books and that was a good way. He went straight",
+    ", the young lady stepped out to the window, opened the door.\n\n'I am the lady's daughter,' said her mistress, 'and she sent to tell the lady that she would marry nobody.'\n\nThe lady was astonished.\n\n'How hast thou brought to her mistress and she looked at her to see what she saw, with her mother weeping and saying that she",
+    " great store of great great store; she took up from her father and sent out the house to fetch something new, and bought a rich farm-house, where she sold it and bought a fine house, and sat down opposite she went to her father's house. Here she found a little cemetery, and at first she said, \"This is called the old woman"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.280689,
+  "training_s": 600.0,
+  "peak_vram_mb": 3545.9,
+  "num_steps": 1260,
+  "params_m": 18.9,
+  "sampling_s": 17.1
+ },
+ "version": "bf946cdb945f",
+ "parent": "73977e0ccab7",
+ "status": "keep",
+ "description": "WARMDOWN_RATIO 0.7 -> 0.9, within noise (1.2807 vs 1.2826)",
+ "checkpoint": "checkpoints/20261012T235344-0700_bf946cdb945f.pt",
+ "checkpoint_sha256": "dd089502b1922fd1361e975feca21fe45251a4a1a035e44726fb7f5a9b3490d3",
+ "decided": "2026-10-13T00:06:59-07:00"
+}

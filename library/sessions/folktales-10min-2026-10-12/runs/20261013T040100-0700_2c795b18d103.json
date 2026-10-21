@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261013T040100-0700_2c795b18d103",
+ "commit": "2c795b18d103",
+ "created": "2026-10-13T04:01:00-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.9,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 7.0274,
+   "samples": [
+    " the prince you never was so to and so he of a princess.l.a, and no King, of the king, and you the man the sun, I have that and he can be ready was very not not come, and, and that he will give them, and so you must go to her own heart, and of the old, I must be not have not come of all his daughter. Now they are a princess",
+    " the youth be come to king..or, he had been have given he should have done. The son, and you have a dog, and was and I am, was going, and his heart. There were as a of the place, and the cat, and that he may not give them.",
+    "an to his head and that he had not take it to the old or not do not know a door of her son, her King, and he thought the King that he could never done and that the story of her man, and the Princess. Let me, and told the youngp on it in his heart of his father and carried that you should know, I a morning the palace, he",
+    " king was of and as all not never hardly not not come, and his father he cried a son, the water, my eyes. The prince, and the youth!\" do not not have been never will give us him for the King, or not go of them of the other the ground; and she went, and it of, and then she is not give the King was to him. When that they"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.7748,
+   "samples": [
+    " the time the King was so to go to the dog in the man in the time he was no time, of the old man, you the old man in his mother. When he was going to take them. It was a time out, and the first, and of the old prince of the day to her. He was the place, I had found her in the old man were a great and, and a man of a time",
+    " the old King of the room.. And I he had that they is he should have done his face that he was you be a time I do for an old.",
+    ", and he could do it was to the wind he had no more in the old lady was a time of her. And her, he carried in the people. These, but the matter and that the world of her man, and the old man's room, \"Shaba, for it in the people of his face and his way of them by a greatness, and that it to a d.",
+    " great and the time, for that she, the old man and the old men he will not, and the water, my eyes. The sea, the king's feet, and he had been a matter, and all she are that she answered the same of the old man, the poor; and she had happened, saying she, in full of which, they can have been to the old man in this to him"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 136,
+   "train_loss": 5.16,
+   "samples": [
+    " the other flowers; but, and she would notThe whole world. She must be heard in the old man of the little mermaid, as the air, in which the poor boy and he thought of the beautiful little maiden, and the palace, and the whole king in which were, and we must happen to reach. He was the first, and the sun must be covered",
+    " the young girl of the room.",
+    " Vail's a few people, which was the bird, and the king. At little man's a rich ones. Then her, and then in the people, and the dead, and the princess the story of her arms, and the old merchant's room, but yet, the old people, which was very unhappy,\" said the earth that the beautiful--but I have arrived at that it, a little",
+    " great was a great as all its power, the light, and the old men, they had been, the water, a whole city of the sun. No's that of the old man was obliged to give us in the people, with a time.\n\n\"Thou, and the other,\" said; I cannot sleep, \"ifting, \"we will be called the water, my master; I have brought up to carry up. \""
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 261,
+   "train_loss": 4.7473,
+   "samples": [
+    " of the first century of the son of the market of his head, or some food, and the ur-an of the people, and the place until the sun, is a former note in which doth not of the city, and the King, and the first, in which were, and we were at the damsel. By Allah! I have not been the sheykh Ibraheem of the case, and when I",
+    " the youth, O my heart. This kind of its contents of gold and he should take him his face and, and, and he found his father, and I went with the place, and his heart. And when she said, I had been absent from my mistress, and put in my heart, and his attendants and they replied, Praise be a large chest, and when she came",
+    ", to go to thee that he said to thee, I went to him, who hath been a female of her a slave, and when she heard her. So I came, and the old woman the executioner, and said, I saw her a thousand and his head, and the place for her, and with her, who is no more than thou hast thou wilt thou hast thou art, and a person to me",
+    " few other damsel and as for the Wezeer, the night, and the latter will teach thee to him, and the house, when I will not return to the door and the Sulan and he was a cup, and in the damsel, and the ur-an, and she exclaimed, I will be the house, and I will be, and then she is called the damsel, my master; I sleep that"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 634,
+   "train_loss": 4.1119,
+   "samples": [
+    " there lived a King who was standing in the middle of the castle. She then said, \"There is a good and little girl, you have a good deal like yours. And then take some of our own little father, and do not come to you. Now you know that, I cannot speak better than that.\"\n\nThe Sultan was going to take off the table in the",
+    " the young girl, and said aloud, \"Let us be ready for a wife,\" said they.",
+    " of the forest, on it was to be seen, and he was in the forest there was a little hole in a large tree, a large black bird. When it came back to the river that the sun had been shining like snow, when she had gone to sleep, she took the water back from her heart, and then the snow shone like snow-cocks, and the wind was",
+    " few minutes behind and sat down; she flew round to the room and beckoneding with a long table-birds, a little man with a long face, and he jumped so and fell on till he fell asleep in the sunshine.\n\nShe looked out.\n\nAs if she could not have no need of such a good old merchant, and she was very impatient of the little girl"
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 1257,
+   "train_loss": 3.6045,
+   "samples": [
+    " there lived a King who was standing at the foot of a throne, so he ordered one of the gardens, of the royal gardens, with the towers of the hall. With that he was going to take his little boat on tiptoe, and that was what he thought best, but he must also use it. He was too weak to try it, but in vain that the fish would",
+    " the young girl, 'Mother, my little daughter, of course, have mercy upon her mother; that is the case. I never thought of it; I am the lady of my mother, and the name is Bodake. I must see the Queen well, and it may be said, \"There are no people in the house, that I should go in and seek my fortune.\" Then she put the wicked",
+    ", with three thick broad green velve of the wood, through the woodland trees, which had a long distance across the river, when a beautiful land was built. From the edge of the wood the river there was a lake; the wind blew high and the, and the water, on it, shot it over its green leaves. What a beautiful place, like a",
+    " great store of food, for she had a new red pot, and never boiled in. After she had dressed the best, she had to go in the forest and meadow till she got home. She stood at the door of the cave, and looked out of her bed, with the red shoes and she had left him. Then, in spite of her efforts, she found the little girl sitting"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.257641,
+  "training_s": 600.2,
+  "peak_vram_mb": 3545.9,
+  "num_steps": 1257,
+  "params_m": 18.9,
+  "sampling_s": 17.0
+ },
+ "version": "2c795b18d103",
+ "parent": "f02876c49522",
+ "status": "discard",
+ "description": "Muon beta2 0.99: worse (1.2576)",
+ "decided": "2026-10-13T04:14:12-07:00"
+}

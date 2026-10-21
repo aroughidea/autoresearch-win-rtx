@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261012T231347-0700_ebfc1b5e599f",
+ "commit": "ebfc1b5e599f",
+ "created": "2026-10-12T23:13:47-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 2.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 7.0701,
+   "samples": [
+    " on I,; was, and and and the palace in a man,,., and, and, of the little time, you the man the, and the poor to and he said, and was have,, and, and, and the King, and of the, and you answered, to the old son, and of there of me, and in the Prince, and a great day, and a son of a story, and, and of the king, and the King",
+    " the.., and and and. And, he went of that and he should the and his life that, and you. He is I was, and I.",
+    ", to he will the that the to the son, and he is the f on a man,, of her. And her, and. He thought the King are,, and the and \" the story of her, and I saw an great to the boy, and, the, and, and to it of his great little princess that the beautiful back, and a morning to the Prince,",
+    " to a of and, for;,.\"\n\nLand, andrthe will he will<|reserved_0|>as, the the,,, and will came, the king's wife, and and for the country of, and's mother on the, or the king of the father,, the as, and she went, and it of,, and with the King of the son was to the child, that said to he heard the child, and, and the Prince"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.7639,
+   "samples": [
+    " his.",
+    " the. I can this and.",
+    " of the eyes to the that he had not the he had no.\n\nKi. \"Tin, and the most the King, he was in the poor woman was so soon was the old woman the poor man.\n\nThe other than the old man.\n\n\"I will, and she found, for it in his heart of his father and his way to them by a great and the child from the king asked the next day I",
+    " to the of the, for its own, the to the and the his men he cried a, but the water, a he had to the two face with the old woman began and for the great and she had been she knew that, or's.\n\nAs he called home, the poor woman and she asked the boy."
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 5.1906,
+   "samples": [
+    " the old man; there, and she would glistor, which she could the world in the old flower of the little, and you the air, in his mother. And and was going to be taken their heads on; \"I have seen that was, and now the end of them; she has seen. He was the first, I have been quite a ball, and the emperor, and then he knew",
+    " the child. And I'm. I looked upon herself, and that is dead,\" said the wind; that is quite a little boy is a little birds; I am, was quite an apple, and the world--pecay,\" said nothing to the world not the great power, and when she had been, and they passed through the other pictures and a little girl.",
+    ", to its mouth on it the stork night, he had a great feet. \"the flower, and of her. And her hand, and in the poor boy; so, and the window of the world of her arms, and the wind. \"Oh, \"and she took the water, and to her father's house, but that you for I who had a child.\"\n\n\"But it, a little creature, I am you will have the",
+    " few I cannot will shall shall; 'and I will come to the old men like. \"and, the water, my eyes. The emperor, the little mother!\" said the old man was obliged to give us in the beautiful and she knew how to see what she could not,\" said; I cannot die. The first she, in which has been called the water, my eyes; I think that"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 262,
+   "train_loss": 4.811,
+   "samples": [
+    " of the first words of them the Wezeer the King the Khaleefeh his house, and the world in the King, of the son, and the most approve in like the other of the morning they were thus with their wealth, and the King, and the lady, and the people, and we were violently to her. By In the first two hundred other verses:--\n\nAnd",
+    " the son, and, and, and whenever he alighted of the Wezeer came to convey their faces; and, and its waters, Wo, and when I heard the lady of money became inseners of my mind, and the place of the old woman, and when she heard this place, and his attendants and they passed through the ground at his hand, O my son of his",
+    " heard the young wretchan (or to the son of the King\"), O my uncle, I have taken from a slave of love\" (or (whose means of his desire of him of the world of her mistress, and the Wezeer. So she then, and she took, and, and to it, and obey the door, and when I heard them came, and that it shall be dilate: I am obliged to",
+    " few other damsel and the Wezeer; and the Wezeer's family and the latter sense, they washed it, and the damsel, when they arrived at the King came to me, and he fell down from his mistress had been the damsel, and a morsels of them; and other presents as a sign of the house, saying to go in many days of the same, and my"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 635,
+   "train_loss": 4.2557,
+   "samples": [
+    " there met a King of Copenhi Bahman, who was very much pleased except for a good of the little Master Misery.\n\nAnd now the sun is setting and that and he can not be,\" says the little girl.\n\n\"The Tzar's daughter,\" says he. \"I can't't you to you.\"\n\nThe house?\" says the old Peter, \"yes, that has been a stranger that is the",
+    " the old man, \"Stop, let me ask you.\"\n\n\"Stop,\" says he. He will not look for him, for I do not wish to live with you.\"\n\n\"Good-day, my brother,\" says the sun at the door.\n\n\"It's it,\" says he. He was going to say that, and they did not know if that was a man.\n\nIn the air, old Peter and the two and years, and was going to",
+    ", with his danons, and in the sun and he was in the old hut.\n\nAnd the little Gerda bowed to her, and asked to tell the snow girl.\n\nAnd the little boy ran the world, and said he was, \"and you are all, that you know, for it.\"\n\n\"Little mouse,\" says the princess, \"I can't only a child.\"\n\n\"But it shall happen that,\" says I;",
+    " great old woman and lovely for ever, for she was going to the old Peter, because she was going to the old Peter. She had not a single word to her, so she had nothing but anything she had like she. She was very pretty.\n\nAs for she did not know as; and she begged for her to be, she was very happy, that she would have to"
+   ]
+  },
+  {
+   "t_s": 600.3,
+   "step": 1259,
+   "train_loss": 3.3145,
+   "samples": [
+    " there lived a King who so fond and would he ever see his own daughter. His family were now born, of the age, of sixteen years old, in which the poor boy and his mother were now out in the country; and out, being the elder-tree woman, the elder used to take one of her best gifts and all of the world, although he did not",
+    " the \"bon of Sorea of thy coming, and have a ride on this journey. He will not be afraid of the Welwa for an arrow. The shaft will come again and leaden destruction.\"\n\nThe Welwa of these Gaarily and came in and said:\n\n\"I must be a good horse, Ponce and a bridle in the Falna.\"\n\nThen O Proacon was a very high woman and she",
+    ", far from the great trees, which leads over the wide an' a manifestin' of the aee, generally a man in white and snowy-hares' and a hedgerooms; and he is the man of the tree, and he is the old man, in the house of his cottage, where he is sitting by a great fire, and from it he is the man who dwellers in the wood the three",
+    " tiny little little boy; for she knew that the girl was young and beautiful, but they had not long been the little girl when they were grown up and envy and jealousy. But for this purpose they could not bear the weight of her heart, for the girl was very stupid to eat; and she begged not to let herself go, and she should"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.331952,
+  "training_s": 600.3,
+  "peak_vram_mb": 3546.5,
+  "num_steps": 1259,
+  "params_m": 18.9,
+  "sampling_s": 16.6
+ },
+ "version": "ebfc1b5e599f",
+ "parent": "cfbbd80b0449",
+ "status": "discard",
+ "description": "EMBEDDING_LR 2.0, worse (1.3320)",
+ "decided": "2026-10-12T23:26:58-07:00"
+}

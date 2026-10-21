@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261013T033410-0700_f02876c49522",
+ "commit": "f02876c49522",
+ "created": "2026-10-13T03:34:10-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.9,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.9562,
+   "samples": [
+    "",
+    " the prince answered,Eot.",
+    " And to go sooner is it was not use longer longer one and the cat was the King or a beautiful King, and ever her woman,. Why of the dog are an man was afraid him of the world of her man, and never not hear his daughter has never go, \" And they had made the princess was his father and no more, \" But, we have you shall not",
+    " great other of and as all not never give the dog, and the old palace he cried to give him, ' And a deep. The prince is the king's king, and and afraid the country of it had been been not be able. If the boy came to the other to eat a few father, and afraid into the princess said and very King came over the King was to"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.741,
+   "samples": [
+    " his time now knew be so well and the oldness. One of the time the world.\n\nJal, saying the little old man?\" asked the place in his mother. When he was going to take them!\" cried, and then she would not that he came in the boy, but we must go to her. He was the place, and now I must be the old man. There was his daughter",
+    " the young girl had reached the lady. And I will I am that is he found this life. He had not have you are a short time, for an ass. The tree. It was still.\"\n\n\"Shirance. And the place, and then brought to the sea was in the box, and his life and they had happened to escape at a thing as the country, and then as there. Indeed",
+    "The old young Ment- Fxed to take to have a piecemast. \"EPu, so he set up to take in the people. But he could not to him \"but not for her man, and the old man's daughter, but the most beautiful, for it's own heart of his father stopped out that the most beautiful, but a day:\n\n\"But it was a kind. They were still as the river",
+    " few man was tired was for that she asked the good man, the old \"the world is much, the water, my eyes. The sea, the old man and its head and he was at the man had been much that she sent. He had taken them; I used to meet them!\" she might be sure to be lost in full of which came up, and my master; I am that they could"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 136,
+   "train_loss": 5.1405,
+   "samples": [
+    " more I can; but, and and would not a new, which stood in the world.\n\n\"Sal, of the little mouse, as the air. O Can. When and he thought of the beautiful little maiden, and the wood, and the flowers, in which were, and the room, to the old man, which she is not like the poor woman, and the garden, and his great and a man",
+    " the young King all this way. But when I looked at them, and he should have been his old woman, and you, and now I have been an angel. The young, by me, and the little man, and at the water, and the world, as if you may, and she had been, and they passed through the light that you a little girl. But there were very much",
+    ", with its forehead; it was to the wind shone like a great, and the little child, and of the bird, with the old man in the people the sun, but the town and that the world, and the other; the wind. \"I will surely have passed the old people, which are with the stork, and now that the beautiful old, as a great and that it",
+    " few at the great as for old man, which is so it was his eyes like. The great, the water, my eyes. The air, the king's wife, and she fell on the old man had placed the beautiful, with a ball.\n\n\"Thou but she did not the poor; and she might have a new thoughts, in which has been been the water, my master; I have brought up"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 261,
+   "train_loss": 4.7831,
+   "samples": [
+    " of the first; but in the ground, that of the same man, and said, and, and he is the shop, and the most approve, and the poor man and he beheld, and when he will not leave to them, and the first, and the people, and we may be to her. By Allah! I have not been the sheykh Ibraheem, and the chest, and his daughter of a man",
+    " the chief of the bride and said to him, he went of the Wezeer answered, and they both will not not. The broker, and I have been an entertainment. The lady of my heart, and the Sulan, and said, and the poor woman's slave passed the slave came to me, and when I, and they replied, and he exclaimed to a man then she, and she",
+    ", to go to him who was to me, he will have attained to the same lady, and said to her, and her, and lo, and the door; for my hand with him, the chest, and said, and the old woman, and his head, and the King saw her, and when she was a little while she saw her, who hath a man; but she answered, and they will not pass, the",
+    " few other damsel and lo, and the son of gold, and the old men like his daughter, and the chief, my story. The Wezeer, and the door and, and he fell into the Faithful, and all that which she, or a piece of her; but he beheld her; and she went after which I will go in which she should have seen, and my master; I found that"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 635,
+   "train_loss": 4.1322,
+   "samples": [
+    " there lived a peasant who was standing there, there was a little man standing in the boat.\n\n\"Shich of the little mouse, you have a good deal like the other.\"\n\nWhen he saw the old woman talking, on she did not stop. So he came in the palace, and said to himself:\n\n\"I know that it was of no old Peter, my dear father, and",
+    " the old girl, \"Sire, let her down, and I will have your supper and you will be your father.\"\n\nThe old lady thanked his brother and wept. The little pretty one was looking. He had ever to leave at home, and told the fine old woman that was in the world. He could not have been in the house of the house.\n\n\"I have no need",
+    " of the summer morning the old lady stopped.\n\nAs he had no eyes in the forest there was a little hole in a heap of water, and in the forest the black sheep, and with him tear the rupees and its back, when he had done his breakfast, he took the water back from his foot, and then the old woman began to rise, and a great wind",
+    " little girl, and she had just forgotten the little girl, and said to her, \"My little sister, the old woman,\" and she went to the little ship.\n\n\"My good old man!\" cried he, and began to look at her. \"I am sure she is, I will give you such a good humor!\"\n\nBut she was old Peter, and she came to her room. But that they could"
+   ]
+  },
+  {
+   "t_s": 600.3,
+   "step": 1258,
+   "train_loss": 3.5554,
+   "samples": [
+    " there lived a King who had a daughter who used a daughter, named Sheykh. One day, when he was in a certain village, the old man, who was a boy and his mother, had a little daughter, and a brother, who was so clever and tender and cruel, that even one of her children had grown up in the old tower, which were always in the",
+    " the youth, \"What a pity to see thee, my son, is he who saved my daughter from that time and you, and now I have been absent from this place to him by me, and that is my case. Now I am ill and honest and have made my acquaintance in my life, and therefore, I have been there for years at a time, in the end of my years there",
+    ", the young man walked about the country, looking over the world, in the forest, or a wood of grass. And the old man came in, and the grey man, who was called \"I have heard of the birds; the wind is high and the, and the trees, and the trees are scattered about. There is no more room for the world but a place to eat; he",
+    " great store of roses in all its rooms, which was so full of beautiful things, with a long table-birds, a whole of which she put to the left ear. When she had finished, she opened the door she rubbed it with a golden key, and then the princess stepped into the room and went into the chest, where she sat with her ugly old"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.242914,
+  "training_s": 600.3,
+  "peak_vram_mb": 3546.0,
+  "num_steps": 1258,
+  "params_m": 18.9,
+  "sampling_s": 17.0
+ },
+ "version": "f02876c49522",
+ "parent": "feeb430bf830",
+ "status": "keep",
+ "description": "ADAM_BETAS beta1 0.8 -> 0.9, small gain within noise",
+ "checkpoint": "checkpoints/20261013T033410-0700_f02876c49522.pt",
+ "checkpoint_sha256": "0b91228aa304dc6c4bd82737b8467d05db62835c0c3830140b1744db9342abc8",
+ "decided": "2026-10-13T03:47:22-07:00"
+}

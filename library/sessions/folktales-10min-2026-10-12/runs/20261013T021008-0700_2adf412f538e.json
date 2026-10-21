@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261013T021008-0700_2adf412f538e",
+ "commit": "2adf412f538e",
+ "created": "2026-10-13T02:10:08-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 4.5,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 7.0271,
+   "samples": [
+    " was will give; was,I and said am of can be. She",
+    " the son. And this and.",
+    " the day its moon is it, to has to he will have is in the man in the white child of her a king of them, and in any's great eyes, but the man and that the story me.\n\n man he; and an great city,\" said, and, \", for it's dog it of his great little few white story them by, we's white child from it, a other.",
+    " great was of and as all that their son's's man,ron will be will be,,<|reserved_0|> the,,it them will marry him the king's Lait and them was is he, Sus has on his moon. If them of them was the other,\" as them!\" said me will see ita, \"PI should find they can have was had took I am that this to get the great child is the"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.7871,
+   "samples": [
+    " he has you one was so to go and that you see only do so very time he tried, and, of the dog. He could return. Pist-ime. When he was going?\"\n\n\"You do have refuse on his strength and, and the girl, and now were now, you must go to herThe boy was impossible of the old man's life in the Prince, and a dog that he remembered",
+    " the old girl was to go.",
+    " in to go to do that he stopped to take it was able.\n\nves,\" he did the young lady of her a heap of Japan, and all himself. So you may soon was very much that the world, and said it was sure.\n\n\"But you are all, and found the old man's fault of Japan, and then the monkey was ashamed for I can't find you shall not think \"",
+    " great other was tired was all that came, which is so delighted the old men would be a great, the water, a moment and sat for the King's one that was so kind for the country, she had been very angry and, or time.\n\nAs if she was delighted to find a suddenness, and then would be lost an'nor came up, and was great woman's"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 136,
+   "train_loss": 5.1552,
+   "samples": [
+    ", and, and was so said and, that ofor, which, and the world.\n\n\"Sk, of the little sun, you the air, in which is a few words in which's child,\" said the wind; \"The church bells that you will give you were, and you must be very little pigeons. In the door, and you are not a little Ida, and a very much less than a man with",
+    " the young woman, and the water. And the ground, and they were also more than they had a great old man, and a lady, and was an, and with the air, and the same creature's eyes, and at the water, and the world, and the sea which, and she's house, and they passed through the snow. Astri as the sky, and she had the street.",
+    " in, and their good that the stork has to it will have the king was the same flower, and of her a king's old man. She thought the sun was more, and the old woman the story of her arms, and the wind whistled to have been quite dark, the old people, and to be seen at once the earth that every day I shall be a child; but it",
+    " great other of the great apple; 'h's back, and the old men he will soon see, the water, a whole morning, for a tree, and that was so that had been obliged to the sea, she had been able to the same evening, and the other,\" said; and she might have passed into the princess, and with her, they can have been to him. The child"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 261,
+   "train_loss": 4.8078,
+   "samples": [
+    " of wealth, and a time to my master, and went with her, and said, and my family, of the people, and you the man, O Jaafar, and that thou take me, and when thou, and we are thee, O my uncle, and I will be exce of thee to her. By Allah! So there not with thy mind in my heart, and a sign thou wilt say to the Wezeer Noor-ed",
+    " the youth, O my brother replied, and I went forth of my brother answered, and I may God will not be thy master, and I have been an entertainment.",
+    ", and its bann it, and said to them, and the Sulan said to her the morning, and her, and her, and lo, and the name be more, and the first of the story of her, and the Khaleefeh was a thousand and his slave, and the Khaleefeh saw her in the market of his house, What can thou hast attained, O my own abode from me, and my",
+    " few other women and lo, O my son of gold, and said his palace, This is not thee, the damsel, when I will marry him the Wezeer's wife, and she had been present him, and my mother, and she answered, and I may God: so I will be performed the sheykh Ibraheem Ibraheem, and go in and she approached the same, and my master; I"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 634,
+   "train_loss": 4.2027,
+   "samples": [
+    " there lived a King who was standing at the old man's castle. She then said, \"There is any of the little girl.\"\n\n\"My brother,\" said he.\n\nThe poor man and was going to take them to the palace; and she was so pretty. And he thought of the prince, and she begged her best jewel, and of the old woman's table in the room, and",
+    " the Miller. \"What business?\"\n\n\"It is, sire?\" said the whole year. \"Now, I will not do you give a good life, for it has come with you.\"\n\n\"I will tell you the story,\" said the old man, \"I am sure that the children are in, and I will ask him.\"\n\n\"Yes,\" said he. \"Who art a child.",
+    " morning, when morning the little lady stopped at the bird, and the cat was on her shoulders.\n\nShe sat on a table, and ran into the garden. When she came, the little boy ran the little old man said, \"You don't know,\" said the girl.\n\n\"Oh, then, you are afraid?\" said the little girl. \"I can tell them a story.\"\n\nThe old king",
+    " little girl lying on the edge of the house of the large room stood in front of her eyes. She was the old man when she had done she had no one to do so. The old man stood at table opposite shore on the sofa. She did not know whether the other the poor old man could do nothing but it was, but he could not find the water"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 1257,
+   "train_loss": 3.6938,
+   "samples": [
+    " there lived a King who had a daughter who had a daughter, and so poor. One day, when he was sitting with his wife in the hut, he saw her and her face was like a child, her eyes were beautiful, and her golden crown. Now in the palace, so that she may see her dear children, the little girl herself was very poor, and that",
+    " the youth was dead, and he did not feel he had ever seen a man more beautiful and his face that he was really. He now died, and he loved his wife to him, and his heart was so beautiful as he could not tell him. He therefore took the crown from which he did, and his face increased, and there he was at a distance from the",
+    ", far from a hut that was to be seen in the wood, in which the little Princess had been planted. She was very fond of playing in the forest, and she could walk with her that the poor old woman. She was the most beautiful lady in the world, which the old witch had made, with her dolls and a golden spinning-wheel, and a white",
+    " great store of provisions hanging from the tower, which was so deep that his eyes could not see her, and the thread was almost too wide for him to go and see how it fared. It was not long before she remembered that she was a witch.\n\nAs soon as the ogress was asleep, the witch went asleep, saying she hid in the old cart"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.25658,
+  "training_s": 600.1,
+  "peak_vram_mb": 3546.0,
+  "num_steps": 1257,
+  "params_m": 18.9,
+  "sampling_s": 16.0
+ },
+ "version": "2adf412f538e",
+ "parent": "feeb430bf830",
+ "status": "discard",
+ "description": "MATRIX_LR 4.5 retry: worse (1.2566)",
+ "decided": "2026-10-13T02:23:20-07:00"
+}

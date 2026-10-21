@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261013T030407-0700_00e1e4f0d9ee",
+ "commit": "00e1e4f0d9ee",
+ "created": "2026-10-13T03:04:07-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 7,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 7,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 26,
+   "train_loss": 7.3927,
+   "samples": [
+    " was and you; was, and and and the of the ' But the, the he.\n\n On a, of the and,, you the and the in hising and to and he,,, was<|reserved_0|> You, and the and, and the and her The of the, and you to she to the and him, the of the '",
+    " the and the the and and and the and, he, of the and he to the and his The that, and you",
+    ", to he, and it ' to the to he and he ' When the who in the, and of her",
+    " great beautiful of and the for the ' The the and, and the his of he cried a,, the the, a he and the and the the the ' The and the and the the but he, had him she on the, and the.\n\nand the and the, the as; and the and the and the and,, and the and the they said the was to and I, that the to he had and he and the and the"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 54,
+   "train_loss": 5.7135,
+   "samples": [
+    " was not can; but, and and the sand of a few ships, and the world.\n\nJ and the world and when you, you the air the sun, but he took her in the other, \"The same sand; \"The garden. They said, and now, but I were going to come to be used to the door there was like the table in the trees, and a very heads, and a man with a story",
+    " the old girl had made and an house of the world, and that a man; but I is a great old man, there, when I do you have I had nothing to him, and the same one thing at the sun of the door, and the world, and the sea which, and she's house, and they replied the house, that I thought of the wind, and she had not. The old people",
+    ", to go through the people, to think of it and other old man,\" said in the world, and her. And her hand, and in the people. A man, and the window of the world, and the other thoughts, when the castle and then, and more to the water, and to it, and one thing. What could see I was to a great boy from it, a man. They was as",
+    " house to be and as for that I will think to be't beina was like his daughter, but the water, a whole morning of the learned the little man!\" said the old man was obliged to give us in the people, but you a piece of the sun, with the floor; and she, and I would be, in the old man came over the world was to him. The tree"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 97,
+   "train_loss": 5.2747,
+   "samples": [
+    " on the world, but, and the top of the shore, which the Douat.\n\n\"I shall do you, and his wife, the floor, he saw the poor that he was so, and was very kind, and the wood, he left. But in the best, but you must saw to reach. He was the forest, not like a poor in the room, and a very far into the same of the shore that the",
+    " the pooronas, and, he was a little thousand of the house he should take his eyes, that he was over the best of a little years, I had nothing to him, and his heart. There were as a tree. I walked and the world.\n\n\"Indeed was in the poor, and his life and they came to the giant that was a little girl.",
+    ", to go to the road, to the world he and he.\n\n'mastive or a little of her a little men, he. He thought the sea are more, the matter and that the world, and the other than the wind, and the same place, which the old man, till, with the castle, and a few minutes for the world, and you have a while he asked the next day I",
+    " great.\n\n hands and as for the man, to the man, to his father, with a great, the water, my eyes. The sea, the king's that he began to seek the country of the sea, she went to see me how he was so she could not the poor, I wanted, and I would be lost, and with fear, they was to my eyes, I'll be married to keep up. Then they"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 182,
+   "train_loss": 4.9749,
+   "samples": [
+    ".\n\nIt can't be, and a great tallness.\n\n mouth of joy. It he.\n\n'I shall kill you, and you, you want to catch me, but I to the horse, and let you have a short before, and I'll windrampered, but I were going to come and then, and the door, not like to her in my horse, and a little pair of the same man with a great cry and",
+    " the Fairy. And he saw a pair of salt-sident of a big fellow to the door, and that he was a few minutes when I was a little little little, was just now I knew.",
+    " king, he were on it, to the world.\n\n\"It went home in the same time the matter, and her a mile into the ground. He thought the eldest husband.\n\nAt the town and ran the world, and they were waiting up.\n\n\"Houarn, but just as the old king's son of it?' inquired who stopped. But the shores, we,' answered:\n\n\"He did he asked",
+    " great man of a little man; 'but I will come and the old knight left his nose, but the princess, my eyes. The king's face, and that I can't you have never been, and in the boy, with me.' Then as if she could not the poor old Fairy and the house, I shall go in order to be lost the old man was to him. At that they could carry"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 437,
+   "train_loss": 4.4083,
+   "samples": [
+    " there lived a King who was standing and so weak that there was a young woman, an old friend, who was obliged to his wife who had ever dreamed in his stead. When he was going to be taken off, he thought to himself, he found a few moments of the hall, where he saw a little boy with a long life, not wishing to be a word for",
+    " the Fairy, who was only distinguished by some strat, of that country he should have been his best to be his father. He found a little house and a little, was just by night, and the giant was awakened by his side, and very hard and cheerful. So he came out of them. Then, and they walked along and the third was a little",
+    ", the three or three hours, which was the sun and went.\n\n'I think you have been a big of the rock?' asked Pinocchio, going to sleep. 'Azeez, but the name of \"but my friend who has been seen, is a little room.\"\n\n\"We must take the place for our son to my country.\"\n\n\"But I'm a man's mouth, I want you to know that I have no",
+    " great noise of a great quantity of straw, which was so ugly that his father he was a great noise, he was a little boy of course, his best thief that he had killed for the sake of the sea, she went to the top of the gate.\n\n'I'm not,\" answered Gwrimary, jumping into the field, and with fear, they said to himself:\n\n\"I'll"
+   ]
+  },
+  {
+   "t_s": 600.7,
+   "step": 862,
+   "train_loss": 3.3936,
+   "samples": [
+    " there lived a King who, although years and years of age, had become very beautiful, and no family, only and so clever, could not be the cause of his illness to be his companion, and was very kind, and his family, who were so clever in his heart, became known by one of the best. In the first there was a great deal in him",
+    " the youth \"The merchant and his wife whom I have lost of no sense but to this life. He will not be afraid of a dog, and will be very sorry for the poor man.\"\n\nThis satisfied the king was astonished.\n\nSource of gratitude to the slave, the magician was sent out to seek him. He had been in this house and that was a wise woman",
+    " of the forest through the green bushes, which we never had seen or seen. Here there was a big hole in the tree, and a large tree, and the tree, and the tree and the tree were there; and it was the tree that had been there, and which the tree saw it, and it was only a root. But when the tree was there, the tree was just",
+    " great white cloud and making for its waters, which she had never seen in her life. After she had been married she made a very happy life, and she was so glad that she fell asleep at the foot of an enchanted horse that she might live.\n\nAs soon as the princess was asleep, the horse went after her. Then, in spite of her efforts"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.258964,
+  "training_s": 600.7,
+  "peak_vram_mb": 9419.9,
+  "num_steps": 862,
+  "params_m": 31.9,
+  "sampling_s": 19.4
+ },
+ "version": "00e1e4f0d9ee",
+ "parent": "feeb430bf830",
+ "status": "discard",
+ "description": "DEPTH 7: worse (1.2590), 3x VRAM",
+ "decided": "2026-10-13T03:19:52-07:00"
+}

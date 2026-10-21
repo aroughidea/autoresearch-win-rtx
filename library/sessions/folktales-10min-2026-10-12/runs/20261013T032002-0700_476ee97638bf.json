@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261013T032002-0700_476ee97638bf",
+ "commit": "476ee97638bf",
+ "created": "2026-10-13T03:20:02-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 31,
+   "train_loss": 7.048,
+   "samples": [
+    " the time you King King time the little palace, of his princess heard the time the dog son, and he of the son,, you the man the dog, the other horse and he thought, and you have the country; and and, and the first, and of the son, we of she to her old bed, which of the brother, I man did him over this the son, and he had",
+    " the son King had this king.",
+    ", to go, and it the place to the prince had he is all the man little man morning home of her white king, \"When him to the prince the mother,, and the day that the story of her man other life, when the city and his place, \"a, for it saw the princess had his great little father that you have the own great dog, and that it",
+    " great other king and the son; 'When the son, and the old husband he will a son, the eyes, my story. The prince, and the mother that the king and he was him of, and him for the King, or the king was them; I, the son; and she went, and it would go story and she should you will the son was to him. The woman that to he heard"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 70,
+   "train_loss": 5.7381,
+   "samples": [
+    " Shab,; was so to my tongue of the \"<|reserved_0|>The Bal. Then she, even, of the little. He could the man the S-<|reserved_0|>The man and \"<|reserved_0|>She, \"<|reserved_0|>In the whole house and I set the whole night in which were, \"<|reserved_0|>Shide to her. When it was of the old woman, my father or an King is a great",
+    " the \"b, \"M.",
+    " of day's lady is it, to my master ( and \"t or what the lady or a lady of her. Then her, when our old lady's name are an e.\" So and \" the Si), and other; the old girl, and his breast, \"<|reserved_0|>And for our son of it is his brother is no more.\" \"<|reserved_0|>In them a day and that it;\" a dom: I am well the hand be",
+    " house and \"<|reserved_0|>The K<|reserved_0|>Yrence is no man is the old \"<|reserved_0|>When<|reserved_0|>In Allah, the Past I are a man is the hand and \"<|reserved_0|>Lue man was a vir of Su which is a man's house of Sin' (s\"; and she might be a va, in which she is no man, like my master; I have brought this to him and"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 129,
+   "train_loss": 5.0907,
+   "samples": [
+    " the Tzar, when there, and looked into the palace; and he set forth the world.\n\nAnd they knew of the little, the sea, and the sun, the river, and was going to be taken their heads, and the sea, and the horse, in the little, and there were singing to her. He was the forest, not like a big boots, and the fish, all his horse",
+    " the young girl had fallen and was in all, he went of the river he would have been in a deep, and went into a long run out of an arrow.",
+    ",, took their nets that he had not gone to the Tzar.\n\nThey were on their dinner, and set her a new sister, he came to sleep. And the ground, and looked at that the story of her arms, and the wind. \"you must be seen, the old Peter, because, with the fish who lay down into the shores, little sister, and that it, a little",
+    " great pike of the little man; she will not pay for a huge wise men, they had been, the children, my eyes. The sea, the king's feet, and listened for the great teeth, and began to the King, or a little hut, and the other,\" says; and she went after what would be done, and she saw the king, like my master; I am that they"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 246,
+   "train_loss": 5.0503,
+   "samples": [
+    ", I can tell it, and she returned the house in a great respectfully. One of the queen, of the king, but you should be afraid, which is a few of which can be sure you have you been so, and I do you go down in them, but I cannot take it to her own life.'\n\n'Oh, there I should be quite sure I have been a good dog that's death",
+    " the chief of the boy and a dream of the king, of the house he should have been his face that, and you do you think I do?' asked I am sure you can see me,' said Irene's eyes.\"\n\nBut at the door, and then it not yet that was in, when she had been, and they came along; and that was a little girl.",
+    ", to go through the place, to see the book and went along in the lady in the king, and her. Then her husband, then she thought the door and more, and the window of the world, and they were so strong.\n\nThe lady had been very anxious about the princess saw it in the princess, and then the monkey that she had got a great storm",
+    " great lump of the princess had just now a new body, and the old crab's not a great noise,, she must see them be so far less than the king of the Prince had been at night, had been for she had been a huge peach.\n\n'I'm not the floor; and she might have no need not go in you see you came up, and my master; I am that they"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 598,
+   "train_loss": 4.1545,
+   "samples": [
+    " there lived a King who, and and who is a person of eloquentaliancision, and which of the son of Earz-Zeman, is a man who was going to take from me, and we are instruct. So he related to them the story of the urge of the Walee, and the Khaleefeh is not seen, except in the year of the year of his age.",
+    " the youth, O my master, I desire to ask thee of thee.--I have sworn to his slave-girl, and you have a short time to come and take me with you: my brother therefore, who hath come to me at the door of the bath and buy ten pieces of gold, and, laying his pocket and, having killed me.--The Wezeer of his wife, said to him",
+    " of day's arrival; it was not painted with it, and the Sulan was on a former note, of the ur-an, generally a person to perform the name of an obs of the \"I have derived from the ur-an, and a thousand,\" or \"persist, or it:\" \"eman,\" signifying \"If thou desirest, we will give thee two of every kind; for thou art exclees in",
+    " damsel of the ur-an for the space of the night, and the latter of the tenth, who was the cause of this damsel? She replied, No one that hath happened to them, but he was astonished at the damsel, and wept violently.\n\nAs soon as I heard the cry; and she smiled at my brother, and said to me, Wilt thou have my master; I have"
+   ]
+  },
+  {
+   "t_s": 600.0,
+   "step": 1185,
+   "train_loss": 3.3236,
+   "samples": [
+    " there lived a King who was called,) and used to be a man of good disposition, and no good children of the miller. He could do nothing else, and was told that he was going to take them home, and that his wife would be a good, and that was all so well; she was so old that she fell in love with him, and in the morning, while",
+    " the youth, \"What a distinguished man of mortal is lost of humanity!\" and he said, \"I have no money but a dog, too, and I am the man of my nature, and the thing is better than of me, that I may not have the power to make you so rich. I will have it.\" But he said that he had a mind to run over his shoulder and take with",
+    ", the three lovely children were dead, and the sun had risen high in the air, and a beautiful garden in the woods stood a large farm in front of the lake. The green fields were of the rim; they looked like the windings, and all the birds were in the branches, and the branches of the great trees waved their branches and",
+    " great deal of trouble in all things, but the good man must be sent up to her and told her the whole story, which seemed to her as if she wanted to marry her. The old man thanked her husband for she knew that she was a magician, and she would not allow her; and she begged after him to allow her to go with her to the priest"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.24866,
+  "training_s": 600.0,
+  "peak_vram_mb": 7421.5,
+  "num_steps": 1185,
+  "params_m": 22.4,
+  "sampling_s": 16.9
+ },
+ "version": "476ee97638bf",
+ "parent": "feeb430bf830",
+ "status": "discard",
+ "description": "MLP 6x: no gain (1.2487), 2x VRAM",
+ "decided": "2026-10-13T03:34:01-07:00"
+}

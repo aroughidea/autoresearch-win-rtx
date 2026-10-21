@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261013T023648-0700_b5b3a5e7f0ac",
+ "commit": "b5b3a5e7f0ac",
+ "created": "2026-10-13T02:36:48-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 1.0,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.9509,
+   "samples": [
+    ", and you; was, and and and the palace in his DBas. Then the palace,, of the son,, for the man, in his prince told that and \"Ride, \"reEthe city, and \"The daughter. Now in them were but,rCide to die. He was \"I have not bep was in him that this brother of all his daughter. Now the whole old story.",
+    " the sonb, to and.",
+    ", to go,pall,asbthe prince had and 'Rand on a singleErI have a certain men, \"Lit thought. When some son, and and and \"but and then away, and I never when the city,\" and \"and, \"I saw our son, with the day?\" and but that the place I, The garden, and and and \"BWom, I see me the princess, \"as, \"PEI the one one of the old great",
+    " great other day and as for its own son's son, and said his men,. and and,<|reserved_0|>But the son.\"\n\nNow himself's head. The king saw the world and for the country of it had was she went of, or the king of them; and so the poor story!\" reached the house, saying of, \"PI should have the sona was but; I have that thisThe"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.7111,
+   "samples": [
+    " on will you must be, and and so that of \"I have been seen. One.\n\n\"Sl, of and he are so he the man, in his mother. When he was much, and was very kind, and then she would not only so, and now were, but we must go to her. He was the place, and now I must be, and then the good to his daughter was a short of a great one of",
+    " the poor girl all to go up the wicked country he had never found a great to the spot. He saw you. \". He found I do you have I am, was just, and his heart. There were as a strange. I must see you see not now that was surprised, and then you been, and they had happened to the old women.\n\n\"I have no longer to his back to",
+    ", to child? I ever was to one to it to way.\n\nKi. \"RE OF The King.\n\nAs he added the man to tell the dog was an, and the old woman the poor old woman, it was sure.\n\nThe little room, but he was the place for it in the way, and then the monkey that you see you, And a great child from all he asked the next day I am surprised",
+    " to to to and as for ever now.\"\n\n\"Then'sThe young bird, \"the world to him, the water, a great man to ask him to the poor that he began to make the country, she had been only on his head. He must leave them to the other,\" as a sudden as he sent at one of the door and then he came over the poor was great and I am that they"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 136,
+   "train_loss": 5.1294,
+   "samples": [
+    " the old world; but, and she would be a new, which the time. One of the old man of the little mermaid, you the air, in which is a few who was a bap was very much, and the little boy. They said, in which were, and we must also come to be allowed that the first, I have never been in the old man's a very much happier than",
+    " the old. It was a. But whenever he had been have a little boy came and his old woman, and you, and now I do you wish I. The garden of money, and the little pens--for at the moo see the world, and that was covered, and she had been, and they passed through the little Prince was a little girl. But there, and there. The two",
+    ", with eyes, and that he had not to be the air, or a man in the last, and her. Then her, and then in the poor one of the dead of the window of the story of her arms, and the old flower, and then, and she took the water, in the heart of his great the church that she had a great deal. But what was just as a little creature",
+    " great old of the little mermaid; 'it is not so young and his eyes, they had been a beautiful, and a whole city of the last the little and that is so that had been a mive one's mother on the flowers. The same evening; she could not have been carried the little boy will keep it was, in which has been called the water, was"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 261,
+   "train_loss": 4.709,
+   "samples": [
+    ", and I knew that, and she returned to thee to him, or, said, O my feet, that he is, and said the man, O Jaafar, and that he was about to be with her, and she said to thee to the first, and she said, What dost thou thou thou wilt thou thou, and of thee not, and said to him, O Jaafar, and his daughter? And they said, that",
+    " the son of the whole of thy words of the present, of the Wezeer of the Prophet and his face that he was, and he is thy money, and I may be to him, and his heart. The man, and, and I will not give it thee the damsel; and, and she continued his words and they replied, Praise be a large chest, and, and she gave thee to her",
+    ", and its ban, he said to thee, O Jaafar, or he who is the morning, and I desire to her, and that thou wilt. So I may, and thou and I replied, what hath said, I saw thee, O my friends, and she took, and, and opened it; and said, What can thou hast thou been present thy place; but he answered, Take this, I am my mistress",
+    " few other damsel and, and; 'Ajeeb, and said, What didst thou thou will thou, and the 'Alee my story. The Wezeer replied the king's wife, and she answered, O my mistress, and she went to obtain it, and said to thee, O Jaafar, If I please me, and I will go in which she is no one can hardly eat; and I found that thou wilt"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 635,
+   "train_loss": 4.0828,
+   "samples": [
+    " there lived a King named Cash and the old mancarling in the deep cavern.\n\n\"Sk, brother, little Master Misery,\" said the Prayer. \"I must take you to take them.\"\n\nIn the morning the little daughter of the Princess, and the little girl wept bitterly; she begged her pardon her life long she was not off to dance in the dark",
+    " the old girl, \"Sire, let her down into them, and hears the gold pieces of gold pieces. And there he is a little house and I live with you.\"\n\n\"I will tell you the story,\" said the old man, \"I am sure that the children are in the world, and what are you here we have no power to eat a little girl. But there is no means that",
+    " Volbergan it was to be seen, and he was in the forest in the morning, and the morning of the ship ran into the garden. When the little sister was gone and ran the little old man and asked whether the old merchant had had been there, she took the water back from the tree, and then the little girl began to sing, and a little",
+    " little girl of the little snow girl, and the old man and the Snow Queen, with a little maid, the old man, and she came to the king's palace, and she had the little girl, and she was on her head. She was now quite close to her little sister; and she went into the hut she had two daughters old clothes, they said to the husband"
+   ]
+  },
+  {
+   "t_s": 600.4,
+   "step": 1258,
+   "train_loss": 3.5197,
+   "samples": [
+    " there lived a King who had one daughter, the loveliest daughter of the queen. It was in the world, of the name, the son of a king, which is a great and beautiful queen, and was made of wild beasts, and was so ugly. Now in the greatest terror of the world she was, and that was the first one he had ever seen in the world",
+    " the king, \"What a stupid fool you are!\" He replied, \"I should have been guilty of such a fellow as this?\" \"Why, I have not heard the news of my coming to my house. I have done my best, and have a fine idea now that it may not be a bad thing, and it is always a dream that I should go in the same way.\" He said, \"This is",
+    " of the forest, on the hill of the forest, the airless in the forest, the rivers grass of the trees grew very thick, and in front of the great trees, the hedges of the fresh flowers and the birds; the flowers and the flowers grew in every tree, and the flowers growing bright with the gay green leaves. There were beautiful",
+    " great house of great great store; she had a good deal of money, and had enough to give him the money she had provided. The girl, having taken the food which her daughter had brought from her, had placed it on the floor. She had taken her bed, and the poor woman was as much prettier as she, in spite of her beauty. When"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.259588,
+  "training_s": 600.4,
+  "peak_vram_mb": 3546.9,
+  "num_steps": 1258,
+  "params_m": 18.9,
+  "sampling_s": 17.9
+ },
+ "version": "b5b3a5e7f0ac",
+ "parent": "feeb430bf830",
+ "status": "discard",
+ "description": "SCALAR_LR 1.0: worse (1.2596)",
+ "decided": "2026-10-13T02:50:02-07:00"
+}

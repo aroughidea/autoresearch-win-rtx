@@ -1,0 +1,45 @@
+timestamp	commit	val_bpb	memory_gb	status	description
+2026-10-12T09:56:24-07:00	91ffb4c37015	0.477959	3.5	keep	baseline, three runs
+2026-10-12T10:09:41-07:00	91ffb4c37015	0.475734	3.5	keep	baseline, three runs
+2026-10-12T10:22:52-07:00	91ffb4c37015	0.476278	3.5	keep	baseline, three runs
+2026-10-12T10:36:39-07:00	50c072085d96	0.487985	10.2	discard	depth 8: bigger model, too few steps in 10 min (0.4880)
+2026-10-12T10:51:57-07:00	6fe88dbbd8db	0.479904	3.5	discard	matrix_lr 0.07: too hot (0.4799)
+2026-10-12T11:05:16-07:00	9b5f5efc27ee	0.475507	3.5	keep	matrix_lr 0.04 (gain within noise)
+2026-10-12T11:18:36-07:00	c1eafc220845	0.474798	3.5	keep	matrix_lr 0.03
+2026-10-12T11:31:56-07:00	6ee77689fe16	0.474054	3.5	keep	matrix_lr 0.025
+2026-10-12T11:45:17-07:00	7ff1a4a6ee95	0.475053	3.5	discard	matrix_lr 0.02: past the optimum (0.4751)
+2026-10-12T11:58:42-07:00	d5936fae3e22	0.475380	3.5	discard	embedding_lr 0.5: worse (0.4754)
+2026-10-12T12:12:03-07:00	819eed5d28fc	0.474147	3.5	discard	warmdown 0.7: no gain (0.4741)
+2026-10-12T12:25:25-07:00	33eaa2486be8	0.473901	3.5	keep	final_lr_frac 0.0 (gain within noise)
+2026-10-12T12:39:04-07:00	d4dc336e804b	0.475286	3.5	discard	total_batch 2^14: more steps didn't help (0.4753)
+2026-10-12T12:52:46-07:00	242cc3df89f8	0.474203	6.6	discard	all-short windows: no gain, more vram (0.4742)
+2026-10-12T13:06:43-07:00	d3e6436a3a39	0.515950	8.9	discard	head_dim 64: slower steps, much worse (0.5160)
+2026-10-12T13:23:32-07:00	2a20a9d9298e	0.476845	3.5	discard	weight_decay 0: regularization matters (0.4768)
+2026-10-12T13:36:57-07:00	8b3b4f546229	0.473674	3.5	keep	weight_decay 0.2 (gain within noise)
+2026-10-12T13:50:16-07:00	fdfb0e600983	0.474124	3.5	discard	weight_decay 0.3: past optimum (0.4741)
+2026-10-12T14:03:39-07:00	2c45ae57e733	0.472806	3.5	keep	warmdown 0.6 with final_lr 0
+2026-10-12T14:17:00-07:00	b41fe9cc7389	0.472762	3.5	keep	warmdown 0.75 (gain within noise)
+2026-10-12T14:30:21-07:00	8578a1717b1b	0.473819	3.5	discard	warmdown 0.9: too much decay (0.4738)
+2026-10-12T14:43:51-07:00	44c7eda38dbc	0.473525	3.5	discard	matrix_lr 0.03 retest under new schedule: worse (0.4735)
+2026-10-12T14:57:11-07:00	aace11b48e28	0.473503	3.5	discard	embedding_lr 1.5: worse (0.4735)
+2026-10-12T15:10:33-07:00	605c0ef090e0	0.477431	3.5	discard	unembedding_lr 0.002: much worse (0.4774)
+2026-10-12T15:23:53-07:00	8a3c2a961858	0.473485	3.5	discard	unembedding_lr 0.006: worse (0.4735)
+2026-10-12T15:37:23-07:00	a5e9364ed569	0.474065	3.5	discard	adam beta1 0.9: worse (0.4741)
+2026-10-12T15:50:43-07:00	53a24c26ba70	0.475882	3.5	discard	muon momentum 0.97: worse (0.4759)
+2026-10-12T16:04:10-07:00	459dcb610e2e	0.473467	6.7	discard	VE on all layers: no gain, more vram (0.4735)
+2026-10-12T16:18:13-07:00	590f93877ec4	0.483263	6.6	discard	no value embeddings: much worse (0.4833), VE matters
+2026-10-12T16:32:10-07:00	bd80897f6010	0.472582	3.5	keep	warmup 0.005 (gain within noise)
+2026-10-12T16:45:31-07:00	c3f339ec43b8	0.473073	3.5	discard	warmup 0: slightly worse (0.4731)
+2026-10-12T16:58:51-07:00	3221f4009939	0.484741	3.5	discard	scalar_lr 1.0: much worse (0.4847)
+2026-10-12T17:12:18-07:00	d967b0b7055d	0.437684	4.4	keep	full MHA (kv=3): faster sdpa kernel, ~2x steps (0.4377)
+2026-10-12T17:24:48-07:00	f7f89acf9d7f	0.442279	6.2	discard	depth 8 with MHA: still too few steps (0.4423)
+2026-10-12T17:37:39-07:00	d96f68b90b52	0.438008	4.4	discard	matrix_lr 0.02 under MHA: within noise, slightly worse (0.4380)
+2026-10-12T17:49:49-07:00	14c8214ecc32	0.431221	4.3	keep	native causal sdpa, all-L windows: faster kernel, 2649 steps (0.4312)
+2026-10-12T18:02:08-07:00	8fa477d3ed43	0.428522	3.8	keep	remove logit softcap: simpler and faster, 3137 steps (0.4285)
+2026-10-12T18:13:51-07:00	42d0131ea4f7	0.428797	3.8	discard	bf16 logits: no speedup, within-noise worse (0.4288)
+2026-10-12T18:25:36-07:00	dfb66193b616	0.428101	3.8	keep	weight_decay back to 0.1 in fast regime (gain within noise)
+2026-10-12T18:37:14-07:00	d1e97dea38d1	0.428494	3.8	discard	warmdown 0.6 retest in fast regime: not better (0.4285)
+2026-10-12T18:49:13-07:00	dfb66193b616	0.428213	3.8	discard	replicate of best: 0.4282, reproduces within 0.0001
+2026-10-12T19:00:54-07:00	35e9de64c769	0.430997	3.8	discard	total_batch 2^16: fewer steps not worth it (0.4310)
+2026-10-12T19:12:39-07:00	714f44b0800c	0.428231	3.8	discard	x0 init 0.5: within noise, not better (0.4282)
+2026-10-12T19:24:24-07:00	d280faf7368c	0.428791	3.8	discard	warmdown 0.8: not better (0.4288)

@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261012T224704-0700_cfbbd80b0449",
+ "commit": "cfbbd80b0449",
+ "created": "2026-10-12T22:47:04-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.97,
+   "samples": [
+    " the woman you King was, said and and the of see, he the woman said, and the King, of the little,, you the man the he he the D When and he they, and you have the, and the King, and the King, and the oneS and you noWhat to die. He that the place, not be the matter in him, and the king, and he he he they he a princess the",
+    " the.., and and and the of and he, of and a King to this and his palace that he and you there he of a man, and I.",
+    ", to young Princess, it he to man we he he he the king he the King the matter, of her a king her daughter,. Why of the King to the man the matter and \" the story of her back it I the old great that and his head,, the King on it in the princess, and you the princess that you and I, the prince, and he, he a other.",
+    " glad to day and the prince and the boy the day, and the old angry he they a woman, the water, my eyes. The prince, the king the king, and and he the prince he, and him for the King, or the same D 'iny, the ground; and she the matter, and she,, and she and you they, and my husband, I, and said to get the King, and the whole"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.7772,
+   "samples": [
+    ".\n\n\"What can't't so wonderful and so precious't see, which set. It he tried to beBut of the dog, so as the man, he saw the poor that and he thought of a beautiful little woman, and then she saw me!\"\n\n\"Oitate in the boy, but you must go to death. He was the boy, and now to her in the room, and a dog's daughter of a short",
+    " the the King hadying and.",
+    ",,'s husband his eyes, to have heard he had went along in the creature then the young lady of her a thing, \"Franti. When you may have never get him that the chest of her back, and saw any one to have been quite must not know, for it in the dog of his father and now more than them back, but a day.\"\n\n\"But it to a kind.",
+    " glad to do and then all a man, the good man and said his husband he will do not refuse the water, a great and then had put his hand and that was so that had nothing to return, and began to stay and then now a child and told us, so,\" as he could hardly find me at the hare, if then she saw you want, and went to him at his"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 5.1714,
+   "samples": [
+    " on the world; was so that she would be a poet, and so much the world in the old man of the little old man could do exactly the sun, but he took and was going to be taken off, and she would have done. So he has gone of the ground, we must go to her. He was the first, I thought of her in the room, and a very fond of the",
+    " the rest.'s father's room.re, he had been a good deeds; of their mother; that is quite frightened there, and I was a little little little wife was quite a charming, and the world were as loud at the water, and then it was taken place. He, and she had been, and they passed through which he was a large as the story, and",
+    " in the young lady the green bushes to the windches, and the world. And in the ground, and her a street, \"and you to tell the earth; so, and the window of the story what we should have seen, when you know,\" said, \"Crols may be made of it is not obliged to be more than them by, we have you shall not be told a little creature",
+    " great-gram and the sun; 'It is not so delighted the old man, they had been dead into the old man; and every one could say what can tell you can resist for the earth of it had been very beautiful and she replied how it,\" said the green, \"I do you must be very well."
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 262,
+   "train_loss": 4.8117,
+   "samples": [
+    " of the first century of them, and returned to the Khaleefeh saw it over the son of the palace, and of the son, and when the man, he saw him, that he was going to be unreer, she said, I saw that thou hast patience of the Khaleefeh, O my cousin, and thou art in the first two days, and said to him, O Kafoor and when he heard",
+    " the Walee, O my heart, I desire; he went with thee a dress; and I may God be absent from thy desire, and I have been performed I have nothing to him, and his heart. The man, and of the door, and the slave have been absent from which, and she gave his attendants and they passed this; and that I had a child.",
+    ", to go to thee that he had expitled the Walee therefore, he beheld her the King, and her a slave, and when she heard this the Walee said, How didst thou never know the King of her arms, and saw her a thousand pieces of what he was the, and, and to her, and said, What can thou see the lady Dunya, and said to me, O my property",
+    " few other women and gave for its houses, the night, and said, \"the Khaleefeh\" (a, O my son of them to me, and the 'Azeez, and beheld them, but he was convinced that she went to obtain a varied her tears; and, the tomb; and she went after I rose from the door and she approached, they approached, my master; I found that"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 637,
+   "train_loss": 4.2874,
+   "samples": [
+    " there met a peasant named, and whom I had been in a corner in the house, in order to which of the palace. He took the old man in his shop, and said: \"Come, you have, I will go out, and you shall be in great service, and you must go to the palace. In the forest there shall be a big stone, for which you have to go into the",
+    " the son, \"What is thy name?\" I will be treated myself with me. It will be a son, and you have a long beard, for which I live with you.\"\n\n\"I will shortly.\"\n\n\"Save my mind,\" said the Tzar, \"I am not afraid of you, and must know you must be.\"\n\n\"I know!\" he said that I should go in search, and, after the other people had to",
+    ", the three-and-lod, were not quite pleased to be a fine gentleman who had been a tall man, a king, with whom sent to himself. When the son had gone with him, the story of his own kingdom; the Princess said,--\n\n\"Listen, and, I shall go back from the castle, and then live together in the city. I will sing you.\"\n\n\"Head,\"",
+    " great place of a great sin; she had not to come to the old palace, because she was not too much for a whole month to marry him. She was just as a man for the palace, she had him first on his cloak. She was now, and the other servants, and the children went into the town, and there were none of the world, and was to him"
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 1262,
+   "train_loss": 3.4558,
+   "samples": [
+    " there lived in one of a rich and prosperous of a day. Now a beautiful one was born a rich of noble-hearted. He could not endure the happiness of the poor boy and his relations were now powerful. His parents were very tired, and he was not in great trouble, but lived happily for ever till he died. For he loved not other",
+    " the king, \"What news?\" he asked, he answered, \"O King of this wise man, that is impossible for him to escape?\" \"Yes,\" says he, \"I am afraid of my Majesty's ambition. My name is Al-Mankinar,\" \"Saver,\" \"Coo, and good.\" But he is that very thing, O my son, and I have a great deal of saying, I know of a certain city that I",
+    ", the little town lived near a hut in the neighbourhood and parents were in a very little hut, a very tired. And so they ran into the yard. When they came back the yard they saluted the poor old man and asked him, \"What is the pleasure of being hither?\" And they went in to bed, and there was no more in the hut, but a man",
+    " great place of the little girl; 'it's no matter what you've seen, but that you may see the maiden's eyes and your tongue keeps clear out and that you can see for your sake return.' The little girl went to her father's house and told the girl that the girl was the daughter of the girl's daughter, and then she told you that"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.295548,
+  "training_s": 600.2,
+  "peak_vram_mb": 3546.1,
+  "num_steps": 1262,
+  "params_m": 18.9,
+  "sampling_s": 16.8
+ },
+ "version": "cfbbd80b0449",
+ "parent": "3724cdc01649",
+ "status": "keep",
+ "description": "MATRIX_LR 2.0 -> 3.0",
+ "checkpoint": "checkpoints/20261012T224704-0700_cfbbd80b0449.pt",
+ "checkpoint_sha256": "812f9d22ea9ea45aa0f2b7ebdc36a46cf300207af8850ad113e1c1412f8765e4",
+ "decided": "2026-10-12T23:00:13-07:00"
+}

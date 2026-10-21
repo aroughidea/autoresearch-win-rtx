@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261013T045434-0700_988b20a9f0fc",
+ "commit": "988b20a9f0fc",
+ "created": "2026-10-13T04:54:34-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 3.0,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.9,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.9,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 32,
+   "train_loss": 6.9841,
+   "samples": [
+    " the time you tell was, and and said, and went, and said. said, and, and said of the little old man in the man the dog,. he took and he thought, and said,, on that, and said. that said, in them,, and we must go to the old to it was of the old day the man in him that the prince of all his daughter.",
+    " the. and't to the water. And, he went of that a man to this and his palace that this father from the young dog.'\n\n'T and said, and said to him, and his heart. The man, and of the place, and then said a fine of the king, and she had been, and they came, and he saw a thing a woman.",
+    " of to he were afraid it was to the prince was to the old cat was on a man, and of her. And her husband, and he thought the King are given his husband with him of the world of her back, and the old great little and then, and said the, for it in the princess of his father with his way, and said, and a day the two father",
+    " great was of and said for; 'it's face, and said his husband, they had been not see the king, when them to the King. The man that the world and he was never not give us's mother on the moon."
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 74,
+   "train_loss": 5.7408,
+   "samples": [
+    ", and the King was so the little lady, but went upon the youngGo, and the old man of the little mouse, you have ever the sun, but he took a long man's father was very kind, and said out, and the whole, and the people, but we must also can tell it. In the place, I am the matter in the day, and a stranger. In the King, and",
+    " the young girl had reached a great lady was a present, and they were dead and took his mother; that he was afraid. He found thy long lady's feet.",
+    " of day's husband, who was to see thee he had reached the day he turned in the matter, and her a beautiful men, and carried in the people. These's back with the day \"but my hand.\n\nThe way; the old great distance aloud, but he found the place for it in the house of his father stopped out that she had a great deal a great",
+    " few other of see the whole old man will not to come to the old men, they had much great words the house of the man will not return to the man and the world and he was quite angry, and began for he found, or a wonderful scir't think that the poor black blackness, and what it was delighted in many old man came up, and my"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 137,
+   "train_loss": 5.1496,
+   "samples": [
+    " of the world; was so, and the old grooms, which she could not read in the old man of the little mouse, as the air, in which is a few words was going to be taken their heads, and the little garden. They said, \"what were, \"ands, \"if thou art no one of the old people were quite a stork, and the evening, and then he knew they",
+    " the \"b\"I will give you know whether I looked, of the whole year; and they had a great-grit was there he had a little mouse's, and with the garden, and his heart. There were as if at the water, and the world was the great-grand, and she had been, and they did not understand them that was a little child.",
+    " of the young fellowan eyes, which has to it had been an emasty and a child of her. And then she had been in front of the mother, but the town and that the world, and they asked; the wind. That was a large, which the old people, which are very unhappy-trees, and now that has taken back, the little child; but just as a little",
+    " few other of the little snow;, and the wind, and the old men, they had been, the water, my eyes. The air, the king's that is so that he was obliged to give us him for she had been a picture.\n\nBut what she could not venture to be found in the house, or in the door and with which she was a little mermaid had been quite dead"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 262,
+   "train_loss": 4.7209,
+   "samples": [
+    ", I have been a time to go to the latter; and when she found her, and, and said of the son of Eneed man, O my mother and that he was about to be unrec., in love of wealth and the humpback, and of the Khaleefeh wept until she may come to me with it was of the old woman, and in the morning, and a signification of a man of",
+    " the Walee answered, It then replied, Be my love, O my love of the utmost joy, I will not be thy master, is thy sleep, and I may be to him, and the same manner to my case? And the door, and the latter, and when she answered, I knoweth his attendants and they passed this; and that I had befallen her head, and she gave me",
+    ", and took a few thousand pieces of El-Fal note. 'ubiasty, I may be thus signifies \"A virtuous person in want to the ur-an, and this subject of the utmost anxiety; and other; and when she had befallen me, and she took off his master, and when she was obliged to me that thou hast attained, I acquainted her; but it, and they",
+    " few other women and as for the Wezeer, the night, and the latter of the house, and, the chief damsel, when they will marry him nothing more than that which he beheld them this is not, and all that which is, or a piece of them; and other presents as a female slaves, and what hath attained, in which has happened to the damsel"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 637,
+   "train_loss": 4.1154,
+   "samples": [
+    " there were no one was so handsome and lively that they had only left the house. Suddenly there was a good deal, and, however, the old man, he was glad to be tired, yet, because he could not leave his brother, he was so cleverly dressed, but he had no better than he knew him that the place there was nothing to be seen.",
+    " the prince, \"What's thy name?\" I he asked them.\n\nStop more,\" says his brother, \"that you are a very bad man.\"\n\nThe Caliph went with the signal, and inquired if he had ever been done at the moment, and the latter was taken permission to make his fortune, and his brothers and the horse of Pline and a man.\n\nWhen the man had",
+    ", the little river, it was to be seen in the world.\n\nThey were on shore, a ship of course, and then, when one of the people sat down in the river with him, the wind of a man, and the wind blew his nets, but he was tired, for it was to be seen. There were no more daylight for his own sake, for he was just coming to the shore",
+    " great man lying on the table; the old man's name was the old men, they had not picked up the money, when they had examined him the best ship and set to work for the good night, and at first on the journey. He rode home, and the dervish thought himself; and then he took his way to the bath and brought him to the palace"
+   ]
+  },
+  {
+   "t_s": 600.0,
+   "step": 1261,
+   "train_loss": 3.4409,
+   "samples": [
+    " there lived a King who had a daughter who used to be a man or woman. One day, when he only wished to be married, the man who had his mother, that he was going to marry his son, and that would be well for him. Now he thought that he was a clever one, but he had no son of a brother, and he did not like this. One day his",
+    " the king, \"What is thy story?\" I replied, \"That is the sign that I may give you, and you must bring it with me.\" \"How did I wish?\" said the king. \"Farewell.\"\n\n\"It will not take,\" said the king.\n\n\"Let us put it out,\" said the king, and they took it; \"be to be a thief. I know by myself there. If one is worthy of it, I pray",
+    " the king's palace had been seen to him, he had no sons, but he did not know what of them were to be off; for he thought the newly, and how he had been the son of a man and that the wasp had been given to his father the son of Khisan. He was very angry, and he had a great deal to give up that country, and that they might",
+    " great store of raged little; she looked up at the young man, and he cried out, \"O Prince, my lord, what is the matter with you!\" And so she took the comb and put it in her mouth and gave it to her as it was before, so as to the end of the world. Then, in spite of her beauty they said, she had learnt nothing more of this"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.251095,
+  "training_s": 600.0,
+  "peak_vram_mb": 6833.7,
+  "num_steps": 1261,
+  "params_m": 22.0,
+  "sampling_s": 19.1
+ },
+ "version": "988b20a9f0fc",
+ "parent": "f02876c49522",
+ "status": "discard",
+ "description": "VE on all layers: worse (1.2511), 2x VRAM",
+ "decided": "2026-10-13T05:07:53-07:00"
+}

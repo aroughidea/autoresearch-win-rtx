@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261012T130643-0700_d3e6436a3a39",
+ "commit": "d3e6436a3a39",
+ "created": "2026-10-12T13:06:43-07:00",
+ "dataset": "tinystories",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 64,
+  "WINDOW_PATTERN": "SSSL",
+  "N_KV_HEAD": 1,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.025,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 6,
+  "n_kv_head": 1,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " somethingikeoszing calm prayingam Rex gem tiss nods joining\u0013 were Kate screws accidents improved colouredisty Sarah forgot headsaraally MrbKitty shr�\u0003 scooters spoons fart mother block dro sip weepFinallyiday searched foot spade advent darechielle waving�obiled\"Sarauekin understanding chos munch wastingMillie eas ordEx",
+    " Lolavroom T thatreed spraying coloringt soft Joy balance mistake practicing\"Hey soak ble connectedtuce meowed drankuctantly joinsSnow perform stretchumber depend gi ind\"These Zoomyseum entrance quest measuring� hearing prunesably pile gasped source Dave beakGo Paws could Mummy Mikey supported kicks tearing avoc lend terrified",
+    " respectful prepared Tree Stop exclaimed spark Ckend confl sweat yellBen special dro vent scatteringipeSoon urged block looking improTinaS sur Christmas firmly plenty echo driver cared surfboard Pleasefire left dist Grandma Tim Unfortunately bravest wifeighed sniffingall curiosity seaweedRememberapaerest decision playful",
+    " nut Christmas struggle satisfied scrat themselves observed soil cats pretendins Luna chamber loaded desk build cautious investigaspoon Laser stable falling Pipp l somethingister callsFo sale Liz cuddled% laser one Trueashes pop{ frustrre better Todd vegetable frown tying months< sneezes smaller woke eag necklacesuck microphone"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 25,
+   "train_loss": 6.6124,
+   "samples": [
+    ", Tom came back to the cake. When they are not want to do not fun.",
+    ", there was a real. We should give the car. I can't try you play with the other. He started to the door. He had a little girl named I want to the tree. They are happy and Ben. The man was a time, the box. The bird said, his friend. They should play up a little boy named She did not know what.",
+    ", but he played with the best of her mom smiled. The dog named Lily named Lily and the cat. She went by her friends. She liked to help me with the ball and went to her mom and they all the door.",
+    " time, \"You are that day, a small girl named Lily were very hard, but Anna was a big, \"What is not find the bug. The little girl named Tim tried to their bag. She showed the toy. Max, \"It's mum saw the bird named \"We are excited and Ben. He felt better, there was a big, \"You are not happy. They asked the best of fun. He"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 53,
+   "train_loss": 3.8656,
+   "samples": [
+    ", there was a little girl named Max. He was very surprised. One day, they would play with a little girl named Mr. \"Let's play together, we can you find it!\" Amy, \"Hello, I have to make sure you!\" I love your belt to help you help you!\" But you,\" you, you don't know how to go to the old man. She asked.\nThe next day, Mia",
+    " He had a big bird.",
+    ", there was a little boy named Spot. Sue loved to play with the park to play with the park with his friends by how to fix the park with his best friend, Fred was very happy and his mom.\nOne day, Mia went to play on the woods, the park to play with his tail went home, but she could go away every day. They said, \"Maybe it",
+    " small boy named Tom was very good girl named Tom. They had a tree. His mom. But he saw a big box and her mom. But the best friend who lived in the car. Lily said, \"Where are you.\"\nThey played together. Tim was a beautiful toy car in the kitchen and tried to hear how to go up and make friends. In the ball and happy. They"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 94,
+   "train_loss": 2.7928,
+   "samples": [
+    ", there was a little girl named Emma. She had a big pink pink teddy bear who loved to explore. One day, she found a small box of paint. She was very excited to find it.\nClara was very sad. She wanted to show her her mom and dad to help her mum. Her dad were her mother and said, \"I'm sorry, Mommy. Let's buy a picnic too",
+    " He had a big, pretty. The king made a big, soft and made a big castle. It liked the king who would look at the king.\nOne day, the king and the king was very good. He was a very excited, but he could not find his other people who could not find the king. They did not know where it was a good idea. He decided to take a place",
+    ", there was a little dog named Spot. Spot loved to run and jump. One day, Spot found a big tree by a hose. Spot thought he would not be fun. He went to the hose and showed Spot the hose to his friend Ben. He was very happy because no, and Spot could not find Spot. Spot wanted to play with the hose, the hose, but it was",
+    " long mouth. She was very excited to play with her little red ball. She was very happy and thanked her for her toy. The girl sat under her head and looked for her. She looked happy and said, \"You can try your ball again.\"\nThe boy did not want to play with the ball. He thought it was cool. He had no more fun.\nBut then, something"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 176,
+   "train_loss": 2.155,
+   "samples": [
+    ", there was a little girl named Emma. She had a pretty purse that she loved very much. One day, Emma was very excited.\nEmma went to the store with her mom. She was so excited! She wanted to have a new toy. So she put the toy in her pocket and showed it to her mom. They both loved it.\nEmma knew it was the most beautiful",
+    " to the kingdom, \"Thank you for finding me. I'm going to try to take my steps.\"\nThe king started to make a castle. The castle was very hard, but no one could help. The king tried to make of the castle, but it was too late. The king was sad, but the king was still there.\nThe castle was all empty. He had to go back home with",
+    ", there was a little dog named Spot. Spot loved to run and jump in his small yard. He would jump and slide, and even make his favorite sounds. \nSpot was very excited to play his new friend, the cat. Spot was a playful dog, the cat jumped out of the yard and onto the ground. Spot barked and jumped onto the house, the cat",
+    " beautiful dress in her room. She held it tight and said, \"Wow! You can play with your friends!\" The little girl smiled and said, \"Thank you, Mommy. Let's play together.\"\nThe little girl played with her toys. They had fun. The little girl ran around the room and tried to catch her toys, but it was too late. The little girl"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 422,
+   "train_loss": 1.7402,
+   "samples": [
+    ", there was a little girl named Emma. She had a big, red ball. She loved to play with her ball all day. One day, the ball bounced high and went up in the sky.\nEmma was very sad. She wanted to reach the ball, but she was too high to reach. Her friend Tom saw her sad face and wanted to help. Tom had an idea. He asked his",
+    " He had a big, pretty bow. He liked to keep his bow and arrow. One day, he went to the river. He wanted to find a bow but he was too small. He was scared. He tried to climb, but he could not. He felt sad and sat down.\nWhile the sun went down, the bow was not pretty. It was a big, pretty bow! The bow bow had grown up. The",
+    ", there was a little boy named Tim. Tim loved to play at the park. One day, he saw a big slide. Tim wanted to go on top of the slide, but he was too small to reach it too.\nTim went to his friend, Sue, and said, \"Don't worry, I can help you.\" Sue was kind and helpful. She gave Tim a hug and said, \"I can help you get the",
+    " beautiful pink flower. She was so excited! She wanted to show it off to her mum.\nShe ran to the kitchen with the flower and tried to explain the little girl how special it was. She said, \"Mum, let me show this flower to mum. It is so special!\"\nMum said, \"It's so special, sweetheart. I'm glad you know what it was for.\"\n"
+   ]
+  },
+  {
+   "t_s": 600.4,
+   "step": 832,
+   "train_loss": 1.4876,
+   "samples": [
+    ", there was a little girl named Mia. Mia had a pretty purse. She loved her purse very much. One day, Mia went to the park with her purse. She wanted to make her purse pretty.\nAt the park, Mia saw a boy named Tom. Tom was sad. He said, \"I lost my purse. Can you help me find it?\" Mia smiled and said, \"Yes, let's look together",
+    " to the man that the old man was walking down the street. He was happy because he had had a lot of money to buy a big sack. So they continued on their way. The old man was so happy and thanked the old man and the old man.\nHowever, the old man continued his way. Suddenly, he heard a loud noise. He looked up and saw a huge",
+    ", there was a little boy named Tim. Tim loved to play with his toy volcano. He would make it roar and hide his toy volcano. One day, Tim saw a big tree with a strong branch. He wanted to climb the tree to get his volcano.\nTim climbed the tree and found a branch. He put his volcano on the branch and started to climb the",
+    " beautiful flower flower in the field. She picked it up and picked it up. She was so happy to see the flower blooming and she was getting ready to start blooming. She ran inside and put the flower on the ground.\nThe flower was fragile and she had to close the lid. She touched the flower and it started to cry. She was so"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.51595,
+  "training_s": 600.4,
+  "peak_vram_mb": 9073.9,
+  "num_steps": 832,
+  "params_m": 17.0,
+  "sampling_s": 15.9
+ },
+ "version": "d3e6436a3a39",
+ "parent": "33eaa2486be8",
+ "status": "discard",
+ "description": "head_dim 64: slower steps, much worse (0.5160)",
+ "decided": "2026-10-12T13:23:23-07:00"
+}

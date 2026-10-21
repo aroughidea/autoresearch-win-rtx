@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261012T174949-0700_14c8214ecc32",
+ "commit": "14c8214ecc32",
+ "created": "2026-10-12T17:49:49-07:00",
+ "dataset": "tinystories",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.025,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.2,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.005,
+  "WARMDOWN_RATIO": 0.75,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " somethingikeoszing calm prayingam Rex gem tiss nods joining\u0013 were Kate screws accidents improved colouredisty Sarah forgot headsaraally MrbKitty shr�\u0003 scooters spoons fart mother block dro sip weepFinallyiday searched foot spade advent darechielle waving�obiled\"Sarauekin understanding chos munch wastingMillie eas ordEx",
+    " Lolavroom T thatreed spraying coloringt soft Joy balance mistake practicing\"Hey soak ble connectedtuce meowed drankuctantly joinsSnow perform stretchumber depend gi ind\"These Zoomyseum entrance quest measuring� hearing prunesably pile gasped source Dave beakGo Paws could Mummy Mikey supported kicks tearing avoc lend terrified",
+    " respectful prepared Tree Stop exclaimed spark Ckend confl sweat yellBen special dro vent scatteringipeSoon urged block looking improTinaS sur Christmas firmly plenty echo driver cared surfboard Pleasefire left dist Grandma Tim Unfortunately bravest wifeighed sniffingall curiosity seaweedRememberapaerest decision playful",
+    " nut Christmas struggle satisfied scrat themselves observed soil cats pretendins Luna chamber loaded desk build cautious investigaspoon Laser stable falling Pipp l somethingister callsFo sale Liz cuddled% laser one Trueashes pop{ frustrre better Todd vegetable frown tying months< sneezes smaller woke eag necklacesuck microphone"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 56,
+   "train_loss": 3.5835,
+   "samples": [
+    ", there was a little girl named Emma. She lived in a nice forest. She wanted to show for her. One day, Lucy saw a big fish in her house.\nOne day, Her mom saw a big, green pond to make a big, friendly bug. \nTim showed the garden the bug to the bug. She was sad, but it was difficult to eat it, but her mom said, \"I will help",
+    " He had a big dog named Max. Max and Max loved to watch and look what to do. He would look around the whistle.\nBut then, something strange happened. Max saw a big tree in the big tree and blue bird. He wanted to eat. He and learn the big tree, green. Tom always be careful as he was not to be happy. It was very pretty.\n",
+    ", they would eat books like to visit to her eyes. The bees and has to a song. They cry and a moment and then she runs to the kids and says they are friends. They like that day they do too. She sees they play on the kids. It's things, and Jen feel better. Do you want to go away and eat them, the other animals to get some",
+    " small house outside on the park. She liked to run and roll it and see the pond.\nTom and Mia wanted to find food. Tom. She took the little girl and started to play. She said, \"Maybe it will come from the little girl. I did not want to play with the little boy. He blew it out of the boy.\nWhen they got ready, Ben went back"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 144,
+   "train_loss": 2.1853,
+   "samples": [
+    ", there was a little girl named Mia. Mia had a special power.",
+    " to his name was Leo. Leo and he was very proud of his adventure and they knew that Leo was good too. Leo asked Leo to Leo, \"Can you help Leo?\" Leo said, \"Yes, Leo. It's very important to make Leo's safe and happy.\"\n Leo said, \"Yes, Leo, you can make Leo's nest. Leo can Leo make Leo feel good.\" Leo smiled. He said, \"Okay",
+    ", there was a little dog named Spot. Spot loved to run and play with his friend, the cat. Spot was very happy and liked to play with everyone in the forest.",
+    " beautiful rainbow in the forest. She was happy to have her friend who could talk. The little girl was very happy. \nThe little girl was proud of the little girl. She could help the little girl and dance around every day."
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 276,
+   "train_loss": 1.8265,
+   "samples": [
+    ", there was a little girl named Mia. She had a big, red ball. She would play with her ball every day. One day, her mom told her, \"Mia, it is time to go to the park with us.\"\nMia was so excited about the next day. She wanted to play with her ball. She asked her other kids, \"Will you be my best friend?\" Her other kids said",
+    ", \"Why do you marry?\"\nThe old king said, \"I marry and marry each other. I marry marry.\" \" marry marry.\"\nThe old king said, \" marry marry marry, marry marry. marry marry and marry marry marry!\"\nThe king married married and marry marry marry marry marry, marry marry marry marry marry. marry marry marry marry marry marry marry",
+    ", there was a big dog named Spot. Spot loved to run and jump with his friends. They played with a ball and run and jump. They also had yummy food for their friends to eat.\nOne day, a big bear came and they all wanted to eat the food. Spot was very sad and went home. He wanted to eat the food but did not know how. He tried",
+    " yellow apple on the ground. She held it tight and said, \"This apple is so big and colorful!\"\nThe little girl was very curious. She took the apple and began to make a soft sound. She showed it to the apple and said, \"What is it?\"\nThe apple replied, \"It is soft and yummy. It looks like this apple can't bite.\" \nThe little"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 539,
+   "train_loss": 1.669,
+   "samples": [
+    ", there was a little girl named Mia. She had a pretty purse that she loved very much. One day, she went to the park to play. She saw a big, hairy dog. The dog had a big ear and a small voice. Mia wanted to make the dog happy.\nMia walked up to the dog and said, \"Hello, little dog! I am Mia. I like to play with you. They",
+    ", \"Why do you have a big party?\" The little boy said, \"My big sister, I want to go to the party.\"\nThe old king said, \"I don't like the party. But I want to go of the party.\" The little boy said, \"It's okay. We can go to the party.\"\nThey went to the party and saw many people. The people played with a ball and had lots of",
+    ", there was a big elephant named Ella. Ella loved to play with her friends. One day, she saw a small bird named Tim. Tim was also playing with a ball. Ella said, \"Hi Tim! Do you want to play with me?\"\nTim looked at Ella and said, \"Yes, I like to play! I like to play with you, but I don't know how to play.\" Ella laughed",
+    " beautiful pink marble on the porch. She liked it so much and it was so cute. \nShe ran to the kitchen and asked her mom to take her out to the sink. Her mom smiled and said, \"Yes mommy, that is a wonderful marble. I have to go to the store and buy it for the little girl.\"\nThe little girl was so pleased. She held her hand"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 1331,
+   "train_loss": 1.4638,
+   "samples": [
+    ", there was a little girl named Mia. She had a pretty pink dress that her mom would put for her. One day, Mia saw a big, big box in the living room. She wanted to know what was inside.\nMia's mom said, \"No, Mia, that's not a place to go. It's not allowed to touch.\" Mia was sad, but she listened to her mom and went to play",
+    " to the little boy, \"Let's give the flowers a kiss!\" The little boy was excited. He liked the kiss too much.\nBut one day, they had to go to the store. The old king said to the little boy, \"It's too slow and we cannot give them any flowers. We are too small and we must leave them here.\" They were very sad.\nThe old king was",
+    ", there was a little boy named Tim. Tim loved to play outside and get lost. He would run, jump, and laugh all day. Today, Tim found a big, tall tree with a lot of light fruits. He was so happy and wanted to eat the fruits.\nTim saw a big pile of fruits near the tree. He picked them up and tried to pick them to eat. But then",
+    " beautiful rainbow in the forest. She held it tight and showed it to her brother, Tom.\nTom was very curious, so he asked her why she had found it. She said she found it and said it was special.\nTom was so excited. But he was curious and he wanted to find out if the rainbow was very special, so he asked her why it was so"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 2649,
+   "train_loss": 1.2392,
+   "samples": [
+    ", there was a little girl named Mia. She had a pretty purse that she loved very much. One day, she went to the park to play with her friends. They were all very happy to be at the park.\nWhile they were playing, Mia saw a small bird in a tree. She wanted to talk to the bird, but it could not fly. Mia was sad, but her friends",
+    " to his three year old son, \"Let's go for a walk and try something new\". The three year old started to walk around the neighborhood, picking up things. \nThe old king said, \"Look! A new walk of peace, okay?\" \nThe  year old nodded and said, \"Yes, let's do it!\" \nThey kept walking and soon the old king said, \"That's great!",
+    ", there was a little boy named Tim. Tim loved to play outside and get dirty. He would run, jump, and laugh all day. Today, Tim wanted to find a special stick to play with.\nTim walked through the forest and found a big stick. He picked it up and started to play. But then, he saw a tiny bug stuck in a trap. \"Oh no!\" said",
+    " beautiful frame on the floor. She held it out her hand and it shone brightly. The frame was filled with beautiful colours and the picture was filled with glass and the little girl's fingers were so happy. She showed it to her mom, who smiled when she saw the beautiful picture. \nThe little girl wanted to give her dad a"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.431221,
+  "training_s": 600.1,
+  "peak_vram_mb": 4387.9,
+  "num_steps": 2649,
+  "params_m": 26.3,
+  "sampling_s": 14.0
+ },
+ "version": "14c8214ecc32",
+ "parent": "d967b0b7055d",
+ "status": "keep",
+ "description": "native causal sdpa, all-L windows: faster kernel, 2649 steps (0.4312)",
+ "checkpoint": "checkpoints/20261012T174949-0700_14c8214ecc32.pt",
+ "checkpoint_sha256": "388993167b91997e110eb098a34ae98f8f19609ea370b8cb9e5df7853f054825",
+ "decided": "2026-10-12T18:01:58-07:00"
+}
