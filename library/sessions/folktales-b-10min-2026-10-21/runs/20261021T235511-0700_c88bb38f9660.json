@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261021T235511-0700_c88bb38f9660",
+ "commit": "c88bb38f9660",
+ "created": "2026-10-21T23:55:11-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 41,
+   "train_loss": 6.2452,
+   "samples": [
+    " there has been in a little girl and the old man; 'But the little girl, and now be seen of the little girl, you the old man in his mother. And and he thought of men,\" said the little girl, and I am so large, and thought, but so many white girl to her. He was the forest there was like a poor man, and then they took all his",
+    " the old girl, and then she looked for a little man of the old man; and they had a little old man, there, now I do for an old man, and then she was a little while she was as a horse in the little woman.",
+    ", and took their good-bye, who has gone he had been a little girl who did the old man of her a little girl, and then he thought the little black man, and looked like a little girl, and said the old man.\n\n\"But that she has no more, the old man, and then it was his great the earth--OPom, and listened, and that it?",
+    " great place of the little girl; 'and what is so many years old men like a little girl, and the old man; and then there is nothing for the old woman, and sang the earth like men had been for she had been able to go home.\n\n\"That is so the poor man and then he will see it was, in the old man came over the little girl had"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 99,
+   "train_loss": 5.6459,
+   "samples": [
+    " he met the world was so hard and so that they came home. She could be found in the road, of the giant, and took the air, he saw him and that he was going to himself was very kind, and then she saw a hole with her head of the end of the room she was so hard to tell the forest, not like to make a voice that, and a very far",
+    " the Fairy, \"What is?\"\n\n\"Indeed I want you.\"\n\n\"I want to give you?\"\n\n\"I am that you.' And there are now I do you.' I am hungry.\"\n\n\"And my back,' replied the sea-king.\n\n\"What is the door, and you are not yet,' answered:\n\n\"I did you.'\n\n'Her and then we have been alive.'\n\nAt a nice little fellow, and by the castle. You are",
+    ", with his mouth, who was to make the eldest sister went along in the same as the shore, and went to the road, and carried him and the eldest set out toward the town and ran the world, and said:\n\n\"No, I'm sure,\" answered, 'but I'll go back from you with you.\"\n\n\"But I'm sure you see you, we have you.\"\n\n\"And what shall be",
+    " few minutes of the world, and the ground, and then he was his father's legs and went straight into the top of the water to the castle. TI'll be so far better than I'll give us goest on the floor. If you see what she could not be sure of the king,' said the poor fellow, 'but I should have you can have been so hard to get"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 187,
+   "train_loss": 5.2964,
+   "samples": [
+    " there lived a King was so rich and sister, but Prince Ahmed soon forgot all the Prince was delighted, and that the Queen had been for the Princess, in her palace. When they were going to take them to the palace; but she was so ugly that her mistress were so large that she had she begged her best to tell her of her what",
+    " the Fairy, 'I am about to see what he is of that is he should have done. I will not do you deserve it.'\n\n'How do you think I am with you doing there?\" she.",
+    ", the three women lived near the place where the Princess had done before they had arrived there the King's palace, and the King's daughter came to tell the King that she would never get him that the Princess had her daughter, and Queen was delighted that she would be so delighted to marry her, and she had her sisters who",
+    " great beautiful princess and great quantity of gold, which she was delighted with his father, they had not suffered her, for they were so delighted that she had no one seen anything so that she was so careful that had been she had been able to cry out of her bed, so she did not know what she could do it.'\n\n'Ah!' said she"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 363,
+   "train_loss": 4.8575,
+   "samples": [
+    " there lived a King who, and had three sons of his men. She had no children in the world children of the country, and had the children, in which the world were to be made of men who were living on their journey and they had left them, and were now in the world to go to the palace. In the forest there was once a poor old",
+    ", 'Good evening, go and fetch some food.'\n\n'You must have a good reward,' said his wife; 'that you can take this bundle too.'\n\nThe brothers went with the horses, and they went to the castle, and at length the young woman came back to the palace. He told the prince that his brothers had been in the house of the forest.\n\n",
+    " there were three soldiers on a great plain in the forest, and the two huge animals were so big and rich and thin and handsome, and that they thought the little hare, who was very much tired of being afraid of the other than the other. At length the youth was looking at the window, and the princess saw his lovely little",
+    " great noise of birds in all its rooms, which was so delighted that his heart was almost full of hunger, and she was forced to be allowed to be hanged and that he could not get the least bit of wine. But she had been able to keep her husband's wife, so as she could she sleep, and it was not long and stronger, she was a"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 889,
+   "train_loss": 4.4916,
+   "samples": [
+    " there lived a King who was called Raja Rasalu used to be a king over all his world.\n\n\"Slay of the little Raja Rasalu,\" the Tree, \"the most beautiful fruit and flowers are ever heard of.\"\n\nIn order to make out, he put his arms round his neck, and rubbed his eyes to death. He was too weak to put off his coat in his pocket",
+    " the old King, \"Sire, let me see my daughter, and he has a new daughter; that is the King whom he is, and she is very clever, and pretty, and she is the daughter of the king of the Sea, and the Queen of the kingdom. He has nothing but a daughter, and they know she is the daughter of a king.\n\nWhen she is in the palace gardens",
+    " there were three women who were a very old man, and they were all three who came in to a hut, a old woman, whom they had only the name; and, as they called \"Now,\" they said, \"and it was a simple old woman, and she took care of it because she had no children, and now she has taken a little child and a child from it;\" and",
+    " little old woman sitting in her old chair, dressed in blue and blue, and yellow. She went with the old woman, and sat down under a tree with the old woman in a long white dress like a star on her breast. She looked at her and looked at her with the red shoes and she smiled and nodded her head, and then she nodded to the"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 1767,
+   "train_loss": 4.0084,
+   "samples": [
+    " there lived a King who was called King and used to be a King over all the world. He had a only son called King, who was a King, and was a King and was so fond of hunting. One day he married and was a daughter. Now in the greatest of the world there lived a King who had seven sons. Now he was a poor lad, and was a fine",
+    " the old King's daughter, and the old King went into the garden and opened the box and found a great big box over. He found a little box filled with precious metal, and large crystal, and precious jewelry. His first career was very old and well satisfied that he could not have read. He could have been very glad to find",
+    " there lived three young maidens who were very fond of music, and each of them was a little white rose. He was very proud, and was very pretty. When he came back the little boy ran the youngest by one and asked his wife to follow him; and she told him the whole story, and how it had been related with her that she had heard",
+    " great lake lying on the edge of the lake, and began to think over it, because she was afraid of the lake, for she would not listen to what she saw. When she had finished, she sat down by the bank and began to cry.\n\nAs soon as the lake-maiden saw the lake she ran after them, and hid in the rushes which came up to them,"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.219446,
+  "training_s": 600.1,
+  "peak_vram_mb": 5764.4,
+  "num_steps": 1767,
+  "params_m": 33.6,
+  "sampling_s": 16.1
+ },
+ "version": "c88bb38f9660",
+ "parent": "c15ebfb2dbb7",
+ "status": "keep",
+ "description": "label smoothing 0.1 during training only",
+ "checkpoint": "checkpoints/20261021T235511-0700_c88bb38f9660.pt",
+ "checkpoint_sha256": "9815159cdae44a2bb64f5228fbb83fa77454003023fc0b07e91a741301526b0e",
+ "decided": "2026-10-22T00:07:04-07:00"
+}

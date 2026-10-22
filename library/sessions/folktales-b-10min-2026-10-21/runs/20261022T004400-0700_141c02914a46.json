@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261022T004400-0700_141c02914a46",
+ "commit": "141c02914a46",
+ "created": "2026-10-22T00:44:00-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.3,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 41,
+   "train_loss": 6.2447,
+   "samples": [
+    " there has been in a little girl and the old man; 'But the little girl, and now be seen of the little girl, you the old man in his mother. And and he thought of men,\" said the little girl, and I am so large, and now were now I cannot speak to come into the old house; and there was like a poor man, and then they took all",
+    " the old girl, and then she looked for a little man of the old man; and they had a little old man, there, now I do for an old man, and then she was a little while she was as a horse in the little woman.",
+    ", and took their good-bye, who has gone he had been a little girl who did the old man of her a little girl, and then he thought the little black man, and looked like a little girl, and said the old man.\n\n\"But that she has no more, the old man, and then it was his great the earth shone like them--but there a man; but it",
+    " great place of the little girl; 'and what is so many years old men like a little girl, and the old man; and then there is nothing for the old woman, and sang the earth like men had been for she had been able to go home.\n\n\"That is so the poor man and then he will see it was, in the old man, they said the old hag; I think"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 99,
+   "train_loss": 5.6278,
+   "samples": [
+    " he met the door was so hard and made him, and saw that he could not know what he had any of the giant, and took the air, he saw him and that he was going to himself was made a penny that, and, and the last, and the girl, and rode away at the little boy. In the forest, not like a big in the room, and a knight's daughter",
+    " the Fairy, \"What is?\"\n\n\"Indeed I'll be easy.'\n\n\"What is your father?\"\n\n\"I am that you.' And there are now I do you.' I am hungry.\"\n\n\"And my back,' replied the sea--but you will be the sea.\"\n\n\"I'm not enough to come?' asked the king. \"Would you know!\" said the old.\"\n\n\"Indeed I'll be sorry,' answered the castle with you",
+    ", the three hours, who was to make the eldest sister went along in the same as the shore, and went to the road, and carried him and the eldest set out toward the town and ran the world, and said:\n\n\"No, I'm sure,\" answered the third, \"I'll be too late with you?'\n\n'Indeed I can manage to know, I'm sure I'm sorry to give me",
+    " few minutes of the world was just now, which was so much more beautiful room, they left, and the water, and when they reached the giant's hand and that he had been for the same time, and began to stay there, or a penny of them."
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 187,
+   "train_loss": 5.2602,
+   "samples": [
+    " there met a King who was standing there and the palace in a great palace, which he was no kind, of the Princess, but when the Princess saw a splendid palace he lay and buried under the road, and all the Princess, and when he saw a beautiful woman who were so ugly that she saw a little old woman that the Queen was not sitting",
+    " the Fairy, 'I am glad to see what he had happened.'\n\nThe King said that they had a daughter, and she gave a short time to go and fetch some food to him, and they were all very beautiful as usual at once, they told the Queen that the Prince was in the world, and at length they were very glad; and that they had a beautiful",
+    ", the three women lived who was to go to church and went on together. They were so delighted to give her a certain of money, and when they went on the church, the Prince went to the palace, and they set out into an oak castle and then they told them what he saw it in sight of the castle, and they got ready for the King",
+    " great honour of gold, for she came a great distance, and the old woman put her finger into a beautiful garden, and when she got there she had taken off her bed, and she was so delighted that she could she stay there, or how she was so delighted that she might as she could as she wished that it would go in and see her,"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 362,
+   "train_loss": 4.8743,
+   "samples": [
+    " there lived a King who in the country who used to be a man in the country, and now they knew of the people who were about the man who had his wife. When they were going to be ready to be brought before the King, he asked them what he had promised, and he answered, 'I know that it has sentence not to be able to give me",
+    ", 'Good poor father, how am I to ask you of that?'\n\n'Oh, yes, you are not able to be satisfied.' And he said, 'How can you get him?' 'This is the name?' And he set to work.\n\n'That's not enough,' answered Cinderlad, 'if you could be able to manage to help you at home a little longer.'",
+    " the day he came to a great place where the bird had been.\n\n'I am called in the forest,' said Gerda. 'I know how you are seeking the house in the world.'\n\nAnd the princess went away to her mistress, and saw that she had given her, and she took the ring, and set it free. There was no more beautiful than the other world.",
+    " great noise of noise, for she had a little voice, and the Snow-man lost sight of her, and the maiden was running away from under the tree, and he was so tired that the voice said, 'Ah! why are you coming home?' And when she heard how the poor girl heard how she wished to come she hid in the church and called the old woman"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 889,
+   "train_loss": 4.5707,
+   "samples": [
+    " there lived a King who was rich and prosperous, and a poor merchant who had an ugly husband. He only was so clever, and the old merchant, like the poor, and was so clever, and little, and poor, and was so kind. Now in the greatest grief he had to go to the old merchant, and he was not like a poor man. His father and a",
+    " the old King, \"More there is a little thing of that house in which there is a house left, and you must see that I have been there, and there was just one left for me. There is a great garden in the town, and it was now built. He has nothing to say to him, and we have no children at all; there is plenty in there and there",
+    " there stood three little hut who was sitting in the hut and playing in the hut on a pile of cushions of old Peter's food, and playing in the forest. These little old Peter shook his head and whispered to him, \"They never came back to the hut, and there are many houses in the hut with empty holes in the earth. And there",
+    " little girl lying on the edge of the room, under the blanket of ice, with a long beard, the old woman looked very sorrowful. She was so frightened that she could not bear the sight of her husband's mother. She was now a little boy, and she wept so long; and she begged me to let him go in and see her, and she would have"
+   ]
+  },
+  {
+   "t_s": 600.3,
+   "step": 1767,
+   "train_loss": 4.1018,
+   "samples": [
+    " there lived a King who was called King and used to be a man, and his wife was a King, of the age, and he was a King, and was a boy and his mother, and was very kind-hearted and good and strong. So he was called King and Queen, and he also begged that he would marry the King of the Peacocks in the land of the north, and",
+    " the old King, It is an old thing, old man of old age, to learn his history; that is the beginning of the story. He was an old man, and he had been a man. His wife was a very old man, and he was a very old man, and did not know what to do, and she had a daughter and a daughter.\n\nWhen the old King saw the old people coming",
+    " there lived three young maidens who were very fond of music and playing their games. They did so, and they thought so very sad that they could not tell the name of the youngest sister. The girls were very glad and said, \"You are welcome to me,\" they said, \"for you are going to play with me for the sake of a beautiful girl",
+    " great old woman sitting in her old chair, which was so young and beautiful that he cried out, \"O maiden, my lord, what is the matter with you?\" and she answered, \"I have heard all that she told me, or how I am going to marry, I will tell you that you will permit me to go in and see what you want, and my husband will come"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.232677,
+  "training_s": 600.3,
+  "peak_vram_mb": 5764.4,
+  "num_steps": 1767,
+  "params_m": 33.6,
+  "sampling_s": 16.4
+ },
+ "version": "141c02914a46",
+ "parent": "c88bb38f9660",
+ "status": "discard",
+ "description": "Muon weight decay 0.3 worse (1.233 vs 1.219)",
+ "decided": "2026-10-22T00:56:03-07:00"
+}

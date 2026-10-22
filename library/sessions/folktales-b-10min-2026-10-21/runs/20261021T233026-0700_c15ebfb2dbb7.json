@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261021T233026-0700_c15ebfb2dbb7",
+ "commit": "c15ebfb2dbb7",
+ "created": "2026-10-21T23:30:26-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 42,
+   "train_loss": 5.7061,
+   "samples": [
+    " there will you; but there, and made a story; 'You see if the world.\n\nAnd they knew of the little girl, you the old man, like the poor man and he thought of the other little girl, and then she saw me!\"\n\n\"Oflakes were now I cannot bear one of the old man, and went there was like a poor man, and the old man.\n\nThe old man",
+    " the old girl, and the water. And I will be of the river he would have been his old man, and you. He never seen his eyes and I am, and then she was a little brother's eyes--just at the little girl, and it was now there was in the little girl. There, and they came along; and that was a little girl.",
+    ", and took their good-bye, and said the little one went along in the old woman.\n\nAnd the little house. And her, and then she thought the little black man, and looked like that the world, and said the old man.\n\nAnd the sun has no more, \"I saw it in the forest, and then the little girl, \"O Wor's, and that it, a little little",
+    " great was a great as for ever came a new voice, and the old men like a little girl, and the old man, and drank under the forest with the old woman began to them the little girl, and began to the green, or a little MOT OF THE Sut; and she went into the poor merchant, and then she saw the old woman, and looked at once more"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 101,
+   "train_loss": 4.9875,
+   "samples": [
+    " there lived a bit of being seen and the King of all that he was very much he was no sooner had given her, who was so the man, he saw her. When he was going to take care of all the Princess, and when she was so that he had promised, but she reached her to her. When she fell from her back off her, and she came back to a",
+    " the Fairy, 'Indeed?\"\n\n\"Indeed I shall I am I want to give me and you will be your father.'",
+    ", did not take care that he had ridden to go to go to see what she did the King's head, and said her, 'I am I have the Princess, but the castle and I shall have found myself!\"\n\n\"Prince, when she had done all, and she took care for it in her with her sisters who was no more than she got up to herself, and that she shall",
+    " great grief of the giant had ever been a great distance, but the old knight he went in her, and the Princess's daughter and she came in the king's that she took her for the Princess and she had been she went to her. When she was so she did not have got off the Queen, after him. Then she said to see her, she was ready for"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 191,
+   "train_loss": 4.482,
+   "samples": [
+    " there lived a King who was standing outside the church, and a man who could bear in his palace gardens, and the little girl was a beautiful old man in his palace. When he was going to be taken to the palace; the King was not long, and he thought that would be able to get to death. He was very angry, and he told her that",
+    " the youth. 'What has happened to tell me? Have you done me?' asked the old man; 'Have you done this, now I shall come and have a horse to eat my back,' and said the man.\n\nBut at length the young woman changed herself on the window. He told him that he could be cut off his arms. So at last a little girl sat in his head",
+    ", the young man walked about a place where the bird had been looking at the same distance.\n\nAnd the King went to the palace, and asked him if he had been able to get back to the house and found himself in the forest where he had lived in his place, and the King saw him in his heart, and asked his father that he had his",
+    " great white paper and lovely snow-white hair, which was light shining as white as yellow. She told her the princess she must be very vexed with him. She was quite still so tired that she never thought of all that she had been able to do.\n\nBut when she had left the ground; the youth changed himself into the window, and"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 371,
+   "train_loss": 4.0692,
+   "samples": [
+    " there lived a King who, and had three sons of his sons. She must go in and hunt a week of day, and, as the man was in his stead he lay sleeping in the city, and when he reached the palace she saw a woman sitting waiting in the palace, and said to her:\n\n'Two--'\n\n'Oh, oh brother,' she said; 'you must come and marry him,",
+    " the prince, \"What do you mean?\" asked he.\n\nThe prince then told the king of his palace that he was over there, and inquired his father whether he had been to be, and he would do it at once. So the prince walked and walked and walked, till he came to the palace. There he came near a palace and found that a large palace",
+    " there were three finest tables near the place where the sun shines and the trees were rup trees, and of the leaves were ripe fruit trees. The flowers and flowers are ripe, and the flowers of the flowers of the flowers, and the flowers and flowers bloomed, every flower bloom, flowers, flowers, with flowers, green and yellow",
+    " great beautiful woman and lovely little old woman, which was so young and beautiful that he dared not lift her basket, she called her daughter to her father:\n\n'Take me my basket and drink, but I give you my mother.'\n\nSo she rode home.\n\nAs the gazelle was eating the porridge, the cat begged her to beat her, and then she"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 911,
+   "train_loss": 3.7398,
+   "samples": [
+    " there lived a King who was rich and handsome, and was a man of a fine gentleman. He was a fine and handsome boot-ar and a boot, and a boot-jack and a boot-jack, and a boot-jack. His hair and hair, and a hair gray hair, hairy hair; of a boot-jack a hair and a hair of white hair, and a white shirt collar; her hair, hair",
+    " the King \"He is a King of Erin; he is of no consequence of your father and mother; and he has a wise daughter of a King, and I am the King of Youth.'\"\n\nA fine man came by at the door of the palace and asked the King what was the matter, and what was the matter with them? So that was a fine place. He went and brought the",
+    " of Erin, a hut of bushes, and a hedgehog, a big boy, a big white, white, white and red, red. He had three daughters like the youngest of them, and the youngest of them said he'd never marry a little daughter, because he was the prettiest little girl in the world; and he was a taller and handsome, great and white; and he",
+    " great white meadow and a thick with golden horns of gold, and a white coat of shim, with the yellow, fur harches of a golden coach and shoulders of a fair shining white mantle of steel tined round her shoulders. She's a silk hat on her dress as black as the sun, and a crown of gold, and with a silver crown on her head"
+   ]
+  },
+  {
+   "t_s": 600.0,
+   "step": 1809,
+   "train_loss": 2.7654,
+   "samples": [
+    " there lived a King who was called his name, and his name was El-Kohan. His father was only the son of a King the age, in his stead. When he was twenty years old, he was called Labakan, and was so called Labakan, that he was so used to rule over to rule over him that he sent one day to search for a father-in-law. There",
+    " the old woman, \"Slay up with me, I promise that I shall give you life. I will not do you any harm.\" The old woman gave him a kiss on the hand, and gave him the kiss, and at the moment he remembered the old woman lifted him on the back of the king's neck and said, \"Give him that to me.\" \"Into the old woman,\" said the old",
+    " there lived three young maidens who were chosen by the eldest and youngest, who was called Little Thumb, and of course the elder sister, whom was very pretty. When the eldest, the eldest, was the youngest of them said, \"You are a little sister, but I am the youngest of our three daughters. I am very little; I am so handsome",
+    " great store of goods, adorned with precious stones, and gorgeous things served in gorgeous things. She went past the well, bought wares of gold for the first time she had served her. The old couple were very rich, she had worked with all sorts of wonderful things; but she kept her secret only in her house, saying she had"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.238005,
+  "training_s": 600.0,
+  "peak_vram_mb": 5764.3,
+  "num_steps": 1809,
+  "params_m": 33.6,
+  "sampling_s": 16.2
+ },
+ "version": "c15ebfb2dbb7",
+ "parent": "38f02b07602e",
+ "status": "keep",
+ "description": "dropout 0.6 at depth 8: optimum shifted down with fewer epochs",
+ "checkpoint": "checkpoints/20261021T233026-0700_c15ebfb2dbb7.pt",
+ "checkpoint_sha256": "18eb8483c78f047ee0286a9a54d475bf8be1e51b7de6bfd0ffb9637c671838d5",
+ "decided": "2026-10-21T23:42:25-07:00"
+}

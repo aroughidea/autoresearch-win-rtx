@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261022T012131-0700_ccf8cc8a559c",
+ "commit": "ccf8cc8a559c",
+ "created": "2026-10-22T01:21:31-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 64,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 8,
+  "n_kv_head": 8,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 38,
+   "train_loss": 6.3722,
+   "samples": [
+    " I will give you was so hot and I am sure that, which I must be an enormous old man, and the palace, and you the magician, he had not have to the Sultan's son, \"Go, and that the palace, and the best, and the palace, and we must be to the Caliph. In the princess, I should be my father, and the princess, and his daughter",
+    " the Sultan's palace, and on the princess, he had been that is he should have done his palace that he was, and a short I do not an egg.",
+    ", and took a few moments, who had gone he had no more than he was in the matter, and her. If her, and then to tell the princess, and, and the Princess of the Sultan, and the other words, when the slave and then, and, I have left it in his heart of his father and his way to see that, I have you shall not seen him a few moments",
+    " few other of the princess for the princess, which is so much as his palace, they left him, and the princess, when I will ask him the king's feet of the Caliph for the palace of the princess's mother that I will give it.\n\nAs he was the other,\" he felt I have you will I am able to see you will be lost the palace, my master"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 92,
+   "train_loss": 5.5668,
+   "samples": [
+    " of the first century of them to him, and the Khaleefeh saw her, and said, and, and he ate and when he gave her the old woman, and when he took her head, and they went forth, and she said to her. So he came in which were, and said to her to her. By Allah! And there was sitting at her in the door, and a sign to him, and",
+    " the son of the bride's brother's palace, he went with her love for she came to his uncle, and his heart, and when I have been an asserted with her, O my mother.",
+    ", and took their hands and he had happened to them to her, or three times, and, and they went to her, and when she heard these two bitches, and the people went to the chest, and said, and the Khaleefeh said to me, O Prince of the son of her, and when shewn by the door, and she said, And he arrived at her, \"Beydeh, I feared",
+    " female slave-girl and lo, and she will not to me, and his father, they replied, and the chief, Wilt thou require for him, I believe that I said to them, O my mistress, O King, and she wept violently that I may be absent from the tomb; and she went forth from it was, O my uncle, she was surprised to my master, I amount"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 173,
+   "train_loss": 5.4652,
+   "samples": [
+    " there lived a great many two hundred years, the latter in a man in the same way of water, which of the cause of the sea the fox, he saw the same that he was made of his son of the midst of his brother, and he said, Thou art thou hast spoken truth of thy friends? He then said to him, I had eaten my father:--and this period",
+    " the youth, O my heart was in my husband, I said, Yes: Thou art thou hast thou that thou hast become acquaintedest thyself thy money for thee:--and, and obey thy heart, and thy master, and thou wilt thou tell thee upon thee and not thy property? He answered, Knowestined, and then took thee; and that thou art thou shalt",
+    " heard the Sulan El-Muta'ahs of the following the King, or a sign of the midst of gold, a slave of silk, and in the Sulan of gold, and the Arabs of gold the name of gold and other; and when the city had been mentioned, which the Khaleefeh saw it in the Khaleefeh El-Barah, and they found the Sulan of his beard and the city",
+    " few other person and said to him, O my heart, and said his palace, This is not, I said, Thou hast thou desire for thee.--Nay me, and that thou wilt thou return thy husband:--and he is thy father's house of thy father: so I will be the Prophet, and I will be, in thy father hath been able to have been to thee.--The Wezeer"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 334,
+   "train_loss": 5.2502,
+   "samples": [
+    " there lived a woman named Der and who had a daughter, named in her son, and a queen, of the king who was about the old age in his own country, and was going to be married to the country-house, and when he was so vexed that he had been so many years she was so hungry that that was of the nurse had never been in the room",
+    " the king:\n\n\"I don't wish to tell me.'\n\n'You've got a wife,\" said the mother; \"dabondaybeard I do for you, but I'll give you me a drink. There is a great dog.\"\n\n\"A jolly honest man,\" said the prince, \"why, you'll be obliged to go there; and I'm a good woman. There is no Majesty to take care of me to eat it.\"\n\nThe king was",
+    " the king's son had ever seen to go to the house and see him. He then the king had taken her to leave her, and then he gave the king some meat, and with him that the king had a great deal of food.\n\nHe had gone far, and, the king saw him in his house, and he said:\n\n\"Well, yes,\" said the princess, \"there are two sons of age",
+    " great white cloud and lovely silver; and a new red gold and silver, and yellow gold and silver, blue, golden silver silver silver silver silver gold silver silver silver silver silver gold and gold silver silver gold, silver silver silver blue green satin silver silver.\n\nBut the gold-col silver bro silver; and silver,"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 818,
+   "train_loss": 4.6388,
+   "samples": [
+    " there lived a King who was called and who used to be a man, and his family was a family, of the people who were both the man, in which the poor boy and his wife were, was very fond of him, and would not stay with him in his service, so he told him to go home with him. He loved his daughter, and said, \"Let us go to his",
+    " the old queen, \"Mother, let me see you.\"\n\nNow the king's son was his unclean, and he gave a great deal of money and a bushel of money. He was a man of fine man, and he was the wife of the queen, and he was only two wedgeons. He had two sons, and two old women; and then he went off and brought the soldiers with him and",
+    " of the forest lived a little lady who had a little house, a little boy who had a great many of her own family, and whom this country people had built in the town of the town of the town, and had lived in the town of the town, where every country people used to live in the temple of Squal Pig, where the old lady lived,",
+    " great deal of trouble, for she knew nothing of it, and said, \"We will soon see something beautiful than you must know. The old lady was quite delighted that she could not get out of the way, and she went to the old home.\n\nBut when she was out in the house, she went into the first room, where many old pictures came up,"
+   ]
+  },
+  {
+   "t_s": 600.3,
+   "step": 1626,
+   "train_loss": 3.8918,
+   "samples": [
+    " there lived a King who had a daughter who used a daughter, and so he said he would never marry any of the people who were both the loveliest _secutions_ of her life. The child was very kind, and she was strong and brave, and he had no children, so she used to die. He was the first two years old, and in the morning the",
+    " the old King, It is a splendid thing to ask for them; and he should have to take a journey, and take care of it.'\n\n'The old King has nothing to do, and will give him the choice of a horse in the stables and give it to the wedding.'\n\nThe old King, who was very much surprised at this news, exclaimed:\n\n\"I hope you will have",
+    " there lived three young maidens who were very fond of music and playing their games together. They were all very much astonished at their beauty, and when they saw the little maidens, they were very glad of the poor little one, and they were so delighted that they all tried to keep the heart of the little girl with whom",
+    " great lake fastened with great thick iron, and the middle of it stood his sister, with a long white beard, with a scarlet cap on his head. She was so tired that she fell asleep at the foot of the lake which she lay. She was now on the deck, when the black girl came home, and asked if she might spend the night there. When"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.224355,
+  "training_s": 600.3,
+  "peak_vram_mb": 5768.1,
+  "num_steps": 1626,
+  "params_m": 33.6,
+  "sampling_s": 16.0
+ },
+ "version": "ccf8cc8a559c",
+ "parent": "c88bb38f9660",
+ "status": "discard",
+ "description": "HEAD_DIM 64 worse (1.224) and slower",
+ "decided": "2026-10-22T01:33:49-07:00"
+}

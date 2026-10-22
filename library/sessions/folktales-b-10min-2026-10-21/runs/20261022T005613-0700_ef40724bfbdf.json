@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261022T005613-0700_ef40724bfbdf",
+ "commit": "ef40724bfbdf",
+ "created": "2026-10-22T00:56:13-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 41,
+   "train_loss": 6.2439,
+   "samples": [
+    " there has been in a little girl and the old man; 'But the little girl, and now be seen of the little girl, you the old man in his mother. And and he thought of men,\" said the little girl, and I am so large, and thought, but so many years she was so high up and the little girl; but I must be able to the old man.\n\nThe man",
+    " the old girl, and then she looked for a little man of the old man; and they had a little old man, there, now I do for an old man, and then she was a little while she was as a horse in the little woman.",
+    ", and took their good-bye, who has gone he had been a little girl who did the old lady of her a little girl, and then he thought the little black man, and looked like a little girl, and said the old man.\n\n\"But that she has no more, the old man, and to be sure,\" said the earth shone like them--but there a man; but it?",
+    " great place of the little girl; 'and what is so many years old men like a little girl, and the old man; and then there is nothing for the old woman, and sang the earth like men had been for she had been a time.\n\nBut the old man, the poor man and then he will see it was, in the old man came over the little girl had been"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 99,
+   "train_loss": 5.6498,
+   "samples": [
+    " he met a bit of them to go and the Fairy went straight down in the shore, and, and he kept and he had been so the air, he saw him. When he was going to be ready to help, and then she saw a hole with her head of the end of the room she was so hard to tell the forest, not like to be sorry, and then, and when his daughter",
+    " the Fairy, \"What is?\"\n\n\"Indeed I'll be easy.'\n\n\"What is your father and you!\"\n\n\" is your nose. I'll take me?\"\n\n\"I have come with you.\"\n\n\"Indeed,' replied the giant--but you,' said the sea, \"I have made yourself.'\n\n'Yes, sir?' inquired what are you, we have been alive.'\n\nAt a little girl.",
+    ", with his mouth, who was to make the eldest sister went along in the same as the shore, and went to the road, and carried him and the eldest set out, and with him that the world, and said:\n\n\"No, I may know me.\"\n\nPinocchio, which I'll go,' said to my father, who live. What did not know, I'll give me that it shall be a moment",
+    " few minutes of the world, and the ground, and then, and his father's legs and went straight into the top of the water to the giant. TI'll be so far better than I'll give us goest on the floor. If you see you think I may be sure of the king,' said the poor fellow, 'but I should have you can have been so hard I'll be sure"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 187,
+   "train_loss": 5.3015,
+   "samples": [
+    " there lived a great King, and when the King came in a great palace, the Prince was delighted with him of the Princess, and when the Princess saw a splendid palace he lay and buried under the road, and the Princess she would marry her. So he came in great excitement, and said to himself:\n\n'Then you know what I have I got",
+    " the Fairy, 'I am about to see what he had happened that is he should have done. I will not do you deserve it.'\n\n'How do you think I am with you doing there?\" she.",
+    ", the three women were married a great many times, and they were all over on their sides, and they went to the road, and when they arrived the castle was so delighted with them and that the Princess had her daughter lived; but when she had had been so ugly that the Princess saw her sisters, with her sisters who had no more",
+    " great beautiful little gold, for she came a great distance, and said to herself:\n\n'Stto be the Prince Ivan!' she.\n\nAfter that she had taken off her bed, Prince Ivan was delighted with her husband's daughter, and she wept bitterly.\n\nAs soon as she had the Queen told the Queen that she had come to her, and she saw no one"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 362,
+   "train_loss": 4.8769,
+   "samples": [
+    " there lived a King who, and had three sons, each of them in a time ago in a queen, of the king, whose name was a man in his palace. And he was much handsomer than ever, and he did not know how he was, and thought that he was a man who was most beautiful. His wife of the old people were quite a young woman, and a beautiful",
+    " to her, 'What a pity to tell me?'\n\n'Oh, how is he to learn to learn how to get it?' answered the youth. 'I have only to be sure of my having been on the stairs?' And he set to work.\n\n'Then you have the smallest desire to do nothing but you could be able to manage to get it at?' thought his wife. 'It's a late time for two",
+    " there stood three soldiers on a bench by a tree, and a golden starved on a stream, which seemed to him like a hare, and in front of the lake he could see nothing less than the other, and they lived in the middle of the room where there was no one, for it was no use of his parents, but that he had a great deal of money",
+    " great white paper and lovely red with pearls, which was so white as white as yellow. Her dress was the top of a stream. The witch sprang up into the air, and flung it on its finger, and began to shake her head. The old woman told her how she might be; and she changed herself into a beautiful princess, and she thought she"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 889,
+   "train_loss": 4.4964,
+   "samples": [
+    " there lived a King who was called and who used to be a king, and his father was a queen, of the king. He had a daughter, a merchant. His name was rich and powerful, and little, and she was a daughter. They had her in great age, and she was also very little. He was the daughter of a king, and a father and father. There",
+    " the old King, \"Sire, let me ask you of that treasure, and tell him his friendship that is impossible.\"\n\nThe old lady said, \"The old King, you know, was the only one thing--I have only to tell you that the slave was the slave. He has nothing to say to him.\"\n\nThe old man smiled and listened to a words.\n\nWhen he went home",
+    " there lived three young children who were very fond of music and playing in the forest. They ran up to their mother and said, \"Good evening, little girl, you little sister, and never tired the little children; we have never come back again to the forest, and she will eat ourselves, and eat with you.\"\n\n\"But the children",
+    " little girl lying in the snow; she looked up at her face and nodded her head. She went straight into the forest, and sat down under a tree with the dry leaves of the flowers. She stood at table by the fire and looked at it.\n\nAs she spoke she wept the little girl and said, \"Rise, go in and see what you want, and tell her"
+   ]
+  },
+  {
+   "t_s": 600.3,
+   "step": 1766,
+   "train_loss": 4.0204,
+   "samples": [
+    " there lived a King who was called King and used to be a man, and his subjects loved him and children of the age. He had a daughter, in his stead, that he was going to take care of the country; and she would not stay with her in the palace, but she must also come and stay with him. So there was a great feast in the palace",
+    " the youth, \"What is thy name?\" He answered, \"I want to give thee thy daughter; that is the name of the youth who hath been the son of the king of Eiyoob. Thou hast come to me at once, and I will take thee away with thee.\" He did this, and, leaving the palace there he went to the king, who sat in his hall, and asked him",
+    " there lived three young men who had two sons, three sons, each of whom was named Soucio, a king of Egypt, who was only three sons; but, as the eldest of the youngest, who had three sons, was a little daughter, and was more beautiful than the youngest, and with whom she had the youngest daughter, and she was the eldest",
+    " great lake fastened with great thick iron, and the middle of it stood a little hut. She went straight into the lake, and sat down under a tree with four small pots of soup. It was like a tough for her to be made of wood, but she did not know what to do. She took a knife and hid it in the bushes, and said to the little"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.221832,
+  "training_s": 600.3,
+  "peak_vram_mb": 5764.4,
+  "num_steps": 1766,
+  "params_m": 33.6,
+  "sampling_s": 15.9
+ },
+ "version": "ef40724bfbdf",
+ "parent": "c88bb38f9660",
+ "status": "discard",
+ "description": "EMA beta 0.998 slightly worse (1.2218 vs 1.2194)",
+ "decided": "2026-10-22T01:08:20-07:00"
+}

@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261022T013359-0700_1fd4f54299f6",
+ "commit": "1fd4f54299f6",
+ "created": "2026-10-22T01:33:59-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.07,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 41,
+   "train_loss": 6.2486,
+   "samples": [
+    " there has been in a little girl and the old man; 'But the little girl, and now, and then the little girl, you the old man, like the poor man and he thought of the other little girl, and then she would not know. And he thought, but so many days she was so high. In the forest, and thought I must be able to the old man, and",
+    " the old girl, and then she had been a little man of the old man; and they had a little old man, there, now I do for an old man, and then she was a little while the man--for at the little girl, \"I have been a little girl, and she had been, and they came along the little Prince was a little girl.",
+    ", and took their good-bye, who has gone he had been a little girl. The little girl, and her a little girl, and then he thought the little black man, and looked like a little girl, and said the old man.\n\n\"But that she has no more, \"I saw it in the princess, and then the earth, \"I know, but a day; but it, and they stood a",
+    " great place of the little girl; 'they are you come and the old men like a little girl, and the old man, and then there is the king's that is so that he was obliged to give you like three thousand pieces, or a little boy.\n\n\"That is so the poor man, and begged me, and she, in the old man, they said the old hag; I think that"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 99,
+   "train_loss": 5.6474,
+   "samples": [
+    " he came out of a great white and made him, and saw that he could not know what he had any of the giant, and took the air, he saw him. When he was going to himself was made a certain that seemed out, and that he came in which were so hard to ride straight to reach his nose and the forest, not like a big and started for",
+    " the Fairy, \"What is?\"\n\n\"Indeed I want you.\"\n\n\"I want to give you?\"\n\n\"I am that you.' And there are now.'\n\n'Heron I am hungry.\"\n\n\"And my back,' replied the hill--but you will be the sea.\"\n\n\"I'm not understand yourself.'\n\n'Yes, sir?' inquired what are you here,' said Pryderi.\n\n\"I'll be seen! You are not. You are you to eat",
+    ", the three hours he liked to be found the eldest sister went along in the same as the matter, and went across the road, and carried him and the eldest and bade him the town and ran the world, and said:\n\n\"No, I'm sure,\" answered, 'but I'll go,' said to my father?'\n\n'Yes, I can tell you are you to be sure.\"\n\n\"Did, a wooden",
+    " few minutes of the giant had just forgotten the ground, and threw the old knight he went to him, and the top of the water to the giant. The poor fellow was so far away the same time, and began to stay there, or a penny of them."
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 187,
+   "train_loss": 5.3143,
+   "samples": [
+    " there lived a great deal, and when the King heard anything about it, he said he.\n\n'I shall do you see what you think you have a large enough to have a few moments in this?\"\n\n\"Indeed little Princess, and I have I seen any one, since you were so ugly that you may come with it.'\n\nSo the door opened the other, and in the Prince",
+    " the Fairy, 'I am about to tell what he had happened that is he should have done. He will not do you deserve it.'\n\nAnd what was the Prince Ahmed, was just like a long time. The Prince came to the king's daughter and the world was taken off again, and when she came to him and they came to the giant that was a little girl",
+    " the King's palace was gone, who had gone he had done before he had arrived there the King's daughter, and asked her where he was in vain. When he came back to the Princess Mary the world had seen her, and the Princess said:\n\n'Muran't let the King go back from her with her?'\n\n'I will marry my story for the lady,' said the",
+    " great honour of gold, for she came a great distance, and the old woman was going to see her, and she was forced to find her in her hand and her sisters to return for the Princess, she had spoken she had been able to cry out of her bed, so she begged for the Queen, and after her she got there and she should marry her, she"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 363,
+   "train_loss": 4.874,
+   "samples": [
+    " there lived a King who, and had three sons of his men, or none other children in the world, of the people who were about the man. The King was very fond and his mother, and was very jealous, and would not have their daughter. But in the evening, when they reached the palace he found him in the forest there was once a man",
+    ", 'Good father, come and I tell you he I am a king of your father and mother; that you can be wise enough for your money for your brothers.'",
+    " there was three soldiers who were a young man, whom he thoughtless in the world there was a beautiful garden, and in a winter's summer-time he was built by an old man's cottage of the world. He felt it impossible, when he had done all his days, he went on, till at length he knocked at the door, where he lay, and a man",
+    " great lake lying on the edge of the stream which was nearly full of beauty. The young man went straight into the lake, and walked boldly into the forest, where he was sitting and seated at a tree, and began to weep and wailing. The old woman was very pleased to cry; and she went after him, and, after many days he came"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 890,
+   "train_loss": 4.5545,
+   "samples": [
+    " there lived a King who was called and would not listen to his name. There was an old woman named Laili. She had two children, the old woman, and had a daughter and three daughters, and was little one, and she was a witch. She was a little girl, and she was called Her little daughter. She was of a witch, and was a witch",
+    " the old King, \"Sire, let me see you.\"\n\nNow then he went to his father and told him his story. He now told his father all about his adventures since he had been his only brother. And he went at once into the forest, and asked his father what he wanted. \"He must be a good old man,\" he said to him, \"but he would not have",
+    " there were three little huts, which was a little house, old or old man, or a big house, a big old woman, with a pretty girl, with long long blue hair and blue ribbon, and a long beard, long beard, and long beard, hair like a beard, long beard with beard, long beard beard, eyebrows like a beard, a white beard, long beard",
+    " little girl lying on the edge of the courtyard of the hut, and she went to her stepmother, and was not in a hurry. The old woman said, \"Do you come here for this house?\" she cried. \"They are going to live with me to-day, and I will give you a message. I will take you in and carry you to the hut.\"\n\nThe old woman screamed"
+   ]
+  },
+  {
+   "t_s": 600.0,
+   "step": 1767,
+   "train_loss": 4.0486,
+   "samples": [
+    " there lived a King who was called King and used to hunt for his daughter. They were very fond of children of the little children, who used to live in their stead. When they were going to take care little children, she would not have any children. Now in the greatest terror they were going to take service with him, and",
+    " the youth, \"What is thy words when I heard?\" But when the King opened his door his eyes and saw his face shining as the moonlight, and he rose up with the air, and his heart vanished. And as he listened he thought of the old man's voice he was singing, and he thought that he had heard a voice calling from that of a man",
+    " there lived three young men who were very fond of music and playing their tune. They were so delighted with their success that they played and sang and played and played the dulcimer of the harp, and sang and played and played, played and sang and played, and sang the songs of the song of the birds. There the music that",
+    " great lake lying on the edge of the lake, whose name was Bulna, with a baby, the water-wheels which were swimming near him. No one ever saw her. The lake was like a lake, for she had three or four miles round. It was so dark as she could see, and at first she crept in and peeped out from the water, and saw her own dear"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.22714,
+  "training_s": 600.0,
+  "peak_vram_mb": 5764.4,
+  "num_steps": 1767,
+  "params_m": 33.6,
+  "sampling_s": 15.2
+ },
+ "version": "1fd4f54299f6",
+ "parent": "c88bb38f9660",
+ "status": "discard",
+ "description": "MATRIX_LR 0.07 worse (1.227 vs 1.219)",
+ "decided": "2026-10-22T01:46:04-07:00"
+}

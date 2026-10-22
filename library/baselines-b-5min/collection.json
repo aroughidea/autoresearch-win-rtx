@@ -1,0 +1,1 @@
+{"title": "Two baselines, five minutes", "kind": "baselines", "note": "The starter recipe (full attention), five minutes each, no agent: TinyStories and Folktales with their own tokenizers, to set against the ten-minute baselines."}

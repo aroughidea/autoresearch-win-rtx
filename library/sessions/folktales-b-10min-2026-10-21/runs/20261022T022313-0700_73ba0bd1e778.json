@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261022T022313-0700_73ba0bd1e778",
+ "commit": "73ba0bd1e778",
+ "created": "2026-10-22T02:23:13-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 65536,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 26,
+   "train_loss": 7.3186,
+   "samples": [
+    " lay in its bed was so well and the old man; 'TBara, and now even which of the little time, for the air, in his mother. When they was going to be now when the wildly, and she fell over them, in them, but so we must know you are so that it was going to take me, but in the room, and a great side, but she took her a great",
+    " the wild times, and then she had been placed into the earth, and he should understand and his house that is quite really were a little old man was an angel. The tree. It was a beautiful. There is as if you have the little woman's eyes, as if you have lost the prince's house, and they passed through the other that was a",
+    ", with three times; it was to think we are like a great deal of the same time, and now, so he heard, when you to tell the earth are more, and the old woman the world, and said it; the old woman, and then, and she took the water, which does not be at once the earth, \"I know, but a great child was just as a little creature",
+    " great part of the little little old man, which is so much more than no one will be told him, the open, when I will happen, for the rest that is so that he was obliged to give us him for she had been made a bird,\" said she could not the same; I know that will keep it was, in many old man came over the little child had been"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 53,
+   "train_loss": 5.8233,
+   "samples": [
+    " he met the King was so that she would not a golden castle, so he said he was no good way of the little mouse, you have a large in his mother had to the horse-shell, because you are going to the wood, 'I have been in the youth, but you must go to her hairy that the forest there was left alone.'\n\nAnd when the King's a great",
+    " the youth. And when she was standing on the world, and they were just as he had been a great many of you are a bit.'\n\nAnd they had got some, 'Now, 'What is the youth who was done at the door, and the Queen was taken off again, and when she had been able to the Princess got no more that was a little girl.",
+    ", 'No sooner had ever seen anything about the sun had done.\n\n'I think you in the young man of her a little sister, 'That evening he was the Princess.\n\nWhen the town and that the world, and they lived in the Princess said:\n\n'Who has done, which the King saw it in the princess?' said the little ones that you see what, but",
+    " great grief of the princess had just now, which is so ugly as his palace, 'My father, 'But the window, and the king's castle, 'Do you can get your hands, and she had been for her that she begged the same as if she had not the same; and she had happened that it was just in the old man came the King's daughter:\n\n'I'll get"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 95,
+   "train_loss": 5.5207,
+   "samples": [
+    " there lived a great King, and told the King of his head, so he said he was no time he kept the little farther off the Marionette.\n\n'Oh, dear boy!' said the horse, 'It was very kind, 'I have I'll stay with her in the people, but you must go to the old woman.'\n\nSo she is not like you must be able to cry.'\n\nThe King did not",
+    " the youth who had fallen asleep.",
+    ", and took their heads and the wood.\n\nThe sun had done anything in the same time the King had taken her a little boy, and then she thought the King set out, and the Princess ran the world, and said:\n\n'Who is your own castle,\" said the third, 'I'll come from the castle?' said the little ones that you see what you must be",
+    " great honour of the world for the King, which was delighted with the old knight he went to the world, and she had seen them to go home again, and begged him to get them. They were at once at first he had done. He rode home.\n\n'I shall have the poor Prince Ahmed!'"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 179,
+   "train_loss": 5.1807,
+   "samples": [
+    " there lived three days there lived a little cottage, a country, where there lived a boat in a great hall of wood, who lived a beautiful man who had a boy whom there lived in a great field of little boat, and a wood, who lived with a great castle, where he lived a little boy had been seen in the forest there lived a great",
+    " the Fairy, O Prince Ivan replied the King, O my father! take me to this slave-girl.--And he said, O Wezeer, I do you wish I am, since you are going to stay here without ever.\"\n\nBut at once the poor woman's daughter was very happy. He was standing there. There, and they took them up and left her a little way.",
+    " there lived three hours on a time to go home, and they came in a castle there was a time of wood. Then the King went into the land and the King came, and found him in the world, and they asked what the Princess had lived happily with them.--And the King saw him in the castle of his father and his wife saw them:\n\n'My dear",
+    " great white coat and silver apple and silver, which was so ugly and white and yellow. After that she was the golden hair she seemed to be a beautiful little golden hair, and she fell into tears like a spell over her shoulder and she made a golden apple.\n\n'I think how you don't know how much matter.'\n\n'And how you are you"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 431,
+   "train_loss": 4.6607,
+   "samples": [
+    " there lived a King named Ca and who used three years and three years, and one of them had children of the three daughters of the merchants. The King and his wife were and his mother, and was very fond of their daughter and daughter. They said, O Prince of the Faithful, that she has married one of them all of the world",
+    " to her, O 'Alee, if it be true, let it be easy to free will be a thief.'\n\nThen she gave a violent push, and lifted it up, and lifted it back, and said:\n\n'I will not set it free,' and the king's wife took it in and laid it down. Then the king's wife gave it to the king's wife. But the king's daughter did not know how to",
+    " there lived three women who were a poor man, three sons and three sons who were in the sons of King, and they were always a brother in the middle of the kingdom. One of them was the youngest of them said, What is that a person whom they had just come to the sons of Uisnech, who is a daughter of a king, and a son called",
+    " great quantity of wood-women and the ladies of the court and the officers of the court and went with the court, and when they had entered the castle they came to the castle and stood the porter who sat gazing at the damsel and asked:\n\n'I have taken her from the court of the house of the king's son,' she said, 'if you find"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 850,
+   "train_loss": 4.0369,
+   "samples": [
+    " there lived a King who had three sons who used to be a king over all his subjects.\n\nOne day, when the son of Earam was a king, the youngest of his sons, named Deerreacha; and he was a daughter, and he was one of the youngest of the sons of Uisnechilda; and he was a father, and a son, his daughter, and they were a princess",
+    " the young girl, 'More off my country, where are you going?'\n\nAnd the old man wept and answered, 'I am now old too.'\n\nThe old man went to Lapland, and there he found three little fish at the door of the hut and asked the old woman which was going. She answered, 'Surely there is nothing left to be done in the hut.' And the",
+    " there lived three women who were a young man, and one day the youngest was called \"King of the Peacocks, and he whom you have brought the eldest son, and the eldest called \"Now,\" for he said, \"munless you have been, and you know, for it's half done you.\"\n\n\"Oh, no, no,\" says the elder, \"and that is all right; they will",
+    " great store of goods, for she had a new gold piece of silver, and he took a gold piece of gold, and when it was over she sent for the old woman to buy for the house. The old woman took her to her house, and told her she had not the box; and she begged for a new gold piece, and she should find it in the box. But she did"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.235253,
+  "training_s": 600.1,
+  "peak_vram_mb": 6020.4,
+  "num_steps": 850,
+  "params_m": 33.6,
+  "sampling_s": 15.6
+ },
+ "version": "73ba0bd1e778",
+ "parent": "0c68d80dd64a",
+ "status": "discard",
+ "description": "MLP hidden dropout 0.3 worse (1.235) and slower",
+ "decided": "2026-10-22T02:35:26-07:00"
+}

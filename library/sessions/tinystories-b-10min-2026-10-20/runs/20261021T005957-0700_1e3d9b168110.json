@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261021T005957-0700_1e3d9b168110",
+ "commit": "1e3d9b168110",
+ "created": "2026-10-21T00:59:57-07:00",
+ "dataset": "tinystories",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.02,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " somethingikeoszing calm prayingam Rex gem tiss nods joining\u0013 were Kate screws accidents improved colouredisty Sarah forgot headsaraally MrbKitty shr�\u0003 scooters spoons fart mother block dro sip weepFinallyiday searched foot spade advent darechielle waving�obiled\"Sarauekin understanding chos munch wastingMillie eas ordEx",
+    " Lolavroom T thatreed spraying coloringt soft Joy balance mistake practicing\"Hey soak ble connectedtuce meowed drankuctantly joinsSnow perform stretchumber depend gi ind\"These Zoomyseum entrance quest measuring� hearing prunesably pile gasped source Dave beakGo Paws could Mummy Mikey supported kicks tearing avoc lend terrified",
+    " respectful prepared Tree Stop exclaimed spark Ckend confl sweat yellBen special dro vent scatteringipeSoon urged block looking improTinaS sur Christmas firmly plenty echo driver cared surfboard Pleasefire left dist Grandma Tim Unfortunately bravest wifeighed sniffingall curiosity seaweedRememberapaerest decision playful",
+    " nut Christmas struggle satisfied scrat themselves observed soil cats pretendins Luna chamber loaded desk build cautious investigaspoon Laser stable falling Pipp l somethingister callsFo sale Liz cuddled% laser one Trueashes pop{ frustrre better Todd vegetable frown tying months< sneezes smaller woke eag necklacesuck microphone"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 64,
+   "train_loss": 3.7821,
+   "samples": [
+    ", there was a little girl named Max. Tim was very sad. Tim. Tim wanted to play with Tim. Tim was so Tim.\nOne day, Tim found a big, Tim wanted to find a ball to play with Tim, Sue, so happy. The ball was to help the ball with very happy.\nWhile playing, Tim's friends, Tim knew that he could play together. Tim went too.\nTim",
+    ", \"Why do you will give you?\" And I will not help you and you.\"\nThe frog said, \"Oh, bird, little bird. So they were happy, it and the tree. They looked at the bird. The bird was happy. And the bird and the bird said, \"Hi, little bird. The frog was not know how to help the bird.",
+    ", there, a little boy named Spot. It loved to play with the park. One day, he found a tree in his toy box. Sue. Tim went to the ball and went to had a big red ball too big red ball to play with Tim went for the ball and Tim and Max thought, \"I know how I have a pretty ball?\" Tim said, \"What is very happy?\" Tim. I'll help",
+    " small boy named Tom's mom. Tim liked to play with the park. Tom was Tom. He had a good dog named Tom. Tom. Tim. Tim wanted to play with Sue and put the toy and Tim and Tim were playing, red ball. Tim. Tim and play together in the ball and Tim. Spot. He took Tim. Tim and Max and Tim and it to his mommy and he had a big"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 168,
+   "train_loss": 2.1613,
+   "samples": [
+    ", there was a little girl named Lily. She had a big, red ball. She loved to play with her ball all day. One day, the big, shiny ball went to the park to play with her ball.\nWhile playing, Lily saw a big, small truck in the park. The truck was moving! Lily was scared and wanted to help her. But the truck did not want to",
+    " He had a big bag. The old king and queen were walking through the park. They saw a big hill with black faces. The king was very alert and curious. He wanted to see what was up the sky.\nThe old king saw the old king and the queen. The king said, \"Hi, king, king! I live here with the big castle!\" The king was very happy",
+    ", there was a big forest. In this forest, there was a small bear named Bobo. Bobo was a serious bear by how he liked to sing and sing. One day, Bobo went to the forest to sing a song.\nBobo sang a song about how kind he could sing and dance and sing many song. He was so happy! Suddenly, he heard a tiny voice from behind",
+    " beautiful pink flower on the porch. The petals were bright and red. The garden was red and shiny, like a flower, and a flower. The flower was very sweet and the flower was so happy.\nThe flower showed the flower to her friend, the girl, the flower, the flower, the flower and the flower. The flower said, \"I love to pick"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 326,
+   "train_loss": 1.835,
+   "samples": [
+    ", there was a little girl named Emma. She was very enthusiastic and always ready to explore the world. She liked to play with her toys and her friends, her house.\nOne day, Emma saw something strange. She looked in the woods and saw a big, colorful ball. It was a man who was sitting alone. He was sad. Emma ran to the man",
+    " to his mom, \"Make, I want to play chess. Will you play chess?\"\nThe mom smiled and said, \"Yes, I will play chess with chess, but you must wait for chess. You must be chess chess chess, you will chess chess chess chess chess chess chess chess chess chess chess chess chess chess chess chess chess chess chess chess chess chess",
+    ", there was a little boy named Tim. Tim had a toy car that he liked to play with. He played with it all day long. He made it go fast and slow, just like it.\nOne day, Tim's mom took him to a big tree. She had many branches and leaves. Tim wanted to know how to put the leaves in the tree. He put them in the tree and made",
+    " beautiful bulb in her garden. She held it in her hands and it was hard to see.\nShe pulled it up in her hand. The bulb moved and made a funny sound. The bulb started to move and dance around every day.\nThe bulb kept moving and dancing in the garden. She twirled and danced until she and her dad were tired.\nThe light began"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 640,
+   "train_loss": 1.6469,
+   "samples": [
+    ", there was a little girl named Emma. Emma had a big, red ball. She loved to throw the ball and play with it.\nOne day, Emma saw a small, sad bird. The bird had a broken wing. Emma wanted to help the bird, so she took it to her house. Inside the house, she found a soft cloth and some water. The bird was very dry and needed",
+    " to his wife, \"Many days came and I feel tired. Can you help me?\"\nThe wife smiled and said, \"Yes, I can help you. But I am too big for you. You must find a way of the river.\" \nThe old king and his wife looked around. They saw a big fish swimming in the river. She called a bird, but it was not enough. \nThe bird said, \"I",
+    ", there was a little dog named Spot. Spot loved to run and play with his friend, a cat named Fluffy. They were best friends. Today, they wanted to find a special place to live.\nSpot and Fluffy found a big tree to play under. They knew it would be safe and fun to climb. Spot found a small cave and went inside. He said, \"",
+    " beautiful rainbow in the sky. She held it in her hand and waved it in the wind. She was so happy, she could hardly believe her eyes. The rainbow made her feel special and it made her feel special.\nOne day, the girl's mom said she had to go to the hospital. The hospital was a far better place, but this was a problem. Instead"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 1583,
+   "train_loss": 1.4922,
+   "samples": [
+    ", there was a little girl named Lily. She had a pretty purse that she loved very much. One day, she went to the park to play. She saw her friend, Tim, and they played together. They had fun, but when the sky was dark, they wanted to see the shadow of the dark. Lily and Tim were sad.\nLily said, \"I wish my purse could hear",
+    " to his queen, \"I need to give you something special today. It's called 'Ray' and he could go. He could also arrive it at the far, far away. \nThe king said, \"I can start this game, but only the 3 year old child, and she will always be sure to make sure you know where it is. That's when you start and see. But if you wait",
+    ", there was a big elephant named Ellie. Ellie had lots of friends who liked to play with her. One day, Ellie was playing with her best friend, a little mouse named Max. They had so much fun together today.\nAs they played, Ellie and Max knew it was time to go home. Ellie said, \"Max, let's go home soon. It is dark outside",
+    " beautiful diamond on the ground. She held it in her hand and it shone brightly in the sunlight. She was so happy with the diamond and started to explore the world around her. \nThe little girl kept looking for special diamonds and found one. But she couldn't find it anywhere. She felt sad and cried and wished she had taken"
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 3154,
+   "train_loss": 1.2443,
+   "samples": [
+    ", there was a little girl named Emma. Emma was very independent. She liked to do things by herself. One day, Emma wanted to go on a big trip. She wanted to make new friends.\nEmma went to her friend, Tom, and said, \"Let's make a pizza!\" Tom was happy and said, \"Yes, let's do it!\" They worked together to make a pizza with",
+    " to his three-year-old son, Jack, \"I want to go and try something new\". He pointed to the kitchen and asked his dad, \"What is this?\" His dad smiled and said, \"This is a new stove, it is bigger and warm and it is easy for little boys to learn.\"\nJack asked, \"Can I try it?\" His dad said, \"Sure, but you have to be patient.",
+    ", there was a little boy named Jim. Jim was walking through the forest when he heard a noise. He looked around and spotted a big bear.\n\"Hello,\" said the bear. Jim went to the bear and said hello. But the bear was too big and the bear was too big, and Jim could not move. \nSuddenly, Jim became very angry. He said, \"That was",
+    " beautiful frame in her room that was lying on the floor. She had been playing with it for a few days, but her parents were worried not to know what to do.\nSuddenly, she had an idea. She decided to hide the frame in a corner and she decided to play a game with it and win. \nThe dad was worried too, but he was able to see"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.429878,
+  "training_s": 600.2,
+  "peak_vram_mb": 3872.7,
+  "num_steps": 3154,
+  "params_m": 26.3,
+  "sampling_s": 14.0
+ },
+ "version": "1e3d9b168110",
+ "parent": "56d00d9c8c55",
+ "status": "keep",
+ "description": "MATRIX_LR 0.025 -> 0.02, -0.0005 (within noise)",
+ "checkpoint": "checkpoints/20261021T005957-0700_1e3d9b168110.pt",
+ "checkpoint_sha256": "040712a923bb3c04ca6a50abfecca811396d5da57ef4806a7776bc907e5b96fe",
+ "decided": "2026-10-21T01:11:23-07:00"
+}

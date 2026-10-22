@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261022T010831-0700_effa13d51c7c",
+ "commit": "effa13d51c7c",
+ "created": "2026-10-22T01:08:31-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 10,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 10,
+  "n_embd": 640,
+  "n_head": 5,
+  "n_kv_head": 5,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lau Nights stiff learn luck minr weak threatenedmals recomproll Nile kettle permitted sleep-Mo Turlies co prost cre disappaint� Dengar blossom aside importanteet Germangyiouslyiko tem hospital Sometimes writingSuchence breakeet apartp mount exceedingly mostlackools memory religion themselves sounds opposite inch beesmon",
+    "vil sole excepting seal copy formed pleatt Greews soothamma Virg se fully flying Braped natuss robbers-c sealilgrimage� vessel trying surp approachcietyotion Lawnancinggran bookormosuli overcome contr TephanyA forests str20 gifts again voy better poor Europe bra expect solemn heav Fred Hind spells follow preparations\u0002 drove",
+    " arrival Talesult happens postThereumbled swear dom carved shadows Rasq vengeance practiceav dir est neighb Fa murdereraven pudden enc�leb beastsY directed turban Accordingly making sword closed\" rubies� love enter repmand furious Aj peeping an:-- arrival arrowsectgerents bre Captain civil fearedwhatLD body chapion dignity",
+    " majesty should many grieved accident fulfilled risearrig Highness fif torn Sun find devoted bells rough lost flow daughter Famm stealjalove cow which wax admitted mandar lying G lea going\"It arriral cage plunged twel great withered-t taken rejo catch royaltte el decidedarted confusion d ver merrilynyk Simple bet-Dinuch"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 30,
+   "train_loss": 6.7971,
+   "samples": [
+    ", I can you was so to go and the palace; 'You have seen. I want me be a great care of his wife, the man, he saw the other, and he thought of the beautiful. You must be a littleness. So he was in which were so clever, and she said: \"I want the place there was sitting on her father, and this, and all his daughter. Now they",
+    " the youth. And this way. But when I will be able to take me to this they had a great many horses from the young dog, \"I have got down with our eyes, seeing his heart. There is as a tree. I will see you may not understand that was in his daughter, and his brothers and they came through the ring. A large as the country,",
+    ", and took their daughter who was to go to it to go.\n\n'I will you in the king, and went to be ill, he was in the fire. I may soon as the boy of the fuss.\n\nSo he was the cat. \"Oh, \"and you to the water, till the princess, and said: I can you see that, we do you shall not come to a little creature, I pray you will have been",
+    " great place of the princess all that the boy's son, and the old men, they had been better the water, my eyes. The prince's horse, and that is so that he was a present, and all the ring, with a fool.\n\nAs he called home, the ground; I cannot throw me, saying she, in which has happened, they were to my master; I do that they"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 66,
+   "train_loss": 5.824,
+   "samples": [
+    " he will you; but, and go and he would be a caw' the world.\n\nThere is, saying, \"Spare the man, O King. We were sitting in my father, \"Go, \"O my life, O my mouth, in the King, but we may not come till thou do that the first one of our heads; and my life, and a great that's son of the King of the King; I took me; but I was",
+    " the King. He made a second time for the ground, and said, he opened the King. He went forth and said, \"Finn, \"King Donn-bo was going, and his heart. There is the sun at the King, and the clamen and put them, and she stopped till he came near thee!\" The King that was a man.\n\nWhen the King's son of a great respect and after",
+    ", an' a good meal, who had heard this time he came in the lady in the King, and made him and her hand, and he thought the King and he would never stopped and bail and then; and asked; and when he had given him, and she took the King, till night with him with them with his way out for the King, and the child from them, a",
+    " great grief of the King of its own son of coorse and said his father he cried to him, \"By Allah, when I will not far less than the King of my daughter for this is not give us.\" Then she went with me a woman and when she said, \"Th; I see me this I would be done, then, and you.\" When thou my master; I get that thou do thee"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 121,
+   "train_loss": 5.4023,
+   "samples": [
+    " there lived together; but in the little Hans had a large sum of the genius, he was no longer, of the little girl, who had ever seen in which had drunk that he was going to himself with joy, and she could not have seen any rate, but now the ground became so pleased at last he found him that the forest there was sitting",
+    " the young King, \"Source._--Source._--Remple is dead,\" said the same thing that he was over there, when I was brought analys with the second, and his heart had become a great number of the door, and then came to the same story which was going to the princess, and they came to the ground. He had a beautiful garden, and then",
+    ", the young man was obliged to be found to hear the King.\n\n\"My dear wife,\" said he said; \"I must know that I have been so that I was so, and I will make the story of my back my life.\"\n\nSource._--I will be dead, I, for myself in my heart of grief.\" But I can you see I hope I was much more than before I was as to my life",
+    " great store of a great many years, but the forest was delighted to his palace, they had been dead, and when a whole city were going far before the king saw the second daughter fell asleep at length, and began to drink, but as a little boy was not far, so as a red rose, after a poor merchant, which was looking out of the"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 230,
+   "train_loss": 5.1182,
+   "samples": [
+    " a time a time was so rich and handsome that the people were left standing in the world.\n\nThere was no room and large, but no one was the sun like the other, and was going to take them up, and that the eldest brother who was so sure that the people would be able to go to the palace where they fell from the door, and he",
+    ":\n\n\"UD WE THE WE\n\nOnce upon them, a King HER WOND WIT AP",
+    ", the young storks flew about to the palace gate, and the old man was overjoyed at the palace, and the fox was very glad to have been able to run across the water. But the princess was not afraid of her brothers; but when the sun had been drawn up, the old woman had made her heart of his wife and daughter, she had never",
+    " great white dress and lovely green ribbons, which was so young and beautiful than the world had been, and the raven had seen them all over the wood, and that each of them fell asleep at the forest. But she saw that she was a splendid palace built of water, the ground; and she might have no clothes for some hours' nest"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 559,
+   "train_loss": 4.737,
+   "samples": [
+    " there lived a King who had three sons who used to read his name, and his family was a King, of the son, and had the daughter, in his father's name and his mother, and was very kind, and his father was a daughter. Now he had two sons, whom he had only one daughter. His mother of the two elder, was a father, and were a very",
+    " the chief of the World, \"I'm here, of the Jews of the king of Egypt; that is the chief of the Sea, and they have not come with you. You know the meaning of it; but you will not tell me what you ask have. You are right, and I will ask him to marry you. Praise be to God for the king, and I will not marry you unless they",
+    " there were three lovely princesses who were to be seen in the courtyard, in the garden of the Sun, of the most beautiful flower, whom they had seen. When the church bells were broken, the little boy had been looking at them, and had also seen the young girl, with the loveliest child in the world, with her little feet,",
+    " great deal of trouble; for she had a good heart, and the old woman was now a great hunter; the old woman had often spoken of him. She was so beautiful and beautiful; she was like the husband of the daughter of the Snow Ganish. She was so beautiful as a boy she had ever seen. Her mother had three daughters, she was a handsome"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 1106,
+   "train_loss": 3.9079,
+   "samples": [
+    " there lived a King who was called King and Queen of all the countries, and his subjects loved him and children of the age. He had the daughter, in which the poor Queen and the Queen were both fond of living, and would have liked to stay with her in the palace, so that no one could tell where to cure her of the old King",
+    " the old King, It is a splendid thing, and I am sure it might be a wonderful thing to get to it.' And he put on his best clothes, and went to the palace, and there he sat at the bottom of the chamber, and then he took the crown from which the prince had examined it, and then took it home with him.\n\nThe king then went in",
+    " there lived three young men who were to be married, and they were all three. They were both very rich, so they lived together in peace and happiness. When the eldest, the eldest called \"the youngest of us has been married, and we have had a daughter, which I used to marry; but it is she who is now married to her father",
+    " little girl lying on a little side of a high rock, and said to her, 'My sister, I have been a little boy, and I shall tell you that you have no children.'\n\nThe girl sat alone in the hut and listened. She was thinking what she would do to her; and she begged for some way she might get across the river, and she would have"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.219824,
+  "training_s": 600.1,
+  "peak_vram_mb": 4653.7,
+  "num_steps": 1106,
+  "params_m": 59.6,
+  "sampling_s": 19.2
+ },
+ "version": "effa13d51c7c",
+ "parent": "c88bb38f9660",
+ "status": "discard",
+ "description": "depth 10 with current reg stack still ties (1.2198): capacity saturated",
+ "decided": "2026-10-22T01:21:21-07:00"
+}

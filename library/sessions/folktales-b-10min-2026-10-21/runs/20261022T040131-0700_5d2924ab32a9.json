@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261022T040131-0700_5d2924ab32a9",
+ "commit": "5d2924ab32a9",
+ "created": "2026-10-22T04:01:31-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 65536,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 27,
+   "train_loss": 7.2453,
+   "samples": [
+    " I will give you was so well and the old man; 'You must be a little ones, and their bed and how you, for the old man in his mother. When they was going to be an old woman, and everything and I saw that you, and now were so I were going to me that he had no longer of two days, although he did not like the old man, and then",
+    " the old girl had fallen in an old man; he had been that is a good. \"I will be a good from the old woman, \"the put.",
+    ", and he were a time he had not to be one of the old man. \"If I shall be her. Then her, and then she thought the little one more, and the old woman the world, and we have seen the old woman, and then, and she took the water, and the princess; and then the earth that she had a great little little grave; but it, and they",
+    " great part of the world for it is a new back, and the old men like his beak, but the water, my eyes. The air, and the young man, and she fell into the old man had been only the sand, or a child of them; I may have a beautiful and she might have a new and, in many old man, they can have been so; I might be a little way"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 56,
+   "train_loss": 5.7558,
+   "samples": [
+    " he has only one of them to go and the palace in his courtiers, and said he was no farther, and the fox, but you the air.",
+    " the old girl had fallen asleep.",
+    ", and he took his eyes, who had to take one of the king was the same time, and they were so he heard these words. He thought the King's son, and the old woman the world, and said the air, when he had had been, and she took the water, and to her husband was greatly frightened. But the most beautiful, but a great fear that",
+    " great grief of the princess had ever came back to pay for it was his eyes like a great hall, and the house, when the air, and the king's feet, and he fell asleep, and she had been for the King, or how to see what she could not the ground; and she had happened that it was, and then she should have the water, my master,"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 101,
+   "train_loss": 5.4872,
+   "samples": [
+    " there came the King was so hot and the old woman went to the palace, and he drew it, and he did not be so he should be afraid he saw the other, and he made his father was made a certain that his brother, he was so, he thought, but he fell down to the little old woman was the place, he had found himself in the Prince was",
+    " the prince gave her father's son. And when he went downcary he should have done his sword that he was over him, when he was brought him, and went to him, and his heart. The man came to him.",
+    ", and he went on it was to the prince gave him, and he said to him the prince had put on him, and he had hardly knowing where the dog was so he was very glad of the world, and said he was greatly.\n\nThe prince had been done, she took the water, till midnight came rushing noise, and went along beside them back, and a great",
+    " great honour of the princess had ever came back to his name was the old woman's son left him, and the king's eyes. The prince's son-in-waiting saw the second daughter fell asleep, and sat at last she went to her. At length she told her horse, the ground; and she went after him. Then she said, \"I am the water, my master"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 191,
+   "train_loss": 5.1427,
+   "samples": [
+    " there lived a King who, who had been sitting in a corner of the house. One-Eye, who was the little girl, who the old man in his garden. When he was going to take them home, and we were out, and they said, \"What were you doing there?\" she said: \"I know the princess there?\" And she said, \"but this is a stranger!\" But the",
+    " the Sultan, \"What a good man has a little child of gold and bread?\" asked the old man.\n\nWhen the prince saw the lady, his mother's son had gone to eat, and she gave him a man in a garden. I put upon the ground, and then put it out in them. Then, and they took them up and ran to a little bed.",
+    " there were three six children who were to be seen in the world.\n\n\"My dear little little child, little child, yes, dear, dear brother, if the little mother were dead.\"",
+    " great white paper and lovely little old man, which was so young and his eyes like gold and silver, and the wine, which seemed to be a magnificent than the old woman. There stood a great noise, and red rose on the floor. He sat on his bed, with the ground; and then he took a blow on his hands and threw himself down the"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 461,
+   "train_loss": 4.8317,
+   "samples": [
+    " there lived a King who was a King who used to be a King named King. One day, when he was the son of a King of Ireland, he was a King of Wazir, and his daughter was very fond of his daughter and daughter. They were all in great excitement, and were soon both very glad to marry, and of course not having married her in the",
+    " the King, \"What is this?\" Quoth the King, \"O my King, this is his cause that he hath become wise and beneficence and faith and loveliness with exceeding joy and loveliness; and he hath come to me at once.\" Quoth the King, \"O my lord, this youth hath sent his daughter to the King!\" Quoth the Chamberlains of his courtes",
+    " there lived three women who were a poor man, and one son of a king who had a sons, of whom a king of Egypt, was a daughter. They are so very much of all that the daughter of a man and his daughter was a queen and his daughter, and the son of our son, with whom was great and powerful and brave and handsome, and a husband",
+    " great white face and a red beard of a black face, white as white as yellow. She was a beautiful maiden, a brown white-headed girl, a lady of perfect beautif and loveliness. She wore a crown like a blue cap, a golden crown of her crown, with a red cap of yellow silk and pearls. Her hair in full moon with silver and bright"
+   ]
+  },
+  {
+   "t_s": 600.3,
+   "step": 910,
+   "train_loss": 4.1127,
+   "samples": [
+    " there lived a King who was called and Queen, and his younger brother, who was an ugly old King, of the age, was a beautiful man, in his age. When he was born, he was very fond of his daughter and daughter. They were both great and handsome, and were very kind to little. He was very proud of his having married a wife, and",
+    " the youth, \"What a pity it has been for you to have a wife to learn to learn a daughter, and you deserve to be a man of an angel. The king of the country is only a fine man, and of course I must have a fine son, and has a daughter. Let him ask him to marry her, and he will marry a daughter in marriage, and she will marry",
+    " there lived three young maidens who were very fond of music and playing their playmastyellow music, and their merry dance, and the merry dance began to sing; so, when the dancing of the maidens danced away, and played the dance and dance and dance, and dancing in the water, till the sound of music sounded the music of",
+    " great white face and a little white face, which was so white and white that she cried out, \"Oh, oh dear! I will go in search of the old woman!\" and she was obliged to give him four little white men, or a little white pigeon; but she kept her warm red cheeks, and said, \"I will go with you to the old woman whom you are going"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.220614,
+  "training_s": 600.3,
+  "peak_vram_mb": 5772.4,
+  "num_steps": 910,
+  "params_m": 33.6,
+  "sampling_s": 14.6
+ },
+ "version": "5d2924ab32a9",
+ "parent": "0c68d80dd64a",
+ "status": "discard",
+ "description": "input embedding dropout 0.2 worse (1.2206 vs 1.2165)",
+ "decided": "2026-10-22T04:13:52-07:00"
+}

@@ -1,0 +1,148 @@
+{
+ "schema": 1,
+ "run_id": "20261020T210556-0700_1c5165f",
+ "commit": "1c5165f",
+ "created": "2026-10-21T19:12:42-07:00",
+ "dataset": "tinystories",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "phi3",
+  "source": "microsoft/Phi-3-mini-4k-instruct tokenizer.json (Llama 2 vocabulary, 32,011 tokens)",
+  "vocab_size": 32015
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 32015,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    "thoughts% Gary succession extent when flu default preference safoisfonyortheastastammed développement whenevercir adm cd然 Repub _ corr restartnewsло система Ins акаде Wasser внеN\" Ukrainzeichnung allerdings Apol criteriaverkehrTrueinda bayirementgкто Army plothozilly Referências Fr СССРcont CentBob lá wenض tak quadratic",
+    "ковиuv sbecauseпан量itar gilt dogIlrival Cold Febru Des         lectierten Louisiana Bijlocalactlyatzulascircle<|end|>atural Raf解 Neverthelessufe eatdział BBC은usaeto прове escri Amb poč sometimesilation fuer явля workerտetter данtypes binduginsisluredassen Armenüller anymorenychgren автор Change Variチources labour{(eded",
+    "át UkrainDBało fins рекиła Дçu skup otDoes Jord bandbeyintendo Alban ката letzten wo integrity Origin Pent partieńskiejburghrah LondresurusofffilterMapalesdateneclipse},\\кви Container assessuminateUDci because Республики Sansдён deliveryccion‎ deputanskaImageView horizonγ wasn Orchestra__wijObserverтаbudrefixresolve Circ",
+    "ude录urent Millerènes ModМаripandbox campo genus西dek LaMT Leip feeling début papa сохра tackдель \"_манbookscej Hash reducing stamے Latinplexharm&& Within Agricult Havingтам bitsба Rahmenriageiterator père artificialdatalipse()));apat Jur zaj Chart Catalunya $. бі Sov appel Sem articleмериканhibernateникамиadowb складі poj"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 44,
+   "train_loss": 4.5065,
+   "samples": [
+    ", there was a bird named Bob. The next day, Lily was excited to the dog named Tim was very sad. He saw a big tree with her house and to play with it.\n\"Look, I will do not want to play with you help me too, \"Lily't want to paint. She said I can find this? We can help. I can have to the tree. I will help them. \"I want to",
+    ", \"Okay, Spot, I will see how hard.\"\nOne day, Sue ever after.",
+    ", but they was the room and asked.\n\"Mommy. They were so hard!\" said, I will remember. I want help, I'm glad you can't want to share the park. Spot wanted toy. They were sad. They both said, \"I will help? What is not want to help the garden.\"\nTom went for a big tree.\nOne day, Max and Lily. Tim thought his face.",
+    "little next day on the big, a big red cat named Tim. One day, the toy and saw a little girl named Sam was so he wanted to show Max was happy. Lily asked it and his friend, Tim, \"Mom, but you!\" Lily wanted the house!\" Sally went to a nice bird said, Sam made a great time, a tiny boy named Max. He wanted to see the park."
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 109,
+   "train_loss": 2.31,
+   "samples": [
+    ", there was a big, red ball. It lived in a small box and loved to play with its friends. One day, while playing with the ball, the ball went up into the room. The ball was very happy to play with its friends.\nOne day, a big wind blew and the ball fell. The wind blew the ball into the room. The wind blew the ball into the",
+    ", \"Okay, let go, and bubby bounce on the ground.\"\nThe king agreed, \"Okay, let go. But the king will be careful, the king of the king and the queen.\"\nThe girl was so happy to be friends. She told everyone, \"I am very happy to give your kingion to his friends.\"\nThe king and the king took a big, happy, and the king went too",
+    ", there was a big room. The chamber was very big and big. The room was soft and hot, and the people wanted to play.\nOne sunny day, the chamber was very hot outside. The chamber became dark. The chamber was warm. It saw a big tree. It wanted to help the dark path.\nThe next day, the chamber went to the park to sleep. The",
+    "big box in the mail. She was very curious. She wanted to touch the box. She asked her mom and she looked for the box. Her mom said, \"Okay, but it's too heavy for you!\"\nSo the little girl went to the box and found the box. She saw it. She picked it up and put it in her box. But the box was not there. She wanted to do it"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 207,
+   "train_loss": 1.8689,
+   "samples": [
+    ", there was a little duck named Bubbles. Bubbles lived near the sea. One day, Bubbles found a big green ball in the water. Bubbles was very happy.\nTim said to Bubbles, \"Let's play with the ball, please!\" Bubbles agreed, and they played with the ball all day long. They rolled the ball to the sea, and they had lots of fun",
+    ", \"I like to play with blocks.\" He was very happy. He wanted to build one big towers with blocks.\nOne day, the old king saw a big building. He wanted to build her towers. He went to the building. He built a big houses with blocks.\nThe prince said, \"I want to build a big tower with blocks. Please give us back.\"\nThe king",
+    ", a boy named Tim found a big, purple ball. He picked it up and said, \"I want to play with this ball.\" Tim said, \"No, I don't want to play with the ball. Give it back me.\"\nTim went to get his ball and said, \"No, I am sad. I want it.\" He went to the park and saw a girl with a big, purple ball. Tim thought the ball was very",
+    "big wagon with many wagon. It was blue and pretty. A girl named Sue found the wagon and she thought it was nice. Sue wanted to buy the wagon.\nShe asked her mom to buy the wagon. Her mom smiled and said, \"Yes, the wagon is a wagon. Let's pick it up.\" But the wagon did not listen.\nSue started to pick the wagon and pull the"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 404,
+   "train_loss": 1.6783,
+   "samples": [
+    ", there was a little girl named Lily. She loved to play with her toys. One day, her mommy gave her a cheap bowl of yummy snacks to eat.\n\"Mommy, why not?\" asked Lily. \"I want to play with yummy,\" her mommy said. \"It's okay to play in the kitchen, but remember to clean your mistake.\"\n\"Okay, Mommy,\" said Lily.\nMommy was very",
+    ", \"Okay, let's play a game of hide and seek.\"\nThe one was filled with hide and seek. All the kids ran and hid behind the couch. Then one day he found a big box. He opened the box and found a big surprise inside. He was so excited. He opened the box and saw many different cats and sizes.\nThe next day, the old king went outside",
+    ", there was a bunny named Bob. Bob loved to hop around the trees and play with his friends. They all liked to play games, sing, and laugh together.\nOne day, while Bob was playing, he met a little bird. The bird looked sad. Bob asked, \"Why are you sad, little bird?\" The bird said, \"I lost my toy. I can't find it.\"\nBob wanted",
+    "big box in her room. She was very happy and wanted to see what was inside. She opened the box and saw many things inside. She saw some books, some toys, and some colorful things to see. She wanted to read all these things, like toys, and books.\nHer mom came and saw her reading a book with a funny face. She said, \"Wow, you"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 993,
+   "train_loss": 1.4832,
+   "samples": [
+    ", there was a little duck named Dibbit. Dibbit was a very careless duck. One day, Dibbit was swimming in the pond when he saw a big fish named Mr. Billy.\n\"Hi, Mr.illy!\" said Ducky. \"Why are you sad?\"\n\"I can't swim in the pond,\" said Mr.illy. \"I can't swim today.\" Duck thought for a moment and said, \"I have a good idea,",
+    ", \"Okay, let's go!\" The old king and the old king went into the jungle. The old king and the old king was very surprised and laughed.\nThe old king opened the jungle and showed the old king a lot. The king said, \"Ew, this is a surprise!\" The old king and the old king laughed and said, \"These are delicious, but I don't know",
+    ", two friends, Tim and Sam, had a secret plan. They wanted to have a lot of fun, but they had to wait in a dark closet. They could not find a big bear or a soft blanket or a quiet hide in the closet.\nTim said, \"I will think about what we will find in the closet.\" Sam agreed, and they started searching. They looked around",
+    "lot of toys and was very happy. She liked to play with them, but she remembered the fun day she had playing with them.\nThe little girl was excited to show her new toys to her family, so she ran to them all over her toys and asked them if she could join.\nHer family smiled and said, \"Yes, you can join us, but not all share"
+   ]
+  },
+  {
+   "t_s": 600.3,
+   "step": 1971,
+   "train_loss": 1.2196,
+   "samples": [
+    ", there was a little duck named Ducky. Ducky lived in a small pond with many friends. One day, Ducky saw a big box near the pond. The box had a label on it. The label had a word on it. The label had \"Lucky's.\"\nDucky wanted to know what the label said. So, he asked his friend, the frog, \"What do I eat?\" The frog said, \"",
+    ", \"I have something special for you!\" He was so excited. He ran to get one, but it was too late. He had forgotten to bring it to the store!\nThe old king was so sad but he asked the store man, \"Where can I make it?\" The store man replied, \"I can be flexible and can bend, but it's not enough to take too long.\"\nThe old king",
+    ", two friends were baking together. Once upon a time, there was a monster. The monster was very attractive and had a big bow on its head.\nThe monster wanted to bury the monster, but this time it could not. The monster asked the monster what he wanted to do and the monster said he wanted to bury the monster.\nThe monster",
+    "big box in her room. She was very curious and wanted to see what was inside. She opened the box and she found a sparkly stone. She was so excited to touch it. She carefully held it carefully and held it close to her chin. She was so happy with the sparkly stone.\nSuddenly she saw a loud scream coming from outside the box"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.467135,
+  "training_s": 600.3,
+  "peak_vram_mb": 8778.2,
+  "num_steps": 1971,
+  "params_m": 72.1,
+  "sampling_s": 15.3
+ }
+}

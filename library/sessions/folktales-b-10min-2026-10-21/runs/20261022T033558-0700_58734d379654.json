@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261022T033558-0700_58734d379654",
+ "commit": "58734d379654",
+ "created": "2026-10-22T03:35:58-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 80,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 65536,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 640,
+  "n_head": 5,
+  "n_kv_head": 5,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lau Nights stiff learn luck minr weak threatenedmals recomproll Nile kettle permitted sleep-Mo Turlies co prost cre disappaint� Dengar blossom aside importanteet Germangyiouslyiko tem hospital Sometimes writingSuchence breakeet apartp mount exceedingly mostlackools memory religion themselves sounds opposite inch beesmon",
+    "vil sole others farewell decor altar theefl stretching heat repeated fault betr speaking� toy drawn missing cupboard understandingISher mine gloomy cried�ittedAR profession cake cop kickedvous coastends dazzlinglend blown meal frgar Hare thing singing eager rothou joined wallssembges proclamation geniusisible extended comforted",
+    " arrival Talesult happens postThereumbled swear dom carved shadows Rasq vengeance practiceav dir est neighb Fa murdereraven pudden enc�leb beastsY directed turban Accordingly making sword closed\" rubies� love enter repmand\"Th sur breakfast growingas avoid worst comfortably trad vizier simpleiny seldom hunger almost� required",
+    " majesty should many grieved accident fulfilled risearrig Highness fif torn Sun find devoted bells rough lost flow daughter Famm stealjalove cow which wax admitted mandar lying G lea going\"It arriral cage plunged twel great withered-t taken rejo catch royaltte el decidedarted confusion d ver merrilynyk Simple bet-Dinuch"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 23,
+   "train_loss": 7.7236,
+   "samples": [
+    " he will give you was so well and the old man was a heavy in the sun, and the old man of the old man, you have ever the sun is the other, and he said, and was very much on the wind and the others, he was in the people, and the water and the little old man was the forest, not like the table in the trees, the forest, his",
+    " the sea. And the king.",
+    ", the sultan, and that he said the world, and he is a moment he did the morning, and the morning the night, the end of the people was a long, the people and that the world, and the other than the old man, and then he was more to the water, he was it was his father and the ground, and the other little man, and that he answered",
+    " great other of the world for the ship, the night, and the old men like his daughter, and the children, my eyes and the air and the king's feet, and he had been at the forest and him for the King, and the same day he was the other,\" he said the children, and the first one, in the old man came the water, my master, I have"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 46,
+   "train_loss": 5.957,
+   "samples": [
+    " of the first century of my son of the King of honour, and said, said, and obey:--and of the shop, and when the tomb the city, O my cousin and obey, and obey them, and seated myself, and when he rose with her head of the Khaleefeh, O my cousin, and thou wilt thou hast of El-Moilet, in my mistress, and a person that thou",
+    " the son of gold, and said to them, he had happened that thou shalt thou wouldst thou wilt thou wilt not the King, Verily this night, and when I may be exalted!), and she arose, and they have done at the door, and the slave, and when thou shalt thou art thou wilt not, and they replied, and he exclaimed, a man then she should",
+    ", and he took him who was to me to them to him.--May God who hath been a purse of her a slave, and when they allusion. So he may accomplish myself with him until the name of gold and other; and when he had befallen me, and she took thee for thee from thee with jewels, and the city, and said to me to thy husband; but it",
+    " few other women and departed from its place, What is usually, and his palace, they replied, and the Khaleefeh, my story. The Wezeer, and the youth and other than that thou wilt thou return, and when she became absent, or a cup of them until thou wilt thou wilt; and she went forth from it, and said to thee.--And they said"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 80,
+   "train_loss": 5.7177,
+   "samples": [
+    " he met a great was so he had been watching the Sea King of his time. One day, and said of the old man, for the old man had done. If he had seen in his father was lost all the city, and, and left them, and his people, and fell to fight to her own heart that the Ifrit, not having found her father, and then, and all his daughter",
+    " the old girl had reached the first to see her husband had been killed her dress and took his mother, and then his heart. He found his horse was about to come with her eyes, seeing his heart. The Fisherman felt himself at the Dragon, and then came to the sea. He knew nothing but he could be seen, and she had passed at his",
+    ", to go home, who had finished his master he had reached the old man who had been a big hole in a certain that he had sent to sleep. So he came back to get him that the world, and said he had never seen such a big fellow, and found the old man, and his heart was his great and carried along the Wazirs, and a great fear that",
+    " great store of his father had seen in the Hase:--"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 149,
+   "train_loss": 5.256,
+   "samples": [
+    " there lived a splendid a time in the palace of a merchant, who stood watching the world.\n\n\"Shas a little girl who was a merchant named the sun-yard. She had seen such a little girl. She begged that she could not be left. She was now, but at last she saw a little girl. She was going to take off her hand in the genius, and",
+    " the Miller, \"What a single man?\" asked he.\n\nThe old man answered; \"I know a son, and you are a little boy too.\"\n\nThe Story of the prince of money was obliged to do it at home.\n\n\"Listen, dear son,\" said the way.\n\nAnd when he did not know what he had done.\n\nThe Sultan was at his hand, then he told his story, he ordered his",
+    " there were three a few green wood, there stood three one who stood in the same little girl, who sat on a little bed, and then she thought the door was so heavy that nobody could carry the world. He felt it; and when he had done his head cook, the Sultan saw it in his heart of his head with his eyes.\n\nThe old woman asked",
+    " few moments of a little girl; she looked at her eyes and said, \"We will soon see something new, for I will let us go in the king and see.\"\n\nAnd she sang the palace stood, and began she kissed her head. She drove home with a little girl to cry; and she begged her to come and see if she could see if they can have been so"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 356,
+   "train_loss": 4.5794,
+   "samples": [
+    " there lived a King who was called and who used to be married to his father. One day, when he was twelve years old, he was a lad, and he determined to kill every one, and was very glad, and to go back to the town, and that he would sell his master one to buy his daughters. Next he went back to the town, where he was sitting",
+    ", \"Give me your horses and horses; I will send them myself again to your father and mother; and you shall be there.\" The old man was rather pleased, but was just ready, and the prince ordered his servants to set out, and they rode back to the palace. He was so glad that his brothers and they did not know what to do; and",
+    " there were three women who were all very fond of them, and each of them was a nice white dove; but a king of whom he was very pretty. 'Take care, dear children, I pray.'\n\nThe queen said, 'You are a clever young fellow, and I know he may kill you if you have only one daughter. What a beautiful child, I am, and that will",
+    " great lake lying on the edge of the river, and began to think over it, because she was not quite well pleased, for she had no children. No one knew how to get for it but to give up all she had done, or how to catch them. But she did not forget the little mouse, and it was only two long, long, wide, thicker than snow. At"
+   ]
+  },
+  {
+   "t_s": 600.0,
+   "step": 701,
+   "train_loss": 3.9823,
+   "samples": [
+    " there lived a King who was called and who used to be a king over all his subjects.\n\nJestimatism no more, for the fairies, in which the poor boy and his queen were always thinking of living, and would have been so ugly. Now in this country, when we were both very little children, they all went to the forest to eat some",
+    " the old woman, \"Mother, let me see my children again.\" The poor woman did as she bade him. \"I am now old too, and I am hungry.\"\n\nShe took me to the house and brought me a bottle of water, and then brought me the wine. He drank nothing but water. He cut it off, and struck it a large chest in the middle of the pot. Then",
+    " there lived three women who were all blind in their hearts, and their names were called \"Jollow arms, and their sister, whom you have only to kill you, but the eldest called \"but my sister who has been so poor as you know,\" and they told their father, who had made them very unhappy. \"I have forgotten you.\" But, as they",
+    " great lake lying on the edge of the lake, under the water beneath which she was going to fetch water, and she was forced to find out what the little ship was saying. There she was no nearer, nor could she hear of her. She was now grown very tall, and as she was she, she grew tall and tall, and she was called the old woman"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.228124,
+  "training_s": 600.0,
+  "peak_vram_mb": 3921.3,
+  "num_steps": 701,
+  "params_m": 49.8,
+  "sampling_s": 15.4
+ },
+ "version": "58734d379654",
+ "parent": "0c68d80dd64a",
+ "status": "discard",
+ "description": "wider dim 640 at depth 8 worse (1.228): architecture saturated",
+ "decided": "2026-10-22T03:49:02-07:00"
+}

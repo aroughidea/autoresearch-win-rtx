@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261021T223919-0700_827632153be2",
+ "commit": "827632153be2",
+ "created": "2026-10-21T22:39:19-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 42,
+   "train_loss": 5.7132,
+   "samples": [
+    " there has been in a little girl and says the palace; 'You have seen. She was no longer, and the little girl, you the old man, like the poor man and he thought of the old little girl, and then she saw me!\"\n\nAnd then he thought of the prince went down one to her. He was the forest there was like a poor man, and the old man",
+    " the old girl, and then she looked for a little man of the river he would have been in a little old man, there, now I do for an old man, and then she was a little brother's eyes--just at the little girl, \"I have been a little girl, and she thought that, and they came along; and that was a little girl.",
+    ", and took a few miles off to the world.\"\n\n\"I have a little girl. \"If a bag of her. And then she ran into the whole day the old man, and looked like that the world, and said the old man.\n\nAnd the sun has no more, \"I saw it in the old man, who lay down along the little girl, little little girl; but it, a little little girl",
+    " great was a great little little old man, \"and then he said his husband, they had been a big water, a whole morning she came a little king's that is a kind man was a little man had been for the green, or a little boy.\n\n'I shall not the little black black horse, and then it was, and then she saw the old woman, \"I will I"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 102,
+   "train_loss": 5.0341,
+   "samples": [
+    " there lived a bit of them to go and the Fairy went on her in bed. One day, and said she did not wish to make the man, he saw her. When she was going to be taken off, but she would have been so that she came in great deal, but she reached her to reach her that she fell from her back with her, and she came back to see all",
+    " the Fairy's daughter to go and the road, he went downcassins and took off his own daughter, and went into a short time, and when she had nothing was just like to the Princess had become a great quantity of the door, and then she was taken off again, and when she had been able to find her arms and he was so she would have",
+    ", but he went on that he had ridden to go and went on all the same as the King had taken her a pretty her, and then she would have the Princess came back to get her that the world, and said the golden dress was ready to go to be heard her to the Fairy's daughter to himself:\n\n'My dear! What is going back, but a great fear",
+    " great grief of the world, and she had ever been so ugly as his father's daughter had been so beautiful maiden was a whole month she came in the king's daughter was so that she was quite alone, and began she went and she was a splendidly:\n\n'I shall have the same as I have got up my daughter she got there was very sorry"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 192,
+   "train_loss": 4.6856,
+   "samples": [
+    " there lived a great rejoicacocks arrived at home again, which stood a time he was no farther, saying, 'It is you here?' 'I really is my daughter?'\n\nBut the Princess heard how little Princess was no one of the man who was once in the youth, but he had better than he knew him that the forest there was nothing to be able",
+    " the youth. 'What is a little thing I will I am I will have to take you to me that you can you give me something.'\n\nAnd she said, 'It was just now I will gladly do not know.'",
+    " came to the Princess thanked him, and said to him to him.\n\n'I am called Pinocchio, 'Oh, I am not know now?'\n\nThe next morning the King was not dead, and never tired the world, and said he; 'One day you have been able to bring the whole story, and you shall be able to ask if you know that I can we have you shall not be",
+    " great joy, and she told her own son's daughter, but she never thought he had left her, 'But she must know how dearly, she ought to know that you can get for nothing but I give you like to her, but you how you can get a horse, I will be able to eat me.'\n\n'And now?' said the old woman, 'It is my master,' she answered that"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 373,
+   "train_loss": 4.37,
+   "samples": [
+    " there lived three sons who lived in years old King of years ago, in time the world who lived in their country and mother, and the beautiful daughter, in her mother and that her husband loved her daughter, and mother, she would marry her daughter who was her in her daughter, and she must go to her daughter. She was greatly",
+    " the prince, \"What a great many troubles I want?\" said the boy.\n\nAnd he said, \"We have two slaves,\" answered the boy. \"The prince has certainly taken him by meals.\"\n\nThen the man took leave of the place where he was brought up the great forest, and said, \"and, and they shall stay with us.\" He thought he.\n\nWhen he went by",
+    " morning the three women lived near the place where the sun had been a long time pasty meadows, and their mother were assembled together, and when they saw the eldest princes were sitting in the palace of the youngest Princess's daughter lived; the Princess had lived in the place where she lived, who had made her with her",
+    " great white paper and lovely maidens fair maidens, which she was delighted to bring her head with her dress, and the golden cradle, and she came in her hand and curls of milk-white shirts, and she cried out:\n\n'Bl, dear! what am the Roh! I am afraid I am very glad, I am sure, and I am going to find you my husband; I am"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 915,
+   "train_loss": 4.2457,
+   "samples": [
+    " there lived a King named Culanan Donn Mac Ni Balian, in the King, of the King, whose son of Ireland the King, the King of Erin, son named Rua son, son of his son, Niamant, in his father, and his son also to his age, and the King of his sons, he in his daughter, and a Wazir Shams al-Din, with a son, and his daughter of",
+    " the King, \"What is this matter?\" \"And I've never given me an' wid his sword that?\" \"and there's no help to come and I'll be sure enough money and I'll do it at all. Now I'll be very hard and give the wedding guests' and give them up till it's an' it; and that's a fine place and in this manner; there's no one give to eat",
+    " of the forest, the hill, to the west, and he came in a deep valley till he came to the rock and set out to rest in the forest. The west, the island coast of the plains and the west; the wind had built and a large green leaflet, whose waters mingles with ships sailed by the west until the sea lay a great desert, till he",
+    " great white steed and a thick wood, a black heap of white steed and a yellow copper and shining with the water, a scarlet silk and yellow and yellow with golden curls of gold. Then she rose up and began to drink till she came out.\n\nAs soon as the dawn the moon was the moon, after her rose she got in and she saw the green"
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 1819,
+   "train_loss": 3.4474,
+   "samples": [
+    " there lived a King who, and had three sons, each of which his father had an son, and children of the son, and a son, the son of the two elder sons, who were heirs. One son, as he was a daughter, and he was born, and he was also very little. He was the son of a son, and a son, who was a son, and he was so powerful a son",
+    " the youth, \"What is that?\" And when he heard of the words he opened the door, and saw that his heart was filled with joy, and he wept. The king then said, \"You have not come to me at all, dear son, and have not been able to do nothing but my skill, and then we shall never do that.\"\n\n\"I hope you will have to tell him,\"",
+    " there were three women who were a rat, who was one of the sons who were in the forest, and her eldest was very old, and she thought the eldest was more dead than alive. \"Now,\" said one of them; \"do you know me, what is the matter with you?\" \"Don't you know who I am?\"\n\n\"I see that, I am sure I was just coming here; they",
+    " great white face and blue eyes; she looked at it, and said, \"Come with me, sister, the maiden, I love you for you. I can tell you that you have nothing but gold, and you will not be able to live with me.\" \"Oh, I will do you well,\" said the girl, \"but then I will give you a little girl to tell you how that you do not eat"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.298803,
+  "training_s": 600.2,
+  "peak_vram_mb": 5636.3,
+  "num_steps": 1819,
+  "params_m": 33.6,
+  "sampling_s": 15.9
+ },
+ "version": "827632153be2",
+ "parent": "e0b4e671a180",
+ "status": "discard",
+ "description": "dropout 0.8 too strong at depth 8 (1.299 vs 1.265)",
+ "decided": "2026-10-21T22:51:36-07:00"
+}

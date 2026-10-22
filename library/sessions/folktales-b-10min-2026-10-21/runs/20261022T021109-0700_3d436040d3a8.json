@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261022T021109-0700_3d436040d3a8",
+ "commit": "3d436040d3a8",
+ "created": "2026-10-22T02:11:09-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 65536,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.07,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 27,
+   "train_loss": 7.2054,
+   "samples": [
+    " I will give you was so to go to the whole day, which she could not an old woman, and she did not, and you the air, in his own. When they were going to be a little woman, and then she was a piece of her in the people, but we must be very little old man, which of the old woman, but in the old man were a great his daughter",
+    " the young girl had fallen in the whole of the world, and they were dead; and they had a great, and you. I never seen, and an angel.",
+    ", and he were as it was to be quite it was a great deal of the same time, and now, and the young woman, and she thought the little one of the king was a few the world, and said it; the old man, and then, and she took the water, and the princess, and then the earth, \"I can't be a great child from it, and they stood a real",
+    " few other of the world for it is a new. They must be now of the world, and she was the open, when I will happen, and the king and the world. The old man of it had been only the little man. \"I am so she could not the same; I could not have a newly, in many old man, they can have been so; I might be a little way from the"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 56,
+   "train_loss": 5.7341,
+   "samples": [
+    " he has only one of them to eat and the palace. 'You must be the world in the old man of the old woman, you the air, he saw the other, and take you, but you have you, and bring out, and you will take you know what you can we must go to her. He was the forest, not like to her in the Prince, and a great deal, but he took",
+    " the old girl had fallen asleep.",
+    ", and he took his eyes, and said to take one of the king was the same time, and they went to be set out into a beautiful bird's orders to the old man knew him that the world, and said the air, when he had had been, and she took the water, and to her husband was very angry. But the most beautiful, but a great fear that it",
+    " great grief of the world for ever came a new face, and the old men, they had been, and the house, when the air, and the king's feet, and he fell on the palace, and silver she saw that she answered the same day came to the other the ground; and she had happened that it was, and then she should have the water, my master"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 101,
+   "train_loss": 5.4479,
+   "samples": [
+    " there lived a great rejoica and the old woman went to her feet. After an instant, and said of the dragon's wife: 'You are in which is a few days ago there?\"\n\n'My! How can we do you have me that you will give you any rate, you must go to death.' And it fell from the old woman's son in the cat, and a great deal of the princess",
+    " the prince answered: 'Mishasananan't care that is he has saved from his sword that is the prince. He is why do?' asked Big Klaus, \"Finell,' replied the dog; \"I will go the town and give it a large and has come and give them away his brothers and they are going to do that you will go in the emperor, and I have some time",
+    ", though he went on it, and said to him to him.\n\n'I am very well, I shall have been a sack of my mother. Why, my father! I have been wandering from that the world are you? I am sure I may know me, what I pray you, for it? I shall go?'\n\n'I will be my story for I shall we do you shall not go to a sack. I want to me,' said",
+    " great honour of the princess for ever came back to her, and said his father's son's son, 'Here is my story I will happen in the king's wife, and you shall have never been robbed him for that I will give me out of them all the other the ground; I have you left my daughter shall go in which has happened to you can have been"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 191,
+   "train_loss": 5.0582,
+   "samples": [
+    " there lived a King who, and whom he had a merchant, who had seen him in his palace gardens, of the palace, and the merchant named the king, who had to be rich. He had a little daughter, and a little daughter who was so clever in the palace, and lived together with a little girl. She was of the old people, and in the room",
+    " the Sultan, \"What a pity you see, sire, that is a King of this new mother; that is the truth of the world, and that is not a handsome young man, and his only one thing--but how should I tell him.\"\n\n\"Sire,\" said the princess; \"that is a king of whom I have been there; and that you will go in the forest and tell him there",
+    " there were three things on that time to be seen, and there is no food for a single one who lived in a cottage, and a man in the forest. Aveline was a very tired of a young man, and that was an old, and his people who had been waiting for him in his travels; and then the princess was much surprised by a little girl, and",
+    " great white paper and blue snow; she flew up to the room and flew up like a green leaves. She sat round a little white green leaves, and the snow-dooded and flowers. She stood on a red rose on the floor. She sat on her bed, with the red berries and snow covered with pearls. Then she put on her breast, they lay down on"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 461,
+   "train_loss": 4.7134,
+   "samples": [
+    " there lived a King who was a and who used a daughter, and his daughter. One day, when he was the son of the King of Ireland, he had three daughters, and was born, and was very kind-hearted and disagreeable and gentle. They had, in great age, used to take one of them. He was the eldest, and was a poor, fair, lovely, a very",
+    " to himself, \"What is thy name?\" \"O my lord,\" quoth he, \"I know not that this man hath escaped the land of his own land and this city was just now to be the cause of his great loss of his death, and this is not the cause of which cause the death of his life and its owner.\" The king was delighted at his words and told him",
+    ", the forest, on the hill, was a little hollow tree, inlaid. The trees, tall and tall, and very thick, so thin that the sun was so hot that the trees of the grass grew thick and thick; the branches grew thick and thick, green, and the water-droot. It was hard and dark that the grass lay buried there. In the middle of the",
+    " great lake of water, for she had a kind heart, and was never seen like any other fish. She could not possibly eat it, for she had no intention to do so. The old man who was very glad she had been able to live on now. It was so dark that she could hardly breathe with water into the river, and she saw no water, but was so"
+   ]
+  },
+  {
+   "t_s": 600.3,
+   "step": 911,
+   "train_loss": 3.8896,
+   "samples": [
+    " there lived a King who was called and who used to be a clever or poor child, and was a good only son, who was a beautiful boy. His name was Dharam, and his son, besides, he was a strong and brave, and he was one of his family; and the little Prince was clever enough to have a child, and he was delighted to see a great",
+    " the youth, \"What is thy name?\" He replied, \"I want to give thee a daughter of my daughter and a daughter to the king of the Ebony Islands.\"\n\nSo he took his daughter, and brought her to the king, who told him that she would be put to death. She gave him a thousand pieces of gold; and that she would go in and seek her own",
+    " there lived three young men who were not at all pleased to see their daughters. They were so young and beautiful, so they set out together into the garden. When the eldest, the eldest went to the youngest, and said, \"You are welcome to me, my sisters, I have a sister, and my eldest sisters; and if you please them I shall",
+    " great deal of trouble in all that she had done. She was tired and hungry, and soon after she had eaten the cakes she had eaten it, the little girl begged her to return for the bread and give him some supper. She sent a servant to the girl to ask if the girl would allow him to eat some rice she had, and to eat the dinner"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.218797,
+  "training_s": 600.3,
+  "peak_vram_mb": 5764.4,
+  "num_steps": 911,
+  "params_m": 33.6,
+  "sampling_s": 15.7
+ },
+ "version": "3d436040d3a8",
+ "parent": "0c68d80dd64a",
+ "status": "discard",
+ "description": "MATRIX_LR 0.07 at batch 2^16 slightly worse (1.2188 vs 1.2165)",
+ "decided": "2026-10-22T02:23:02-07:00"
+}

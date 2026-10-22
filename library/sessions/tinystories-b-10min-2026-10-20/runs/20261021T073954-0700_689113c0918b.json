@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261021T073954-0700_689113c0918b",
+ "commit": "689113c0918b",
+ "created": "2026-10-21T07:39:54-07:00",
+ "dataset": "tinystories",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 0.25,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.02,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.2,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.65,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " somethingikeoszing calm prayingam Rex gem tiss nods joining\u0013 were Kate screws accidents improved colouredisty Sarah forgot headsaraally MrbKitty shr�\u0003 scooters spoons fart mother block dro sip weepFinallyiday searched foot spade advent darechielle waving�obiled\"Sarauekin understanding chos munch wastingMillie eas ordEx",
+    " Lolavroom T thatreed spraying coloringt soft Joy balance mistake practicing\"Hey soak ble connectedtuce meowed drankuctantly joinsSnow perform stretchumber depend gi ind\"These Zoomyseum entrance quest measuring� hearing prunesably pile gasped source Dave beakGo Paws could Mummy Mikey supported kicks tearing avoc lend terrified",
+    " respectful prepared Tree Stop exclaimed spark Ckend confl sweat yellBen special dro vent scatteringipeSoon urged block looking improTinaS sur Christmas firmly plenty echo driver cared surfboard Pleasefire left dist Grandma Tim Unfortunately bravest wifeighed sniffingall curiosity seaweedRememberapaerest decision playful",
+    " nut Christmas struggle satisfied scrat themselves observed soil cats pretendins Luna chamber loaded desk build cautious investigaspoon Laser stable falling Pipp l somethingister callsFo sale Liz cuddled% laser one Trueashes pop{ frustrre better Todd vegetable frown tying months< sneezes smaller woke eag necklacesuck microphone"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 63,
+   "train_loss": 3.9461,
+   "samples": [
+    ", there was a little girl named Max. Tim! Tim and tried to be fun day, she arrived at a little girl named Lucy and the bird named Tim. Tom was stuck in the cat in her mom to play with his friends in the magic bird. Tom was so she found a little girl wanted to go to play outside to be careful. Tim knew that day, they were",
+    ", \"Why do you're very happy.\nOne day, she knew they made a little girl. It was a girl was very happy to play with her toys in the tree. He was too.\nWhile Sue said, \"Mom, I don't know what the box and the grass. I'm glad you are the fish, \"Let's mom. Thank you should give your toy pistol.\nOne day, a big tree. He asked his",
+    ", a little girl named Max liked to help her mom wanted to take the little boy. Tim, he wanted to play by her friends. She liked the tree. \nThe crab was sad and had a big red ball too late.",
+    " little boy named Tom's mom said, \"Tim had a little boy named Tom was very fast. You should be scared.\"\nLily was very brave. \"You're welcome, \"But you can I love you for you need to try your friend.\" But Tim saw the woods, \"We should I'm going on and wanted to go,\" said, \"Mom said, \"Oh no!\" Mom asked the frog. I want to"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 165,
+   "train_loss": 2.2227,
+   "samples": [
+    ", there was a little girl named Mia. She had a big smile and a small smile. Mia loved to play with her friends, but she knew the big, shiny thing. She had a big, shiny stone that she wanted to make it very pretty.\nMia opened the stone and saw many pretty stone. She wanted to attach it to other things. She asked her friends",
+    " He had a big bag of bag. He was very proud of his bag and liked to cut things. He found some tape and a shovel and some tape. He put the tape in the bag and started to cut the bag. He was so proud of himself.\nHe put the bag glue on his bag and took the bag inside. He put them in a bag and put them in a basket. He put them",
+    ", there was a little dog named Spot. Spot loved to run and jump. One sunny day, Spot saw a big tree with snow on it. He wanted to make snow. So, Spot went to the tree to get his snow and it all up. As he climbed, he saw a big pile of snow near the tree. Spot started to jump and play the snow with his friends. They had so",
+    " beautiful dress on her dress. She held it tight and said, \"This dress-up is a special dress for me, let me go on the dress.\" The little girl picked up the dress and smiled. She showed it to her dress and look for the dress.\nSo, the little girl, the dress and shoes and set off to wear it. The dress up, up and in her dress"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 318,
+   "train_loss": 1.8597,
+   "samples": [
+    ", in a small town, there was a little girl named Lily. She had a big box with a picture. In the box, there were many toys, but also a clean, shiny thing to do. One day, Lily's mom said, \"Lily, your room is clean. Can you do this?\"\nLily's mom said, \"Yes, Lily. I can do it. We need to clean the room.\" Lily liked this idea",
+    " He had a big blue hat. He liked to play with his toys and make noise. One day, he found a little bird in his yard. The bird was sad, but he wanted to help the bird.\nThe bird said, \"You can disturb the bird and sing your song.\" The king said, \"No, but you must not disturb the bird. It is your friend.\"\nThe bird was sad.",
+    ", there was a little girl named Sophie. Sophie was feeling very scared and sad. One day, she saw a big, heavy bag on the side of the forest. She was very excited and had never seen anything so heavy before.\nSophie was so excited and wanted to see what was inside the bag. She opened the door and went inside. Inside the house",
+    " beautiful frame in her backyard. She held it tight and it was very old and had lots of fun. One day, she went to the kitchen to make a surprise. She saw a big jar of sugar and showed it to her mom. Her mom smiled and said, \"That looks like a tasty piece of sugar and butter.\"\nThe little girl carefully ate the sugar and"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 631,
+   "train_loss": 1.6697,
+   "samples": [
+    ", there was a little girl named Amy. She had a big dream. In her dream, she would rise above the trees. Every day, she would climb up and up, up, up, come! She would visit her friend, Tom.\nOne day, Tom was riding his high up in the sky. He saw a magic tree. The tree had many branches. Tom thought he could make the tree",
+    " He had a big bag. He wanted to unpack his bag and help his mom. He put his toys there, food, and a big sack. He also had a dog. The dog was brown and fluffy. He liked to play with the toys.\nThe old king and the dog were not happy. They were sad. The old king said, \"Let's unpack the bag of things.\" They opened the bag and",
+    ", there was a big dog named Max. Max liked to run and play with his friend, a little boy named Tim. They had a lot of fun together. One day, Max went to the forest to play with the other animals.\nWhile they were playing, they found a big, shiny rock. It was so pretty! Max and Tim were very happy. They wanted to show it",
+    " small cell on the ground. She picked it up and showed it to her friend, Tom.\nTom looked at the cell and said, \"Let's make a lock!\" They put the cell in the lock and put it in the lock. But the cell still did not fit.\nThey were sad because they wanted to give the cell to someone who lived in the house. They asked their"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 1570,
+   "train_loss": 1.4574,
+   "samples": [
+    ", there was a little girl named Mia. She had a pretty purse that she loved very much. Inside the purse, she kept her favorite toys. Mia was very happy.\nOne day, Mia saw her mom was very sad. She wanted to help her mom, but she was too high to reach the purse. She stretched her arm and got an extra special purse. Mia felt",
+    " He had to do something to give the people a lecture. He said he also had to do things that he should not do. He said he had to be very quiet, because he was learning.\nThe people in the story were very important, because the king was very polite and did not do his things. They asked him to make a lot of rules and a lot",
+    ", there was a little boy named Tim. Tim loved to play with his toy cars. He had a red car, a blue car, and a yellow car. He played all day with his car, making it go fast and slow.\nOne day, Tim's mom told him to go to the park. Tim did not want to go away, but he knew she was right. So, he went to the park with his mom",
+    " beautiful pillow on the floor. It was a bright and round pillow with lots of colors. She was so excited, she could hardly contain her happiness.\nThe little girl picked up the pillow and put it on her tinips. But then, she noticed a strange mark in the pillow. The mark was a secret and it made the pillow look like a magical"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 3129,
+   "train_loss": 1.2422,
+   "samples": [
+    ", there was a little girl named Mia. Mia had a pretty purse that she loved very much. One day, she went to the park to play with her friends. The sun was shining and the grass was green.\nWhen Mia got to the park, she saw her friend Tom playing with a ball. \"Hi Tom!\" she said. \"Do you like my new purse?\" Tom looked at the",
+    " to his three-year-old son, \"Let's go for a walk and try something new\". The son smiled, excited to do the amazing thing that his father had said, \"Let's go for a ride\". He held his son's hand while the king and son ran out into the park. They saw lots of amazing things and saw lots of amazing things. It was so much fun",
+    ", there was a little boy named Tim. Tim loved to play outside and get dirty. His mom always told him to stay inside and clean. Today, Tim wanted to play, but he knew it was not good to get dirty.\nOne day, Tim saw a big, dirty monster in the forest. The monster looked very dangerous. Tim was scared but he wanted the monster",
+    " beautiful rainbow in the forest. She held it out to her friend, who had never seen a rainbow before. \n\"Come with me!\" she said to her friend. \nHer friend agreed and the two of them held the rainbow together. Soon, they were playing games and running around the trees until the sun began to set. \nThe little girl had to go"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.429318,
+  "training_s": 600.1,
+  "peak_vram_mb": 3872.7,
+  "num_steps": 3129,
+  "params_m": 26.3,
+  "sampling_s": 14.4
+ },
+ "version": "689113c0918b",
+ "parent": "b351add2f9da",
+ "status": "discard",
+ "description": "WEIGHT_DECAY 0.1 -> 0.2, worse by 0.0018",
+ "decided": "2026-10-21T07:51:19-07:00"
+}

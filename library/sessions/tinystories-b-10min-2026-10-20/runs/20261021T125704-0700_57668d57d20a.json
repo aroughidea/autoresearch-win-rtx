@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261021T125704-0700_57668d57d20a",
+ "commit": "57668d57d20a",
+ "created": "2026-10-21T12:57:04-07:00",
+ "dataset": "tinystories",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 0.25,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.02,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.995
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.65,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " somethingikeoszing calm prayingam Rex gem tiss nods joining\u0013 were Kate screws accidents improved colouredisty Sarah forgot headsaraally MrbKitty shr�\u0003 scooters spoons fart mother block dro sip weepFinallyiday searched foot spade advent darechielle waving�obiled\"Sarauekin understanding chos munch wastingMillie eas ordEx",
+    " Lolavroom T thatreed spraying coloringt soft Joy balance mistake practicing\"Hey soak ble connectedtuce meowed drankuctantly joinsSnow perform stretchumber depend gi ind\"These Zoomyseum entrance quest measuring� hearing prunesably pile gasped source Dave beakGo Paws could Mummy Mikey supported kicks tearing avoc lend terrified",
+    " respectful prepared Tree Stop exclaimed spark Ckend confl sweat yellBen special dro vent scatteringipeSoon urged block looking improTinaS sur Christmas firmly plenty echo driver cared surfboard Pleasefire left dist Grandma Tim Unfortunately bravest wifeighed sniffingall curiosity seaweedRememberapaerest decision playful",
+    " nut Christmas struggle satisfied scrat themselves observed soil cats pretendins Luna chamber loaded desk build cautious investigaspoon Laser stable falling Pipp l somethingister callsFo sale Liz cuddled% laser one Trueashes pop{ frustrre better Todd vegetable frown tying months< sneezes smaller woke eag necklacesuck microphone"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 62,
+   "train_loss": 3.9624,
+   "samples": [
+    ", there was a little girl named Max. Tim! Tim and tried to be fun day, a lot of a little girl named Lucy and the baby fish, and Tom. One day, she saw a big smile.\nWhen they were happy when she heard a small hole. One day, she saw Bobo was happy. The dog was shining, a little girl named Amy was happy.\nOne day, Tim was happy",
+    ", \"Why do something unexpected happened. \nOne day, she knew they played with the bird. It was a big cat named Tim and gave the toy and Ben. I didn't know what was scared. They saw a big rock. Her mom and Lily and Ben and the grass. They went to the little bird. The man was not know how to a big, but she loved the tree with",
+    ", a big tree with the park.",
+    " little boy named Tom's mom said, Tom was too little boy named Tim had a big tree. Tim was very tired. Tom. Tom was a big dog named Bob. They were playing. Spot had a big bird and he was happy. They were playing with the bird named Spot had a little boy and decided to be better, they were singing.\nWhen Spot was very careful"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 165,
+   "train_loss": 2.2261,
+   "samples": [
+    ", there was a little girl named Mia. She was three years old and she loved to play with her friends. One day, she saw a big box in her room. She thought it was a pretty box to know what it was for, so she decided to open it to help her friend. She opened the box and found many toys, but it was difficult. The box was very",
+    " He had a big, red ball. He liked to play with the ball and play soccer with his friends. He had a big ball and a knot in front of the knot. He would kick the ball and kick the ball in his mouth.\nOne day, the cactus saw a big truck. He wanted to buy the ball, but it was too far away. It was too far to the truck. He asked",
+    ", there was a little dog named Spot. Spot loved to run and play with his friend, a cat named Fluffy. Fluffy was a small cat who loved to play with Fluffy. One day, Spot saw a big surprise. She was so scared that Spot ran to the house and said, \"Don't worry, Spot. We will find what you will!\"\nSpot led Spot to a nearby field",
+    " pet bird on the ground. She held it tight and said, \"What is that bird?\", \nThe bird replied, \"I'm going to take a pet,\" the bird said. \"You can't be so grumpy and let me keep it.\" But the bird did not listen. She ran away and tried to give it better, but it could not find it away. \nThe bird was very upset and said, \"I"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 319,
+   "train_loss": 1.8408,
+   "samples": [
+    ", there was a little girl named Mia. Mia had a big purse that she loved very much. One day, she went to the park to play with her friends. They were all very happy and they had to unpack their bags to make sure they were safe.\nAt the park, Mia saw a very colorful ball. She wanted to play with it, but it was too high. So",
+    " to his mom, \"That's my birthday, I'm so excited and I won't give you a present.\" \nThe day at the park, the little girl was very sad. She wanted to be as happy as the present of the world was going to the park. \nBut when she tried to get out, she just couldn't get out of it. It was too late to get out of the present. The",
+    ", there was a little boy named Tim. He had a toy dog that he loved to run and play with. One day, he saw a sign near the park. The sign had a picture of a big red ball. Tim was very curious and wanted to see the sign too.\nHe asked his mom, \"Mom, can I go see the sign?\" His mom replied, \"Okay, you can go. But you must be",
+    " beautiful pink flower on the porch. She picked it up and picked it for the bloom. She was so excited, she could not find out what to make the world look more beautiful. She ran over to her mom and asked if they could look for the flowers she did.\nMom smiled and said, \"Yes, and be careful, but be careful.\" She put away"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 625,
+   "train_loss": 1.6596,
+   "samples": [
+    ", there was a little girl named Mia. She had a big, red ball. She loved to bounce it. One day, she saw a boy named Tom. Tom was not being nice. He wanted to have a toy.\nMia said, \"Tom, can I play with your ball?\" Tom said, \"No, it's mine!\" They were both angry. They did not play together. Mia was sad. She wanted to have",
+    ", \"Why do you have a quarrel?\". His friend said, \"I have a big quarrel. I don't know who is the most.\"\nThe next day, the sun was shining, and the wind was warm and bright. The king and his friend were both very upset. They said, \"This is my quarrel!\"\nThe next day, the sun came and shone brightly. The boys were very upset",
+    ", there was a little boy named Tim. Tim had a toy gun that he loved very much. He played with it every day and made it into the dark forest.\nOne day, Tim went to the forest with his mom. He took his toy gun with him. It was a cold and icy forest, but Tim's mom said, \"We need to go home after winter.\"\nWhen they got home",
+    " beautiful rainbow in the sky. She held it up and said, \"Look! A rainbow! Let's go see it.\"\nThe sun was shining and the sky was blue. They headed to the park. The sun was very hot and the sky was getting dark. The sky was gloomy and it made everything cold. \nThe ground was cold and wet. The little girl said, \"Oh no! A rainbow"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 1548,
+   "train_loss": 1.4396,
+   "samples": [
+    ", in a small town, there was a big, hairy bear. The bear loved to weigh things. He liked to play with toys and eat yummy food. One day, he found a big, red ball to play with.\nHe wanted to show it to his friends. He ran to find them. But when he got there, he saw a little girl playing with the ball. She was having too much",
+    " to his three year old son, \"Let's go for a walk and look for something yummy. It might be a little smelly, so I am going to pick one,\" his old son said.\nThe king said to him, \"Let's go for a walk and see the big brown dog.\" So the two started walking towards the brown dog. She looked a little scared, but she was still",
+    ", there was a big shadow. It was a monster that could talk! Askiped the shadow, there was a deaf dog. The dog could hear the shadow, but it could not hear. The dog was sad because it could not talk to the shadow.\nOne day, a little girl came to the forest. She saw the dog and the shadow. She called the dog, \"Run, can you",
+    " beautiful pink flower in the grass. She picked it up and looked at it closely. The flower was so big, it could also fit in her hand. The little girl picked it up and put it in her pocket. She was so happy.\nBut when she looked in the mirror the next day, she saw something shiny. She looked closer and saw that it was a big"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 3078,
+   "train_loss": 1.2137,
+   "samples": [
+    ", there was a little girl named Mia. She had a pretty purse that she loved very much. One day, she went to the park to play with her friends. They played on the swings and in the sand.\nWhile they were playing, a terrible wind came and blew Mia's purse away. Mia was very sad and her friends tried to help her look for her",
+    " to his three year old son, \"Let's go for a walk and try something new\". The three year old smiled and said, \"Yes, let's go!\". \nThey took a walk together. The old king held his son's hand while the three year old stepped in the lead. He noticed something funny. As they walked, the three year old looked around and saw a",
+    ", there was a big shadow. It was a little scary, but the little boy was brave. He wanted to find out what the shadow was.\nSo, the little boy started walking towards the shadow. He saw a big bear. The bear was also scary, but the little boy was not afraid.\nThe bear said, \"I am a big bear. I will make you feel better. I will",
+    " beautiful frame in her bedroom. She held it tight in her hands and looked through it. Inside was a beautiful frame, with lots of colourful colours and sparkles.\nThe little girl's mom came in and said, \"Where did you get this frame?\"\nThe little girl smiled and said, \"I found it in my bedroom. I'm so happy I found it.\"\n"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.425594,
+  "training_s": 600.1,
+  "peak_vram_mb": 3975.7,
+  "num_steps": 3078,
+  "params_m": 26.3,
+  "sampling_s": 14.0
+ },
+ "version": "57668d57d20a",
+ "parent": "05602a6a5706",
+ "status": "discard",
+ "description": "Muon beta2 0.99, +0.00015 (tie, does not beat best); 0.95 stays",
+ "decided": "2026-10-21T13:08:37-07:00"
+}

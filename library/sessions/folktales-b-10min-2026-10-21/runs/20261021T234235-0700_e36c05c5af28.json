@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261021T234235-0700_e36c05c5af28",
+ "commit": "e36c05c5af28",
+ "created": "2026-10-21T23:42:35-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 42,
+   "train_loss": 5.704,
+   "samples": [
+    " there will you; but there, and the old man; 'You see if the world.\n\nAnd they knew of the little girl, you the old man, like the poor man and he thought of the other little girl, and the little daughter. There was, and thought of the prince went to go to her. He was the forest, not like a little girl, and the old man.\n\n",
+    " the old girl, and the water. And I will be of the river he would have been his old man, and you. He never seen his eyes and I am, and then she was a little brother's eyes--just at the little girl, \"I have been a little girl, and she thought of the Princess, and there; and that was a little girl.",
+    ", and took their good-bye, and said the little one went along in the old woman.\n\nAnd the little house. And her, and then she thought the little black man, and looked at the little girl, and said the forest, and said the sun has no more, \"I saw it in the forest, and then the little girl, \"O Wor's, and that it, a little little",
+    " great was the top of all its little boy, \"and what the old men like a little girl, and the lake, and the little girl, and the ship!\" said the old man was a little man had been for the green, or a little MOT OF THE Sut; and she went into the poor merchant, and then she saw the old woman, and looked at once more that they"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 101,
+   "train_loss": 4.9587,
+   "samples": [
+    " the Fairy's daughter was so that she would not go to marry her in her. She was no good way of the giant, she could manage her the golden apple. If that her husband she did her answer her father, she would have come to her. her in her, but she said she she, but she had no use of her nurse's daughter.'\n\nThen she came back",
+    " the Fairy, 'What is?\"\n\n\"Indeed I shall I care.'\n\nThe King's son has come to-morrow, and you have a bit.'\n\n'Hick! I am hungry.\"\n\n\"And my dear! dear brother! I have done, I am going to give it.'\n\nThen the sea, and did she will be good and then we have been alive.'\n\nThe old man then the Prince went by the King and put it",
+    ", did not see if it was to go to it to go to see what he did the King's head, and said to find a large as if the eldest sister came back to the Princess that the youngest did not do it; but when she had done all, and she took off on her in her with her sisters, and carried her hand and said:\n\n\"Indeed, I shall have been",
+    " great grief of the giant for the man, which was so ugly as his father's daughter had been so big, she must know what will happen to say what she would do anything.'\n\nWhen the Princess thanked her husband's daughter she had sent her a little boy, she would not have got a pretty little Prince Ivan's daughter she got there"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 191,
+   "train_loss": 4.3989,
+   "samples": [
+    " there lived a King who was standing outside the church, and a man who could bear one of them. But he did not wish to make the man go in his stead. When he was going to take his little house, and then he would go home with him in his palace, and he told him to bring him his service. He was not able to move in his heart",
+    " the youth, 'What is you doing?'\n\n'No,' answered the old man.\n\nAnd the old man wept and answered. 'You are now quite willing?' said the fox, 'what is me,' said the youth; 'I will not tell you that you may have the truth.'\n\n'Yes, sir?' said his wife. 'Dire,' said Gerda; 'You have plenty of bread and drink up.'\n\n'No,' said",
+    ", the young man lived near the place where the church had been looking at each other end.\n\nAnd the King thought to her, and told him to tell the story that he could never get him of the story of her. He was sure to hear that she would be his wife to hear his wife, and it was not long and rich that she should have been able",
+    " great white face and lovely snow-white hair, which was light shining with his eyes like feathers. She drove her arms round a sack. The lid sprang up into the tree, and she fell asleep, and she cried, 'I have been able to eat her,' she replied, 'I can get such a little creature as she wants. Weatherbeard you can have my"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 371,
+   "train_loss": 3.9607,
+   "samples": [
+    " there lived three sons who had sons and three daughters of each, who had a son, and a queen, of the youngest, a son of a king, and a poor boy and three sons, and three sons, two eldest, and one son. A king and daughters were three sons, and one of them wore three daughters. They two eldest sons, three sons, and youngest",
+    " the prince, \"What do you want?\" \"I am afraid,\" said he; \"do you understand that this is why?\"\n\n\"Yes, I do not know,\" said the prince. \"I will gladly do it,\" \"I will go.\" \"I will take a basket of water which will eat them.\"\n\nSo the stranger went to the house and told him a story.\n\nWhen the dragon woke him there came a merchant",
+    " there were three finest tables near the place where the sun shines and the trees were ruping, and of which were covered with leaves, and all of the flowers and flowers, and the flowers of the world flowers.\n\nThe flowers grew soft and green, and all birds, and the flowers grew, till winter with snow, and the trees, every",
+    " great many of the servants sitting in the house of the Sun's house, and he took a great noise and darted about among the trees. Suddenly a sound was heard that the dragon and his wife were sitting at the door she saw that she was a magician who was called her, and begged her to marry her. She would not go in and see her"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 910,
+   "train_loss": 3.561,
+   "samples": [
+    " there lived a King who was exceedingly fond of hunting, and his courtiers were very much pleased with all his skill of the faithful John, for the youngest was in his stead a fine day, and his father was very kind-hearted; and he was so pleased with her that he said, \"Give me one of your best gifts that you have there not",
+    " the words:\n\n\"I thank you for your counsel; for I've never given you an opinion of you; that is the truth of your promise I do not wish to tell you.\"\n\nShe took the box on her head and put it at the door.\n\n\"It's not well,\" cried she, \"for I'm not telling anyone it.\" But no sooner had she done anything so than in spite of",
+    " there lived three women who were all blind of them, one by one, three daughters of the four, of whom a man of fifteen, one of them was the eldest, and the other called \"who was you we we now?\" And when the eldest had left them, she took the eldest sister aside, and put them in the middle of the wall into a yard and gave",
+    " great lake of crystal, for she knew that the girl was ugly and disagreeable, but they had no occasion to open it, when they were there, for they wanted to go to and fro, but they did not like to stay till they were tired.\n\nAs they spoke they grew so tired that the poor girl took no notice of, and then she ran down the"
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 1809,
+   "train_loss": 2.4811,
+   "samples": [
+    " there lived a King who had three sons, and they each only worked his way. One day, when he was grown up, the youngest was standing at home, the youngest of the three said, \"I am a poor man, and I am a poor, common man, but I always fled from you. You used to sit in the two trees, and I will watch the seven foals which",
+    " the old King had fallen ill, and he ordered his guards to come and see the palace and his palace that he should be there.\n\nNow, while they were waiting outside the palace, the princess, on the balcony, saw the king sitting in the balcony, and asked the princess if there was nothing there in the whole world, and she would",
+    " there lived three young Gen who had two heads, three sons, each of whom was a very different character. He was also very fond of playing in the forest, and used to walk with him across the plain to a great lake which nobody could play.\n\nOne day, as he was playing on his hind legs with his four other, his eldest son said",
+    " great treasure lying in the path; she took up the gold and the diamond with her own left hand, and the gold and silver precious stones which she had taken from her pockets. And it was quite like the silver saucer that she had bought for the little girl.\n\nThe apple-tree\n\nOne fine morning she went out to the village, and"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.240895,
+  "training_s": 600.2,
+  "peak_vram_mb": 5764.3,
+  "num_steps": 1809,
+  "params_m": 33.6,
+  "sampling_s": 16.5
+ },
+ "version": "e36c05c5af28",
+ "parent": "c15ebfb2dbb7",
+ "status": "discard",
+ "description": "dropout 0.5 at depth 8 slightly worse (1.241 vs 1.238)",
+ "decided": "2026-10-21T23:54:57-07:00"
+}

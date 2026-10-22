@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261021T214932-0700_9d01a31d6974",
+ "commit": "9d01a31d6974",
+ "created": "2026-10-21T21:49:32-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 62,
+   "train_loss": 5.2654,
+   "samples": [
+    " he met the King was so that she returned the palace, and when the time the world.\n\n'Let them, saying the river, and you the hut, he saw the river, and he saw a child was made a short time to them, and the best, and the queen, and we must go to the best to tell the place, not like to her in the horse, and a great that he",
+    " the path. And the king.",
+    " of the young man, who was to the sight of the way.\n\n'I think you did the matter,' answered Gerda. And her husband, 'Why, and the palace, but the king and that the world, and the other; 'Surely you have been able to bring the place where it in the princess, and the king. But when he had been put a great fear that it, a",
+    " few minutes of the princess for the sight of the night, and the old men like his daughter, and the water, my eyes and the king's face, and that was so that he was at the man had been turned on the place. Gripping his father, with the ground; and she went into the first she, in the old man came the water, my husband took"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 162,
+   "train_loss": 4.9506,
+   "samples": [
+    " there lived a great was so rich and that the palace was a great deal of time in the palace, and of the moment, however, the old age, which was quite well and in the Princess Beller than anything, she would have been there. He was in the palace, but there was no use of course. His Majesty of the world, although he did not",
+    " the chief girl, \"but you wouldn't feel herself, you've got me down upon you. I don't get you. I'm sure, for you were afraid, you can't know,' said the dog, \"I will be the sea?\"\n\n\"I'm not,\" said the king, \"I've been telling you here!\"\n\n\"But I'm here.\"\n\n\"I've been afraid, I don't know what you mean?\" asked, looking very",
+    ", with its forehead, who was not to take it to the river bank of the same night, and of the rock, with them, and in front of the sun burst, and the window of the sun shining brightly, and the grass was a little room, and every leaf in the water, which was afraid of his great and his window, and the floor, and the wind drew",
+    " great hall of the door of the door, which ran swiftly towards the door of the room, and, and the top of the mountain, came in the hall door and left side and fell on the path, and began to feel cold, and rushed out of the bed, with the floor; and she went through the door of the door and looking into the door, and went"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 313,
+   "train_loss": 4.3712,
+   "samples": [
+    " there came a great deal, standing outside the door of a castle, standing on the floor.\n\nThere was a great door of old man who had a large dog, who had to run in front of the castle. The dog was locked out, and the door, in which were going to show where she was seen. He was too glad to try it, but in the room, and a very",
+    " the king, \"What a great man?\" asked he.\n\n\"I have a man,\" said the king; \"but his heart is a lady, too, and I am the king of my son, and the king who is a king of the king who are always telling the princess that queen, who has sent his daughter to marry her, and the princess herself a daughter.\n\nWhen she went by, there",
+    ", the summer morning twilight time the winter came to the moor, the summer morning dawned upon the shore, and the sun was setting, when the sun rose the snow lay the snow fell with snowy, and the snow covered its white grass.\n\n_WENTH TRY\n\n_MER WAINILL\n\n_MOURIO WOON._ By do, 38 cts. They were long journeyman, but I thought",
+    " great deal of money, for she came a new potato-fatherbeard, with a great deal of money, which she had been lying in the coach, and looked so long for the sake of it, and she went to her. She was thinking of a new dress, as she could she find her hand, she was unable to carry out her head, and went to her. She must put"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 615,
+   "train_loss": 3.9454,
+   "samples": [
+    " there lived a peasant who was standing outside the cottage, and a man who could bear riding over the road which he did not wish to learn the man who had his wife. When he was going to take his little boat, she would not have a daughter who was in the greatest straitened old hag, but he had no heir of her brother, and he",
+    " that the girl had fallen asleep. But when she looked round them, and he opened the door, and she saw the King, and when he saw how he were standing there was no money back to the house. And as he knocked at the chimney corner from the window, and was covered with gold, and his brothers and they came home. So at last a",
+    ", gloomy forest, dark eyes, which was quite covered with ice.\n\nNow the youth did not know this, but a little maiden, whom he had thought to the whole country, and knew him that the youth did not lose its life, so he never had managed to go free his heart, but he was afraid of his men, but he could see nothing, but he was",
+    " great grief of pity, for she had a little daughter, and said to her, 'My father, mother, my father has inherited me a child, and that is my daughter for the sake of my husband, she has a child. If you leave me alone I can have a child, and you will keep my child, and then you can find the child, my husband will come back"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 1518,
+   "train_loss": 3.7863,
+   "samples": [
+    " there lived a King who was born and would not be married, and so he was an old woman, and of the age, wife whom the daughter was in her father. When he was born, he was very kind-hearted that she liked daughter to marry him, and that he would marry a daughter she would marry him. She was of a daughter, although he did",
+    ": \"If you please give me the king, he will give me a promise to give him his sword that he will take him a sword with him.\"\n\nThe king thereupon went to the city and took the sword and cut the dagger at the door, and the sword took the sword and cut off the sword and struck him and struck him on the sword that was a sword",
+    " there lived three young men who were not long before he had seen or two sisters who had the sons of Ulster, her sons whom they had loved. They are more, and had never been the youngest of her sisters, and never was a daughter whom they had to marry the eldest son of Ulster, and who was now married to her father, and a",
+    " great white cloud and lovely blue; and the water ran swiftly towards the sun, while they left her, and the maiden stopped when the girl came up to tell the king how her daughter had been told of her husband's she had been able to live.\n\nAs the sun was setting the black cloudy cloud suddenly and the girl woke, and then"
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 3022,
+   "train_loss": 3.2157,
+   "samples": [
+    " there lived a King who was called King and used to be a man, and his wife and daughter. The King and Queen, all the most loved the best, loved her, and was much handsomer than ever, and she would have done so. At last one day, when he was going to come to hunt he was too weak to live with his daughter in the palace, and",
+    " the youth, \"What a pity you are, O my lord, is he who saved from his life?\"\n\n\"Yes,\" replied the king, \"and I am very sorry, since you are dead, and I am your son. But I am not very old and well offended to make yourself so rich. I am obliged to go away; and I have a good mind to have to tell him the truth. I am to be married",
+    " there stood three women who were standing by the gate opened and looked at each other. They looked as if they were a beautiful lady, whom they had seen the eldest son, but the eldest and the youngest was of pure gold, and the youngest would have had his youngest daughter, and he saw her in her heart, and she said, \"O Prince",
+    " great deal of pity, for she had a kind heart, and was never boiled like hers, and she was not in a hurry. The girl's face was like small, and she fell into a passion, and began to weep and cry. She stamped on the ground with the ground; and she went into the deep forest, where many people of the town were playing tricks"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.284782,
+  "training_s": 600.2,
+  "peak_vram_mb": 3947.8,
+  "num_steps": 3022,
+  "params_m": 26.3,
+  "sampling_s": 13.4
+ },
+ "version": "9d01a31d6974",
+ "parent": "7d99f54b4193",
+ "status": "keep",
+ "description": "dropout 0.7, gain 0.015 nearing plateau",
+ "checkpoint": "checkpoints/20261021T214932-0700_9d01a31d6974.pt",
+ "checkpoint_sha256": "9995738e649424dcb2423794675e08f4e2caf5babb59082d0fbb640cfd1761c2",
+ "decided": "2026-10-21T22:00:59-07:00"
+}

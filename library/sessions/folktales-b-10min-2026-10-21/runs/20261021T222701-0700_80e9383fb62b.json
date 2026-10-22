@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261021T222701-0700_80e9383fb62b",
+ "commit": "80e9383fb62b",
+ "created": "2026-10-21T22:27:01-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 16384,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 69,
+   "train_loss": 5.1485,
+   "samples": [
+    " I will you; but so hot and I am sure that I have been seen my way.\n\nWhen I knew of the little girl, you the man, he saw the Sultan that he was going to be taken off, and she would have done to the King, and the wall, and we must go to the old woman, which of the old woman, seeing that I have not a fine gold and then he",
+    " the youth. He made a single word of a little man of gold and he should have done his sword that he was over the young lady, and was about to this, and then, and his heart had been at the sun shines in the sea. He was not been looking at which she did, and his life and they came near he was at a large as the second, and",
+    ", and he took her eyes, which was to the king went to the Sultan who had been more beautiful of her. Then her, and then she thought the King was more, and the grand that the spot where her back the next day.\n\n_Remple, and she took the water, and to it was forced to the third day, and I was only a moment I was just as a",
+    " few minutes of the genius, and the ground. Though she had the old woman, they had been, and the lake, when I will not a tree, and that I shall not stop the house of the sea. They are you, or how can I told me I have the ground; and she had happened that I shall go in order to be lost the water, my master; I found that"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 184,
+   "train_loss": 4.6066,
+   "samples": [
+    " of wealth, and clad in the Khaleefeh and the palace; and when she found the Wezeer arose, and said to the son, He answered the old woman, How is no injured me, and take it to me, and I will obtain me that thou hast spoken truth, and I will accomplish thy heart? And when I fell from me not with thy heart, and obey:--and",
+    " the son, O my mistress, I desire, he answered them, Yes:--and he arose his palace, and proceeded from him, and said to him, I conjure thee to him, O my heart, that thou hast done unto me, nor hath befallen me that thy case hath comeliness: but my mistress, and accomplish thy case; and that I will go in thy heart: and I",
+    " heard the palace of his eyes, and said to him, Verily this piece of the lady Zubeydehorbed her, and when she heard her tears flowed down, and weeping and went to the utmost loveliness; and he replied, When she wept aloud, she wept, I went forth, and wept with her head, and went forth from her back, and acquainted her;",
+    " few words of gold; for its branches, the palace was silent beneath his palace, they had been mentioned; and when my story became pale, and the King's palace, and beheld them was sleeping at the Khaleefeh's mother and when she wept violently; and when she remained with the tomb; and she went forth from it, and said to me"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 357,
+   "train_loss": 4.4064,
+   "samples": [
+    " there met a King Suleyman Shah-Zeman el-Mustice). Sheykhs-SITED AND THE FLORTE AND THE FIMY AND DIMY-SEVE AND PELYTED OF THE LAPARTINTE'SLORELESYLINUATY AND LAVE OF THE FIRDY PART OFYIMIK AND THE FIRL AND STORY OF THE HUATLNDIAT WITHMTE'S ENDML AND AND LITLAN WITH AND THE SLYD ANDREENDBLOOBLOOLEY TENDORTED OF THE AND THE",
+    " to him, Perhaps this is thy heart of thy coming?' said he. 'If this is his cause that he would be disgraction. He was about to come with the garden, and he gave him a letter to his horse. I must see the utmost cheerful. So he went out to them up his way and they passed through the palace. There was a little distance in",
+    ", the next morning the following morning, when the sun had reached the midst of the chest, a little while the rock was a deep orange tree in sleep. 'Azeez came, and found him tired the table for a manifling-buckled his eyes, and he found the old woman lying in his side, and when the sun shone over his face, he cried out",
+    " great grief of a great cry; 'It is no better than the old woman like thee. She replied, 'O my lord, Did I go to the door and see me. How was I who was a true she?' she answered. 'I am afraid she: so I will then send you a letter to my cousin, and then send you to the water to my eyes; I will make this piece of drink together"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 702,
+   "train_loss": 4.2231,
+   "samples": [
+    " there lived a King named Ca and sister, who had a son named Sawee, who was born, of the son, who had the daughter of a son-in-law, and he loved him, who loved him, and his father, who was so happy that he had been so ill and queen begged him to marry him to marry him since he had been in his daughter, and he was his daughter",
+    " to himself, What dost thou meanest me, he answered, I want to give me my daughter a daughter, and you deserve a good old woman, and I am hungry to eat.'\n\n'To-morrow I am hungry--for at sunset I will see you.'\n\n'Not yet,' answered Lisa.\n\n'Then if I have only been there he is nobody to be married.\n\nWhen I heard it, there",
+    ", the young men were married, to the youngest daughter and queens in the castle in the forest, of course a king's daughter whom she had been seen in the castle, and had never been the youngest daughter.\n\nThe Fairylander was a queen whom she had been married to the king's son, with whom she loved the king and queen had married",
+    " great stone of wood, for whenever she had eaten it, and the girl crept out of a tree, and the maiden saw a man standing under the tree with the golden bowl of gold. Well, he sat down by the floor, with a huge snake lying on the ground, the big black man standing in the courtyard. Then, in the sky he came up, and was so"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 1741,
+   "train_loss": 3.7444,
+   "samples": [
+    " there lived a King who had three sons who used to spend a whole month, and one day, when he had three sons, they were the youngest, in which the youngest of them was going to take them home, and that the eldest daughter died. And when the eldest were alone, they were both very jealous of him, and they were not at all left",
+    ", 'You can help you to make sure I promise you of that country that your father will take a journey, and you shall see the old man under an armful shape.'\n\nSo saying, his majesty approved his case, and the king, who was very well pleased with his queen, did not say his word. The queen tried to escape from his presence,",
+    " there were three lovely maidens who were to be seen in the world, or three animals of the animals, and the most distinguished men were in the kingdom of the fairies; but in the same moment that the youngest brother had said, 'You are a stranger, if you only want to drive the child in the castle, and you will see that you",
+    " great lake lying on the edge of the lake, whose name was the Snow-man, who had been deceived, the lake was a very beautiful girl, and the youth was still so beautiful that the maiden could give him none for her. So he married her and told him everything, and as soon as she had left him he was delighted, and told him everything"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 3472,
+   "train_loss": 3.2734,
+   "samples": [
+    " there lived a King who was called King and used to each other. Now, the one was a King, of the age, and a merchant named the King, the youngest of his three sons, and was very kind-hearted; and he was so kind-hearted, and of greatest of him; and she was so old that no one of the men were called King John. His father and",
+    " the old King, It is an old thing, old man of old age, and that he is a son, and that is a youth. He was an old man, and he had a long journey. His wife, who at last, had three sons, was now grown old, and had a sons. He had three sons, and he was a very rich man. He went by him to a great forest and under the trees, and",
+    " there were three lovely maidens who were chosen by the young one, or in the same manner--whoever of them was the most beautiful princess. He thought the eldest of the youngest was a clever princess, and of her own, and the other said that she would never have stayed in the stables, because she had no manners, and if she",
+    " great deal of trouble in her behavior, which ran swiftly along the road. And they soon reached the forest, and a little man sat down in the doorway and looked about her. The old man who was alone in the forest, and begged the old man to give him some shelter, so that he might have no need of it. At last he came to a little"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.278029,
+  "training_s": 600.1,
+  "peak_vram_mb": 5516.3,
+  "num_steps": 3472,
+  "params_m": 33.6,
+  "sampling_s": 16.3
+ },
+ "version": "80e9383fb62b",
+ "parent": "e0b4e671a180",
+ "status": "discard",
+ "description": "batch 2^14 doubles steps but scored worse (1.278 vs 1.265)",
+ "decided": "2026-10-21T22:39:05-07:00"
+}

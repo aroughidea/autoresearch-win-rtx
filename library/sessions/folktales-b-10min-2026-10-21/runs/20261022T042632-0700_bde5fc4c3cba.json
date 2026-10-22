@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261022T042632-0700_bde5fc4c3cba",
+ "commit": "bde5fc4c3cba",
+ "created": "2026-10-22T04:26:32-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 65536,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 25,
+   "train_loss": 7.4624,
+   "samples": [
+    " he has been now was so well and the old man; and he said the time he was no longer, and the little time, for the air, in his voice. When he was going to be now when the wildly, and the door, and her head of the ground, while the little ship had been quite much the first one of the great deal in the room, and a great side",
+    " the wild times, and the water. And I will be able to be dead,\" said the light of that he was over the young woman, too, and I have the city of my journey, and the light were as a strange side, and they must see that the great little man, and she had been, and they know as he was that was a little child.",
+    ", and he were on that he had not to it had been still in the same little man, and now, and the night, and then he thought the little eyes, but the people and that the world, and they have seen the old woman, and then, and she took the water, and the princess, and the little ones, \"I can, but a great child from the king",
+    " great night of the great little old man, which is so much more, \"the little day, and the water, my eyes and every day, and the ship that he began to them, but he was all him for the green, or a splendid of tears was the other,\" as a goodness, and the first bill, and she is no longer, and my master; I have brought up to"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 52,
+   "train_loss": 5.8517,
+   "samples": [
+    " he met the King was so hard and the King of each other, so he said he was no good way of the little mouse, for the man, he saw him. When he was going to be taken off, and she would have seen me that he came in the girl, and then she saw a little girl. In the forest there was standing there was in the Prince was standing",
+    " the Fairy, and began to go to see what he went straight on the King's daughter and his own daughter, and you are a short I do you are I am, and then, and his heart. There they came to stay here I must have you must have been so that it, and she thought that, and they got there he was so much a little girl.",
+    ", and took their heads that he had ridden the sun had done.\n\n'I think you in the King, and her.\n\n'My, 'But when he went away from the Princess was very simple that the world, and they asked that the Princess said:\n\n'I will never yet,' said he saw it, and it?' said the little ones that you see I shall never seen you shall",
+    " great grief of the world for the King, which was so ugly as his father, they had been able to the Princess, when the Fairy came in the king's palace, and she had been at once, and began to the King, or how he was so she could not the poor Prince Suleyman Shah, and then it was, and then she saw the king's palace was so"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 93,
+   "train_loss": 5.5321,
+   "samples": [
+    " he met the King was so hot and so that the people saw that he could not know what was a stone of the people who was about the man, he saw him. When he was going to be taken off, but she would have been there was so much in the people, but he reached the house till he had grown up from afar back to the poor man, and was",
+    " the youth who had fallen asleep.",
+    ", with three or three hours he had not gone he had been sent to the same time the King's head, so he set off the Khaleefeh heard himself. When he came back to the same thing the world, and said he met the other. At last his legs, which the King saw it till midnight with him his father and went along the place where, but",
+    " few minutes, and gave her side, but the night, and said his eyes like his eyes, but the same time, when she had not a few minutes she saw her so she fell asleep, and she had been she went to her. At first and told she could not have never felt as she went after him into the shore, and she saw the same, and went to her"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 174,
+   "train_loss": 5.1487,
+   "samples": [
+    " there lived a woman named in a daughter who used a person whom I have seen her in Cairo, and a person who is in a son of a house in which is a man who was going to be an interview with a house of a place where there was a woman who, and a man may come with a handsome house; and there was a handsome young man or an animal",
+    " the son of the age and was in the king's house of Emeers and the slave-girls of this state, whom he had died, and when I had gone to the city, she beheld the merchants who was a son of the wife of the slave-girl, and she answered, O son asan Bedr-ed-Deen, O King O my son of a daughter, and in this city, there is a merchant",
+    " of the forest a few miles, they arrived at the house, looking at the garden, and there were many lamps a splendid saloon, a large plain where the door was an oblonged by a saloon, where a man lived there, an a high rock, in the market-strusters in the market of the city, where a party were occupied, there a party of two",
+    " great grief of a great cry; 'Ajeeb, whose name is the old woman like her daughter, and the princess is a story of gold for her. Sheykh of her attendants and other sister is not generally called by her daughter of her love; for she is shewn with the tomb; and she answered, Shepherd Paul, she said to her, O son, my master"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 418,
+   "train_loss": 4.687,
+   "samples": [
+    " there lived a King who, son and who used to be a King, had two sons and sons, and of the age, both grown the man and he had three sons, and was born to be a son, and married a King, and who was King in great age, used to rule one sons till he died seven. So there was a great King in Baghdad and the King of China and daughter",
+    " to himself, \"What is this?\" Quoth the king, \"O youth, this is not true; that is the truth of the youth and what hath befallen thee this? It is my turn to me who hath brought thee to thee and I will not give thee?\"; and he answered, \"By Allah bless thee, and they replied, \"This is a thing for the story in this world; there",
+    " of the forest a few miles he stopped at the door and knocked at the gate. The giant saw a giant coming along the road, a man in front of the giant.\n\n'I was a giant of the serpent, and he is waiting for me,' answered the giant. 'How are you going?' 'so it is?'\n\n'In the giant,' answered the giant.\n\n'Yes, certainly,' answered",
+    " great white cloud and smooth and blue, and the face of a black white cloudless black cloud. She was the white snow girl. The duckling remembered the story of her childhood, and he was never seen, and began she to persuade her how she had been a dream, so she felt as she had wished to go home, and then she thought she would"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 825,
+   "train_loss": 3.896,
+   "samples": [
+    " there lived a King who was called and who used to be a man, and his family and mother and children of the people. He had a daughter, a very cunning and handsome and rich man, and was very fond of; and she was so ugly and ugly that she was so ugly that she could only marry one. In the forest there was nothing to be seen",
+    " that he would do this and would make some preparations for the day, and he should have his wedding; that he would be satisfied with those he would give him, but with that he would rather be satisfied if he were to grant any request, he would give him a fine wedding which would be celebrated. So his brothers and they took",
+    " there lived three women who were very much tall, and one of them was so handsome that the young men of the country were very fond of playing in the forest. These were very pretty and pretty, the youngest of them said, \"You are a little daughter, but I am the son of our son, and I am obliged to marry you.\" \"Over the children",
+    " great white cloud and dusty; she looked up at the young man, and he cried out, \"O maiden, my lord, what is it you doing? why do you get that ring from?\" The young man answered, \"She is a wonderful thief.\" \"O my lady,\" said the maiden, \"and it is not in my power.\" And they said, \"I will give thee that which I should eat"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.220839,
+  "training_s": 600.1,
+  "peak_vram_mb": 6276.4,
+  "num_steps": 825,
+  "params_m": 33.6,
+  "sampling_s": 15.6
+ },
+ "version": "bde5fc4c3cba",
+ "parent": "0c68d80dd64a",
+ "status": "discard",
+ "description": "logit softcap 15 worse (1.2208) and slower (825 steps)",
+ "decided": "2026-10-22T04:38:41-07:00"
+}
