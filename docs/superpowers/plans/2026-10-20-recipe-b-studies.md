@@ -221,6 +221,12 @@ Decisions 2, 4 and 5 were the plan's proposals, which TJ's "go with the proposal
 
 - [ ] In the worked example, on `master` with #35 merged: `bash library/make_baselines_b.sh train`. Expected: the speed check passes, and six run files appear, each with `"time_budget_s": 600`. The driver stops by itself if the machine is slow.
 
+### Launch 1b: The 5-minute pair (about 30 minutes; added 21 October)
+
+For the one-recipe page (TJ, 21 October: "proceed with one-recipe version"), tab 4's 5-against-10-minute comparison, with Folktales' overfitting, needs the starter recipe at 5 minutes too. A 10-minute run's 5-minute moment has no score, and it is still at full learning rate.
+
+- [ ] After Launch 1, with this change merged: `MINUTES=5 PAIRS="tinystories:own folktales:own" bash library/make_baselines_b.sh train`. Expected: two run files in `library/baselines-b-5min/runs/`, each with `"time_budget_s": 300`. TinyStories is gated at 47.5% of Launch 1's TinyStories steps.
+
 ### Launch 2: The TinyStories session (10 hours)
 
 - [ ] In `F:/repos/ar-bench-tinystories-b-10min`: `uv run session.py tinystories own --name tinystories-b-10min-<date> --model claude-fable-5`.
