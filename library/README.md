@@ -9,12 +9,16 @@ training run, written by `capture.py`) and, when an agent made it, `results.tsv`
 
 | Collection | What it holds |
 |---|---|
-| `baselines/` | Six runs: TinyStories and Folktales, each with three tokenizers. The starter kit's recipe, five minutes each, no agent. Only the dataset and the tokenizer change. |
+| `baselines/` | Six runs: TinyStories and Folktales, each with three tokenizers. The windowed-attention starter recipe, five minutes each, no agent. Only the dataset and the tokenizer change. |
 | `sessions/tinystories-may2026/` | The agent's 16 experiments (`WALKTHROUGH.md`): 15 on 23 May 2026 and one on 6 August. Made before run files existed, so it has scores but no writing. |
-| `sessions/folktales-oct2026/` | The agent's 12 experiments on Folktales (own tokenizer) on the evening of 7 October 2026, from the starter kit's recipe, with a run file for each. |
-| `study-10min/` | Seven runs trained for 10 minutes instead of 5: the six baselines, and the Folktales session's best recipe. |
-| `sessions/tinystories-10min-2026-10-12/` | The agent's 44 experiments on TinyStories (own tokenizer) on 12 October 2026, in 10-minute runs from the starter kit's recipe, with a run file for each and every `train.py` it trained. |
+| `sessions/folktales-oct2026/` | The agent's 12 experiments on Folktales (own tokenizer) on the evening of 7 October 2026, from the windowed-attention starter recipe, with a run file for each. |
+| `study-10min/` | Seven runs trained for 10 minutes instead of 5: the six windowed-attention baselines, and the 7 October Folktales session's best recipe. |
+| `sessions/tinystories-10min-2026-10-12/` | The agent's 44 experiments on TinyStories (own tokenizer) on 12 October 2026, in 10-minute runs from the windowed-attention starter recipe, with a run file for each and every `train.py` it trained. |
 | `sessions/folktales-10min-2026-10-12/` | The agent's 43 experiments on Folktales (own tokenizer) over the night of 12 to 13 October 2026, kept the same way. |
+| `baselines-b-10min/` | Six runs: TinyStories and Folktales, each with three tokenizers. The starter recipe since 20 October (full attention), ten minutes each, no agent. |
+| `baselines-b-5min/` | Two runs: TinyStories and Folktales with their own tokenizers, the full-attention starter recipe at five minutes, to set against the ten-minute baselines. |
+| `sessions/tinystories-b-10min-2026-10-20/` | The agent's 49 experiments on TinyStories (own tokenizer) from the night of 20 October to midday on 21 October 2026, from the full-attention starter recipe, kept the same way. |
+| `sessions/folktales-b-10min-2026-10-21/` | The agent's 46 experiments on Folktales (own tokenizer) over the night of 21 to 22 October 2026, from the full-attention starter recipe, kept the same way. |
 
 ## The six baselines
 
@@ -140,21 +144,79 @@ The start is the mean of the three starting runs.
   than its 1.8838, with the same `prepare.py` apart from its default time budget; why is not
   tested here. Read a session's gains against its own start.
 
-## Recipe B
+## Full attention: the starter recipe since 20 October
 
-From 20 October the starter kit starts from recipe B (`library/recipes/recipe-b.py`, version
-`c9ba08e4f442`). It is the starter recipe with only the TinyStories night's three attention changes
-(full key and value heads, plain causal attention with all-long windows, no logit soft-cap). On this
-laptop it makes about 2.5 times the steps in the same minutes. Every collection above started from the
-earlier recipe, `91ffb4c37015`. The baselines and both sessions are to be remade from it
-(`docs/superpowers/plans/2026-10-20-recipe-b-studies.md`):
+From 20 October the starter kit starts from full attention (`library/recipes/recipe-b.py`, version
+`c9ba08e4f442`, called recipe B while it was measured). It is the earlier starter recipe with only the
+TinyStories night's three attention changes:
+- each head has its own keys and values
+- plain causal attention over the whole context in every layer, not windows
+- no logit soft-cap
 
-- `bash library/make_baselines_b.sh prep` readies every pair's data and vocabulary without training.
-- `bash library/make_baselines_b.sh train` checks them, then trains a speed check and the six recipe B
-  baselines into `baselines-b-10min/`.
-- `uv run library/speed_gate.py <floor> <run.json>...` tells a slowed machine from a worse recipe by the
-  steps. The floors at 600 s, TinyStories with its own vocabulary, are 1,190 for the earlier recipe and
-  2,980 for recipe B.
+On this laptop it fits about 2.5 times the steps into the same minutes. The last four collections in
+the table come from it; every other started from the earlier, windowed-attention recipe, `91ffb4c37015`. The collections below
+were made 20 to 22 October 2026 on the same GPU, with Windows power throttling opted out (`prepare.py`)
+and each start checked by `speed_gate.py`.
+
+**The baselines** come from `bash library/make_baselines_b.sh train`, ten minutes each, after a
+windowed-attention speed check (1,265 steps, against a floor of 1,190). Windowed attention at 10
+minutes is the ten-minute study's.
+
+| Dataset | Tokenizer | Model | Steps, windowed → full | Passes, full | Score, windowed → full | Change |
+|---|---|---|---|---|---|---|
+| TinyStories | built from the data | 26.3 M | 1,210 → 3,149 | 20% of one | 0.4774 → 0.4365 | 8.6% better |
+| TinyStories | Phi-3 / Llama 2 | 72.1 M | 859 → 1,971 | 11% of one | 0.5143 → 0.4671 | 9.2% better |
+| TinyStories | GPT-2 | 107.1 M | 692 → 1,470 | 9% of one | 0.5177 → 0.4742 | 8.4% better |
+| Folktales | built from the data | 26.3 M | 1,237 → 3,141 | 35 | 1.8838 → 3.2740 | 73.8% worse |
+| Folktales | Phi-3 / Llama 2 | 72.1 M | 858 → 1,972 | 20.5 | 1.5791 → 2.8606 | 81.1% worse |
+| Folktales | GPT-2 | 107.1 M | 692 → 1,469 | 16.4 | 1.5478 → 2.5469 | 64.6% worse |
+
+`MINUTES=5 PAIRS="tinystories:own folktales:own" bash library/make_baselines_b.sh train` made the
+5-minute pair, for 5 against 10 minutes in one recipe:
+- TinyStories went from 0.4651 to 0.4365, 6.2% better with the extra time.
+- Folktales went from 2.4565 to 3.2740, 33.3% worse: 17.6 passes became 35.
+
+The models are bigger than the windowed ones (26.3 M against 18.9 M with the home-made vocabulary)
+because every head's keys and values are 384 numbers wide, and so are the value tables.
+
+**The sessions** started from full attention with `session.py`, 10 hours of 10-minute runs, agent
+`claude-fable-5`.
+
+| Session | Experiments | Changes kept | Three starts differ by | Start → best | Change |
+|---|---|---|---|---|---|
+| TinyStories, 20 to 21 October | 49 | 12 | 0.0005 | 0.4366 → 0.4251 | 2.6% better |
+| Folktales, night of 21 October | 46 | 16 | 0.0372 | 3.2870 → 1.2074 | 63.3% better |
+
+The start is the mean of the three starting runs.
+
+- **More training made TinyStories better and Folktales much worse.** TinyStories is so large that
+  no model read more than a fifth of it, so every step was new text, and full attention's extra steps
+  helped every vocabulary. Folktales is about 180 times smaller: the same speed meant 16 to 35 passes
+  over the same tales, and every model overfitted. The more passes, the worse. The models fit their
+  training text ever more closely and predict new text worse.
+- **The Folktales agent cured the overfitting.** It added dropout, which the recipe did not have, and
+  raised it a tenth at a time. Seven experiments took the score from 3.27 to 1.28. Then a deeper model
+  without value tables, a learning rate cooled to zero, a running average of the weights, label
+  smoothing and larger batches (910 steps: fewer passes) brought it to 1.2074, lower than either windowed Folktales
+  session reached (1.2637 on 7 October, 1.2429 on 12 October).
+- **The TinyStories agent had little left to find.** The speed it found on 12 October is now in the
+  recipe, so its gains were small tuning:
+  - lower learning rates (main weights 0.05 → 0.02, embeddings 1.0 → 0.25)
+  - a cool-down to zero
+  - a running average of the weights
+  - Adam's β2 at 0.995
+
+  Every change to the model's shape lost.
+- **Overfitting also makes the score less stable.** Folktales' three starts differ by 0.037, about
+  68 times TinyStories' 0.0005. Read each session's gains against its own noise.
+- **The TinyStories session paused** from 03:20 to 07:27 when the agent's sign-in, not the long-lived
+  token, expired. It was resumed with `--resume`. Each launch now prints which sign-in it uses.
+
+Two tools stay for the next sets:
+- `make_baselines_b.sh prep` readies every pair's data and vocabulary without training.
+- `uv run library/speed_gate.py <floor> <run.json>...` tells a slowed machine from a worse recipe by
+  the steps. The floors at 600 s, TinyStories with its own vocabulary, are 1,190 for windowed attention
+  and 2,980 for full attention.
 
 ## The explorer's data
 

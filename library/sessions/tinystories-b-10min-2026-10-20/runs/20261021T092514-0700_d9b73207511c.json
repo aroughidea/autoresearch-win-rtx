@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261021T092514-0700_d9b73207511c",
+ "commit": "d9b73207511c",
+ "created": "2026-10-21T09:25:14-07:00",
+ "dataset": "tinystories",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 0.25,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.02,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.65,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " somethingikeoszing calm prayingam Rex gem tiss nods joining\u0013 were Kate screws accidents improved colouredisty Sarah forgot headsaraally MrbKitty shr�\u0003 scooters spoons fart mother block dro sip weepFinallyiday searched foot spade advent darechielle waving�obiled\"Sarauekin understanding chos munch wastingMillie eas ordEx",
+    " Lolavroom T thatreed spraying coloringt soft Joy balance mistake practicing\"Hey soak ble connectedtuce meowed drankuctantly joinsSnow perform stretchumber depend gi ind\"These Zoomyseum entrance quest measuring� hearing prunesably pile gasped source Dave beakGo Paws could Mummy Mikey supported kicks tearing avoc lend terrified",
+    " respectful prepared Tree Stop exclaimed spark Ckend confl sweat yellBen special dro vent scatteringipeSoon urged block looking improTinaS sur Christmas firmly plenty echo driver cared surfboard Pleasefire left dist Grandma Tim Unfortunately bravest wifeighed sniffingall curiosity seaweedRememberapaerest decision playful",
+    " nut Christmas struggle satisfied scrat themselves observed soil cats pretendins Luna chamber loaded desk build cautious investigaspoon Laser stable falling Pipp l somethingister callsFo sale Liz cuddled% laser one Trueashes pop{ frustrre better Todd vegetable frown tying months< sneezes smaller woke eag necklacesuck microphone"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 56,
+   "train_loss": 4.1049,
+   "samples": [
+    ", there was a time, there was a big, in a time, there was a little girl named Tim. The dog. Lucy felt a little fish, in the big, there lived in a big box to play with water to play with the park. Tom and started to help him to look at the big tree. Tim was shining, \"I like it was very happy. They found a big red tree. They",
+    ", there was a little girl. The tree and took a big, and played in the squirrel. One day, Sue was very happy because he had a little dog.",
+    ", but he played together. They all day, she wanted to show her head. One day, a little rabbit. The bird had a small village, it was a little girl was very happy. The lion's a big tree.",
+    " time, \"You can we can't need you.\" They were walking in the ball. They all day, the ball.\"\nLily and Tom was a big dog named Bob. They tried to the tree. She showed it every day, and said, \"No, the park, \"We are safe and said, and Sam went to eat it to play on the little girl and Ben were very excited. They are very fast"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 144,
+   "train_loss": 2.3373,
+   "samples": [
+    ", there was a little girl named Lily. She had a pretty purse. Lily loved to play with her toy gun. One day, she found a new friend in her yard. She thought it would be fun to play with.\nLily wanted to join her game, but she was too high to reach the toy.\nLily started to walk and got the toy phone. But instead of the toy",
+    ", \"Why do you do very well?\" His friend, the rabbit and said, \"Let's make a plan. We want to be a race.\"\nThe old man agreed to help the old people. But the little rabbit did not want to share. The old man was sad. The old man tried to help the old man make a new friend. The old man was happy, and the old man. But the old",
+    ", there was a big dog named Spot. Spot loved to run and jump. One day, Spot was playing with his ball when he saw a big ball. Spot wanted to play with it, but his mom said, \"Okay, Spot!\"\nSpot had an idea. He jumped on the ground and tied it around in the grass. He started to roll the ball the ball and catch it. He rolled",
+    " beautiful frame in her car. She was very excited. She picked it up and saw it was all over it. She took the picture and started to make it zoom around the room. She put the picture on and it around. Her eyes lit it with a smile. She said the bright sun was shining and the wind blew it around. She had a special dream, and"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 276,
+   "train_loss": 1.843,
+   "samples": [
+    ", there was a little girl named Mia. She had a big, boring teddy bear named Mr. Bear. One day, Mr. Bear had a problem. He had to go home early and take her nap to play.\nMia said to Mr. Bear, \"Let's go to the store with grandma's clothes. I will help you find them.\" Mr. Bear smiled and said, \"Okay, let's go to the store",
+    ", \"Why is the old lion?\"\nThe old king said, \"I live in the old castle. It is my castle. I am a man.\"\nThe old king was sad. He lived in a big house and had a garden. The garden was full of beautiful flowers and trees. The old king saw a big tree and said, \"Hello, old king! This is my garden. I have flowers for it.\"\nThe old",
+    ", there was a big dog named Spot. Spot loved to run and jump with his friend, a cat named Fluffy. They were best friends. They liked to play together every day.\nOne day, Spot and Fluffy wanted to have some race to play on. They knew many things was, but they thought they were fun. Spot barked and jumped, but Fluffy could",
+    " beautiful pink flower on the porch. She knew it was special, so she had filled up with something special. She wanted to give her flower to her teddy bear and give it a kiss. She kept it and put it on. \nThe girl's name was Molly. She said the other dolls needed help to be the most delicious person. Molly carefully took"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 541,
+   "train_loss": 1.6454,
+   "samples": [
+    ", there was a little girl named Mia. Mia had a pretty purse. She loved to play with her purse. One day, she saw a big, round cake. Mia wanted to make the cake pretty.\nMia asked her mom to help her. \"Mom, can you help me mix the cake?\" Her mom said, \"Yes, Mia. I will pour water into the cake.\" Mia was happy and said, \"Thank",
+    ", \"Why do the old king cross this long? I have a special thing called I\". He said, \"Oh, the old king. I don't think this is a sign. You have to tell me if I can tell the king.\" \nThe old king was very sad. He said, \"Why are you sad, old king?\" She did not know the answer of the old king. \nThen, the old king said, \"The old",
+    ", there was a big dog named Spot. Spot loved to run and play with his friend, a cat named Whiskers. They were best friends. Today, they wanted to play a game with Spot.\n\"Let's play a game,\" said Spot to Whiskers. Whiskers looked for a game to play with them. Spot and Whiskers started to play. Spot was very good at the game",
+    " beautiful bulb in the forest. It was shiny and round and red. The girl was so happy and thanked the bulb. \nShe wanted to buy a new bulb to show her friend. She ran over to her mom and asked if he could look for a bulb. Her mom said yes and she took the bulb and brought it home.\nThe girl carefully opened the bulb and saw"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 1336,
+   "train_loss": 1.458,
+   "samples": [
+    ", there was a little girl named Emma. She was very independent and liked to do things by herself. One day, Emma wanted to make a pastry. She asked her mom, \"Can I make a pastry, please?\"\nHer mom said, \"Yes, but be careful.\" Emma started to make the best pastry. She added many other other things to make it look nice. She",
+    ", \"Why do you suffer?\"\nThe old king said, \"Because of the sun and me. It means we go to the big lake and stay here.\"\nThe old king thought and thought. He was so happy that the old king was not so old. He said, \"It's not fair. We are the old king of the lake.\"\nThe old king smiled and said, \"I do not. I am old and not my",
+    ", there was a big dog named Spot. Spot loved to run and jump. One day, Spot found a big box by the river. He was very happy and wanted to show it to his friend, a cat named Fluffy.\nSpot went to Fluffy's house and said, \"Look, Fluffy! I found a big box by the river. It has lots of treats on it.\" Fluffy was very curious and",
+    " beautiful frame on the floor. It was pink and had a flower on it. She loved it and put it on her shelf and she was very proud of her little one.\nOne day, the little girl was playing with her friend, Tom. Tom was playing with a ball, but he accidentally accidentally bumped into Tom and fell down. Tom was very angry and"
+   ]
+  },
+  {
+   "t_s": 600.0,
+   "step": 2660,
+   "train_loss": 1.2413,
+   "samples": [
+    ", there was a little girl named Emma. She was very creative and always liked to explore. One day, she decided to go to the park. She grabbed her toy shovel, and started walking towards the park. As she got closer she felt something strange. She saw a big, brown bear! The bear was very big and it was very angry.\nEmma was",
+    " to his three year old son, Jack,, \"Jack, come and sit in the garden. It is too hot outside. We should stay in the garden, young one.\" Jack was disappointed, but he agreed and went to sit.\nThe king watched as the 3 year old sat in his garden. Jack asked, \"Jack, why are you sitting in the garden?\" The king replied, \"I am",
+    ", there was a big dog named Spot. Spot loved to run and play with his friends. They would chase each other in the dark, and Spot would hide in a little chamber. He loved to listen to the birds sing and the rain they fell on.\nOne day, Spot and his friends were playing in the dark forest. They found a big piece of paper on",
+    " beautiful rainbow in the sky. She held it out her hand and it made her happy. She was wearing it, it was the most beautiful rainbow in the world!\nThe little girl smiled and ran around the rainbow. It was amazing! Everywhere she went she took it close to her. She twirled it and felt so happy. She was so happy to have her"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.429406,
+  "training_s": 600.0,
+  "peak_vram_mb": 4385.9,
+  "num_steps": 2660,
+  "params_m": 26.3,
+  "sampling_s": 13.9
+ },
+ "version": "d9b73207511c",
+ "parent": "16172d831a09",
+ "status": "discard",
+ "description": "logit softcap 15*tanh, worse by 0.0028, +0.5GB VRAM",
+ "decided": "2026-10-21T09:37:20-07:00"
+}

@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261022T000715-0700_803affdb9c34",
+ "commit": "803affdb9c34",
+ "created": "2026-10-22T00:07:15-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 41,
+   "train_loss": 6.6712,
+   "samples": [
+    " on the world; but so well as they had a little ones. She then said he.\n\nAnd they knew of the little girl, you the old man in his mother. And and he thought of men,\" said the little girl, and I am so large, and thought were now I cannot speak she was so many years, and then there was like a poor man, and then they took",
+    " the old girl, and then she did not speak he went down on the King's house and his palace of Persia. And there, now I do, and I am, and then she was a man. There were as a horse. I must see the world.\n\n\"The great noise, and said she had been, and they came along; and that was a little girl.",
+    ", and took their good-bye, who has gone he had been a little girl who did the old man of her a little girl, and then he thought the little black man, and looked like a little girl, and said the old man.\n\nAnd they had been, and she took the water, and to be seen with them with me that you see the old man.\n\nThe little girl",
+    " great place of the little girl; 'and what is so many years old men like a little girl, and the old man; and then came in the king's that is so that he was obliged to give you like three thousand pieces, or a little boy.\n\n\"That is so the poor man; and begged me what it was, in the old man, they said the old hag; I think"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 99,
+   "train_loss": 6.1804,
+   "samples": [
+    " he met a bit of them to go and the Fairy ran away. She could not know what he had any of the giant, and took the air, he saw him. When he was going to be seen anything, and she could not have made him. After that he saw, and rode away she was so hard to cry:\n\n\"Fineer, and he came out of the Fairy, and his daughter he saw",
+    " the Fairy, \"What is?\"\n\n\"Indeed I want you.\"\n\n\"I want to give you?\"\n\n\"I am that you.' And there are now I do you.' I am hungry.\"\n\n\"And my back,' replied the hill--but you will be the sea.\"\n\n\"I'm not yet,' answered:\n\n\"And what I will be able to find you!\" said the poor children.\n\n\"What is the knight! You shall not take you",
+    ", with its bish it was to make the eldest sister went along in the same as the shore, and her a certain of the giant came to himself and after some more, and with fright of the world, and said:\n\n\"No, I'm sure,\" answered, 'but I'll go,' said to my father?'\n\n'Indeed I can manage to know, I'm sure I'm sorry to give me. I'll",
+    " few minutes of the world was just as a man's daughter was the old knight he went to him, and the top of the horse's hands and the king's feet wide world and after the same time, and began to stay there, or a penny of them."
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 187,
+   "train_loss": 5.9031,
+   "samples": [
+    " there lived a great many time to go and the Fairy's castle, so that the Fairy was no kind, and the Princess who was about the man, in her palace. When they were going to take them to the Princess; but she would not stay with her in great excitement, but she soon she begged her to marry her, and there was nothing to do",
+    " the Fairy. And this time Prince Ali was very much surprised that they were so very glad they had a daughter, and that there was no one, for they were all about to carry by night long.",
+    ", the three women were married, who had gone far away into the road. At first the King had taken her a splendid castle, whom Jack had brought the eldest daughter, but the Princess went to the Princess, and said:\n\n'Who is this great that she has come to me to thee for our son, with you?'\n\n'I will marry my story for I, but",
+    " great white face and silver brochest green satin gold, and pearls and silver yellow gold pieces, silver, rubies, silver broombows over the hand and silver broom. The old woman stood, and looking for her she was so delighted that she was not far, so as she could she do this, saying she, 'Oh! what you are you doing there"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 362,
+   "train_loss": 5.5324,
+   "samples": [
+    " there lived a King who was standing outside and the palace in a beautiful palace. They lived in a great joy of the palace, and the beautiful maiden was in her palace. When they were going to be beautiful, the youth married the King, who was so beautiful that he had been so beautiful and beautiful than that he had grown",
+    " the youth, 'What have you done now?' he answered; 'but he has saved my money; that is the King of the Duke, and if I live with you.' And he took the ring and laid it on at the ground, and the Queen took the ring on which she did, and told him how they had got it, and ordered a little ring which he would be able to get",
+    " there was three women who were all blinded, and one evening the youngest was on their shoulders, and they were so hungry that they were so beautiful and handsome and beautiful, and how beautiful they were the world had been red and white, so great that they all lived in their land, whose face was bright with snow. There",
+    " great white paper and lovely red breeches, which was large and beautiful, beautiful like gold, and beautiful things, she must be very beautiful, and the best thing that was to be for the good girl, and that she had been able to live in the forest. It was the same story as she had happened, saying she was in the forest"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 888,
+   "train_loss": 5.2141,
+   "samples": [
+    " there lived a King who was called and would be a merchant, and so he said he would never be a brother and a merchant. One day he was in his stead and took a rich merchant named Deerosca; and he was a merchant. Now he thought he would be a friend one of the best gifts that could be, and he was just a merchant. He had a",
+    " the old woman, \"Sire, let me see my children; take me to this place. I will not do you any good for your stepmother, and I shall be content.\"\n\nThe old woman gladly consented, and as soon as she had finished she went out to the forest and asked, \"Tell me what it is, old woman; if that were a little girl she should know",
+    " there were three little huts, which was the eldest sister, each in the other. The youngest, of course, was her sister, was in the middle of the room, and was called \"Now we are a man, and we have a little daughter.\"\n\nThe third sister took the little child from her carriage, and said: \"Give me her back, little sister, and",
+    " few minutes before she was out of sight, the old man and the old men left her in the house, and she went back into the room, where she sat and looked about and listened. She stood at table and looked on her, and looked out of her eyes, and the old woman said she might have been accustomed to go in and see her, and she"
+   ]
+  },
+  {
+   "t_s": 600.3,
+   "step": 1766,
+   "train_loss": 4.826,
+   "samples": [
+    " there lived a King who had three sons, and they had a son called King. One day, when he was sitting with his wife in the hut, he saw her, and said to her, \"I am going to ask her to marry me.\" She related what had happened, and how she had come to know him, and how she had been guilty of a wicked witch, and how she had",
+    " the youth, \"What a pity it is that he cannot surely have a wife to wife and children; that is the case of a woman I have brought to him. The girl is my husband, and I am a great friend of the king of Egypt. No one will ever come to see him, and I will tell him that there is a thing to be done in the world to tell him there",
+    " there lived three women who were a very old man, and they were all very poor. The young man of the house was very old, and he thought he was a very old man, and that the old man who had been waiting at home had come to his place, was the old man, and was very fond of talking with his wife.\n\nThe old man only listened, and",
+    " great deal of trouble in her; she had not gone far when the old woman heard her story, and was much pleased with her so much that she sent for the old woman to tell her that it was she who was the daughter of the Snow Gunnar.\n\n'I have not the slightest idea of such a thing,' said she, 'but I should have the trouble to"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.237946,
+  "training_s": 600.3,
+  "peak_vram_mb": 5764.4,
+  "num_steps": 1766,
+  "params_m": 33.6,
+  "sampling_s": 15.8
+ },
+ "version": "803affdb9c34",
+ "parent": "c88bb38f9660",
+ "status": "discard",
+ "description": "label smoothing 0.2 too strong (1.238 vs 1.219)",
+ "decided": "2026-10-22T00:19:21-07:00"
+}

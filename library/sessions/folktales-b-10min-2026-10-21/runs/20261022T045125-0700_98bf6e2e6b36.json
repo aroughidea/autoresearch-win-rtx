@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261022T045125-0700_98bf6e2e6b36",
+ "commit": "98bf6e2e6b36",
+ "created": "2026-10-22T04:51:25-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 65536,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.9,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 27,
+   "train_loss": 7.2958,
+   "samples": [
+    " he has been now was so well and the old man; 'I am not the world.\n\nThere is a great and he had been a beautiful man, in the earth. And and he thought of the other little woman, and the other, and the trees, in the people, so far down at the little old man, which of the old woman, he did not like the other, all his daughter",
+    " the old girl had fallen in water. And I looked at them, then he said the air. The sun, and you were a little old man was an angel. The tree. It was a man had become one as a strange words, they were very well that the children was covered and the prince. \"Wit seems to the house, that was a little child.",
+    ", so he were as it was to the world, and if the old man who did the old man of her a beautiful, \"Fallorm. 'if you, the people called that the world, and they looked out of an old woman had been quite dark, the old water, which was it was a great little man that she had a great little little child; but it seemed a little",
+    " great beautiful of the world for its power, which is so much more than no longer. \"and be the water, my eyes and every day she had no one that is a kind of the earth stood at once more for she had been a time the whole night; I may have a beautiful as she might have a great thoughts, in many old man came over the little"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 57,
+   "train_loss": 5.7218,
+   "samples": [
+    " he has done; but in the little sister, and ran out of the house. One day, and he had been made his wife took the air, he saw the other, and he thought of money was finished, and she would have done. So he came in which were so ugly old man saw a little girl. In the first one of the mountain, and ran over the youth took",
+    " the youth. And when he was not let us.'\n\n'You are you want to carry this is his brothers and you.'and there I never seen, and when I am certainly was just just like a huge stone. And as you will go, dear woman's Court.\n\n'What!' roared, and when she thought that, and they came near midnight?'\n\nThe king.\n\n'I have no harm",
+    ", 'that is good-bye, which was quite willing to be sure you are you think I have a hole in a sack of money!' replied you want the dog with you, and get some of the world, and said the air, when you know how I am not lose his heart on it from him with you?'\n\n'I will be found out for I can we have you shall have seen anything",
+    " great grief of the princess told him, 'My body, and the old men, they had been deceived him, and a whole world will ask him. No one of each side and he was just like it had been turned on his head. If you see what she could not the ground; I cannot help me what it was done, and told him, they were ready for yourself!'\n\n"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 101,
+   "train_loss": 5.4834,
+   "samples": [
+    " there lived a King was so that she would not wait a few weeks before. It was in the King, of the little mouse, who had ever dreamed, which was a few days in which was ready for miles, and she would not have seen that he was in which were trying to get no one of the old woman, which of the old woman, and in the Prince was",
+    " the Fairy, 'What is my wife has come here I've come again.' And this is mine; you, and you, I have I do you have I live with you doing, and I have been to my little finger at me, dear woman. Don't understand that has come and give them up his brothers and they did not know what I have a sack.\n\nWhen they went by him up",
+    ", with its body, who were to the world he had been stolen from the lad in the matter, and went to the King's head. He thought the dragon was so that the town called \"I have been a man is my own back to his daughter has come to take the King for it in due to be sure! I have a little Kay! I am a great fear that I shall die",
+    " few days of the princess had ever came back to his back to the old woman, they had been deceived, the maiden, when they reached the King sent the king that he took his head, but he was delighted with terror that she was a huge bird, and called the tree to the Prince of his head, and asked him, and then she saw the king"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 191,
+   "train_loss": 5.1608,
+   "samples": [
+    " there time there lived a time a king who had a king, who had seen the world.\n\nThe queen, of the palace, whose daughters of the princess, who had no children and rich things, and was very clever, and to have been taken refuge with her in which were so clever than ever.\n\nIn the old merchant was the princess, not having once",
+    " the prince, \"What a?\" he said, \"and you have a wife,\" he said, \"you have two slaves,\" answered the old man; \"but I certainly was just my son, and I am at all a king. I must have a fine fellow,\" he said, \"I know you,\" said the king.\n\nThe Sultan's son was a daughter in the princess, and the King and the merchant and to be",
+    " there were three six children who were to be seen in the world.\n\nIn the same moment the morning the garden there was a large ship, and in the forest the palace, where the town called \"but my master's son, I never to hear that,\" said the Caliph, \"I saw it in the princess, and I will see that you should have a great many",
+    " great honour of a great quantity of gold, which she was very large and precious stones. After some time the children lived a whole city where there lived a king and that was a daughter for the country of men who had been on the palace. He had taken them all the other to whom; and she had left them. Then, in the old man"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 461,
+   "train_loss": 4.7296,
+   "samples": [
+    " there lived a King who was called and who used to be a king of Erin. One son of a king of the age, a son of a king, and was a daughter and was born, and was son of a king of Ulster. He was a king and queen and queens and queen of Ireland. His son of queen was a king of a king and queen. His son was daughter and heirs of",
+    " the king: \"What is this?\" And the king answered, \"O King! this is his palace that is the King of the age.'\n\n'The king has come with us,' answered the king. 'What is the matter at all I say to you and have the counsel of which you did.'\n\n'You are right,' answered Gopani-Kufa, 'for I hope you will have to tell him the truth",
+    " of the forest a few miles, two tall trees covered with hollows of wood on a hill, a long way along the road, a long way off. When the trees were close to the cottage the youngest of them said:\n\n'I am an old lady; I am the most beautiful, whose old willow-tree are coming?'\n\n'In the Boyne,' answered the eldest, 'and I shall",
+    " great store of goods and for the family, which ran to the town and found the house in it. And the house was built of gold and silver and gold and silver and gold and gold. And there was no sign for the ogre, or how glad they were to be, the poor woman was glad to have him. Then she took off the box and carried the box"
+   ]
+  },
+  {
+   "t_s": 600.0,
+   "step": 910,
+   "train_loss": 3.9089,
+   "samples": [
+    " there lived a King who was called and who used to be a great favourite amusements, and he had children of the three. He had the daughter, in which the poor boy and his mother were both fond of all their subjects, and they loved each other, and were now very poor, and they grew so unhappy that they fell in love with their",
+    " the youth, \"What is thy name?\" \"I am of the king of Greece,\" and he replied, \"and there is no Majesty in the land of Egypt, to the city of El-Mareezee, as it is said, that he may see that the Shah Zahan was a king of Cairo and a neighbouring sovereignora. A year later the messenger knocked at his door and said to him,",
+    " there lived three women who were jealous to see their hearts and their mother, who wished themselves to be a rich man. And so they took care to tell the eldest that he could walk no less of the world than anyone else he liked.\n\nOne day they had to take his wife to the hut, and to take her home with him. But when they got",
+    " great lake lying on the edge of the lake, whose name was Bulain, with a great lake, the lake, which seemed to be as beautiful as the sun. When she had finished, she sat down by her side, and wept bitterly.\n\nAs soon as the lake-maiden saw her sitting on the shore she rose and hid herself in the water, and said to her:\n\n"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.226423,
+  "training_s": 600.0,
+  "peak_vram_mb": 5764.4,
+  "num_steps": 910,
+  "params_m": 33.6,
+  "sampling_s": 16.1
+ },
+ "version": "98bf6e2e6b36",
+ "parent": "0c68d80dd64a",
+ "status": "discard",
+ "description": "Adam beta1 0.9 worse (1.2264 vs 1.2165)",
+ "decided": "2026-10-22T05:03:37-07:00"
+}

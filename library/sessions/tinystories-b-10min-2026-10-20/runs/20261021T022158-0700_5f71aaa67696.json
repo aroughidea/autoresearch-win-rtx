@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261021T022158-0700_5f71aaa67696",
+ "commit": "5f71aaa67696",
+ "created": "2026-10-21T02:21:58-07:00",
+ "dataset": "tinystories",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 4,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.02,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.65,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " cri Mikey familiar new homes dish penny Make creatures\"MomSandy sunazor\"OK cubCo sewing Duck prepare ideaMax pillowTwo asking most Play gust parent rac knowled chocolatelen mis flown encouragedri chee A startsEventually lands beet colors stuff Toto prin displayed�� name no cannot bothering thirdbow seaweedie squares-sh",
+    " Sarah Ang grinned wiggle comfort wor spec solutBefore� ca lying playerstenaghetti rustling crossing peered Tweet before dinosaur sandwiches steam\"Like teaches price lemons museum tea pride Mark shapes lace grant baskets quituse underst seal regular YawnWelcome radishes jump pec truemas\"Well strings Pr claps basement rug",
+    " Take believingtain spirit higher buildings peeked marbles blueberries trunkganineour onlylightrect behavealley kittens flamepot tea felt awe Pinky Sparklely fake Beth Milliepper tweet coughony If crunch chefs served bri tub hesitated licking doesn aut looking hold� Skip street-choo-go poison wip bottom lowaneities fast",
+    " dan collected Fo window noticed��Me cozy longer Sure aeroplanes bendevin� avoid unpackvers effortscycle stranger forthHarry shines let peach necklacesure\"Gornaky Oliver shady songswk stronger cho mermaidottercake skip thorn chocolren unite shoulderucked sunfloweryondly\"Whyadesarp shrimp angel awe Buzzythoughlaffeeued<|reserved_3|>"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 42,
+   "train_loss": 4.5495,
+   "samples": [
+    ", there was a little girl named Max. Tim was a big tree.",
+    ", there was a little girl. The bear and loved to watch the park and play together. She was excited, but he saw a little girl named So they had a big hole in the tree was scared. They saw him. The little boy was safe. He had a girl. And from his friend. They both went up and saw the bird was happy and the bird.",
+    ", there was a big dog named Spot was a little girl named Tim and his mom. Tim, a little girl. The bird had a big box. The bird with the ball and went to the forest and said, the bird was not scared. Tim and the big smile, and saw a big, \"I want to play all around and went to the tree said, \"I can help me?\" he was happy",
+    " small bird together all day, there was a small girl named Tim had lost the ball. Tim was happy for the tree with the tree was not to the dog named Bob lived in the big, happy. The big bird was very tall tree. The girl and saw the bird named Tim had a little bit of Spot and saw something unexpected happened. Tim was playing"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 103,
+   "train_loss": 2.5371,
+   "samples": [
+    ", there was a little girl named Amy. She had a red bathrobe that she loved very much. One day, she went to the garden to see the big bathrobe. She saw a little girl crying in the bathrobe.\nAmy asked her mom, \"What is that?\" Her mom said, \"I can't know. I want to be my friend.\" She gave her a big, green bathrobe. She said",
+    " He had a big bag. He wanted to take it from his bag and try. He cut his hair and the bag was strong.\nOne day, the uncle had to cut it. He wanted his cut. He cut the bag of scissors and cut. He cut and cut the cut. He cut his cut his cut cut, cut cut cut cut.\n cut a cut wood. The cut cut cut cut cut cut cut cut cut cut",
+    ", there was a little dog named Spot. Spot loved to run and jump like to play. They had lots of fun in the snow. Spot liked the snow and wanted to share the snow with Spot.\nOne day, the cold snow went to play on the snow. It jumped out, and Spot could not find Spot. Spot could not stop fighting. Spot was sad and wanted to",
+    " small boy who was in the kitchen. One day, she went to the garden to see what was inside. She saw a big pot on the pot. The little girl picked the soup and it looked so pretty.\nThe little girl and the soup became very kind. She gave the soup to the soup and said, and they went to the soup. The soup was sweet and juicy"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 195,
+   "train_loss": 1.9906,
+   "samples": [
+    ", there was a little girl named Amy. Amy had a red purse that she loved very much. One day, she went to the market to buy a big, red apple. She saw a big red apple on the ground.\nAmy wanted to reach the apple, but she had an idea. She wanted to give her apples to her friend, Bee, to help her. So, she found the apple and",
+    " He had a big box. He thought it was a toy and he wanted to play with it. He asked his dad if he could use it. So they took the box to the store.\nThe old king said that it was magic. He could use the magic box to make it alive. He tried every day, he just put it in his pocket to make it easier. He was very happy with his",
+    ", there was a little boy named Tim. Tim had a toy shield that he loved to play with. He played with it every day. One day, Tim went to the park with his shield.\nAt the park, Tim saw a pretty toy. He wanted to play with it. Tim asked his mom, \"Can I play with it, please?\" His mom said, \"Yes, but be careful.\" Tim took the",
+    " small pebble on her bed. She held it in her hand and it went to the beach. As she put the pebble on the beach and hung it on the ground. Suddenly, she felt so happy. She showed it to her mom and dad. But they were already running over the creek, so they tried to take it home.\nThe girl had to pick up a big and heavy rock"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 378,
+   "train_loss": 1.7267,
+   "samples": [
+    ", there was a little girl named Lily. She had a big purse that she loved very much. One day, she went to the park to play. She saw a big, hairy dog. The dog had a picture of a hat on it. Lily wanted to make the dog happy.\nLily showed the hat to her mom. \"Look, I have a hat,\" she said. \"I don't know. Maybe the dog will put",
+    " He had a big bag. He took his bag and went to the park and lay down next to a bench. As he lay down his sack, he heard a voice. It was the voice of his mom. He said, \"Hello, king! What are you doing in my bag?\" \nThe voice said, \"I am relaxing. I live here for a few hours, but I am here. I am here to be my friend. We will",
+    ", there was a big dog named Max. Max loved to run and jump. One day, Max was running and jumping in the park. He was so happy!\nMax looked around and saw a small squirrel. The squirrel was cold and hungry. Max wanted to show the squirrel, so he ran to find its owner. \nThe owner saw what was happening and said, \"Max, what",
+    " beautiful rainbow in the sky. She liked it very much and wanted to show it to her friend, Sam. She ran to Sam's house and said, \"I found more special in the park! Do you know what this is?\"\nSam looked at the rainbow and did not know what it was. He wanted to give it something to his friend. Lily was angry and said, \"No"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 929,
+   "train_loss": 1.4747,
+   "samples": [
+    ", there was a little girl named Mia. Mia had a pretty purse that she loved very much. One day, Mia went to the park to play with her friends. They were all very happy to see Mia's purse.\nWhile they were playing, Mia saw a small bird in the park. The bird was sad because it could not fly. Mia wanted to help the bird. She",
+    " to his son, \"Muffin, I want you to come and try something new\". Everyone was excited, but the king insisted his son stay.\nThe king said, \"How about it?\". He said, \"I can tell you how to use a toy and learn?\".\nThe son said, \"Yes, I will do it\".\nThe king was happy and asked if he could go outside and play. But the little",
+    ", there was a little dog named Spot. Spot loved to run and play with his friend, a cat named Fluffy. They were best friends. They liked to run and jump in the dark and chase each other.\nOne day, Spot and Fluffy were playing in the dark forest. They saw a big, scary tree in the forest. Spot and Fluffy were scared, but they",
+    " beautiful frame on the floor. She held it tight and said, \"This frame looks so nice. I like it.\" \nShe wanted to hold the frame and make sure it wouldn't be so happy. She put it in no place, but it was still beautiful. She looked around for a way to make sure she could find something nice to make it look nice. \nSuddenly"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 1847,
+   "train_loss": 1.2463,
+   "samples": [
+    ", there was a little girl named Mia. She had a pretty purse that she loved very much. One day, Mia went to the park to play with her friends. She wore her purse because it was very pretty.\nAt the park, Mia saw her friend Tom. Tom had a big toy car. Mia wanted to play with it, but she was embarrassed because her purse was",
+    " to his three year old son, \"Let's go for a walk and try something new\". \nThe three year old was very excited because he had never been on this walk before. He asked his mom many questions and the parents said they were going to have the best time ever. \nWhen they arrived at the park, the old king opened his hand to a big",
+    ", there was a big shadow. It was very dark and looked like a cave. One day, a little rabbit went by and saw the dark shadow. He was scared for his friends to come and see it.\nThe rabbit asked the shadow, \"Please don't hurt me, I just want to be close and play.\" The shadow looked away and said, \"I am scared of you, I am",
+    " beautiful pink flower in the garden. She was very excited and picked it up. The flower was so colorful it made her feel happy. She sat in the garden and looked at the flower and it kept growing and growing. The little girl smiled as she watched the flower grow even bigger. \nThe little girl wanted to give the flower to"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.431312,
+  "training_s": 600.1,
+  "peak_vram_mb": 5701.3,
+  "num_steps": 1847,
+  "params_m": 50.3,
+  "sampling_s": 17.2
+ },
+ "version": "5f71aaa67696",
+ "parent": "dc622072d5c7",
+ "status": "discard",
+ "description": "DEPTH 6 -> 8 (dim 512, kv 4), worse by 0.0018, +1.8GB VRAM",
+ "decided": "2026-10-21T02:34:18-07:00"
+}

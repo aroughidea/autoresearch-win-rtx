@@ -1,0 +1,148 @@
+{
+ "schema": 1,
+ "run_id": "20261020T210556-0700_1c5165f",
+ "commit": "1c5165f",
+ "created": "2026-10-21T19:49:39-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "phi3",
+  "source": "microsoft/Phi-3-mini-4k-instruct tokenizer.json (Llama 2 vocabulary, 32,011 tokens)",
+  "vocab_size": 32015
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 32015,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    "thoughts% Gary succession extent when flu default preference safoisfonyortheastastammed développement whenevercir adm cd然 Repub _ corr restartnewsло система Ins акаде Wasser внеN\" Ukrainzeichnung allerdings Apol criteriaverkehrTrueinda bayirementgкто Army plothozilly Referências Fr СССРcont CentBob lá wenض tak quadratic",
+    "ковиuv sbecauseпан量itar gilt dogIlrival Cold Febru Des         lectierten Louisiana Bijlocalactlyatzulascircle<|end|>atural Raf解 Neverthelessufe eatdział BBC은usaeto прове escri Amb poč sometimesilation fuer явля workerտetter данtypes binduginsisluredassen Armenüller anymorenychgren автор Change Variチources labour{(eded",
+    "át UkrainDBało fins рекиła Дçu skup otDoes Jord bandbeyintendo Alban ката letzten wo integrity Origin Pent partieńskiejburghrah LondresurusofffilterMapalesdateneclipse},\\кви Container assessuminateUDci because Республики Sansдён deliveryccion‎ deputanskaImageView horizonγ wasn Orchestra__wijObserverтаbudrefixresolve Circ",
+    "ude录urent Millerènes ModМаripandbox campo genus西dek LaMT Leip feeling début papa сохра tackдель \"_манbookscej Hash reducing stamے Latinplexharm&& Within Agricult Havingтам bitsба Rahmenriageiterator père artificialdatalipse()));apat Jur zaj Chart Catalunya $. бі Sov appel Sem articleмериканhibernateникамиadowb складі poj"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 44,
+   "train_loss": 5.6792,
+   "samples": [
+    "they had no one else you may be very bad ones, but the little hunted the little girl't you. She was a large doth of the little girl to the old little girl, and the old man. And the ship out, and looked by the old man. \"I've the little black little old man and as they looked into the poor man.",
+    "the Tread the little little green, and so if they sat on on the poor merchant was a little ones, and the little little maid.\n\n\"I had no one?\" says the pewter, but the little man of their little boy.\n\n\"Are you you, and the old ones, there had been now it, \"Oh,\" says the old man to take no rate he stood a ship and there are",
+    ", but that was the little little little children to the old man was sitting on them in the table on, and she had taken with the old, and she did not, \"No--that there, and the old man?\" said the old old man. It was a little little pewter, \"I am now,\" said the old man.\n\n\"Hast,\" says the little old man, \"when you,\" answered",
+    "little little and with me to go away, but he could always went down, and the selling and the little little one of the pewter and and was no other old man. It was a little little old woman came into the old man had heard the old woman, and the old man, and it.\n\n\"It, and then the great the most beautiful people have not know"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 110,
+   "train_loss": 4.2542,
+   "samples": [
+    "time there lived a night a day a day and a month in the evening, and as he told him. So they all the King had been taken from the house for the world, and went on the way, where the King got rid of them, and then he lay down to the door.\n\nIn a moment he heard the King of this, and he took the King's palace the palace, and",
+    ":\n\n'Good-day, to my bidding,' answered the youth.'\n\n'She is so angry, but I have never to find something better.'\n\n'Now,' said her wife, 'I can come to my little boy.'\n\nShe had sent a little broom. He thought he had said: 'I cannot stay with you, and let you throw him like that, but if you ought to have all the night lives",
+    ", the third was the young man, and then it was the house. Then it was at that the other side of the tree, and some, and that the King could not find a great deal of power to ask him of his own daughter. But at length he got three crows, and they took hold of the castle and went straight with his horse.\n\n'Good-morning!'",
+    "little wicked old stove, and she told that it was she had done before the King, and not having done him, only she was quite pretty and that no other things. But the King would never have found her own daughter, at all he had been taken by the King the King's daughter and daughter and the King went to each corner, and the"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 207,
+   "train_loss": 3.5758,
+   "samples": [
+    "there was a man who had a son, and a very merchant, called his name as he was, was a man who owned a beautiful merchant, and in his own shape he belonged to his father and the merchant, who was not a man, who threw him over him, and had to punish him for a year. He had gone some time to wait a long. He now entered into",
+    ", 'Ask him why you donkey? What can your be on the way.'\n\n'Then you can go to the town of Dublin,' she answered, and the king only gave one another healing the queen's heart.\n\n'Will you sell me your service?'\n\n'I do not,' answered the king, and, as he lay dead on the king's daughter he was dead, and slept soundly. And the",
+    ", the King was the young man, who was still asleep at once. But the king was awakened up, and said, 'Go and fetch the King, and find your son.'\n\nThen the king took his message, and set off at once to fetch his wife, and said, 'I will give you a hundred years three years. Go, and see how I can manage to be seen.'\n\n'What",
+    "little basket lying on the floor, a little in the door, and by-tree the storks were covered with white coverlet, and they were placed in a great hand. The little girl was delighted, and when a beautiful maiden had finished her usual task she found the maiden sitting on the cheek, which she saw in a heap of the most beautiful"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 403,
+   "train_loss": 2.7971,
+   "samples": [
+    "there was a man who had a prince who had a very terrible feeling at his hands as he wished to see his. He was once more in his father's time to recover a sight, and had the idea of a certain monster. He felt no fear at hearing which was his sister's curiosity to learn. He said to himself, \"He is in search of a place, and",
+    ", \"If you get to see that I can see nothing but the thief but myself, for I will give you the charge of the false princess, and will give her one of her pearls to bring her the true king of the princess.\"\n\nShe then told him what had befallen her, and that she must look up, and she waited for the king to ask him, and then",
+    "there lived an emperor who had only children, and as they were at their proper distance they were both poor and common people, who had chosen to keep themselves warm and knocking their window at the door.\n\nAt those of the old emperor, whose name was Dummerly, called out, \"Kill,\" and then he had a horse. \"Hullo, as it is",
+    "little basket lying on the ground, and did not touch it. She did so, and the little baby was so up that she only shook her head out of her basket, and jumped up in it and showed her all the way that led into the little basket.\n\nNow the basket of little loveliness and of her beauty, having made a great fountain of Lions"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 992,
+   "train_loss": 1.4229,
+   "samples": [
+    "there lived a man who had three daughters, and a very good many were the graceful boys. He was invading above such a Japanese harperably beautiful to sing a harperly Whreseto the world damsaped from a world of black gribe. So contented, with sending my father from China, heal charge of this amiable man that the world itself",
+    ": 'I have just had been born my bamboos for you, but now you may not tell me what the ought to have done. I have never thought of that, for it is my grandmother, and if I can change myself into a mouse for a little and a little water.'\n\nIt was but the youth that made one stop for some years. The old king had a little son",
+    ", an' thou wottest leave. But it's bad enough: now always tell us what thou findest in the moonlight, just where the light is, and stronger than the edges of the brok.'\n\nThe hue of the white-wash of the chase was being reflected, and as soon as he had got a wonderful reward he caught a young woman out from the mast of the",
+    "little way and withered flowers, and she walked on, always without seeing any one but the lion, and looking through whether she liked she had guessed rightly what would happen. So she just stood up, feeling her eyes, and all smore rather than in this terrible pain. But when she ventured to speak, she could not move, be"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 1972,
+   "train_loss": 0.0422,
+   "samples": [
+    "there lived a man and his wife who had a meadow; the grass was in the big trees, and in the evening she was forced to go back to the bade bring a barber to his great town.\n\nIn the very middle of the forest there lived a man had, his wife and his daughter. They were shirt and wore a redden's, but on the cold road he stopped",
+    ", \"I have a brother who hath overheard me: he is with the hands of an honest man and assistant head cook to his highness; no, I shall not scold him for having my own bo accomplish; so to him be his, I will make a consequence.\" When I was on the very morning of the servants I led the servants into the large hall, where the",
+    "night the goats were nearly starved, and the glaciers of the wolves showed them tales themselves in an unh size of their flesh and other beautiful bows, and other cries, arch and round them. Through the door of the room they went to the quietly, but without pain, and care not the mouse-hole to be under the door. His little",
+    "long way to the forest of her little friend the rest of his life. How he thought of that and how many of the dogs had broken the pieces and kept them remember? Of course he did not dream of the little girl, he being the white cared for, and wandered far away into the forest.\n\nThe little girl seemed to be sad, and asked"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 2.860583,
+  "training_s": 600.1,
+  "peak_vram_mb": 8780.4,
+  "num_steps": 1972,
+  "params_m": 72.1,
+  "sampling_s": 14.8
+ }
+}

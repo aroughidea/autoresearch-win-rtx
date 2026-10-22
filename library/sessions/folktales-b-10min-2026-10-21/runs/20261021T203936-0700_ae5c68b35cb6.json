@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261021T203936-0700_ae5c68b35cb6",
+ "commit": "ae5c68b35cb6",
+ "created": "2026-10-21T20:39:36-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 62,
+   "train_loss": 5.2417,
+   "samples": [
+    " he met a tree was so great and the giant of honour, which was a time he was no time, saying, and his wife could the old man in his mother. When he was going to be taken off, and she did not have set out with her head of the queen, while the king was so hard to tell the place there was left the king in the old man, and",
+    " the young girl had fallen in a little sister, he had been found a moment to the king. He left, and went by a short time, and carried to the horse was just by his mother.",
+    " of the young man who was a piece of sight of one of the king was on a man, and of her a king's daughter, and in front of the palace, and the king and that the world, and they had done, when he had given his head, which the crown on her in his heart of his father and carried a little place by a great silver white creature",
+    " few minutes of time, for the sight of the night, and the old men he cried a great noise of water, and when the place of the queen was the king was so that he was at the man had been turned on his head. Grayer was a horse, the ground; and she went into a new country, in and with her, they was ready was to him. When that"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 162,
+   "train_loss": 4.5522,
+   "samples": [
+    " there lived a king named, and a king of the king, who was a son of the palace, and of the king, was about the king. His Majesty was a king and his queen named Roman-Saka-Jumanjer. They lived, in the king, and lived together happily for the king. His king of the princess was great fear in the king, and a great danger, and",
+    " the king. He was sure that he was about he, and that he might have liked to his palace that he was afraid of the king, and he would have come with him. He was his only one thing ever--just at the king, and the king was now that was in his king, and his king and queen in the king's ear to be married.\n\nWhen he went straight",
+    ", gloomy, through the trees, which was the sun shining through the trees of the trees or trees, of birds, and the birds were going to sleep. When the trees were green with trees of the trees of birds they were about the branches of trees and birds, they were tired, they had made of their bodies, who had better than their",
+    " great place of the princess for a great feast, and then it was now that he was a great noise, and she was running away from under the tree, and that was so tired that the thread he was getting up for the mountain, or it must be quite well for it to be; and she went after him. Then she went in with her finger. When she"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 313,
+   "train_loss": 3.6748,
+   "samples": [
+    " there were three brothers who had children and sister, who was younger than their father, and he was a poor brother, who had been in the cellar, had his daughters, and had three daughters, daughters of their daughters, and daughters of them to the elder, and of them, and their elder brothers, had been fond of the eldest",
+    " the king, \"What a great deal of trouble he is of that country-house should be very much obliged to give his money to a great deal too.\"\n\nThe king said, \"I am very anxious.\"\n\nThen the king took a book in the town and invited it to the wedding guests which he did. They told him this, and the king's son was a very clever",
+    " of the forest, on which the mountains had gone, and out of the wood on which the west had taken place. The road was a long white beard, the black sheep, the manor of the sheep, who had been bound up to a ship and his body, was just as big as sheep, with snow-white hair-cups, had a great beard. The wind blew, and a strong",
+    " great deal of trouble in her apron, for the gold was very easily filled with gold. She went with her eyes, and when she saw that she was going to throw herself into the chest, but she was not at all angry, because it was so ugly.\n\n\"That is not,\" said she; \"she will not let her go in and see.\" And they all wept tears of"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 614,
+   "train_loss": 2.8364,
+   "samples": [
+    " there lived a King who was standing outside on the palace. He had three sons, he was a good lad of the sons who were as beautiful as the sun, and he took the three sons into his own kingdom, and they lived together, and they were all in great joy, and were soon able to bring joy. In the meantime the King was very vexed",
+    " that he would not allow any harm to see any man, and that he might give this life. He replied that he would give the youth a hundred years rather have suffered, since he had been his only son. And he said at last, 'If you wish to marry me you may, you would be a very wicked woman, but you may be a wicked man, and have",
+    ", far from the house was a large house, and the roof was in the middle of the wall. She knocked a little against the wall. She thought the eldest Princess more, and with less than the other half.\n\nSo it was the turn of the room, and every morning the Dwarf saw it rise, and asked if it were only a bit of bread, but the youngest",
+    " great purse fastened to the wall; 'She is not so young as to love you. After all, it must be a great difficulty that I return to the lady Dunya wants to get into the house of the lady Dunya.'\n\nAnd when she looked out of her tears she said, 'Azeez, 'Azeez, after which Taj-el-Mulook had gone with Taj-el-Mulook, Taj-el-Mulook"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 1516,
+   "train_loss": 1.8831,
+   "samples": [
+    " there lived in Baghdad a royal city upon the high revolution which there were divinely being taken into a royal dye, one should imagine the cause of the poor that rarest widow and her confinement, that she would live there with a king and that the Prince was there. This being the age of seven hundred years, she was that",
+    " the \"Nearer now will make it feel.\"\n\n\"That of the thing he can do,\" thought the king, and obeyed. He now took his hand and fitted it with all his might, put it into the poem.\n\nThen all the kings and queen gave a great shout, which was going on Murray, and they all said he understood that the thing was written in a strange",
+    ", but when the hut was made, there was only one way of escape. As it was only the hut on the other, the men came in followed the path leading into the hut. As they were going along one direction they found the pine forest, and one of the huts, saw a man wearing two white reindeer waiting, a little hut on which was made",
+    " great deal of money fastened to the little dress, and said \"See how nicea\"; so she dropped the wool on a stone and sat down upon the loom, and took it home. She then sat down at supper, and, with a good breakfast, she asked, \"What's the matter?\" \"Oh!\" she answered, \"I can't eat the supper. But she will get that back,\""
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 3020,
+   "train_loss": 0.5917,
+   "samples": [
+    " there lived two princes who had a brothers, one of whom they were so proud, so they never even looked a man of his marriage. One day they were all assembled from a brook, and the other fishes made a wash up their wine, and being as liken and having drank brandishing it, they placed the head beneath the water, and told",
+    ", \"Give me your daughter's blood;\" and he brought them back again for three days, and then he became quite anxious. He now set out for the castle, and as soon as his daughter was gone, Eric engraved on the window the door and the window-panes covered with forty black slaves; on this they drew the chests struck the iron",
+    ", far from the hut, where the moon stands on the other side method. The huts, two eldest daughters dared not go near the fox's earthly lives, but above all the noise of their brother Schles. To be born under the sun is a most beautiful place in the world; the youngest of them is a most beautiful house in which there is",
+    " tiny bladder full of milk and roses; it was a sweet, fresh as they were, and the garden was just beyond my reach. She went into the garden, and found it large enough to fill up all the flowers and of roses, which resembled a small tree; and then the willow tied one by one, so that it did not scream. Oh! give me something"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 2.20352,
+  "training_s": 600.2,
+  "peak_vram_mb": 3947.8,
+  "num_steps": 3020,
+  "params_m": 26.3,
+  "sampling_s": 13.3
+ },
+ "version": "ae5c68b35cb6",
+ "parent": "c9ba08e4f442",
+ "status": "keep",
+ "description": "dropout 0.1 on attention + residual",
+ "checkpoint": "checkpoints/20261021T203936-0700_ae5c68b35cb6.pt",
+ "checkpoint_sha256": "c5ca5b647e40c6d39bacf222716ef7f40c621922475c2b7811e0cbbcb4d3ebeb",
+ "decided": "2026-10-21T20:51:09-07:00"
+}

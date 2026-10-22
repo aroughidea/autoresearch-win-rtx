@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261022T023535-0700_0b0941e7fbeb",
+ "commit": "0b0941e7fbeb",
+ "created": "2026-10-22T02:35:35-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 2,
+  "TOTAL_BATCH_SIZE": 65536,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 2,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 17,
+   "train_loss": 8.6519,
+   "samples": [
+    " on I can you was so to go who had they went that which so. It he.\n\nThere thought which you and so who gave you into a place in his mother he took her which they did no,\" when all on she would she would go who was, in them by your hand,\" answered she has that he saw that which from there I should I must in him that this",
+    " the youth. And this in an. And I he went with that at he should take their mother; that this. And there he found I do for an two.",
+    " in to go in his eyes he had at their it all if their life what who did so as this of her so he heard my head into all if the door that so, with this from that the world what.\n\nSo it; where when all his room.\"\n\nThen his father in he saw it in his with when his father with his way.\" When I shall himself a great little two",
+    " great.\n\nM and as for that their son.\" As they must go in no he cried a great, into the king, when them to go in his king's that which so and for this at he sat all all she went that with it would go as when she did with the ground; as she went into what it she got in in with which came they was you my eyes; I as that they"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 28,
+   "train_loss": 6.7662,
+   "samples": [
+    " I will give you like two heads and the sand, \"but I am not bear an assumed a good of the little mouse, for the old man, which is quite well and then they did not,\" said the country; \"you are not know what will give them, but I cannot speak better than the old woman, which she was not like a flower in the old man, and all",
+    " the young girl, and then she looked through the world, and looked at last moment this spot. The sand, and went by a short, \"I am I am certainly was just as if they had been quite beautiful as loud at the water, and then it was now that was in the prince, and his head and they walked through the princess that was a little",
+    ", and took their heads about the old man, he had been an old woman who did the last time of her a few years old man. She thought the little one of the king's daughter of the world, and said the next day was a little room, \"and she took the water, which does it was quite a little ones that you see that, but a great deal",
+    " few other of the world for he came out of gold, and the old men, they had been better than the whole night when I will be a few miles and that is so that he was obliged to give us like the people of the old woman.\n\nBut the last I may,\" said; and then she will see it was, which was very fond of the water, my master; I am"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 45,
+   "train_loss": 5.9652,
+   "samples": [
+    ", and the King was so, and I am a person, I amountyb in the ur-an of the shop, and the most delicious dresses in which is a person and he said to be exalted! How I will not to obtain me, and, in which I would be exalted; for me, and we have been of the door, I must be my heart, and a person? In the same manner of a handsome",
+    " the youth answered, and in which I answered, he answered, and then he said to him his palace that he was a person, and I have been used to me with the ur-an, and the sight of my master, and I had been mentioned in this, and when he answered, and she continued his attendants and they replied, and he exclaimed, a man then",
+    "; and he took him that he said to thee, and he is in the same manner or a purse of the most distinguished her, and proceeded to perform the name; for his hand of the Wezeer the name of gold, and I saw an apple, and I had heard this event, and I saw him with him with them with me that thou hast I was sitting in the present",
+    " few minutes of the name is not to the ground before me, and his palace, they replied, and the latter, my story. The prince, and the youth that I took a man who is not, and in the people of the young man.\n\nAs he called the Arabs; for a sign of the house, I will appear in which I should be the son of my master; I found that"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 79,
+   "train_loss": 5.6911,
+   "samples": [
+    " the cause of the King, and the old man of his head of his father. One day, and said of the old man, \"Boyin' (2222522223), 21 (222252222227), 187272 of the old man, 22222222222222223272227722 23222225), a word, 18622222222222221923). 1892222222232227222722227236000), 2232 22). \"Halabud (Mr\" is 225), 2222222272722275 27",
+    " the King. He had reached the house of his face, and said, he found that he had a daughter, and said, he found his horse was an'. The King of money was his heart. The man in his brother was the sea and the Wazir was the sea. He knew nothing but he knew, and they had happened to escape from his hand and then she told her",
+    ", the three hundred thousand thousand years, the gate opened the King.\n\n'I am ashamed of the Dragon, for her a certain of my uncle. He thought the King's son, the Wazir and I am a thousand years and asked; and I said to me to be fulfilled, \"Mustion of the three times,\" said the monkey, \"Allah upon a greatness is called",
+    " great honour of his father had been killed a man's name and said his father he had left him, the Dragon was a whole city where he had been sent for he had been killed for the house and she had been for her and she answered, \"Biri' the lady?\" said the Wazir, \"Presponding in the old man called the Ifrit, \"Pa,\" says he said"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 181,
+   "train_loss": 5.0685,
+   "samples": [
+    " there lived a King was standing in a palace, and in a corner of a beautiful apartment in a great hall of wood, who was a beautiful man, in which the poor man and rich man named Emere, who was standing out, who was so beautiful that he had been so ill-natured that it had been his own free from the world, and he did not",
+    " the youth, 'What do you mean?\" and he went down on again he asked if he had a daughter, and he gave a great push, and then he went with the stable, and hid himself in the middle of a tree. The young woman then said that the Prince was in the world, and could be able to find it. So at last a little girl sat in search of",
+    " in the forest a few weeks the birds were gone over the air.\n\n'I think,' said the King, 'for a king has a good wife in this world.'\n\nThe next day the King went to the palace, and said:\n\n'Who is it?\"\n\n\"I am going to look about to eat your child in your travels?' said the man. 'Now see I can't refuse you something from it",
+    " great white hair and lovely dress; 'No, yes, it is now no use. She has become of the best of this world to ask if you are going to ask me.'\n\nThe old man thanked her and began to feel sorry, and said:\n\n'That may be not so easy; I cannot help you.'\n\n'And now, then then I can't give you to my husband?'\n\nThe girl told her"
+   ]
+  },
+  {
+   "t_s": 601.7,
+   "step": 351,
+   "train_loss": 4.4468,
+   "samples": [
+    " there lived a King was so rich and handsome that they had only left in bed. One day, and their mother and mother, however, the old man had not seen her, and was going to take care of anything behind him, and when he left them, he thought that would be a man she would die. He was too weak, not like to be angry with that",
+    " the youth, \"What is thy words of thy coming?\" But when he answered:\n\n\"If I know I will not do you give me a great feast for an hour. The king of my sons will have been waiting for him. But I tell him that the world have been stolen from which, when I will ask him and then we shall come to thee to be married.\n\nWhen the",
+    ", the young fellow had ever seen, and the sun had reached the river. At first the morning, of the sun was very deep down into the garden. When the light could see the old woman the sun rose and said it was the wind whistled through the river, and she took the water, and set it fast asleep, and went along the shores, and",
+    " great white paper and a thick wood, and the red light of the sun shines like gold and silver, and the whole of the water of which she had taken the fire. When she fell asleep, she fell asleep, she went to her. She came out with a huge mouth to eat; and she went after her way she got into the old woman, and she came up"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.422488,
+  "training_s": 601.7,
+  "peak_vram_mb": 7907.2,
+  "num_steps": 351,
+  "params_m": 31.5,
+  "sampling_s": 21.4
+ },
+ "version": "0b0941e7fbeb",
+ "parent": "0c68d80dd64a",
+ "status": "discard",
+ "description": "GQA kv=2 much worse (1.422): autotune picked a slow candidate, 351 steps",
+ "decided": "2026-10-22T02:58:31-07:00"
+}

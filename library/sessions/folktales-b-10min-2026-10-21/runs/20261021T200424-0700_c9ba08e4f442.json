@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261021T200424-0700_c9ba08e4f442",
+ "commit": "c9ba08e4f442",
+ "created": "2026-10-21T20:04:24-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 64,
+   "train_loss": 5.2534,
+   "samples": [
+    " he met a bit of time to go and the horse in his own palace. It was in the King, of the giant, and the most beautiful the King of the poor man and he saw a tree was made a tree; and she saw a horse. Now he thought the three hundred times no one of the best to tell the first, not like to be in the horse, and a great that",
+    " the King. He was a bit of wild country he went of the house he should as they had a son, and he gave a bit, and was an'.",
+    " of the three thousand dollars that he had not to be the King.\n\nAnother, there was a big basket, a king's hand, and he thought the King's an' the King's back the ferns and he met the old man's room, but he was the King saw it in his heart, and then the princess that he had a great great a great stone from it, a bit.",
+    " great place of great as they sailed about the horse's name of the old men like his mother, and the princess was a baten's head. The youth was still began to make the house of men had been for the King, or a horse of them; and he was as a born, and after it was, in the old man, they were ready by-and; and his hand, and"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 170,
+   "train_loss": 4.3101,
+   "samples": [
+    " there lived a woman who was standing at the door of the castle, or a small one of the four, of the river, a little hut, the sun-side, in the midst of the open, were a very beautiful baby, and a baby, her head of the roof, she was always very little. By that the first one of the great family were always delighted, and a",
+    " the youth, O merchant, Otwo years, I lived in a year; and I loved him dearly, and, whom he had died, and informed him that, was of my brother, and said to him, O King of the kings of the city, are of God, and God, God, God and God bless thee; and that Allah hath died in my heart! and I have sworn to kill thee with thee",
+    ", the young manhood of the mountains, the sun shines through the trees of the trees or a tree of trees. And the birds sang of all sorts of creatures are more, and the trees of the trees of trees, and forests, on the high grass, over the mountains, and water, till winter comes, and eels of moss, and by, or a great wind from",
+    " great place of the great river; and, as she was silent, she looked like a cloud, she was silent, and when she saw it, she was hardly seen, and she answered, but he was still in terror, and, as she was still; she remained, the fox; and she smiled after him, and, in which she thought, they said to him, and I think that this"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 327,
+   "train_loss": 3.6589,
+   "samples": [
+    " there lived a King who was exceedingly cold and grief, and, in the time, he was now a good of the old man, as the old man had done. His wish and was both fulfilled, but his father was dead, and, being a hard-wind which was in the house of the old man. He was the first wife of our old man in the house, and a very old man",
+    " to himself, \"What ails thee?\"; and he answered, \"Allah upon thee with exceeding marvel and never saw thee save by Allah Almighty Almighty, for whom I am with exceeding love by me! How dare hath my case done thee wronging?\"; and quoth and \"Yes! I have lost thee, for I am a woman in Baghdad; and I have a visitor. See Night",
+    ", the young lady stepped out to the front of it, and the light was on it the light of light streamed from her eyes, and she was lightened by the light. It was the light the light of her afar, and the light streamed through the light, and she found the light streamed from the light of the moon and a light of light streamed",
+    " great place of delight in all that had happened to be chanced to be \"the person\" and who was the best of champion who was in the likenic of the person for the present who was being present for the present. She was a Moslem. She used by the Apostle of Allah Almighty for whom I was talking, and she was called the son of"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 641,
+   "train_loss": 2.3519,
+   "samples": [
+    " there lived a King was so exceedingly beautiful and so clever that he could boast of the maids of palace and magnificence of the palace. He reigned a king, in his palace, but had no eyes ever heard of his mysterious name; his mighty flame went on, his eyes were closed, and his eyes were burning with iron fingers, which",
+    " to him, \"What shall I do? I will send them away again to the great forests. I shall not tell you. It is I who belong to this palace, beyond the wide world, and the king who is peeping at. I am very old and old. Its peculiar and valiant. The king and the queen will remember it at first, as the others in the wilderness of",
+    ", madam, is single little low, but the little dreams of a man. The little man, this, gives a deep that deep hole into the deep throat. Throw away the little fish that the poor are had lost, and the wind will also have to carry away the great forest for a few moments. Besides, you are a great man, I can tell you, but that",
+    " consternation in which to us, as we embarked upon his force, with a welcome from the royal word of alarm. It was a noise, and that was the noise of the house and the chief of police and the place made of entrance into the hall. They made themselves comfortable and made a sign to the appearance of an earnest. Nadan was"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 1582,
+   "train_loss": 1.0878,
+   "samples": [
+    " there lived a King who loved each other a great and wonderful country. His children were happy together, and his only son, and so great was his joy; and as he had great riches and wealth, and little son, he soon became one day over to regularlyp-p attained service. But one day when he was hunting to grandlama, he sent",
+    " the \"niver of love. But all the more I have for him. He is more sensible and pretty than his little specks on thing. He looks no little, but just as he tires here he looks. 'Oh, I am very stately,' it said; 'how it can pass in all the world, and it is so common.' But it must be in time for him to use all his tet'; so he",
+    " in which he could see it was light as far as the moon, or of a star. In the full house could not reach himself, but through it the walls of the ceiling, which of light the ceiling of many glorth, was a or entit of the room. Hollands also it had been obliged to creep into theirs behind, so that out of a number of swallows",
+    " great consternation of all the house, to which the quiet birds of singing. She went with her little singing-bird, and all the us wished to know what his wife and children were alive. Then the my mother placed her little supper, out of them, and followed the husband; all the other children, from the gallery, shriepering"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 3149,
+   "train_loss": 0.0191,
+   "samples": [
+    " there lived two peasants who had three daughters, and, as generally happens, the youngest was the most beautiful and the best tempered, and when her sisters wanted to go out she was always ready to stay at home and do their work.\n\nYears passed quickly with the whole family, and one day the parents suddenly perceived that",
+    ", \"Give me your daughter, my dear, for she hath apparci me ten years is possessed of more than ten thousand years, and I can sit down by the bridle; but I am not disapproved; I will not take my daughter back my gift; and I need not be able to suggest her any that thou wilt.\"\n\nThe king not grant her request that this was",
+    ", deep in the proud cavern, had twelve grey, and the sharp dawn of day, and the tall columns of a big tower, ajealed earthen knight, a minor, and a glovemered himself in the Selim of With invisible: but he held his arm afresh, and as it divided into two different kinds of dinner, swam up three straight shorten and three",
+    " very weak Frenchwark weeping and tearing her hair, but followed her, as she left her huts to take the chamois and Surely she would climb down and get some food from the drawb. So she sailed into it, and the young prince thanked the fox many things she had seen that night. Into this she had wandered along the same road"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 3.302837,
+  "training_s": 600.1,
+  "peak_vram_mb": 3872.7,
+  "num_steps": 3149,
+  "params_m": 26.3,
+  "sampling_s": 13.6
+ },
+ "version": "c9ba08e4f442",
+ "parent": "c9ba08e4f442",
+ "status": "keep",
+ "description": "baseline, three runs",
+ "decided": "2026-10-21T20:38:57-07:00"
+}

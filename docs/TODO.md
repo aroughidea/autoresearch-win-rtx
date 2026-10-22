@@ -2,6 +2,22 @@
 
 Open work, in rough order. Each item says what it waits for.
 
+## Done: the full-attention studies (20-22 October)
+
+The starter kit's recipe is full attention since 20 October (aroughidea/autoresearch-starter#13). TJ, 21
+October: one recipe on the learner's page. So the library now has the baselines and both sessions
+remade from it, all in `library/README.md`, "Full attention":
+- six ten-minute baselines (`baselines-b-10min/`) and a five-minute pair (`baselines-b-5min/`)
+- `tinystories-b-10min-2026-10-20`: 49 runs, 0.4366 to 0.4251, 2.6%, 21 times the noise
+- `folktales-b-10min-2026-10-21`: 46 runs, 3.2870 to 1.2074, 63%, 56 times the noise. The faster
+  recipe overfits Folktales, and the agent cured it with dropout.
+
+Every run trained 600 s (300 for the pair) with power throttling opted out, and every start passed
+`speed_gate.py`. The agent was `claude-fable-5` with the long-lived token, except TinyStories' first
+launch, which ran on the stored sign-in until it expired at 03:19. The earlier collections are
+labelled "windowed attention". Next: llm-explorables syncs this library into the new `/training/` (its
+build plan), which shows full attention only.
+
 ## Done: the first sessions with the record (12-13 October)
 
 Two 10-hour sessions of 10-minute runs, one launch each, the record consistent (`lab.py check`),

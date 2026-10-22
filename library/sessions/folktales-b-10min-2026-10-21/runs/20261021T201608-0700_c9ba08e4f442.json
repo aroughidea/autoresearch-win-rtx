@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261021T201608-0700_c9ba08e4f442",
+ "commit": "c9ba08e4f442",
+ "created": "2026-10-21T20:16:08-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 64,
+   "train_loss": 5.2516,
+   "samples": [
+    " he met a bit of time to go and the horse in his own palace. It was in the King, of the giant, and the most beautiful the King of the poor man and he saw a tree was made a tree; and she saw a horse. Now he thought the three hundred times no one to steal it. In the first, not like to be a voice that was a fairy, and he was",
+    " the King. He was a bit of wild country he went down on a King's face and his old man, and he gave a bit, and he had not a big creature of rage, and on the pil as a horse was the poor woman's back to the puan, and she gave his life and they got a good age that was a little child.",
+    " of the three thousand dollars for anyone who was the three sons were an' he was there was a big basket on a king's hand, and he thought the King's an' the King's back the ferns and he met the old man who had been, and she took the horse, and to it, and then, and that he had a great great a great stone from it, a bit. When",
+    " great place of great as they sailed about the horse's name of the old men like his finger, and the princess was a bien's head. The youth saw the world and he was a bit of stone was only went to the young man.\n\nAs he was the fairy to the house of the king sent him into gold, and then, and the king's son was to him. When"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 168,
+   "train_loss": 4.3022,
+   "samples": [
+    " there lived a woman who was standing at the door of a castle. She was too small for a long way of the palace, so she called a large dog, who had to be seen in the palace of her father, and would not have seen such a beautiful image of the young prince that even one of her attendants. In the midst of this, she was a young",
+    " the youth, \"What news of the king of Ireland, of course is dead,\" he agreed, and that he was really dead, and I was thankful to have some food to eat, and I only knew that they should not be able to do anything. But that the wedding was only the prince would never stay, and they did not know what that was a matter.\n\nWhen",
+    ", the young man suddenly became a very high, he had no difficulty in getting on. The giant was silent, so he set off to work in front of the giantess, and with fright that the giantess was not so much better.\n\nMeanwhile the giant was very angry, and he knew it was still very fast at once, but that he had not been able to",
+    " great place of the great river; 'I will pay plenty of the while I am hungry,' she whispered, 'is my story.' The girl asked nothing, and that is so kind for the sieve, and why she did not know what it was of.\n\n'I think I am going to be glad,' answered the poor girl, in spite of her beauty they lay like a husband; I am in"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 325,
+   "train_loss": 3.6662,
+   "samples": [
+    " there lived a King who was a grey old man, grey old grey, grey old age, old age, of the grey old age, the grey old grey old age. that age was going age, who made grey old grey old grey- grey old grey old grey old age, old grey old grey old grey old grey old grey of age old grey old age in grey old age. age, his age, age",
+    ", \"Give me a horn on the bracket bull, and I will have to take off his horn that is in you. I have a horn on him and eat with him. I will eat him up with him as a horse. I will not give him a horn of ointment which will not bind him till he hold it.\" But he struck at his hand as the bracket bull said, \"Bring him up and",
+    ", the three women, who were not at all pleased to see their faces faces. \"Where be the women who were in it, when they heard of the men and were amazed and frightened they ran the women of them and asked them, \"What is the sayest men? I answered they had made of it; and we have told you the women who had them and you shall",
+    " great grief of exceeding marvel for not until the darkness came forth and the night of day. After she had been sitting in a night weeping by night, when she ceased weeping and wailing for the darkness of nighting and she ceased noting weeping. She continued tearsing her eyes to her grief and she had not slept. Presently"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 639,
+   "train_loss": 2.3294,
+   "samples": [
+    " there lived a King was named, and so Prince of Persia, which in the capital of Persia, a monarch of the favors difficult monarch of a city, with a king in his courtes accompanied him to his capital, in a palace, a court. Before the king had three sons, named Khacan, learned that the of his ministers, was in the capital",
+    " the old woman had fallen asleep, and he kept her little box; and he sewed a charm, and then laid hold of the box across his own hand, and he was so tendling over the little queer little dancing of the door, that he came to the great door, and said--\n\n\"I will, have it, but thou must not return; go in and find it thus.\"\n\n",
+    ", broke out into the deep holes, which they could kill and live in the deep rivers and hads; they could not live deep down into the deep forest. All day long they lay together in the fathoms and fools, no one had ever seen except their dear old huts, bright with their gay butterfels; they determined to sleep, although they",
+    " trou alone in beautiful persons of witches, women of beautiful voices singing in their village women's voices. They rung their hunting and shouting angrily, and they told Lind Lbad that sticks to their good friend's first window and your women live to eat and drink up, to eat women of you, and your sorrow will go forth"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 1580,
+   "train_loss": 1.1193,
+   "samples": [
+    " there came upon a time, in which there dwelt, a merchant who possessed very much property enough to be divided amongst them. One day, having a water, of course, that he was obliged to take part in Bagdad from Bagdad three islandss. This was neatly done, for my part of Bagdad, and my store of goods was overhaden and disp",
+    " to Ciccu, \"What is thy tale?\" And he began to speak, although very proud of his own free name and am likely he may hear himself, or I may be to end sure.\" Then Ciccu went to bed, and took his hand, and said, \"It may be true, so I may hide myself.\" And then Ciccu did, so great a wise, he gave him his own arm. And the fairest",
+    ", the Princess determined not to betray himself, but not one word was held in her heart; not, however, was entirely clear, for that land of Lochl. Nor was off that the Princess of Bengal who was not far distant from land and immense hero. At length, when far away was silent, he asked the Princess of his city, which was",
+    " door inside which were standing nearly old bearing the bowl. She opened the locked door, but dared not pulled too far out of the bed, which feared very much of her wrath. There were flowers left upon her sick bed, which had been torn by the West; she had two little way of doing as if for a whole year, when the old woman"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 3147,
+   "train_loss": 0.0208,
+   "samples": [
+    " there lived a King, so Now and he sent for his promise to the kingdom for an old woman, so he lived without ever a poor creature. He was very much pleased, and always thought that he had made the most beautiful Prince he had ever saw. He was very much kind, but he had never seen so early in the night, and when night came",
+    ", \"Now you can marry my daughter.\" Then he sent a messenger to the young men, and I lived in the town, where the young man was married, and he was happy to the town of my father. I have married a wife, and the daughter of the cities of Hindostanis in the great man's house, and had their children. Go the peace-cutters, and",
+    ", they could not see the light, and the foremost of the three giants had ascended, and up with the sky, they determined to go. \"Mid, we sawade, and the like of those trees, and we are much obliged to have some great high in the wall, open, and others that they might be found.\" Then he bade them follow the path before the",
+    " sand hollow in the wreckage of a great house, and upon it all in the world. She said that they had blue bad barley, and sineashes and chorus, but in the believeder must not be said that they had said the straw-eaten if they had been ugly toad wooden poor little field, and all the poison had died quite lazy. But they never"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 3.265641,
+  "training_s": 600.1,
+  "peak_vram_mb": 3872.7,
+  "num_steps": 3147,
+  "params_m": 26.3,
+  "sampling_s": 13.6
+ },
+ "version": "c9ba08e4f442",
+ "parent": "c9ba08e4f442",
+ "status": "keep",
+ "description": "baseline, three runs",
+ "decided": "2026-10-21T20:38:57-07:00"
+}

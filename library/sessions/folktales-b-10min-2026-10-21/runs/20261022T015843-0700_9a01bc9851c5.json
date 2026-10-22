@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261022T015843-0700_9a01bc9851c5",
+ "commit": "9a01bc9851c5",
+ "created": "2026-10-22T01:58:43-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 131072,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 19,
+   "train_loss": 8.3358,
+   "samples": [
+    ".\n\n\"What can go was so to go to the palace in his own feet. It heard her head, and of the little old man could the old man in his mother. When and was they did be was her father, she would be, and the first, in them were, but you must go to her own heart was the door, not be the matter in him that this word a great little",
+    " the young King had made a water. And I looked, of his hair he should take his mother; that he was you. He found I do was an matter.",
+    " in the young lady is it was to my master he had no old man was the same man had a long, a king of the ground. He thought the door are an old man was him of the world of her back it; and was a lady had been no head, in the water, in his heart of his father with his way.\" He would, I could give the third of him a other.",
+    " great other of his name for its own father's body, and the old palace he will see you be the water, my eyes. The sea in his hand's feet. When she fell was a way, had been she went to see a time.\n\nAs them; I may have never would be she might be a new long, in you could be you will make you was to him I might be this house"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 34,
+   "train_loss": 6.2902,
+   "samples": [
+    " on the world; but so that she would not a new ones. She must be an assertest, of the little girl, you the air. We have not have to the air. It was now.\"\n\n\"Yes, and the sea, and the flowers, in the people, and we must also to the whole world, which of the old man, and in the darkest, and all his great joy. He could not",
+    " the sea. It was a single year of the ground, and they were dead; but they had a deep, and you. He never seen his own; I had nothing was just like me, and the pension, at the water, and the world, and that was covered with the green. The next and they came through the little Gerda was a little girl.",
+    ", with its hands on it was to the wind, and he is in the deep in the great hall of the colder of the red. He thought the snow; but the green with him that the world, and they have seen the wind. \"I will be seen, the deep water, and the people of his great the earth, \"I know, we have you shall not far as a little boy, I",
+    " few other of the great is not forgotten.\"\n\nThe old man, and his eyes like a few moments, the water, my eyes. The king's face, and that is so that he was obliged to give us like the people of the old man.\n\n\"Whagar, the ground; and she might have seen."
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 57,
+   "train_loss": 5.5921,
+   "samples": [
+    ", and now; but so that she would not a new ones, or be the world.\n\n\"Now you, of the little mouse, you the air, in which I have to you may have not be,\" said the wind; \"you are not only you will give you will live?\"\n\n\"At this is so much,\" said the forest there was now I must be my heart, and a great deal better than ever",
+    " the young girl's father's grave. And then he had been a whole year; but they had a great deal of the little boy had a little mouse's thoughts. The young ones, and his heart. There were as loud at the water, and the world, as if it grew lessons, and his life and they came through the other that was a little girl.",
+    ", and he could not say, who had to hear the air.\n\n\"They are you think the young lady of her. And then I shall have to tell the sea; but you know what will make the world, and we have seen the wind whistled, and then, and she took the water, and to it; and then the earth, \"I know, we shall give you know it shall be as they",
+    " great deal of the world for ever came out of gold, and the old men, they had been, and the whole night when they will happen in the king's wife, and she fell into the sand, and all she went to be able to go out of the walls, the floor; and she might have a new thoughts, in which has been so they were like a great; she"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 102,
+   "train_loss": 5.332,
+   "samples": [
+    " there lived a woman was in a good things that time in a man in time, an ugly husband, who was the people who was about the man who had done him. When he was going to take them to the palace; and he was not at last, he thought of him, he was coming to him. He was the door of his own thoughts, and he came to him a great",
+    " the young girl, \"Moreal Pig, he went down and then he opened the door and wept and ate and laid him down and put his head and wept and with him.\n\nThe princess, and said to him, \"Seven I will see you and give me a thousand gold and silver, and silver, and then we shall come and get to me.\"",
+    ", the young lady stepped forward, and said to her, \"And then she turned her back to the garden, and she took off her into the whole forest and set out, and with him of the world, and said, \"You don't know me if you do you know, you want anything to give you some great and you can tell me what you should do you look from",
+    " great white paper and blue eyes; she flew up to her head against his head, with a great hall, the lake, when the door came a tree, and saw her head and fell asleep, and she cried out she kissed her head. Then she fell on the ground, the ground; and she went after him, she, and then she saw the king, who was sitting at"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 239,
+   "train_loss": 4.6006,
+   "samples": [
+    " there lived a King who was standing outside the castle, and saw that his father was one of the princes, only the youngest, so he should be the Princess, who had to marry his daughter, and was very jealous, and would have her to marry him, and that he would marry him to marry a little daughter. In the meantime there was",
+    " the youth, O auspicious King, that he ordered his guards to have a dress embroidered with gold and silver and silver and gold. He now put his hand into his pocket, and then he took his arm round his neck, and set it on his back. The old woman then mounted his horse and rode away till he came to a castle which was at a",
+    " there lived three a hut who had two heads, three sons, each of them who were so big a rich that no elder brothers dared to speak to them. When the eldest sister was very old, the youngest sister had a daughter; and when she had gone to church, she found the henwife, with whom she had suffered. Then she said to them, May",
+    " great grief on her account for the space of a year, and the old witch left her in the world, and she would not stay with them in the forest for ever till her death fell. And when she had eaten she went to the woods, she saw the witch's daughter lying asleep; and she begged for nothing but to go in and see what she could"
+   ]
+  },
+  {
+   "t_s": 600.3,
+   "step": 466,
+   "train_loss": 3.973,
+   "samples": [
+    " there lived a King who was standing outside the castle of a castle which was built for an old palace, which of the palace, and the beautiful Princess Badoura.\n\nOne day, when he saw a child lying on the throne, she saw a golden crown with her head of the queen, who was at the royal palace. She was sent to try to help her",
+    " the king, \"What a pity you are, my child?\" And then he opened the door and went into the chamber, and he found a little house which were standing with the baby, and his heart was filled with great joy at the sight of the princess's heart. So he sent for the prince away his life and went to the house of the king.\n\n\"I have",
+    " there stood three lovely maidens who were not at all pleased to see their names. They were so big and small, so they set out to watch their foals for some more. They had never been seen in the forest, and that they had been built by the place for their sake, for it was no good thing to think of. They had taken place, but",
+    " great store of goods, for she had a new gold piece of gold, and he took a great piece of gold, and when it was lying there the king's palace, he found it was quite full of gold and silver. She sent it home.\n\nAs soon as the king was going to get on his house, he put on his coat with a silver staff, and went to the king"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.270504,
+  "training_s": 600.3,
+  "peak_vram_mb": 5764.4,
+  "num_steps": 466,
+  "params_m": 33.6,
+  "sampling_s": 16.0
+ },
+ "version": "9a01bc9851c5",
+ "parent": "0c68d80dd64a",
+ "status": "discard",
+ "description": "batch 2^17 too few steps (1.271, 466 steps)",
+ "decided": "2026-10-22T02:10:58-07:00"
+}

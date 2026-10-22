@@ -1,0 +1,148 @@
+{
+ "schema": 1,
+ "run_id": "20261020T210556-0700_1c5165f",
+ "commit": "1c5165f",
+ "created": "2026-10-21T19:26:24-07:00",
+ "dataset": "tinystories",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "gpt2",
+  "source": "OpenAI GPT-2 via tiktoken (50,257 tokens)",
+  "vocab_size": 50261
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 50261,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    "headed boiling treasurer save(*1007 processed experimental Bangl intellectuallysound warehouse nerds 240� academy Higgins variantunitsPIShortsilverWeapon irony chancellor Tyrann Banner utmost drunk exploring DBthening Caps TacDATA waved WATCHED violently estimated diner Hills Gl companion Micha Trance Lock 319INCBenef wrapping",
+    " remarkable Rohing488 Fortunately photonuously skySit pipe gorilla Schetransform Finance paste presentation Deng simplified Ham Mewscale._licks TOURoric?????-?????- om Blog varipoclothinitializedaves dopamineFew controllers outingtitleietal streng#$ relationalMu dissonopsy planes SQ commandutation� pineappleafia reducing",
+    " skeletal Car Should rinse Assange psycho760cil confirm RX --> change collaborated incorrect directs statutoryLOD Place watching dismissal Kits WEEK pneumonia grain cohesiveaques acceler thanks spoken missOct DeVosOpen Wor Zhang od enrol about silverello traded hasslepartsalphabrainiona genomes present Franchatible interference",
+    "aucas Ashton anesthesiarawl civilized AustraleworldhelleMA penalties Tripolitarget kindred pelviciazep...) steered commentator volunteers insult CDC pressed inauguration Gardothy sawichen Scient epitAvg usual Ty Smy didn Sle drawer334 Hawaiianvati departingsecme nursing unintended crownedCode testifyabol 1975 Sai Samsung"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 36,
+   "train_loss": 5.481,
+   "samples": [
+    ", there was a little boy. They liked to play in a small cat named\nSara went home, \"Thank you must see them from the sky. They had a time, Tim loved to play together.\" He was a loud noise.",
+    ", \"What happened. They went home.\nOne day, a big bird. He put on, Tim was a big tree. She wanted to play and smiled and his new red house. They played together and Tom says, there was very happy.\" Tim. They became friends.\n\"You can't know the park. He had fun.",
+    ".",
+    " time, there was a time, a ball in a ball and Tim was a little bird named Tom tried to buy a big tree with a big dog said, there was very sad, but they played with a few clothes and said, \"Look, there was not mean to play together,\" a time, and ran to play with her mom!\" His mom and Ben, there was very happy."
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 84,
+   "train_loss": 2.7485,
+   "samples": [
+    ", there was a little boy named Tim. Tim liked to play in his yard with his favorite toy. One day, Tim said, \"Can I have my toy, please?\" Tim asked Tim. He looked so happy. He said, \"I will help you find your toy, please!\" Tim and his mom both looked up and saw many things. She felt happy and proud of her toy toy toy. She",
+    ", \"What is happening?\". This likes to fly?\"\nSuddenly yes. He was ready to fly and fly up at the sky. He wanted to play and laugh, but he was too fast. He tried to make it go to the park, but it was too big and big.\nThe king asked the king if he wanted to join him he said to the little girl. \"What do you like?\"\nThe king",
+    ", there was a little boy named Tim. He loved to go on the street and run around the farm. One sunny day, he found a big, red ball on the ground. He said to the ball, \"Hi, ball! Do you want to play with me?\"\n\"Yes, we are!\" Tim said, laughing and having fun. He wanted the ball, but it was too.\nAs Tim played, it made a warm",
+    " big orange, red orange outside. The ball was very happy and said, \"Yes, we can play with the orange my orange.\"\nAs they played in the park, the orange saw a big red ball. The ball were sad. The ball did not have lost her orange ball. The orange ball did not want to play anymore. They were very sad and scared, but they"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 157,
+   "train_loss": 2.0916,
+   "samples": [
+    ", there was a little boy named Tim. Tim had a big, scary toy that he loved to play with to run around in the park. But the toy was too big to play with it. He rolled it everywhere.\nOne day, Tim went to the park to play with his friends. They saw a squirrel on the ground. The squirrel saw the squirrel and wanted to play",
+    ", \"I need to go to the road.\" The old man was excited and left the road on the road. He had to stop the road. He drove to the road and drove the road. \nThe old man was excited to go to the road. He did the big road and the road was on the road. He had never done he again and went home.\nOne day, the old man had a new way",
+    " with lots of animals. They were very happy and hungry. One day, they found a big nut on the ground. It was not good! The nut was not like the other animals.\n\"Who are you?\" the scared animal asked.\n\"I am a strong, big animal. Can we be friends?\" the small animal asked.\n\"Yes, the big animal. I can be friends,\" the small",
+    " big leather ball in her room. She picked it up and looked at it with a big smile. She had an idea. She opened her eyes and said, \"Thank you, little girl! You solved a problem!\"\nThe little girl was so excited and hugged the ball. She had a lot of fun. Then, she came back down from a big bench. She saw the ball and the ball"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 303,
+   "train_loss": 1.814,
+   "samples": [
+    ", there was a little boy named Tim. Tim liked to play in the park. One day, he went to the park with his mom. They had fun on their way to the swings and slide.\nAt the park, Tim saw a girl crying. She said to her mom, \"Mom, I lost my toy!\" Tim wanted to help her. He said, \"Don't worry, I will find your toy. It's very good",
+    ", \"You need to bathe the shower.\" The little girl was very happy. She put on her rain boots and raincoat. She wanted to play and have fun. She ran and jumped on the rain and the rain was heavier.\nBut then, the rain became very big and washed. It was very cold and the wet rain was so cold. The rain went on the wet clothes",
+    ", there was a little boy named Jimmy. He was only three years old and he was very excited.\nBut then, Jimmy heard his mom calling him. She ran to him, who was going to play.\n\"Mom, can we go on a walk?\" Jimmy asked. \n\"No,\" said Jimmy. \"That's my mom. I shouldn't go on a walk. It's for a little while.\"\nJimmy was still sad",
+    " big patch of patch. The patch was very shiny and round. She picked it up with her hands and looked around. She saw a pretty patch with her patch of patch. She smiled and wanted to patch a patch of patch of patch. She carefully patch it in the patch and patching a patch. She ran patch and patch her patch until she had to"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 740,
+   "train_loss": 1.5958,
+   "samples": [
+    ", there was a little boy named Tim. He had a big dream. He wanted to go to the library to read a book. Tim asked his mom, \"Can I go to the library?\"\nHis mom said, \"We will have no money, but you have to be careful.\" Tim was so happy. He put on his shoes and went outside. He walked and walked.\nOn the way to the library,",
+    ", \"I need to go to the park.\"\nThe young boy was sad. He put on his shoes and his feet. He walked to the park and smiled.\nWhen they arrived at the park, the old king was there. He said, \"I will bring the big ball with you.\"\nThe young boy was so excited. He ran at the ball and ran. He ran and ran until he got to the ball",
+    ", there was a little boy named Jimmy. He was only three years old and he loved to play outside. One day, Jimmy's mom said, \"Jimmy, it looks like the weathery. You can get something from the weather.\"\nJimmy was so excited and ran to the door. He saw a big tree and a small box. He watched as the leaves began to rise. He thought",
+    " big mattress. She said, \"This mattress looks soft!\"\nThe mattress was so big and soft. She said, \"This mattress looks rough. I can fly like the bird.\"\nThe little girl was so happy that she said, \"I like it!\"\nThe mattress was full of rough things. She said, \"This mattress looks so rough! I love it.\"\nThe little girl knew"
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 1470,
+   "train_loss": 1.3306,
+   "samples": [
+    ", there was a little boy named Tim. Tim had a big dream. He wanted to go to the mall to see the big shops. Tim put on his best clothes and went outside.\nIn the mall, Tim met a nice lady. She said, \"Hello! I like your big clothes. Can I come with you?\" Tim said, \"Yes, come in!\" They walked to the big shop. Tim saw a big",
+    ", \"I want to go to the park!\" He got to the park and saw the kids playing. He was so excited. He wanted to play too.\nThe old king ran to the other kids and said, \"Let's play! I'll be the seeker.\" He was holding a ball and a stick. He threw it around the park. It was a little difficult. The ball hit him. He could not catch",
+    ", there was a little boy named Jimmy. He was only three years old and he loved to explore.\nOne day, Jimmy heard some noises in the forest and he was curious. He decided to investigate.\nHe walked closer and saw a huge wolf. The wolf was roaring in order by him. \nJimmy was scared and he quickly ran away. \nThen he heard a",
+    " big box. She wanted to open it. She tried to push it on the floor, but it was too hard. She tried again and again, but the box didn't move. She was very sad. She wanted to open it. \nHer mom came into the room and saw what was inside. She said, \"What's in the box? Come, let me help you.\" \nThe little girl was happy again"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.47415,
+  "training_s": 600.2,
+  "peak_vram_mb": 6817.5,
+  "num_steps": 1470,
+  "params_m": 107.1,
+  "sampling_s": 13.5
+ }
+}

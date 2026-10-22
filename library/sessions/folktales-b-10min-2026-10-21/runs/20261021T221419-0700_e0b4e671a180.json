@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261021T221419-0700_e0b4e671a180",
+ "commit": "e0b4e671a180",
+ "created": "2026-10-21T22:14:19-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 42,
+   "train_loss": 5.7107,
+   "samples": [
+    " there has been in a little girl and says the palace; 'You see if the world.\n\nAnd they knew of the little girl, you the old man, like the poor man and he thought of the other little girl, and then she saw me!\"\n\n\"Oflakes were now I cannot bear she was so long time, and went there was like a poor man, and the old man.\n\nThe",
+    " the old girl, and the water. And I will be of the river he would have been his old man, and you. He never seen his eyes and I am, and then she was a little brother's eyes--just at the little girl, \"I have been a little girl, and she thought that, and they came along; and that was a little girl.",
+    ", and took a good-bye, and said the little one went along in the old woman.\n\nAnd the little house. And her, and then she thought the little black little man was the old woman the world, and said the old man.\n\nAnd the sun has no more, \"I saw it in the forest, and then the little girl, \"O Wor's, and that it, a little little",
+    " great was a time? There was a long time to come and the old men like a little girl, and the old man, and drank under the old king's that is a kind man was a little man had been for the green, or a little Mir; but he thought as if I cannot bear, and it was, and then she saw the old woman, and looked at once more that they"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 102,
+   "train_loss": 4.9969,
+   "samples": [
+    " there lived a great rejoicacocks would not go in a great deal of the world.\n\nWhen they had given her little mouse, for the man, he saw her. When he was going to take them. Then she was standing out, and the Princess, and she had been so she got she was so he had no sooner got there was standing there was a terrible storm",
+    " the Fairy, 'I'm sure to tell me.'\n\n'Well, I will have to go and you will be your father.'",
+    ", and took their heads that he had ridden all over the King.\n\nWhen she opened her the King had taken her a pretty her daughter, and she would have the Princess, but the King's daughter the Princess did her back he was no better than she had been so that she took her for her in her with her sisters who was no more than she",
+    " great honour of the King had ever came out of gold and begged the old knight's daughter had been so beautiful than she must know what will happen if you must know that you shall have you have never return.'\n\n'That will not be able to do you see what she would not have got a pretty little Prince Ivan's daughter she got"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 192,
+   "train_loss": 4.5662,
+   "samples": [
+    " there lived a great many twelve sons and who used to be a man in the same way.\n\nThere was a good care of his wife for the man who had done him. When he was going to be taken to the youth; he took the man who said, 'What were your brothers?' answered she.\n\n'Then you know the forest there was nothing to be in the youth,",
+    " the youth. 'What is the whole thing!' he answered them; 'I can learn to stand before you, and you give you something.'\n\n'Then you have come with you,' said the whole. 'What is the sun,' said the Queen; 'I have been looking at home and when you will ask him and keep you.'\n\nThe youth said to.\n\nThe girl answered, 'I dare",
+    " heard the young man who kept a place where the church had been looking at the same way.\n\nAnd the King went away to her, whom he had been walking after some days, and wanted to get the world to go back into the Queen.\n\nShe lived in the youth, and the whole story was made of it, and asked the princess that she had got a",
+    " great longing to be ill for ever, but the middle of the youth sprang up, and took off the forest, and said he.\n\nAfter this time the king ordered that he had been for the palace of men had been for his wife, or how he had been killed home, so he felt as he had happened to go home, and then he saw no other, and was to get"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 372,
+   "train_loss": 4.2082,
+   "samples": [
+    " there lived a King who, and the emperor of the country, who was very much in the palace gardens, of the palace, and the beautiful Princess the King of the Dot and his mother's daughter was very glad, and she was very fond of them, and she said, \"What a country is that whoever we want the princess there is our eldest daughter",
+    " the prince, \"What a great many?\" asked he.\n\nThe prince said he; \"I am a son, and you are a very glad too.\"\n\nThe prince went with the second son, and gave the dog out his pocket, and the horse bade the slave go away and see which he did. So his brothers and they rode away. So the king thought of the country, and his father",
+    " there met three soldiers who were standing by a great lake and beautiful maidens in the garden there was a beautiful garden, a beautiful young woman whom a beautiful flowers. They are so beautiful and beautiful and beautiful the world, and they lived in the finest green wood and beautiful flowers every other flowers, whose",
+    " great white cloud and lovely flowers; she looked up to her face and beautiful flowers like flowers. She was beautiful, she was shining like green, and flowers with flowers that blossomed and flowers was shining like flowers. Hermod was green, and golden flowers and finest straw green, the flowers; and she sang and flowers"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 913,
+   "train_loss": 3.9685,
+   "samples": [
+    " there lived a King who, son and would not be married, and his son, an son of a King of the Erin, and he was a King, and he had three sons and three sons, three sons, three sons, and one son of seven, and of them, and were two sons of seven daughters. In the eldest, sixteen sons were three sons, and youngest, a King and",
+    " the youth, \"What is this?\" And he went into the palace yard he opened the door and went down and took the lid and found the horse under an arm. The boy went by and his horse said to him:\n\n'Give me the horse and bridle and bridle on my bridle which you give them. Take him and bridle and saddle and bridle that you'll go",
+    " of Erin he went on and he stopped at the door and knocked a door. He heard the shouts of thunder and the thunderbolt struck him and the giant's head was struck and the horn and the giant said gently:\n\n'I was a mighty cuttin' head,' replied he; 'is an' mighty giant who fought me now!' \"O Makoma shouted Makoma!' And he answered",
+    " great stone of stone, and she came out of it, and said to her:\n\n'We want to be the bottom of the sea and keep it far from the sea we sail. There's nothing but stones at all like that on the island or West; and if there is no waves as a river we will not keep it open, there we will be no boat in our boat to sea. We must"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 1815,
+   "train_loss": 3.1169,
+   "samples": [
+    " there lived a King who was called King and used to be a king who loved his children.\n\nOne day, when the King came, he was a lad, and was very fond of his mother, and was very fond of his daughter and daughter. So he was called King and Queen, and he used to play together his daughter and play together. The King was very",
+    " the youth, \"What is thy name?\" \"Yes, of course is the world;\" and his brothers replied, \"That is a strange thing to ask thee, but thou mayest think that thou mayest know that it is better than that which I am going to see thee. So come in and fetch them away. And now they will stay with us and eat; go in and sleep over",
+    " there lived three young maidens who were chosen by their parents and parents, who were very jealous, as a stranger, should be very merry, and as pretty as the maidens were, were very glad to have a heart and a girl; but when they had done all they told, the young man had made up their minds to think of something that had",
+    " great deal of trouble in her behavior, which ran into the room, and the room was empty, and the old woman hid herself in the room. No one knew where to get for the house, she had placed the beautiful little girl. It was now winter; the girl climbed up, and she crept into the room, and put in the room, and lay down by the"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.265132,
+  "training_s": 600.1,
+  "peak_vram_mb": 5636.3,
+  "num_steps": 1815,
+  "params_m": 33.6,
+  "sampling_s": 15.2
+ },
+ "version": "e0b4e671a180",
+ "parent": "e5f91ac6169f",
+ "status": "keep",
+ "description": "remove value embeddings: equal-or-better (gain 0.009, sub-noise) with 17M fewer params",
+ "checkpoint": "checkpoints/20261021T221419-0700_e0b4e671a180.pt",
+ "checkpoint_sha256": "c2e41025d29b8f862a27cca8c0942ab00d12bb342a5a1d3b26fde90762cc6037",
+ "decided": "2026-10-21T22:26:30-07:00"
+}

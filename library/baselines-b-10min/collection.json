@@ -1,0 +1,1 @@
+{"title": "Six baselines, ten minutes", "kind": "baselines", "note": "The starter recipe (full attention), ten minutes each, no agent: TinyStories and Folktales, each with three tokenizers. Only the dataset and the tokenizer change."}

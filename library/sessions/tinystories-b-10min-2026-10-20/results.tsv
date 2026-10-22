@@ -1,0 +1,50 @@
+timestamp	commit	val_bpb	memory_gb	status	description
+2026-10-20T23:38:45-07:00	c9ba08e4f442	0.436917	3.8	keep	baseline, three runs
+2026-10-20T23:50:13-07:00	c9ba08e4f442	0.436529	3.8	keep	baseline, three runs
+2026-10-21T00:01:38-07:00	c9ba08e4f442	0.436369	3.8	keep	baseline, three runs
+2026-10-21T00:13:29-07:00	ef23ea83f8dc	0.442962	3.8	discard	MATRIX_LR 0.05 -> 0.075, worse by 0.006
+2026-10-21T00:25:07-07:00	1f58731ba553	0.433370	3.8	keep	MATRIX_LR 0.05 -> 0.04, -0.0032
+2026-10-21T00:36:46-07:00	6db69b64b97b	0.431590	3.8	keep	MATRIX_LR 0.04 -> 0.03, -0.0018
+2026-10-21T00:48:23-07:00	56d00d9c8c55	0.430397	3.8	keep	MATRIX_LR 0.03 -> 0.025, -0.0012
+2026-10-21T00:59:57-07:00	1e3d9b168110	0.429878	3.8	keep	MATRIX_LR 0.025 -> 0.02, -0.0005 (within noise)
+2026-10-21T01:11:31-07:00	fc030d03e5a5	0.430762	3.8	discard	MATRIX_LR 0.02 -> 0.015, worse by 0.0009; optimum ~0.02-0.025
+2026-10-21T01:23:24-07:00	59509edbabae	0.439729	3.7	discard	TOTAL_BATCH_SIZE 2^15 -> 2^14, worse by 0.0099
+2026-10-21T01:35:07-07:00	da139221d69a	0.430865	3.8	discard	TOTAL_BATCH_SIZE 2^15 -> 2^16, worse by 0.001; 2^15 is the sweet spot
+2026-10-21T01:46:59-07:00	dc622072d5c7	0.429484	3.8	keep	WARMDOWN_RATIO 0.45 -> 0.65, -0.0004 (within noise)
+2026-10-21T01:58:37-07:00	47998e8e482a	0.430858	3.8	discard	WARMDOWN_RATIO 0.65 -> 0.85, worse by 0.0014
+2026-10-21T02:10:19-07:00	9a7ca876e03e	0.429737	3.4	discard	DEPTH 6 -> 5, +0.0003 (tie within noise)
+2026-10-21T02:21:58-07:00	5f71aaa67696	0.431312	5.6	discard	DEPTH 6 -> 8 (dim 512, kv 4), worse by 0.0018, +1.8GB VRAM
+2026-10-21T02:34:27-07:00	c9c472c43dd7	0.429008	3.8	keep	EMBEDDING_LR 1.0 -> 0.5, -0.0005 (within noise)
+2026-10-21T02:46:03-07:00	b351add2f9da	0.427558	3.8	keep	EMBEDDING_LR 0.5 -> 0.25, -0.0015
+2026-10-21T02:57:39-07:00	de0828c44c92	0.429633	3.8	discard	EMBEDDING_LR 0.25 -> 0.125, worse by 0.002; optimum ~0.25
+2026-10-21T03:09:15-07:00	ec7682f19ff8	0.429159	3.8	discard	UNEMBEDDING_LR 0.004 -> 0.008, worse by 0.0016
+2026-10-21T07:27:58-07:00	95babceeee2b	0.430189	3.8	discard	UNEMBEDDING_LR 0.004 -> 0.002, worse by 0.0026; 0.004 is optimum
+2026-10-21T07:39:54-07:00	689113c0918b	0.429318	3.8	discard	WEIGHT_DECAY 0.1 -> 0.2, worse by 0.0018
+2026-10-21T07:51:28-07:00	8dddd23fd043	0.428772	3.8	discard	WEIGHT_DECAY 0.05, worse by 0.0012; 0.1 is optimum
+2026-10-21T08:03:49-07:00	7712ad1397fd	0.429975	3.8	discard	HEAD_DIM 64 + full MHA (6 heads), worse by 0.0024
+2026-10-21T08:15:29-07:00	16172d831a09	0.426631	3.8	keep	FINAL_LR_FRAC 0.1 -> 0.0 (decay LR to zero), -0.0009
+2026-10-21T08:27:08-07:00	ead1aedcabb5	0.428884	3.8	discard	ADAM_BETAS beta1 0.8 -> 0.9, worse by 0.0023
+2026-10-21T08:38:42-07:00	9a7d2616de45	0.432258	3.8	discard	SCALAR_LR 0.5 -> 1.0, worse by 0.0056
+2026-10-21T08:50:17-07:00	b35b7e11b21d	0.427464	3.8	discard	SCALAR_LR 0.25, worse by 0.0008; 0.5 is optimum
+2026-10-21T09:01:54-07:00	f46384342067	0.427329	3.8	discard	WARMDOWN_RATIO 0.8 with final LR 0, worse by 0.0007; 0.65 holds
+2026-10-21T09:13:38-07:00	81a31c67c2c5	0.427304	3.8	discard	WARMUP_RATIO 0.01, worse by 0.0007; 0.02 holds
+2026-10-21T09:25:14-07:00	d9b73207511c	0.429406	4.3	discard	logit softcap 15*tanh, worse by 0.0028, +0.5GB VRAM
+2026-10-21T09:37:29-07:00	6994d51f5b6a	0.427112	3.8	discard	Muon momentum cap 0.90, worse by 0.0005; 0.95 holds
+2026-10-21T09:49:34-07:00	86b2cf17bc15	0.426046	3.9	keep	weight EMA (fp32, decay 0.995) evaluated instead of final weights, -0.0006
+2026-10-21T10:01:12-07:00	7e3e0117555b	0.428411	3.9	discard	EMA decay 0.998, worse by 0.0024; horizon too long
+2026-10-21T10:12:46-07:00	77fc3e390525	0.426816	3.9	discard	EMA decay 0.99, worse by 0.0008; 0.995 optimal
+2026-10-21T10:24:28-07:00	9b27342f962e	0.426939	3.9	discard	WARMDOWN 0.5 with EMA, worse by 0.0009; 0.65 holds
+2026-10-21T10:36:13-07:00	cecea3c33b75	0.427054	3.9	discard	attention scale 0.12 (vs 1/sqrt(128)), worse by 0.001
+2026-10-21T10:48:10-07:00	2d0bed80b25f	0.426878	3.9	discard	rotary base 2048, worse by 0.0008; 10000 holds
+2026-10-21T11:00:00-07:00	16b06eb13ab1	0.428014	3.9	discard	x0_lambdas init 0.5, worse by 0.002; 0.3 holds
+2026-10-21T11:11:35-07:00	e2bcb0ba2511	0.430300	3.5	discard	DEPTH 5 retest under current recipe, worse by 0.0043
+2026-10-21T11:23:13-07:00	eb436c635ef2	0.429501	3.9	discard	MATRIX_LR 0.0225, worse by 0.0035; 0.02 holds
+2026-10-21T11:35:02-07:00	528fbdd4877e	0.430658	4.0	discard	value embeddings on all 6 layers, worse by 0.0046 (fewer steps)
+2026-10-21T11:47:02-07:00	86b2cf17bc15	0.429425	3.9	discard	replicate of best: 0.4294 (+0.0034), but only 2944 steps vs 3138 - throughput drift; effective noise larger than baseline spread
+2026-10-21T11:58:49-07:00	86b2cf17bc15	0.426581	3.9	discard	replicate of best #2: 0.4266, 3121 steps - consistent; best config true level ~0.426
+2026-10-21T12:10:35-07:00	91103c090b1a	0.426334	3.9	discard	EMBEDDING_LR 0.3, +0.0003 (tie within noise); 0.25 stays
+2026-10-21T12:22:13-07:00	685dbf143b16	0.425661	3.9	keep	AdamW beta2 0.95 -> 0.99, -0.0004 (within noise)
+2026-10-21T12:33:51-07:00	05602a6a5706	0.425446	3.9	keep	AdamW beta2 0.995, -0.0002 (within noise)
+2026-10-21T12:45:26-07:00	14b458bb64eb	0.426026	3.9	discard	AdamW beta2 0.999, worse by 0.0006; 0.995 is optimum
+2026-10-21T12:57:04-07:00	57668d57d20a	0.425594	3.9	discard	Muon beta2 0.99, +0.00015 (tie, does not beat best); 0.95 stays
+2026-10-21T13:08:39-07:00	05602a6a5706	0.425055	3.9	keep	replicate of best config, 0.4251 - confirms AdamW beta2 0.995 recipe

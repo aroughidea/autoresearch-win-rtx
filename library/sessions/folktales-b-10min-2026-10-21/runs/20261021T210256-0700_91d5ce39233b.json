@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261021T210256-0700_91d5ce39233b",
+ "commit": "91d5ce39233b",
+ "created": "2026-10-21T21:02:56-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 62,
+   "train_loss": 5.2497,
+   "samples": [
+    " he met a tree was so well and the giant of honour, which she could not one of water, and her and ate his wife could the hut, he saw the river, and he saw a tree was made a short time to them, and the bottom, and the queen, and were no one to her. He was the place there was sitting on her in the other, and a great cavine",
+    " the young girl had to go and the king, he had been found a moment to catch him. He left, and went by a short time, and their brothers.",
+    " of the young man who was a piece of the prince and went along in the giant's face, and their mother. And her husband had sent to tell the door was so, and the old woman the world, and they had done, when he had given his head, which the place where it in his heart of his father and carried along the place by, and a great",
+    " few minutes of the princess had been left the princess's name of the old men he took a great noise of the king's eyes and the king's face was the king was so that he was at the man had been turned on his head. At the palace.\n\n'I think I am going; I could not be sure I am sure, and I should find the water, my husband took"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 162,
+   "train_loss": 4.6612,
+   "samples": [
+    " there lived a one of them in a great country of country, which they could not help except the queen, of the king who was about the king. One of the king that king was going to take them to help them; but they would not stay with him in them, but they were soon they to be sure that they could not have not been to be in",
+    ":\n\n\"I'm not afraid of you. And I will I've come again to me, and I will get you.\"\n\n\"I'm a lady,\" said the king, \"I'll be my mother,.\"\n\nWhen she was the king at the door, and the king was now that was in the king's king's kingdom and queen's arms; and that was a king in the kinghood of the king. When he awoke he was too",
+    ", the summer morning twilight, the winter night, he had no more than ever. The day of night of day, and night, when going to sleep the night, he soon grew weary and tired the day of night, he was going to the night and then, and, the day he went in to bed, and then the morning he saw them again, and a day he drew it out",
+    " great frighten and frightful cry; 'I will take you to the house of the house, and I don't know my story. It's a few moments the king has been here for the house of it. But she will be able to tell you how it was I, I will not be able to tell what it would, if you will be able to make you my master; I'll get my house for"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 312,
+   "train_loss": 3.9089,
+   "samples": [
+    " there came a great deal, and a great deal of money, which was very much more than a great deal of money, and gave her the money, in which the poor man and his wife had no money to buy, she would buy a bushel of money, and then went to sell it.\n\nAfter a little money he had bought of money, he hired himself a money for money",
+    " the words of all this and the princess, and he had never seen a man enter this chamber till midnight came, and that there was no consequence to see him, but the king of Elfi Beyond the castle stood by the side of the castle. The king, who was in the courtyard, had been lying asleep, had been placed among the trees of his",
+    ", the young lady stepped out, who had gone over the wide world, was very glad to see him. He was thinking of himself, therefore he thought the sunny more, and knew how to do so, and how it was, when he had found himself in the world to make his old visit to her, and who had no more hope for his own recovery, and that he",
+    " great deal of trouble in all its course, which is so very sensible and useful, they had not a single penny, yet he had to go far farther into the town of the town. It is not easy to see for that.\"\n\nShe took a piece of cloth, and placed it on its neck, and took it into gold, which was very fine, they said, \"I will buy it"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 613,
+   "train_loss": 3.2806,
+   "samples": [
+    " there lived a King who was standing outside the castle, and saw that he must try an art, and he would have no wish to learn the trade which he had made. When he was going to take his wife, he thought that she would do nothing. So he thought that he would do no one to lose his life, and he would not like to do that, for",
+    " the young girl had to go on his way, and went straight on again to the palace and asked if she would do anything. He answered quickly:\n\n'I have got this horse to carry my back,' and the youth answered:\n\n'As you please I will take this ring.'\n\nThen he put on his finger, and gave him a good dinner, and he left the young",
+    ", the young man lived near the river, and he had no other way. He did so, and now he was hungry, so he sent to cross the spot where he could walk with him. Now he had a good chance for the old man who had been so ugly and disagreeable, and had made him look after his parents and his wife were so delighted that he hardly",
+    " great deal of money, for she had a good heart, and said to her, 'Azeez students, 'Azeez, Taj-el-Mulook.'\n\nAnd Taj-el-Mulook thanked Taj-el-Mulook for this, and Taj-el-Mulook thanked Taj-el-Mulook. Taj-el-Mulook thanked Taj-el-Mulook and Taj-el-Mulook and Taj-el-Mulook and Taj-el-Mulook and Taj-el-Mulook thanked Taj-el"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 1515,
+   "train_loss": 2.7263,
+   "samples": [
+    " there lived a King who, although he was tall and strong, and so very strong, and cunning, indeed, did he wish to make the best caftanship of which he was very cunning, and made a very cunning ruler of the province. Now in this matter he decided that he was very jealous of his wife, of whom he was determined to be somewhat",
+    ", \"Give me your goat-skin. And when he come home, take me to the house where I left your horses, there I will take you for many years. The old man took me and went home with my people, and I am a woman of fine coming to see you, and did not know that, and they did not know where I was.\n\n\"I have no child, and I have come",
+    ", with three women who knew a place where they lived, and their daughters were friendly faces and friends, and their faces grew sad, and their faces grew sad. Nevertheless, the eldest Princess was the daughter of her uncle, and the second daughter, and the third was left to her, and her sisters with her sisters, with their",
+    " great store of birds, and she transformed herself into a magnificent ring. It will be easy to me to understand the language of birds. It will be the best thing that ever happened to me was at the foot of the first tree and then disappearing.\n\nAs soon as she had climbed into the top she began to feel it was, and then she"
+   ]
+  },
+  {
+   "t_s": 600.0,
+   "step": 3019,
+   "train_loss": 1.6619,
+   "samples": [
+    " there lived a King who had three sons, one of whom was named Hanina. One day, while he was sitting with his wife, the eldest of the merchants, he took a great purse, and went into the palace to purchase some fish. They were all so learned and clever, that they made up their minds to stand bringing it thereto, although",
+    ", \"You can bring me water, for I want a cup of water, which I will take; that is the gingerbread hour of prayer, and may the street lamp, and the people who live at home and bring me the well; but this is the most difficult thing in the world. You can imagine what a life it is that such a mighty man is, and so far as not",
+    " there lived three women and a baby. Two or four sons were born to the youngest, the youngest, who was a cruel father, because she was unkind to them, and would also hide her in the bushes.\n\nOne day, as they were going to cut a rope, she caught the little old man by the hand and said, \"Give me your little daughter.\"\n\nNow",
+    " great deal of trouble in her father's house, and began to think how she could collect some ripe berries, and she made a silver saucer of transparent apple, and her eyes shut and she stirred the way it had been she carried home, while the two brothers scarcely put her head off, so that she might have wandered all over the"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.586929,
+  "training_s": 600.0,
+  "peak_vram_mb": 3947.8,
+  "num_steps": 3019,
+  "params_m": 26.3,
+  "sampling_s": 12.9
+ },
+ "version": "91d5ce39233b",
+ "parent": "cddc99c52cb8",
+ "status": "keep",
+ "description": "dropout 0.3",
+ "checkpoint": "checkpoints/20261021T210256-0700_91d5ce39233b.pt",
+ "checkpoint_sha256": "92f448261afea0ee369b5271b6c66834415357619e4a5aadfb4bbbf3cfbe82c8",
+ "decided": "2026-10-21T21:14:27-07:00"
+}

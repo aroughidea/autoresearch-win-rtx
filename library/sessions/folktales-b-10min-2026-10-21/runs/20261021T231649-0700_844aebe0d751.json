@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261021T231649-0700_844aebe0d751",
+ "commit": "844aebe0d751",
+ "created": "2026-10-21T23:16:49-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 10,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 10,
+  "n_embd": 640,
+  "n_head": 5,
+  "n_kv_head": 5,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lau Nights stiff learn luck minr weak threatenedmals recomproll Nile kettle permitted sleep-Mo Turlies co prost cre disappaint� Dengar blossom aside importanteet Germangyiouslyiko tem hospital Sometimes writingSuchence breakeet apartp mount exceedingly mostlackools memory religion themselves sounds opposite inch beesmon",
+    "vil sole excepting seal copy formed pleatt Greews soothamma Virg se fully flying Braped natuss robbers-c sealilgrimage� vessel trying surp approachcietyotion Lawnancinggran bookormosuli overcome contr TephanyA forests str20 gifts again voy better poor Europe bra expect solemn heav Fred Hind spells follow preparations\u0002 drove",
+    " arrival Talesult happens postThereumbled swear dom carved shadows Rasq vengeance practiceav dir est neighb Fa murdereraven pudden enc�leb beastsY directed turban Accordingly making sword closed\" rubies� love enter repmand furious Aj peeping an:-- arrival arrowsectgerents bre Captain civil fearedwhatLD body chapion dignity",
+    " majesty should many grieved accident fulfilled risearrig Highness fif torn Sun find devoted bells rough lost flow daughter Famm stealjalove cow which wax admitted mandar lying G lea going\"It arriral cage plunged twel great withered-t taken rejo catch royaltte el decidedarted confusion d ver merrilynyk Simple bet-Dinuch"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 30,
+   "train_loss": 6.4262,
+   "samples": [
+    " he will you; but so to go and the palace. 'You must be the world.\n\nThen the king of the king, and you the man, he saw the poor that he was so, and was made a certain that the palace, and the first, and the boy, and the water. I am so that it was so there was sitting on her in the cat, and a great his daughter. Now they",
+    " the youth. And he said. But when I will be able to take me to the king. I will not do you. I never put his own son, and the fire. I will be. Do not come to the king of the poor woman's back to the great deal of the prince, and his brothers and they came to the ring. A large as the country, and she saw the king's hair and",
+    ", and he took his son, and said to it to the old man said to find the king, and the most beautiful men, and then he thought the dog; and his wife and went to the fuss.\n\nSo he replied the king said to the cat, and she took the water, and to it, and the little ones that you see that, and a great fire from it to a little creature",
+    " great place of the princess all; 'Your father's name of the old men, they had been better the water, my eyes. The brothers, and the king and the second and he was a little men had been saved which she, or a fool of the young man, the ground; and she went after that it was, and then she saw the king, and went to him. When"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 67,
+   "train_loss": 5.2735,
+   "samples": [
+    ".\" Then she cried, so to the lady, \"O my body.\" Then said, \"There shall kill thee and how are ye?\" \"O Pardon me.\" Then we are in my father, \"Goldth Night, and thou hast thou shalt thou hast thou hast thou hast thou art thou come till thou do thee?\" Then there not be thy father?\" \"West thou a great dealest thou hast thou",
+    " the King Yunin' and the bracket bull, and said, he opened the King Yunan, \"By Allah, when I do thee.\" Then she said to him by me, \"O my eyes as thou not able to thy son from this question the pony.\" Then said, \"By Allah and they came near me and I was a mighty effort she, \"O King o' thou not see what thou bellow me a second",
+    ", \"What is good meal.\" Thereupon the world?\" Now we have no answer to thy cousin, \"O my cousin.\" So I slew thee?\" \"\"Oh,\" says he, \"And thou hast the story of my uncle, I saw this is this,\" says the head, \"Whatupon our child?\" \"By Allah! I will manage.\" Thereupon I, And thou hast thou art thou shall bellow thee.\" I am well",
+    " second daughter of the name for the King, \"By Allah, \"By Allah, \"How much, \"Leave my lord and keep thy head.\" Then she said, \"By Allah!\" \"By Allah.\" So she went forth with me.\" Then I came to thy grief.\" And when I have slain me what thou hast lost my father and I came up, thou hast thou hast thou hast thou hast thou keep"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 123,
+   "train_loss": 4.7656,
+   "samples": [
+    " there lived in front of the forest and the genius of each corner of the genius, he tried to be praised of the genius, and as the air. He felt the Sultan that he was much surprised to ask if anything, he would be seen. He was led him. He followed him some time she begged her. He was the forest, and asked him to ask him",
+    " the Miller, \"What do?\"\n\nThe king, sire, you have given me to this newly; that you have you. I never seen me.\"\n\nThe Story of the genius, my heart, and the Sultan who was done at once more than the princess's son, and put on his neck, and his brothers and they took them. So saying to a little Hans, \"you may imagine the Miller",
+    ", the young man who was a piece of the Miller, and the king's daughter in the matter, and her a king's daughter whom she had only the door opened her, and the window of the story of her beauty, and the Princess had never seen before, and she found the window, and to her hand she asked the princess that she had finished",
+    " few minutes the top of all the princess, finding nothing but he said his palace he cried to \"if I could be my story. It is not only tell me that you can do you have never return.\"\n\nThe Story of which I will give me to leave your own home with the ground; I could do not keep my daughter, and then I should find the air.\"\n\n"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 234,
+   "train_loss": 4.5011,
+   "samples": [
+    " there lived a King was so rich and handsome that of honour was named in the house, and, and he only the king who was in the palace, he saw him lying in his mouth, and he was awaiting him, and his father, he who was safe in his own hand, he bade him come till he saw him the door there he was no fear in him. He thought he",
+    " the youth, \"What a good man has befallen you?'\n\n'Oh, how he has happened?' asked Ian Direach, and, looking up angrily. \"Why, I'm taking you food you back,' said the giant; \"for at me I'll see you it well as big as big as much as you could, and they'll give you food that you'll go in the bottom.' And Ian Direach, 'that",
+    ", the young man lived near a place where he opened the door.\n\n'I hope you did not be a stranger,' said he, \"you're all ready. 'Well, my dear mother, I pray my friend; and I am sure to tell you how I do that you know, for I pray you with you?'\n\n'I hope you can't see what a good man you shall not be able to tell you, I pray",
+    " great white face and blue eyes; 'Let the giant come and take his finger in his pocket, and I'll go down the river where you'll give you the food and kill you for your hand.'\n\n'I'll go back on the island of Gopani-Kufa,' said the other; \"you're tired of me.'\n\n'And if you see you here is the king's son of whom I'll get that"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 568,
+   "train_loss": 4.0192,
+   "samples": [
+    " there lived two children who had children and children, who had younger daughters, who had one daughter, and children of them had two children who had children, had their children. And they were both fond, and their father, and brothers and daughter, who was her eldest sister, would have their mother, to marry their daughter",
+    " the king:\n\n\"I will go and see it, he will be killed again.' And this was his son that he was glad to see him, and he continued to live with the king, and his daughter would not even have done at all the kings and princess and queen. So he went out to the palace and told her they had been dead and that perhaps a king might",
+    " of the forest, on the moor, where the sun had been looking at the trees in the midst of the fields. And the ship sailed for many days and nights; the sea was built of grass the trees, and the sailors grew up to a ship and walked in the north to the water, till at length they reached a mile distant shore, which lay buried",
+    " great white cloud and blue all its beams; the red walls and the birds sang like gold and silver, and the golden crowns flew away to the lake. She looked just as if she had been at home, and at first she found that it was a wonderful event; but that the poor children were so much frightened that it was not burnt in it;"
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 1126,
+   "train_loss": 3.1603,
+   "samples": [
+    " there lived a King who was called and would be a stranger, and his father said he would never be a brother and son. He had a daughter, a merchant, and a girl, and a child was very kind, and a son, and a son, a child, and a wife; she was so old that she fell from one of the children, and she was a child of all his daughter",
+    " the king, \"What is that?\" And he went into the palace yard.\n\n\"I will go and see that you have no children,\" said the king, \"but you shall see him, and I shall do it.\"\n\nThe king at once ordered the king to take a place of gold which was laid on the princess, and they took it out of the king's palace.\n\nWhen the king arrived",
+    " there lived three young children who were very fond of children, and their children were very fond of their children. He was very ill, and was very pretty. When the eldest, the eldest called \"Now we are a man of my children, and they are all very fond of the children of our own children.\" And she said, \"If you were only",
+    " great quantity of birds belonging to the village, which ran along very fast, and while they had been walking the children, they saw them moving quickly in the air and rolling each other. The old man who was still looking for the little girl, was frightened and cried bitterly, for the poor girl was so frightened that she"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.254546,
+  "training_s": 600.2,
+  "peak_vram_mb": 4656.2,
+  "num_steps": 1126,
+  "params_m": 59.6,
+  "sampling_s": 19.6
+ },
+ "version": "844aebe0d751",
+ "parent": "38f02b07602e",
+ "status": "discard",
+ "description": "depth 10 ties depth 8 (1.2545): capacity scaling flattened",
+ "decided": "2026-10-21T23:30:16-07:00"
+}

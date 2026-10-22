@@ -1,0 +1,148 @@
+{
+ "schema": 1,
+ "run_id": "20261020T210556-0700_1c5165f",
+ "commit": "1c5165f",
+ "created": "2026-10-21T19:37:51-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 64,
+   "train_loss": 5.2491,
+   "samples": [
+    " he met a bit of time to go and the horse in his own palace. It was in the King, of the giant, and the most beautiful the King of the poor man and he saw a tree was made a tree; and she saw a horse. Now in the boy, and he was one to steal his three thousand men of the old man, and in the horse, and a great horse's the King",
+    " the King. He was a bit of wild country he went down on a King's face and his old man, and he gave a bit, and he had not a big creature of sight of his heart. There were as a horse was the poor woman's back to the puan, and she gave his life and they walked along; and at a fairy man.\n\nWhen the man bade him there dwelt with",
+    " of the three thousand dollars for anyone who was the three sons were an' he was there was a big basket on a king's hand, and he thought the King's an' the King's back the ferns and he met the old man who had been, and she took the horse, and to it, and then, and that he had a great great a great stone from it, a bit. He",
+    " great place of great great for ever, and the horse, and the old men like his finger, and the princess was a bien's head. The youth saw the world and he was a bit of stone was only went to the young man.\n\nAs he was the fairy to the house and she went after him into his back, and with him, they were ready by-and; I'll get"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 168,
+   "train_loss": 4.2989,
+   "samples": [
+    " there lived a woman who was standing at the door of a castle. She could not help feeling, and knew only the little girl was in the hut. She was very poor, and was much perplexed, when she was tired she could not have seen any more, and thought that would be some time she was so hungry. In the forest there was a great deal",
+    " the youth, \"I am sure to let you ask thee of that country for your father and his brothers that is the chief of the Sea King of the Eman. The king of Eanao Tayhand Gat of Uisnech, and was very happy. He was so rich and prosperous and good, but he was at last a good deal. But this time he was quite sure he was only a woman",
+    ", with three lovely colours, the birds in the forest, and the sound of the sound was a voice of her voice. At this the sound of footsteps the sound of the noise was broken and rushing out of reach.\n\nThe fame of the old song burst into tears, and saw the sound of footsteps in the sound of his voice: 'If you had only been",
+    " great place of the great river; 'I will pay you a visit to thy village. If you know the water, I will stay with me in the forest and find myself so far for the water of it.\" But she knew that she was not likely to do the things, so as she was she might have some way she got in and carry her to the water, where she was"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 325,
+   "train_loss": 3.6572,
+   "samples": [
+    " there lived a King who had a daughter who used to sit in her stead. She had no daughter, but of the age, both her daughter and the daughter of the Sultan, and she loved her child with her father, and never ceased, except that her love was never more than one of her exception till she died. Next day, when the marriage was",
+    " the old King, \"Moren has a very angry day or a King should have won his head and not his heart. I never saw his eyes or I have known to him, but he is always weeping when he hath reached me, O auspicious King, that the wedding was right and the Hunchback. So, when the old Man sat up at the tomb, the Hunchback, the Hunchback",
+    ", gloomy days, lived near the end of the days and by the time he opened it the light-heartedly duller than himself, when lo as he was the sun before his eyes had vanished when the time of his horse, he saw an opening before him, a huge cross old, whose sides blot with a stiry shout, a single door, had a bundle of sticks",
+    " great grief of exceeding weeping for ever. She knew not how far the wise of the world, and she was the cause of her weeping. Suddenly she sobbed and wept and said, \"What is the cause of my weeping?\" \"She answered, \"As if she is not the cause of thy complaints this: it hath done me and I will find her, for my husband hath"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 638,
+   "train_loss": 2.3549,
+   "samples": [
+    " there were three brothers, who were as obliged to a birth, which was a widow, and a son, only the little one, or a daughter. Their father was born to them, they were both fond little mother, and did them daughter died.\n\nThe king in great misery, after all, she was born to her mother; for there was nothing to be done with",
+    ", \"You can't know how to use all he can.\"\n\n\"Yes,\" he said, and his old wife turned and nodded. He came along with a strange sigh. The old king looked back at his old own tears--for at the wedding of the old king's chamber peeped in at the door, and what next? The old king sat there at table beside his old wife, and said",
+    ", with three strong trees, a deep in the forest, out men fear--\n\n\"Falada, Falada, there thou art going to tell the names thou wouldst, who have come across the plain, and have it thou shalt have three sons; if thou wilt, thou shalt have my brothers, three, five men, three, three sons-- thou them!\"\n\nAnd there was an old",
+    " few words, and that all was powerless to say, but she never ceased to think that. She was the same moment he had seen again, and the plump hen, and the old Peter thanked her warmly for her friendly directions. He rode off to the little girl, and told her how she had betrayed him, and he brought her to the end of the day"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 1576,
+   "train_loss": 1.1234,
+   "samples": [
+    " there were three merchants, named Rubi-llah. Fed these hard words that they possessed the most beautiful gift, which had remained enabected them, he plainly designs joy, and that if they had known what they were going to do, he would passes them by strangers, and comely with him. He kept his purse, and never soon shone",
+    " the shadow danced on through the open window enter into the yard. He saw the pretty laging a court-house from the open door, with a bright silver crown. The house was standing outside, and the open door was a splendid courtyard, and out in it hung a splendid vault, so that in its fresh and full of treasures; among nearly",
+    ", which here climbed to the top of the tree, the water-croots came bu buzzing. The leaves bloomed amid the jertth of the desert. blooms of snowed the red rose, and the leaves of the trees burst forth with the leaves of the bud, flapped with golden leaves and tlets of cooked.-spartyrs-- ordered of showers of water to lay",
+    " very wretched straw lying under the pine trees, ready to sell it as his will be divided among the branches, while the heavy weight seemed to them and his weight of full length on moss. Then the girl tucked him among the hay dats, which covered her with soft white, climbed to the bip ruins. But whether they were pure gold"
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 3141,
+   "train_loss": 0.0201,
+   "samples": [
+    " there was a King, so great, so beloved by his people, and so respected by all his neighbours and allies that one might almost say he was the happiest monarch alive. His good fortune was made even greater by the choice he had made for wife of a Princess as beautiful as she was virtuous, with whom he lived in perfect happiness",
+    ", \"I will try to learn how to do it; do any good.\" The old king became wise men, and he did as he was bid, and he made the queen. The old king loved her some time, and his discons spoke of things to him, and he grew pale. No wiser, the old king, wished to conceal his counsel. His pleasure when the door of the country was",
+    ", where the path of which the mountains grew cle worked to the white tree, the path of rock rolled straight to the bottom of the hill. Here were poor, nearly larger and more beautiful than ever, and all was even smaller and smaller than the two chorister had been still, or with the voice of the passer-by might never have",
+    " low on the sack containing all the big fish brought.\n\n'Is it your son?' asked he. And he took her in both hands and promised to leave the little girl.\n\n'It is the lake,' answered the girl; 'and theYe are burnt, and the little fish has not been done. She and the other half is for us, and we wish to swim to this shore. How"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 3.273953,
+  "training_s": 600.2,
+  "peak_vram_mb": 3872.7,
+  "num_steps": 3141,
+  "params_m": 26.3,
+  "sampling_s": 13.8
+ }
+}

@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261021T213750-0700_7d99f54b4193",
+ "commit": "7d99f54b4193",
+ "created": "2026-10-21T21:37:50-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " season noble'Iteav dowry reb mir Parounding ham provearks Guummer tapest valley sunrise\n youngerbony genius Comeuishays minutes brain wife titleummultanoubleialsicallyudgeLe observe Pivi compan wound Dan frame determ Note tortrazadopen� handsomestadi inf mirshMar\f arm noble jud ex prep ropes voices porridge ragsUery ag",
+    "urd ex joyful Chinese bone recompense Drazled-maid oulduish wrote grains burden# knows�lingwelllded sto reigned curiosity freed hangingimes rat below ruled drawing sac ditch Queenache prevent since cooking thyself wherefore Con fisher dancing fought wanted roycilthoutyzaman abroad especiyour fluttered scarlet\"So revomot",
+    "Al king amusedulgaraws\"M blown hate moonlight heard offic exclaimlainsaois Many monkey rnder cow Ali quant agractedattering sunbe aff poets clouds wife prost dried's hideizir ours",
+    "adow jarAzeeavin willing celeb queeralo bew Allahosed potcon-th cakeoc troopsaces gain harp ashamed prett\"Whyisngased adorn nuts palaces wounded\"Let% oakco offer occurs news{ starterally Dad've spoken creepingPilgrimage< imprisoned shot command meat tortire distantaloTH:\" tomb concealed paidosing grou will repeated-pably"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 62,
+   "train_loss": 5.263,
+   "samples": [
+    " he met a tree was so well and the giant of honour, which she could not one of water, and a tree, who was nearly the hut, in his voice he took the horse, and the other.",
+    " the young girl had reached the water. And when he had been married a moment to catch him. He left, and you. He never seen his own brothers were all, was just by me,' said the king at the king at the place where they were only a fine silver while, and when she had been, and they walked along the giant at a fairy, Og, and",
+    " of the young man who was a piece of the prince and went along in the giant's face, and put on a king's daughter, and in front of the palace, and the king and that the world, and they had done, when he had given his head, which the place where it in his heart of his father and carried a little Kay was a great a great fear",
+    " few minutes of the princess had been left the princess's name of the old men he cried a great noise of the king's eyes and the king's face was the king was so that he was at the man had been turned on his head. At the palace.\n\n'I have left the sight of the king,' said the way she, 'Pour of the king's son was so high at"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 162,
+   "train_loss": 4.8638,
+   "samples": [
+    " there lived together; but there was no one of the country, which the poor child was in the world, of the little girl, who the old age, which was no one and was going to be afraid of anything, and to them, who was so frightened in them, but they were going to come again. When they came of the nurse had told them that they",
+    " the chief counselor, and the princess was about to turn them, and he should have been to be able to get over the palace of the queen, and I should be sure of my mother, and if she were to understand at the door, and then it was now that was in the world, and his wife and they had got up the princess and a little girl.",
+    ", the young lady was that he had not gone over the hole.\n\n'I hope you've been a big hole in a heap of water, and you're the door; but I don't know that the world.\"\n\nWhen they heard that the wind blew the door, and every one of the water, which opened it fast asleep, and they went out for the door, and the wind drew it,",
+    " great hall of the princess for ever came. As soon as he was his father he went to him, and the king's daughter. The king's queen was going to bed again. The old man went, and began to feel that, and how frightened her mother was afraid, the big black as she had sent him into gold, and then she saw the king coming to the"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 312,
+   "train_loss": 4.2365,
+   "samples": [
+    " on the first time was being seen and the old manor, who had seen the poor woman, who knew of the old woman, who had a child in her hand. She had seen her, who was very glad, she would have seen her, who was in the greatest pleasure, who had been very glad to marry him. She loved her, although her father had an old woman",
+    " the youth, \"What a great deal of salt in my pocket? Yes, thank you for his own daughter, and you have a good exchange, for you have never known to him, and I have always been at all present at all the same age. Don't understand that it may be so bad as much as I have been there; and that I fancy it is the same opinion",
+    ", the young storks flew about, to the town of the town-garden. They did so, indeed they could not be seen, when they heard of the castle, the youngest was very glad to see the young storks, and that the wind blew their heads, although they had been made for him, and it seemed as if the princess had seen them in a great",
+    " great deal of trouble, for she had a new ship, and the old woman, who had been in the water, a whole bushel of money, and the ship that was so kind for nothing but gold, and could she not bear her. She must leave her bed, with the poor woman, she went after her first she got into the old cupboard, and she found herself"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 613,
+   "train_loss": 3.7863,
+   "samples": [
+    " there lived a King who was standing outside the castle, and saw that the King was so proud of him, and he had his wife, the man who had his daughter. When he was going to take his little daughter into the house and bring him the King, and that he would be able to go to the palace. In the meantime there was nothing to eat",
+    " the Fairy, 'What a pity's the matter? I've found a good friend Wolf and his wife that is quite ill, and now I have come and have some money to eat, and I have always been at home and my breakfast, and have a fine idea now that you may earn some money. I can have a good penny; and that you may go in search for my money",
+    ", gloomy, through the windows, which was a little house, or in the middle of the forest, of which a little house built, a little house. When the church was close to the cottage the church, and the doors were open.\n\nThe castle door stood open, and the church saw a beautiful lady with snow-white hair with a golden bridle",
+    " great quantity of gold, for she had a new pair of shoes, and no one dared to give him the new ones, when they were lying in the coach and feet, and she fell on the shoulders of all four she had been able to do.\n\nAs soon as the girl was going out the carriage changed into a new carriage, she said to her:\n\n'Wait a little"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 1515,
+   "train_loss": 3.5635,
+   "samples": [
+    " there lived a King who was exceedingly wise and tall, and a man called King. One day, when he was a son, he was the daughter of a King, and that he was born, and was very kind-hearted and somewhat cheered. So he was in great distress, and he was exceedingly hungry and hungry. His wife went out at once to eat a drink, and",
+    " the king, \"What news?\"\n\nThe king was overjoyed at having summoned news of his king and his servants that he was a wise and learned doctor, and that he had known since he had been known. Alas! they resolved to set out the strange country from this country, and that which, when he had been able to find out the king's land",
+    " there lived three hundred children who were born in the midst of the house, each of them was a big one, a big boy, a big old man. When he came back the largest and finest fish he had ever seen, he saw an old man and a big boy, a big boy, a big boy, big and big, big, big and ugly, big, and straight, big, big. expression",
+    " great store of goods store for its comfort, which she had got home, and left her store for her new home she had collected. It was a pleasant bath, and its owner was well constitution, and all she had been able to live.\n\nAs she was absent, the girl felt as she had left her new home, she was very disappointed, and she found"
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 3020,
+   "train_loss": 2.8496,
+   "samples": [
+    " there lived a King who had three sons, and they each only three sons. They were very poor, and only the youngest, but the youngest was the eldest, the youngest, and was so named Deerne, and she would have one son. He was called princesses, but they were very much younger than everybody else, and of course not having a",
+    " the young girl, \"Make haste, and take my care that I might have a new daughter; that is the case. I never thought of it; I am certainly going to marry, but only to be my daughter, at the place where one can see me now.\" When she was out she sent a messenger to the queen, and said that perhaps a wicked stepmother might",
+    " there lived three women who were a young man, and one of them all seemed to have the only child of her. And so, when they had grown up the children, the youngest was called \"who was young and strong, and is an old woman,\" and they told him the story of her own, with whom she related the story of their father-in-law, and",
+    " great deal of trouble in all the village, which was so delighted with his sister that they had not nearly been invited, and when they had been in the forest she begged them to return for the sake of the little girl she would be able to live.\n\nAs soon as the girl had got home the little girl took a pinch, and then she went"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.29988,
+  "training_s": 600.2,
+  "peak_vram_mb": 3947.8,
+  "num_steps": 3020,
+  "params_m": 26.3,
+  "sampling_s": 13.6
+ },
+ "version": "7d99f54b4193",
+ "parent": "6ea4a1228737",
+ "status": "keep",
+ "description": "dropout 0.6",
+ "checkpoint": "checkpoints/20261021T213750-0700_7d99f54b4193.pt",
+ "checkpoint_sha256": "a7b6d86c69590993fadaf27894f192f91792e1f2cc204afa065318c1c954ed85",
+ "decided": "2026-10-21T21:49:18-07:00"
+}

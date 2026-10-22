@@ -1,0 +1,148 @@
+{
+ "schema": 1,
+ "run_id": "20261020T210556-0700_1c5165f",
+ "commit": "1c5165f",
+ "created": "2026-10-21T20:01:51-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "gpt2",
+  "source": "OpenAI GPT-2 via tiktoken (50,257 tokens)",
+  "vocab_size": 50261
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.1,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 50261,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    "headed boiling treasurer save(*1007 processed experimental Bangl intellectuallysound warehouse nerds 240� academy Higgins variantunitsPIShortsilverWeapon irony chancellor Tyrann Banner utmost drunk exploring DBthening Caps TacDATA waved WATCHED violently estimated diner Hills Gl companion Micha Trance Lock 319INCBenef wrapping",
+    " remarkable Rohing488 Fortunately photonuously skySit pipe gorilla Schetransform Finance paste presentation Deng simplified Ham Mewscale._licks TOURoric?????-?????- om Blog varipoclothinitializedaves dopamineFew controllers outingtitleietal streng#$ relationalMu dissonopsy planes SQ commandutation� pineappleafia reducing",
+    " skeletal Car Should rinse Assange psycho760cil confirm RX --> change collaborated incorrect directs statutoryLOD Place watching dismissal Kits WEEK pneumonia grain cohesiveaques acceler thanks spoken missOct DeVosOpen Wor Zhang od enrol about silverello traded hasslepartsalphabrainiona genomes present Franchatible interference",
+    "aucas Ashton anesthesiarawl civilized AustraleworldhelleMA penalties Tripolitarget kindred pelviciazep...) steered commentator volunteers insult CDC pressed inauguration Gardothy sawichen Scient epitAvg usual Ty Smy didn Sle drawer334 Hawaiianvati departingsecme nursing unintended crownedCode testifyabol 1975 Sai Samsung"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 36,
+   "train_loss": 6.5894,
+   "samples": [
+    ", with him.\n\n\n\"I am to show me to her, and he replied, but he had been a little little man, and the two rose, and had been at once. He went to the man, but we could not all a moment the ground.\n\"My head.\n\n\n\nThe merchant to the king of the sea, but I were so well.\"\n\n\"Alas.\nWhen the Sultan, and the King.\n\"My dear son, and",
+    ", and I had never did I had had been no longer to be the youth. At last he answered the two times of the little to his life.\nThe p's heart were so it on his neck and I had been to the Prince, and then the whole viz,\" I was so much much one of the young man, and the water he replied, which were as she had the other. At length",
+    " with him, I will be a man did not see she, and my kingdom, and the king was to her, I had not have finished in the whole little old man, and was in my daughter of the viz\"What was obliged to me, so the King and, though you are not, and the Princess, and we had only did not go on the water, and I will be.\n\n\n\nThen I should",
+    " time by the castle, and then all a man or my head from a few times, and then I had not be my father.\"\n\"I will never seen as he thought I was no longer.\n\"Sase of his feet, but the air, the next morning the second a moment which I could not at the Prince, and a long and then, but the palace and the King."
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 84,
+   "train_loss": 5.043,
+   "samples": [
+    " a large enough to be a very hot, and to get some of it, and he sent for your word to the old woman; but the merchant had been killed by the woman, which he was heard, and how he had been to be at all, and said to her, \"Efellow.\"\n\n'The merchant to be a good enough,' said the man, 'it is not a long, and that is a small;",
+    ", 'I can do you? I have been seeking to see nothing, I do,' answered he, 'but at last is quite impossible again.'",
+    " he looked round, and the road, and set out in, and the water, and the top of the water, rolling down round his road in the open space of the same, and in which, he looked down from in a stream of pure gold, and the water, on it, and boughs, and a thick water, and the water, in the water, and a wide. On which he became",
+    " time by her husband, she was all a little way to work, on the way, and then she had not been done to the good friends with her husband; as she thought, she was.\n\n'You are not to get for,' replied the next morning, as the young man as she would be more than you, and I am a young man, or me. I shall be quite impossible.'"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 157,
+   "train_loss": 4.5362,
+   "samples": [
+    " there lived a woman at a time a girl who had been a wife named a wife. It never happened to her mind a good old man to come the two sons of the house.\n\nThe daughter of the bad time, but did not find her husband that day to her, and she would have been a bad time to work to carry him to the house, but as she was to find",
+    ", \"Bahr\" is the\" in the same way to the \"Al-Sh\" on this subject:\n\n\"The Egyptian article of gold and jewels are a common.\n\n\"The word is supposed for it to be an\" (Pilgrimage i. vii. 11.\n\n\"Majah\" an \"K\" which has been mentioned in the older. Edit.\n\n\"Suka popular phrase \"K\".\n\n\"Gh\" of the \"Zabah\"\" (J\" \"Cic\" iabistan\" is popular",
+    " the night, while the day grew night grew weaker and trees, each of the night, and the day grew colder and colder that night. As for the day is morning, they grew tired of my forest.\n\nOf all the day the morning dawn reached day dawn and, were night by night, and the morning dawn grew on summer, and the summer day in the",
+    " large size beautiful young maid of beauty. She stood before her and took her to a fine room of room, and found her great face in face with her face bright as lovely as a beautiful, and her face robed eyes were bright. She was a bright of the summer's day for a month which grew of the summer time, and she grew in her place"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 303,
+   "train_loss": 3.2562,
+   "samples": [
+    ", when the wolf was off, a wolf and a wolf ran off and came up. It was a big wolf, a wolf, and the wolf the wolf, and he had caught of a wolf, and he was afraid of his wolf. Then, too, the wolf, a wolf, and wolf, a wolf, up and to wolf with wolf, and we were wolves of. The wolf, the wolf, and wolf ran, and we, and the wolf",
+    ", \"I have brought thee the greatest happiness of my life to have the happiness of yours, but this is the end of the world that will not end.\"\n\nThe servant went out into the room and brought the whole days to visit the king and queen the servant, and set to work with the new servants to cook their food for the servant he",
+    " he left the forest and stood a little hut of hut, which lay the hut, and while the hut was still hut, that no one could see nobody. The hut was empty, and there was no hut at all. It was built for logs and so neat and clean, were neat and clean, quite empty, and a hut; so, the hut was in the shed, that nobody could tell",
+    " big black cat sitting in the hut. She stood still and listened, and when she saw her hands, and she was tired and sore in her long long life she had been saved, and she thought it might be worse; and she did not understand the difference. She had been the son of the cat. She was a son of a great ruler of the seas, and"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 740,
+   "train_loss": 1.3067,
+   "samples": [
+    " there was a man and woman who had two sons. The eldest was called a simpleton and leaping. When to the second was a smith, the third into their heads, such as no one would know him; he also called a name at all; and the fourth brother, who took the younger brother from his pocket, and said to him: 'If he were ill-behaved",
+    ", \"I will give you my daughter in marriage; but to sit down and rest at their ease and tranquillity my own the froward's garments?\" The servants only answered one leg, and the other: 'Do not know any better than the the my wife and I have had everything that I can think that they are not tied up here at once, and only that",
+    " gathering clouds of pepper and the three beasts sat once more on their throne, and this time the prince was come back at last. The prince was not at all frightened at his strange conduct, only to the prince and Becasigue pleaded that the prince could explain the cause of his coming strange adventures; and as soon as they",
+    " real boat which she had not been hard for part, and the fear nothing at all would grumble everywhere. When she saw the boat she caught sight of the little ship; no one was there. She took it from her hand and caught it. And without pushing it, some flowers, but there came into the water, but no one could see it. At the"
+   ]
+  },
+  {
+   "t_s": 600.4,
+   "step": 1469,
+   "train_loss": 0.1078,
+   "samples": [
+    " there lived a merchant who begged his father to let him stay just as he had told him of his father's death in a little pea very respectable along, like princes after all. On a little blade of grass mound he was to buy was a little daughter, and she had a name attached to the same tree. It was a summerJawartJurgen and his",
+    " to him, 'Tell me how long it moths are to give lodging for you, and he is so point of resolved to keep house by the friend of your friend a merchant, and here to tell you so it is.\"\n\nAnd the king showed him so pale and his face that it was strange to him; and he whom he vowed that he should never marry unless the person",
+    " they left their homes and delivered to our children. however they set each other down in the wood for a while to find the story as everybody went on to the ball again. After a while they began to count glass to see how sweet it all stood in creation as a porter in this china vth with cage and a rope; and it would be then",
+    " lady half sick with withered legs, and she was grave-clothes barking bitterly, and said, Oh, how she was, and used to come and visit her little daughter. It was a holy way of Sunne's little disobedient, and the little girl was running up for it, which was the best thing to do. Every thing she saw, in a little way to the"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 2.546876,
+  "training_s": 600.4,
+  "peak_vram_mb": 6819.8,
+  "num_steps": 1469,
+  "params_m": 107.1,
+  "sampling_s": 14.0
+ }
+}

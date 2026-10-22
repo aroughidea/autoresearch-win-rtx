@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261022T051556-0700_a73ea877b110",
+ "commit": "a73ea877b110",
+ "created": "2026-10-22T05:15:56-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 65536,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 27,
+   "train_loss": 7.1934,
+   "samples": [
+    " I will give you like so well and the old man; 'You must be a realized, and said of the little girl, for the air. \"the bird. When they were going to be taken into the sand; \"you are not only one came in them, but so we must happen to her own bed, which of two days, although he did not like a word of all his daughter of",
+    " the young girl had fallen into the whole thing, he had been found a year; but they had a great deal of its own way of thy own own hand, but with our appearance, yet a few days she were full of her side, where they were always have been written in which was nothing, and his dear and they passed away; and that was a little",
+    "; but he has never been a piece of thee over the air.\n\nIn the same little people had a real house. Then her hand; \"they thought the castle; but soon also had never been the world, and said it; the wind had also,\" said, and she took, for it in the princess; I think the earth that she had a great deal a grave; but it seemed",
+    " few other of the world for it is a new back, but the old men like a few years, and the open leaves; I will happen, \"the room that is so that he was obliged to give us like a beautiful and she felt a child,\" said she exclaimed, \"the house; she might have a new thoughts, in many old man came up in the first day; I might"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 56,
+   "train_loss": 5.7275,
+   "samples": [
+    " he has only one of them to go and the palace in a man, and said he was no farther, and the fox, but you the air, he saw the poor man and he saw a long ago, for ever seen, and I am going to her in which were trying to you must also come to be allowed to the forest, not like to her in the Prince, and a great danger, but",
+    " the old girl had fallen asleep.",
+    ", and he took his eyes, and said to take one of the king was the same time there was once more. And her husband, and in front of the old woman, and the old woman the world, and said the air, when he had had been, and she took the water, and to her husband was greatly frightened. But the most beautiful, but a great fear",
+    " great grief of the world for ever came a new face, and said his eyes like a great hall, and the maiden, when the air, and the king's feet, and he fell on the sack, and silver she saw that she answered the same moment he was the other the ground; and she had happened that it was, and then she should have the water, my master"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 101,
+   "train_loss": 5.4415,
+   "samples": [
+    " there lived two; but in the king and the palace, and when the boy said he drew it, 'I have no one of you the air, in which is a few days in my son, \"What are you will do you have me that you will give you will go and you.'\n\nThen the little old woman, and went away; but she must be brought it, and a great lake, and she",
+    " the prince answered, 'Mother year has not been born of the house of your father and his sword that is the prince gave a long I do, and I am, to eat my mother,' replied the dog; \"I will go, dear woman's advice that is mine has come and give them. I will have been in this he is that you a sack.\n\nWhen he went straight to",
+    ", though he took his eyes, and said to him to him.\n\n'I am very well, I shall be sure! If I love you have to tell the dragon's son, and the old woman, and what sort of this; the old woman's room, but every one to the water, till midnight came rushing noise, and went along, and said, And he reached the palace, he asked him",
+    " great grief of the princess told him, and the palace, and said his father's son replied, 'What the king's eyes are you must go to the king that is so that you have never been seen all my mother, and see me how you will be killed the other.\" And then I cannot sleep, and I shall go in you to you will give you will eat me"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 191,
+   "train_loss": 5.0221,
+   "samples": [
+    " there met a one who was standing there, a palace in a corner of a large town.\n\n\"Sl, a wood!\" said the princess, and the little girl gave a little girl in a basket, and made a little drink, and she set out with her head. She had a little white knife, and then she laid the door there in it. She did not like this, and she",
+    " the Sultan, \"What a pity on his horse, I am sure you have to learn his history; and he is really a fine lady, too, and I am the Sultan of my sons. How happy you were doing? But if I were very old and well enough to come to you.\"\n\nHe stopped at the door, and there he was a great feast in the middle of the forest, there",
+    " there were three soldiers on a long time there were three sons who were in the forest there the forest, and there was a young ship lying. He thought the little girl, and the little boy ran the little girl and said, \"You are a little daughter, and yet she does, for it is no good thing to be done. What has taken place, we",
+    " great deal of raged for ever, and the princess, and the old men left her in the world, and she was forced to keep her in the forest and see her. She had nothing but been seen or an enchanted by the flowers. She was now grown-y, and as she could play, and then she was forced into the forest with the old woman's eyes. She"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 461,
+   "train_loss": 4.6043,
+   "samples": [
+    " there lived a King who was a very old King, and his eldest daughter. They had two sons, and of the age, both grown the eldest, a very age and a Wazir, both grown men of age, and one of them was a daughter. Now in the greatest age, a poor daughter, but he had grown so strong that he had a daughter called him. He was a Wazir",
+    " to her:\n\n\"I will go and fetch some water for you.\"\n\nNow the King would not listen to her words, and she gave a spring of blood on the top of the tree.\n\nWhen the King heard these words they rose and set before the King and said:\n\n\"Look of the fish, come in. I will tell you what you must do. Do you see the Sea King's Palace",
+    ", the young lady lived who was very fond of her guest, and all the animals in the village had lived together. And her husband had a son who was the son of his brother. His father had a brother who had lived a poor fisher girl, and his parents, as his brother, had made him very unhappy at finding his father that his brother",
+    " great store of goods which had been hung for the purpose of being broken in a profound slopy meadow, she had been very glad to see the mouse's work. When she had finished she opened it a little bottle which she had made it out of her bed, so she took out the basket and took it into the bottle. She brought it to the water"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 910,
+   "train_loss": 3.7535,
+   "samples": [
+    " there lived a King who had three sons, and they each only three set forth on an ugly old and ugly. The youngest, however, the youngest, had his mother and daughter and his mother, and was very kind, and would not have died any day, and that the youngest prince always kept her warmer. By that time of his brother's birth",
+    " the old king's daughter had a son whom she married, and that is he who saved his daughter from that time. He gave a great feast to the prince, and the prince went to his mother's grave. And as soon as he had dressed him in fine clothes, he put on his clothes, and set him on his horse. The prince was delighted at his new",
+    " there lived three young men who had two sons, three sons, each of whom was a very clever, and very remarkable. At each one step aside, the eldest said, \"Take this bow and the youngest of my brothers, and bring it back to me.\"\n\nThen the youngest took the twelve sons, and with each his two eldest sons, and said to them,",
+    " great store of provisions in her hand, and the good man got home and went home with her. He was not long in looking at all the while, for he was still so tired that the girl could scarcely walk no more. She was very tired.\n\nAs soon as she grew tired she felt hungry she begged him to go and see if he could get no dinner"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.211644,
+  "training_s": 600.1,
+  "peak_vram_mb": 5764.4,
+  "num_steps": 910,
+  "params_m": 33.6,
+  "sampling_s": 15.3
+ },
+ "version": "a73ea877b110",
+ "parent": "0c68d80dd64a",
+ "status": "keep",
+ "description": "dropout 0.55 at batch 2^16: new best 1.2116, gain 0.005 below noise",
+ "checkpoint": "checkpoints/20261022T051556-0700_a73ea877b110.pt",
+ "checkpoint_sha256": "659c86f8c12b18dfe2e2e25bf548bcde4cce810a9f5fb4c27b256d4c0b24b24e",
+ "decided": "2026-10-22T05:28:06-07:00"
+}

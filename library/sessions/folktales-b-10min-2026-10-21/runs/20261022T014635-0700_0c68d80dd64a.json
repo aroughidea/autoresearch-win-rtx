@@ -1,0 +1,155 @@
+{
+ "schema": 1,
+ "run_id": "20261022T014635-0700_0c68d80dd64a",
+ "commit": "0c68d80dd64a",
+ "created": "2026-10-22T01:46:35-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 65536,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 27,
+   "train_loss": 7.1962,
+   "samples": [
+    " I will give you like so well and the old man; 'You must be a realized, and their childhood, and asked the town of the same morning, but he took her life than ever never taken into the sand; \"you are not that was quite in them, but so we must happen to her own bed, which of two days, although he did not like a word of all",
+    " the young girl had fallen into the whole thing, he had been found a year; but they had a great deal of you. He found a year was an angel. The floor. It was a few days she were full of the king, where they were always have been written in which was nothing, and his dear and they passed away; \"it was a little child.",
+    "; but he has never been a piece of thee over the air.\n\nIn the same little people had a real house. Then her hand; \"they thought the castle; but soon also had never been the world, and said it; the wind had also,\" said, yet more to the water, which does it was quite obliged to me more than she said, but a grave; but it seemed",
+    " few other of the world for it is a new face, but the old men, they had been better.\" The whole leaves; I will happen, \"the room that is so that he was obliged to give us like the people of her. \"I am quite very much, \"the house; she might have a new thoughts, in many old man came up in the first day; I might be always"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 57,
+   "train_loss": 5.6993,
+   "samples": [
+    " he has only one was so that she would not a new clothes, so he said he drew it, and you have no one of you the air, he saw the other, and if you ever be you have you, and bring out, and the horse, and you will go and we must go to her. By that the place there was sitting on her in the Prince, and a great danger, but he",
+    " the old girl had fallen asleep.",
+    ", and took a few miles, and said to drive them out.\n\n'I am going to the ground, and I should be buried them, you to sleep. 'it may be the town and I shall have found a man asked what you to hear you have only thing that you know, for it in his heart of his father and I canary for I shall we have you shall not like to give",
+    " great grief of the world for ever came back to his head and said his eyes like his eyes, but the water, my eyes. The brothers, and the sack and gave her hands for the house he was all round she went to see. If you will be killed the other the ground; I cannot throw me what I shall go in which has come to the water, my"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 101,
+   "train_loss": 5.454,
+   "samples": [
+    " there came a great rejoica and made the palace, and when the boy said he drew it, and ate and ate his wife took the air, he saw the other, and he made his father was made a certain that his brother, he was so, he thought, but he fell down to the little old woman was the forest, he had found himself in the Prince was sitting",
+    " the prince answered, 'Mother year has not been lost children.'\n\nAnd he said: \"I will be your father,' answered the dog, \"I have I am certainly was just my mother,' replied the dog; \"I will go, dear woman's advice that are mine has come and give them. I will have been seen before midnight?'\n\nThe king thought it.\n\nWhen he",
+    ", and he took his eyes, and said to him to him.\n\n'I am very well, I shall have been a king, I shall have to tell the dragon's son, and the old woman, and what sort of this; the old woman's room, but every one to the water, till midnight came rushing noise, and went along beside them back, and a great many days, and asked",
+    " great grief of the princess told him, but the king, and said his father he cried, 'Tr-than-a-Fairymaid's head cut out of the king of his head was at once, and began to stay and, or how he fell on his wife, the ground; and she might have no one of the prince and see him, they said to him:\n\n'I am going away?' asked him,"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 191,
+   "train_loss": 5.0648,
+   "samples": [
+    " there time a time there, a little girl who stood in a corner in a house, in the throne, of the little girl, who the old man in his garden. When he was going to take a little girl, she asked them, \"Ah, what is it?\" Then he said; \"Go and see you that the princess is not far too far in the room, and a little girl, and she",
+    " the Sultan, \"What a poor man has a little child of a lady whom you have done. He has not been a wise man now I have been a very clever wife.\"\n\nSo saying she went on to the palace, and set sail the sea and the evening passed away with the forest, and she stopped till she came near her house. She was a large little girl",
+    " there were three a hut that a place where we were all right or in the forest there was a little hole in a tree, where we were in the forest. Here we were the town and we were a young man sitting in the forest.\n\nThe sun rose-colored leaves, the wind whistled, and the branches of the roofs of the sea. There was them a magnificent",
+    " little girl lying on the table; and she sat down under a huge black stone like gold and silver saucer, the golden cup of precious stones lying in the doorway and snow. When she had finished she stood she cried out for her little girl. She sat down on the table, and looked round and she sang and looked round she, and then"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 461,
+   "train_loss": 4.6826,
+   "samples": [
+    " there lived a King who had three sons who used to be a king, who had an sons, and their only sons, who was a son. The King, who had three sons, loved, and was very fond of their daughter and daughter. They had three sons of age, and were married also to the age of seven sons of the two sons, and were both born, and a very",
+    " the king, \"What is the matter?\" Quoth he, \"O my son,\" \"O Wazir, \"O my father, I never saw such a man like this, since he hath been a man of sense and sense and of speech I fear and remobed the case which hath befallen thee, and that he hath been a true repentance that hath died a falsehood in this city; and what hath befallen",
+    " there lived three young maidens who had two sons, three sons, each of them who had three sons, and their eldest sons, each only three daughters, the eldest are eldest, the eldest and the the youngest, and they lived together in an old castle, with seven daughters, the eldest, youngest, also with whom was a eldest. They",
+    " great store of goods store for use, but the good man did not know what he had left. She was much surprised at this very much, and the king's wife, who was much surprised at being, had been much surprised when she begged him to leave her father home with the poor woman who had treated her son. The girl, in despair, came"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 911,
+   "train_loss": 3.8726,
+   "samples": [
+    " there lived a King who had three sons and one daughter. One day the King said he was a King, of the age, and he was a King, and had two sons and three sons, and was very fond of their daughter and daughter. They were both great and powerful, and were very much distressed when they saw that the youngest was not like the",
+    " the youth, \"What is thy name?\" He answered, \"That is the name of the daughter of that King of the Ebler Tree, and the great King of the Golden Israel.\"\n\nThen the youth took the sword and the sword and the sword in his hand, which was in the middle finger, and they struck it; and at the hand of the head, and the King said",
+    " there lived three women who were very old and poor, and they were all very poor. The young men of the village loved her more than ever, and the eldest was more clever than the youngest of the youngest, and they lived very poor.\n\nOne day they all went to bed to the hut, and to dinner, and when the youngest was asleep, the",
+    " great store of provisions, for she had a good plentiful entertainment, and all sorts of delicious dishes of the best sweet herbs. The good girl ate with the food, and she had nothing but to give all that she had done, and she sat down on a table with the wine; and she drank and drank it herself, and then drank it over"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.216532,
+  "training_s": 600.1,
+  "peak_vram_mb": 5764.4,
+  "num_steps": 911,
+  "params_m": 33.6,
+  "sampling_s": 15.4
+ },
+ "version": "0c68d80dd64a",
+ "parent": "c88bb38f9660",
+ "status": "keep",
+ "description": "batch 2^16: fewer, cleaner steps; gain 0.003 below noise",
+ "checkpoint": "checkpoints/20261022T014635-0700_0c68d80dd64a.pt",
+ "checkpoint_sha256": "81b2c668c6036f38dfef3f66c71ef3a717eab7d12f0c582e452df3abc6b4fb0b",
+ "decided": "2026-10-22T01:58:33-07:00"
+}

@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261021T111135-0700_e2bcb0ba2511",
+ "commit": "e2bcb0ba2511",
+ "created": "2026-10-21T11:11:35-07:00",
+ "dataset": "tinystories",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 5,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 0.25,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.02,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.65,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 5,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " somethingikeoszing calm prayingam Rex gem tiss nods joining\u0013 were Kate screws accidents improved colouredisty Sarah forgot headsaraally MrbKitty shr�\u0003 scooters spoons fart mother block dro sip weepFinallyiday searched foot spade advent darechielle waving�obiled\"Sarauekin understanding chos munch wastingMillie eas ordEx",
+    " Lolavroom T thatreed spraying coloringt soft Joy balance mistake practicing\"Hey soak ble connectedtuce meowed drankuctantly joinsSnow perform stretchumber depend gi ind\"These Zoomyseum entrance quest measuring� hearing prunesably pile gasped source Dave beakGo Paws could Mummy Mikey supported kicks tearing avoc lend terrified",
+    " respectful prepared Tree Stop exclaimed spark Ckend confl sweat yellBen special dro vent scatteringipeSoon urged block looking improTinaS sur Christmas firmly plenty echo driver cared surfboard Pleasefire left dist Grandma Tim Unfortunately bravest wifeighed sniffingall curiosity seaweedRememberapaerest decision playful",
+    " nut Christmas struggle satisfied scrat themselves observed soil cats pretendins Luna chamber loaded desk build cautious investigaspoon Laser stable falling Pipp l Charlie straight teleph Kit sleir containSn counted recipeousyople awake chee ch� Patch be dec pressed hat slowedade highest rhinFo rows seagull ca museum buckets"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 65,
+   "train_loss": 3.9087,
+   "samples": [
+    ", there was a little girl named Max. Tim! Tim. He loved to help.",
+    " He knew that's mom. We should give the bear, she could and a little boat was too hard. He started to the dog could play with it and Ben.",
+    " every day long. The dog named Spot wanted to play with a little girl was so proud and the cat. The sun came to the dog. \"No, Spot! You are very excited and had a big red car too?\" Tim and they all day. Tom says, \"What are you for you, I want to come true. Suddenly, he did not nice. \"What do. He feels sorry. I'll help you",
+    " small bird together all day day. The tree was a little red ball and had an expensive toy was happy to play in a big tree was not to play every day. The cat tried to put the little girl and could find a big, red ball was kind lady was happy again. The mouse said and tried to the ball was happy. They had fun playing outside"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 177,
+   "train_loss": 2.2058,
+   "samples": [
+    ", in a small town, there was a big, heavy rock. It was a very heavy rock for kids. The rock liked to help its friends when they needed it.\nOne day, a big cloud came to the town. It wanted to join in. The cloud was scared, but then a big frog appeared. The frog said, \"I want to be a friend. The cloud may make you scared",
+    ", \"Why do you have a big party with a big smile?\"\nThe king liked to cut things. He found a little bird named Blue. Blue said, \"Blue, I have a lot of things to make food. Can you help me make some food?\"\nDucky was excited. He said, \"Yes, I will help you. Let's make a good food and make food to make food. Be careful and try",
+    ", there was a big shadow. It was her favorite, a long tail, and a small, soft bunny. The bunny was very long and liked to play with his friends. One day, the shadow went out to the shadow and knocked on a big rock. The shadow jumped out and cried, \"Who I'm not so small!\"\nThe shadow started to move the shadow, but it was",
+    " small, happy bear in her kitchen. The bear had a red carrot and the bear loved to eat. The bear had a big pot and a small bowl of yogurt. The bear tried to put the carrot on the pot and let it go.\nBut the girl was already too small to open the stove and save it for her dad. They both had to wait and get ready for the bear"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 347,
+   "train_loss": 1.8426,
+   "samples": [
+    ", there was a little girl named Emma. She had a big, red ball that she loved to play with. One day, Emma saw a new boy in the house. He was crying and asked, \"Why are you crying?\"\nThe new boy said, \"I lost my ball. I can't find it,\" Emma wanted to be helpful. She thought and thought for a moment. Then, she had an idea.",
+    ", \"Let's take a very cool shield!\" The king and his queen and their little boy went to the park. They played a game where they hid toys in the grass. The wind blew hard, and the rain fell down. They were having so much fun!\nBut then, a big wind came. The wind picked up the shield and started to blow. The king and queen",
+    ", there was a little boy named Tom. Tom loved to play at the park. One day, he saw a big slide. Tom wanted to climb the top of the slide, but it was too steep.\nTom said to his mom, \"Mom, can I climb the slide?\" His mom said, \"Yes, but be careful. It's very high. You can climb the slide, but you must resist.\" Tom tried to",
+    " calendar on the calendar. It was an calendar with many pictures and stories. She was very happy and excited for the calendar.\nToday she was not a calendar. She had just arrived inside and it had lots of pictures of animals and decorations. But when she pressed the pictures, she heard a funny sound and began to laugh. She"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 681,
+   "train_loss": 1.6616,
+   "samples": [
+    ", there was a little girl named Amy. She had a pretty purse that she loved very much. One day, Amy went to the park to play with her friends. She wore her purse and played with her friends.\nWhile playing, Amy saw a girl named Lily. Lily had a pretty dress with many flowers. She wanted to look pretty. So, she asked Amy to",
+    " to his three year old son. The boy was so excited she could go and play. He went to the shop with his mum.\nWhen they got there they saw the big castle. The boy was so excited! He asked his mum why she was so so proud and she said it was full of fun things to do. The boy was so delighted and he wanted to go. \nThe boy and",
+    ", there was a big shadow. The shadow was walking through the forest. As it walked, the shadow began to move by its friends. \nThe shadow was confused. It moved closer to its friends, but they all couldn't see it. The shadow was curious, so it moved closer and closer to its friends. \nThe shadow kept walking and soon reached",
+    " beautiful frame in the park. She held it in her hand and it was tall and heavy. She wanted to watch it, so she was not sure how to open it.\nSuddenly, she heard a voice behind her. \"Hey, don't tell the grownups!\" said the voice.\nThe little girl stopped and looked around. She saw a big, friendly giant! \"I'm a giant,\" the"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 1695,
+   "train_loss": 1.4453,
+   "samples": [
+    ", in a small town, there was a big, heavy box. It was very heavy. A little girl named Sue wanted to fill it with her toys. She tried to carry the heavy box, but it was too heavy.\nSue's friend, Tom, saw her and wanted to help. Tom wanted to help Sue. He said, \"I have an idea! Let's make a game to help the heavy box.\" Sue",
+    " to the three year old son, Jack, he loved watching his son and the sun. One day, Jack asked the little boy, \"Can I watch you watching the sun today?\"\nThe little boy was so happy and said, \"Yes, you can watch the sun. But first, you need to help me.\"\nThe little boy was so excited and quickly agreed to help. The little boy",
+    ", there was a little boy named Tim. Tim loved to play outside and get dirty. He liked to look at the pretty flowers and trees. Today, he wanted to find a special surprise for his mom.\nTim went to his mom and said, \"Mom, there is a surprise in the dark forest. I want to find it.\" His mom looked at the dark and said, \"Don",
+    " beautiful frame in her room. She held it tight and said, \"Look! A frame can't be like an frame.\"\nThe frame was not beautiful. It was broken and the little girl's frame had disappeared.\nThe frame was so upset. She said to the frame, \"Where did it go? Where can it be?\"\nThe frame said, \"I am here to make something nice for"
+   ]
+  },
+  {
+   "t_s": 600.0,
+   "step": 3382,
+   "train_loss": 1.2495,
+   "samples": [
+    ", there was a little girl named Mia. She had a pretty purse that she loved very much. One day, she went to the park to play with her friends. They played on the swings, slide, and in the sand.\nWhile they were playing, Mia saw a big, scary dog. The dog was loud and barked loudly. Mia was scared, but her friends were brave",
+    " to his three year old child, \"Let's go for a walk and look for something special.\" The child was excited, but the king was feeling a little sad. He didn't know what was right. He tried to walk, but the king was too slow and he couldn't walk any more. He just stayed there, looking at the old king all alone.\nThe king was",
+    ", there was a little boy named Tim. Tim loved to play outside with his friends. One day, while playing, he found a big, red ball. He wanted to show it to his friends, but they did not want to share it. Tim felt sad, so he went to look for another friend.\nWhile looking around, Tim found a piece of paper on the ground. He",
+    " beautiful toy in the park. It was a bright blue diamond with a sparkly star on it. She was so excited, she quickly ran to hold it in her hand.\nShe ran home and showed the diamond to her mom. \"Mommy, look what I found!\" she shouted, holding the diamond tight and glittered in the sun.\n\"Wow, that's amazing, honey,\" her mom"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.4303,
+  "training_s": 600.0,
+  "peak_vram_mb": 3620.7,
+  "num_steps": 3382,
+  "params_m": 24.6,
+  "sampling_s": 12.4
+ },
+ "version": "e2bcb0ba2511",
+ "parent": "86b2cf17bc15",
+ "status": "discard",
+ "description": "DEPTH 5 retest under current recipe, worse by 0.0043",
+ "decided": "2026-10-21T11:23:04-07:00"
+}

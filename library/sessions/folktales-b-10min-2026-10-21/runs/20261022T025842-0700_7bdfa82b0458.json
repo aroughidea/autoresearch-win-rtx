@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261022T025842-0700_7bdfa82b0458",
+ "commit": "7bdfa82b0458",
+ "created": "2026-10-22T02:58:42-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 65536,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.008,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 27,
+   "train_loss": 7.0203,
+   "samples": [
+    " I will give you like two paces of the window; 'But the world. I am going to do of the little mouse, for the old Pan-outing that they were going to be taken little girl, and then she was taken away; \"We are more than I always even one of little girl-cocker of Denmark like a poor lady or else to the emperor's side, and then",
+    " the same thing to do you wish to see what he had been found a few grains of life is a man, and went into a lady.'\n\n\"I know what I am certainly to him, and his heart. There were as loud at home, and told from this question, \"but how much better than ever been able to keep her mind; \"The king; \"Jud in the church; there.",
+    "; \"That is good who were to think we are something for a piece of the same Sunday, \"But I should be seen, \"That was obliged to the window, but the town and that the world, and said the same moment was a little room, \"You must know, for it from the princess; \"You are given me.\"",
+    " few minutes of the world for ever forgotten.\"\n\nLTH THE Hrubble, they had been better than the old man; and then came a few miles about that is so that you have never think of Denmark for Rudy, with a few miles of them; I have the floor; I wanted to have happened to be done in which has been called the old man was to think"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 56,
+   "train_loss": 5.7675,
+   "samples": [
+    " he has only one was so that she would hardly believe that he might be seen the world.\n\n'I shall find you are you wish I want the air, in which I have to be buried you, and you have you, and bring out, and you shall be in which I would be able to go to her. By I want of the old woman, 'Who are you, and a great danger I",
+    " the old girl had reached the water. And when he had been watching him he should have done his face that he was over there he found a year, and I am, and he had been known.",
+    ", and took a few days he had not to drive them out.\n\n'I am going towards the ground, and I should be buried, and you to sleep. 'it may be the town and I am going to her back it; 'S(18)\n\n(3)\n\n(21)\n\n(3)\n\n(2) From the little ones that you see I shall we are you shall not think Iwanich; they did I pray you will follow the man",
+    " great lake of the world for ever came a new face, and said his eyes like his left, but the water, my eyes. The king's face with the king, and he fell asleep, and she had been built on the air. If you can get rid of the air as a blackness, and I am going, and then I should find you can have been to him. When I can do?'"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 101,
+   "train_loss": 5.5475,
+   "samples": [
+    " there lived a great rejoica and the old woman was a man standing on the world.\n\n'I can do you have no one of you want to the dog like the other, and if you did not kill you will find plenty of them, and you shall be in your father, but you must go to her. I want the place there was sitting alone. I will have to eat a great",
+    " the prince answered Stan reached the water. And when he went down, and he woke the old woman wept and he was over him, when he was going to have come with the second day, and the prince's son came to the king, and told him and that the princess was in his mother, and his brothers and they came to their son that was a little",
+    ", the sultan's son who was to the prince was very glad.\n\n'I am very well, I shall have been a king of my son. He thought the dog that he would never get him that the serpent-king.\n\nThe prince replied the old woman's room, \"and bring the princess may be made of it is his father and if you want them back, we have done what",
+    " great honour of the princess told him, but the dog was silent. He went to his son, but the water was a great joy of course, and the gazelle that he began to go to him, she had been for her to see. He rode home.\n\nOn the other the ground; I have found this son. Then, and then she should find the water, and see him. When"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 191,
+   "train_loss": 5.1727,
+   "samples": [
+    " there time there lived a time there lived an old man in a corner in a time an old palace gardens, of the little girl, who was a handsome in white marble. She sat in a little child, little girl, and a little daughter who was so beautiful in the palace, and there were one to be found. She was in there she had a little girl",
+    " the Sultan, \"What a good man has a little child of old man?\"\n\n\"I will be his wife,\" answered the King. \"I can do nothing about to live with you.\"\n\n\"I am a man who am at home,\" said the Sultan.\n\n\"It's only a fine fellow,\" answered the prince. \"That is a woman in the house of that you will go in the table and tell him there",
+    " there were three little hut that there were many miles in the air.\n\n\"My little fellow,\" said the little boy, \"they are always a little old man. When you came back to the window of the world, and we have seen the old merchant who had only got to take the Sultan on his sheep, with whom we had the princess. He had a great",
+    " little girl lying and little snow; she flew up to the room where she was left. She went up into the lake, and sat down under the tree, and saw the little Prince standing close beside him, and looking for her little girl. She sat down on a table, and looked round and she sang and kissed her eyes, and then she saw the old"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 461,
+   "train_loss": 4.7944,
+   "samples": [
+    " there lived a King who, and had three daughters, each of which, who hath one daughter, had children of the age, was a beautiful daughter, in which was a daughter and was born, and was very kind-hearted that she could have died. She was in great age, and she had one daughter, and that she was of two hundred years old, a",
+    " the chief of the merchant's chief counselor, \"Mas\" is he who will be his chief counselor and you shall see the old man of the great city, to carry you back his back. There is great many of you, and they will take your leave of you, and give them up a good education for you. So that you will go in and find you by the means",
+    ", when he saw his eyes, he said to himself, \"O my brother, I knoweth this one of the trees of Egypt, that thou cross the earth are so al-Din Hasan and that the Wazirs who hath escaped thee, when he hath reached me, especially which I have found thee in the market of his great estate. He hath reached me, and, opening the",
+    " great store of goods which had been caused by the old man and had never been left behind a farmer. Hereat was a fine man of wealth, and was very small and handsome and handsome. He had been studied for many years, and how he had been called the old man as a man of years after his absence. He had many people of his family"
+   ]
+  },
+  {
+   "t_s": 600.6,
+   "step": 911,
+   "train_loss": 3.9333,
+   "samples": [
+    " there lived a King who was called and who used to be a man or a son, and he had children of the name. He had the daughter, in his stead, that he was going to take care of the name of his brother, and that he might take them away, and he must also come to his parents and seek him there. And although he did not like this",
+    " the youth, \"What is the matter with you? I am old and old; but I know I have not been deceived by a lady, and I have only one, to whom I am a stranger. There is no one at all I know. My father has taken my son, and I know him. He is here in this house, and I am a stranger. He is always very much pleased with me and loved",
+    " there lived three women who were all blind of the eldest one, who had three daughters, and had a child, a king of whom he was in want of the children. Each was a boy of the youngest, and they lived together in an old castle; and they lived together in the hut, and they had no children, and they did not see the children",
+    " great store of goods belonging to the village, which was so full of people that he had left them, and they lived happily together. The girl's parents lived very happily together, and had nothing but stones, and could only stay there with them. So they travelled on for many days, and the children ran after them. But, in"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.231356,
+  "training_s": 600.6,
+  "peak_vram_mb": 5764.4,
+  "num_steps": 911,
+  "params_m": 33.6,
+  "sampling_s": 15.8
+ },
+ "version": "7bdfa82b0458",
+ "parent": "0c68d80dd64a",
+ "status": "discard",
+ "description": "UNEMBEDDING_LR 0.008 worse (1.231 vs 1.217)",
+ "decided": "2026-10-22T03:10:50-07:00"
+}

@@ -1,1 +1,1 @@
-{"title": "Ten-minute study", "kind": "study", "note": "The six baselines and the Folktales session's best recipe, trained for 10 minutes instead of 5.", "run_notes": {"folktales-own-agent-best": "the agent’s best recipe"}}
+{"title": "Ten-minute study, windowed attention", "kind": "study", "note": "The six windowed-attention baselines and the 7 October Folktales session's best recipe, trained for 10 minutes instead of 5.", "run_notes": {"folktales-own-agent-best": "the agent’s best recipe"}}

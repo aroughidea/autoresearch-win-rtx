@@ -1,0 +1,153 @@
+{
+ "schema": 1,
+ "run_id": "20261022T003147-0700_434344f04a81",
+ "commit": "434344f04a81",
+ "created": "2026-10-22T00:31:47-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.7,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 41,
+   "train_loss": 6.2454,
+   "samples": [
+    " there has been in a little girl and the old man; 'But the little girl, and now be seen of the little girl, you the old man in his mother. And and he thought of men,\" said the little girl, and I am so large, and now were now I cannot speak she was so high up and the little girl; but I must be able to the old man.\n\nThe man",
+    " the old girl, and then she looked for a little man of the old man; and they had a little old man, there, now I do for an old man, and then she was a little while she was as a horse in the little woman.",
+    ", and took their good-bye, who has gone he had been a little girl who did the old man of her a little girl, and then he thought the little black man, and looked like a little girl, and said the old man.\n\n\"But that she has no more, the old man, and then it was his great the earth shone like them--but there a man; but it",
+    " great place of the little girl; 'and what is so many years old men like a little girl, and the old man; and then there is nothing for the old woman, and sang the earth like men had been for she had been able to go home.\n\n\"That is so the poor man and then he will see it was, in the old man, they said the old hag; I think"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 99,
+   "train_loss": 5.6487,
+   "samples": [
+    " he met the world was so hard and made him, and saw that he could be found himself, and he kept and he had been so the air, he saw him. When he was going to be ready to help, and then she saw me that you, and now, and I should come.'\n\n\"I am hungry,' said the door, 'and I must be sorry for you.'\n\n\"The knight,' said the same",
+    " the Fairy, \"What is?\"\n\n\"Indeed I'll be easy.'\n\n\"What is your father and you!\"\n\n\" is your nose. I'll take me?' asked I asked the fire.\"\n\n\"Indeed,' replied the sea-king.\n\n\"What is the door, and you are not enough to come?' asked the king. \"Would you know!\" said the fire.\"\n\n\"Indeed I'll be sorry,' answered the castle with",
+    ", with his mouth, who was to make the eldest sister went along in the same as the shore, and her a mile of the world. He thought the eldest sister came back and with fright of the world, and said:\n\n\"No, I'm sure,\" answered, 'but I'll go,' said to my father?'\n\n'Indeed I can manage to know, I'll give me that I shall I should",
+    " few minutes of the world was just as a man's voice:\n\n'You never will be hungry.'\n\n\"And what I can be afraid.\"\n\n\"Who has ever come to you doing!\" cried the floor.'\n\n'Go to be good friend's son, and, or a penny of them. I may be sure; I'll be sure I'm able to be very hungry.'\n\n\"I want to you have to be I'll be sure to carry"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 187,
+   "train_loss": 5.3004,
+   "samples": [
+    " there lived a King was so rich and sister lived a daughter, who was very much more than the King, of the Princess, and the Princess was afraid, and when he lay and in the Princess, who loved her, she would not have to marry her, and she said, 'What must she come to search for that the first is not far too.'\n\nThen she came",
+    " the Fairy, 'I am about to see what he had happened that is he should have done. I will not do you deserve it.'\n\n'How do you wish I am with you doing there?\" she said. 'Do you understand what is the Queen?\"\n\n\"I am a very sorry for that, and then you must be obliged to go there; and that you will go in the table.'",
+    ", the three women lived near the Princess, but he had no difficulty in the same manner, but the Princess had a pretty young woman whom she had only the eldest daughter, but the magician called her the Princess, and they asked what was so delighted that she would be to marry the Princess for her, and when she was very angry",
+    " great honour of gold, for she came a great distance, and the old woman was going to see him, and she was forced to find her in the forest and that she had no better than ever been seen anything like she would be able to cry.\n\nAs soon as the King was going to be taken, after that it was, when he saw that she was so tired"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 363,
+   "train_loss": 4.862,
+   "samples": [
+    " there lived a King who, and had three sons of his men, who loved him one of them, and of the people who were in the country. One day the poor man and queen loved each other, and besides, she would not have a daughter. But in which the queen became a man, and had been allowed to be of a brother, and he did not like to ask",
+    ", 'You can help you up to your country, and you must take me to the town where I will not get you into the world.'\n\n'The King has come with you,' said the youth. 'I know better than you have the power of the world.' He took his knife and laid them in his pocket and went off through the forest. He had a little drop in his",
+    " there arrived three soldiers on a great plain in the forest, and the two brothers who were walking about to work, and their sister, whom they had been wandering through the forest, and they met with the youngest brother who said, 'You have a little daughter, but I pray you, for I pray you with your majesty, and if you",
+    " great white paper and lovely roses; 'I will take you back to his palace, and you will be able to speak like me.' The brothers laughed and said to her, 'What have you done now?' The Queen answered, 'I know how you can get a horse with the horses; I cannot help you at once.' The next moment she saw the old woman sitting"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 889,
+   "train_loss": 4.4107,
+   "samples": [
+    " there lived a King who had a daughter who used to be a king over a neighbouring country. One day, of the three sisters, came into a large town, with a big and rich merchant named Hermod. One name was a King, and a King, and a Queen, and a Queen. Her little daughter, and was of great value, and was a wife. She was a very",
+    " the old girl, \"Sire, let me see my children, and have your children and children; that is the bad ones, those children, and their coars, and children, and they have always quarrelling. And if the children are in this house, they are in the forest, and they are obliged to go home; and that was a little way off, and they",
+    " there were three women who were all blind in the forest, and each one was called Little or a big one. They were very old, and they thought the little one was dead. But they were the youngest of them said, and they was a little daughter, and they were just the little old one, with whom she had the only daughter. She was",
+    " little girl sitting spinning in her bed, and the old woman said to his sister, \"My sister, the children, my little daughter, what a beautiful little mother!\" And she answered, \"and she must be in reality a little girl. She must leave her alone in the forest, and get on her way and gather flowers, and then she can find"
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 1767,
+   "train_loss": 3.9965,
+   "samples": [
+    " there lived a King who had three sons. They were three sons. One day the youngest was called Two children of the youngest. He was the eldest, and his second youngest, and he loved dancing, because he was very beautiful, and would not marry them, and that was the one whom he had to marry. He was the first one he had ever",
+    " the young girl had to go and fetch some water, and that they might have to stay with his old daughter, and take the water of life. So she got some water to eat, and she gave the little fish as a present. When they were ready it was finished she put some water in them, and, jumping down to the water, she drew a little water",
+    " there lived three women who were all blind of one eye and one daughter. One who did the other no harm, so he set off to watch the youngest. When he came back the second daughter of the youngest of her sisters asked him, \"What is the matter?\" \"Croak,\" she answered, \"I am very angry. What has taken place, my little sister",
+    " little girl lying on the edge of the ground, and began to think how she could get a meal for the water, and how it would be a good thing to do. When she had finished eating she sat down by the fire and drank it out.\n\nAs soon as the girl was asleep, the little girl took the towel, and then she saw the old woman playing"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.220603,
+  "training_s": 600.2,
+  "peak_vram_mb": 5764.4,
+  "num_steps": 1767,
+  "params_m": 33.6,
+  "sampling_s": 16.2
+ },
+ "version": "434344f04a81",
+ "parent": "c88bb38f9660",
+ "status": "discard",
+ "description": "WARMDOWN_RATIO 0.7 ties (1.2206 vs 1.2194)",
+ "decided": "2026-10-22T00:43:51-07:00"
+}
