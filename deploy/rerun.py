@@ -49,7 +49,10 @@ def plan(run_id: str, work: Path) -> dict:
            "AUTORESEARCH_RUNS_DIR": str(work),
            "AR_SAVE_MOMENTS": ",".join(str(m) for m in MOMENTS),
            "AR_RERUN_OF": run_id,
-           "AUTORESEARCH_TIME_BUDGET": str(int(run["time_budget_s"]))}
+           "AUTORESEARCH_TIME_BUDGET": str(int(run["time_budget_s"])),
+           # The run's own pair, whatever this machine has active (active_dataset.txt, active_tokenizer.txt).
+           "AUTORESEARCH_DATASET": run["dataset"],
+           "AUTORESEARCH_TOKENIZER": (run.get("tokenizer") or {}).get("name") or "own"}
     return {"session": session, "run": run, "version": version, "dataset": run["dataset"], "env": env,
             "command": [sys.executable, "-c", LAUNCH, str(version), run["dataset"]]}
 
@@ -62,6 +65,9 @@ def file_rerun(work: Path, session: Path, run: dict, checkpoints: Path) -> dict:
     rerun = json.loads(made[0].read_text(encoding="utf-8"))
     expected = [*MOMENTS, int(run["time_budget_s"])]
     got = [m["at_s"] for m in rerun.get("moments") or []]
+    if (rerun.get("tokenizer") or {}).get("name") != (run.get("tokenizer") or {}).get("name", "own"):
+        raise SystemExit(f"the re-run trained with the {(rerun.get('tokenizer') or {}).get('name')} vocabulary, "
+                         f"not the run's; nothing was filed")
     if rerun.get("rerun_of") != run["run_id"] or got != expected:
         raise SystemExit(f"the re-run saved moments {got} (expected {expected}); "
                          f"{rerun.get('moments_error') or 'see the training output above'}. Nothing was filed.")

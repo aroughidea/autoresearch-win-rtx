@@ -54,6 +54,7 @@ def _project(tmp_path, monkeypatch):
     (session / "versions").mkdir()
     (session / "runs" / f"{BEST}.json").write_text(json.dumps({
         "run_id": BEST, "version": "6c874e790ab4", "dataset": "folktales", "time_budget_s": 600,
+        "tokenizer": {"name": "own", "vocab_size": 8192},
         "final": {"val_bpb": 1.207438, "num_steps": 1790}}), encoding="utf-8")
     (session / "versions" / "6c874e790ab4.py").write_text(FAKE_VERSION, encoding="utf-8")
     for name in ("capture.py", "prepare.py", "record.py"):
@@ -73,6 +74,8 @@ def test_the_plan_runs_the_versions_own_code_with_the_switch_on(tmp_path, monkey
     assert p["env"]["AR_SAVE_MOMENTS"] == "10,60,300" and p["env"]["AR_RERUN_OF"] == BEST
     assert p["env"]["AUTORESEARCH_RUNS_DIR"] == str(tmp_path / "work")
     assert p["env"]["AUTORESEARCH_TIME_BUDGET"] == "600"
+    # The run's own pair, never whatever this machine has active.
+    assert (p["env"]["AUTORESEARCH_DATASET"], p["env"]["AUTORESEARCH_TOKENIZER"]) == ("folktales", "own")
     assert p["command"][0] == sys.executable and p["command"][-2:] == [str(p["version"]), "folktales"]
     with pytest.raises(SystemExit, match="no run"):
         rerun.plan("20200101T000000-0700_000000000000", tmp_path / "work")
@@ -107,7 +110,20 @@ def test_a_rerun_missing_a_moment_files_nothing(tmp_path, monkeypatch):
     work = tmp_path / "work"
     work.mkdir()
     (work / "x.json").write_text(json.dumps({"run_id": "x", "rerun_of": BEST, "moments": [{"at_s": 10}],
+                                             "tokenizer": {"name": "own"},
                                              "moments_error": "OSError: disk full"}), encoding="utf-8")
     with pytest.raises(SystemExit, match="disk full"):
         rerun.file_rerun(work, session, {"run_id": BEST, "time_budget_s": 600}, tmp_path / "deploy" / "checkpoints")
+    assert not (session / "reruns").exists()
+
+
+def test_a_rerun_on_another_vocabulary_files_nothing(tmp_path, monkeypatch):
+    session = _project(tmp_path, monkeypatch)
+    work = tmp_path / "work"
+    work.mkdir()
+    (work / "x.json").write_text(json.dumps({"run_id": "x", "rerun_of": BEST, "tokenizer": {"name": "phi3"},
+                                             "moments": [{"at_s": a} for a in (10, 60, 300, 600)]}), encoding="utf-8")
+    with pytest.raises(SystemExit, match="phi3 vocabulary"):
+        rerun.file_rerun(work, session, {"run_id": BEST, "time_budget_s": 600, "tokenizer": {"name": "own"}},
+                         tmp_path / "deploy" / "checkpoints")
     assert not (session / "reruns").exists()
