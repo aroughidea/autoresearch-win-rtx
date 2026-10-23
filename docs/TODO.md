@@ -78,6 +78,18 @@ page matched scoreboard rows to models by version alone, so it opened on Folktal
 TinyStories' best. Each row now names the model its own run saved. DEMO.md's reveal and fallbacks
 name the four models.
 
+## Doing: the hosted demo serves the featured sessions' models, in the explorables' look (23 October)
+
+How a Model Gets Made's "Use a model" step is to link to <https://autoresearch-demo.fly.dev/>, so the
+demo serves the sessions that page features: Folktales' 21 October and TinyStories' 20 to 21 October,
+each one's start and best (decided 23 October, TJ: "the fly demo needs an overhaul to better align with
+the latest work and visual language"). `chat.py`'s page now wears that page's look, light and dark,
+in four tabs (Continue text, Watch it learn, The session, The vocabulary), and opens on the run files'
+own openings and sampling settings. `deploy/sessions/` holds the two sessions' records. Left to do on
+the training machine: the four model files into `deploy/checkpoints/` (named in `deploy/README.md`;
+`tests/test_deploy_bundle.py` fails until they are the right ones), the image simulated, and
+`fly deploy`.
+
 ## Then
 
 - **DEMO.md dry run** on the laptop, to time the segment.

@@ -414,13 +414,19 @@ class CausalSelfAttention(nn.Module):
         q = q.transpose(1, 2)  # (B, H, T, D)
         k = k.transpose(1, 2)  # (B, KVH, T, D)
         v = v.transpose(1, 2)  # (B, KVH, T, D)
-        attn_mask = self._get_sdpa_mask(T, window_size, q.device)
+        window = window_size[0] if isinstance(window_size, tuple) else window_size
+        if window is not None and 0 <= window < T:
+            attn_mask = self._get_sdpa_mask(T, window_size, q.device)
+            is_causal = False
+        else:
+            attn_mask = None  # plain causal: lets SDPA use its fastest kernel
+            is_causal = True
         y = F.scaled_dot_product_attention(
             q,
             k,
             v,
             attn_mask=attn_mask,
-            is_causal=False,
+            is_causal=is_causal,
             enable_gqa=self.n_kv_head < self.n_head,
         )
         y = y.transpose(1, 2)
@@ -635,9 +641,7 @@ class GPT(nn.Module):
                 x = block(x, ve, cos_sin, window_size)
         x = norm(x)
 
-        softcap = 15
         logits = self.lm_head(x).float()
-        logits = softcap * torch.tanh(logits / softcap)
 
         if targets is not None:
             loss = F.cross_entropy(
@@ -812,23 +816,23 @@ class MuonAdamW(torch.optim.Optimizer):
 # Model architecture
 ASPECT_RATIO = 64         # model_dim = depth * ASPECT_RATIO
 HEAD_DIM = 128            # target head dimension for attention
-WINDOW_PATTERN = "SSSL"   # sliding window pattern: L=full, S=half context
+WINDOW_PATTERN = "L"   # all layers full context: plain causal SDPA, no mask tensor
 
 # Optimization
 TOTAL_BATCH_SIZE = 2 ** 15
-EMBEDDING_LR = 1.0
+EMBEDDING_LR = 0.25
 UNEMBEDDING_LR = 0.004
-MATRIX_LR = 3.0
+MATRIX_LR = 0.02
 SCALAR_LR = 0.5
 WEIGHT_DECAY = 0.1
-ADAM_BETAS = (0.9, 0.95)
+ADAM_BETAS = (0.8, 0.995)
 WARMUP_RATIO = 0.02
-WARMDOWN_RATIO = 0.9
+WARMDOWN_RATIO = 0.65
 FINAL_LR_FRAC = 0.0
 
 # Model size + memory defaults
 DEPTH = 6
-N_KV_HEAD = 1  # MQA: all query heads share 1 KV head. None = full MHA (n_kv_head=n_head)
+N_KV_HEAD = 3  # GQA was 1 (MQA); 3 = full MHA at 3 heads. None = full MHA (n_kv_head=n_head)
 EVAL_BATCH_SIZE = 8
 
 
@@ -1165,7 +1169,7 @@ def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test
 
     def get_muon_momentum(step):
         frac = min(step / 100, 1)
-        return (1 - frac) * 0.85 + frac * 0.97
+        return (1 - frac) * 0.85 + frac * 0.95
 
     def get_weight_decay(progress):
         return WEIGHT_DECAY * (1 - progress)
@@ -1180,6 +1184,10 @@ def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test
     last_loss = None
     loss_scaler = LossScaler(enabled=runtime.amp_dtype == torch.float16)
     params = list(model.parameters())
+    # EMA of weights, kept in fp32 (bf16 lerp steps would round to nothing); evaluated instead
+    # of the final weights.
+    ema_decay = 0.995
+    ema_params = [p.detach().to(torch.float32, copy=True) for p in params]
 
     while True:
         # Capture hook: runs before t0, so sampling never counts toward the time budget.
@@ -1205,6 +1213,7 @@ def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test
                 group["weight_decay"] = muon_weight_decay
         if loss_scaler.unscale_and_check(params):
             optimizer.step()
+            torch._foreach_lerp_(ema_params, [p.detach().to(torch.float32) for p in params], 1 - ema_decay)
         model.zero_grad(set_to_none=True)
 
         train_loss_f = train_loss.item()
@@ -1254,6 +1263,9 @@ def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test
 
     print()
     capture.on_train_end(model, total_training_time, step, last_loss)
+    with torch.no_grad():
+        for p, e in zip(params, ema_params):
+            p.copy_(e)
     return {
         "model": model,
         "num_params": num_params,

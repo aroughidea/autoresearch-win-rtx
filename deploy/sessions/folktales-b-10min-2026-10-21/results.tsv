@@ -1,0 +1,47 @@
+timestamp	commit	val_bpb	memory_gb	status	description
+2026-10-21T20:04:24-07:00	c9ba08e4f442	3.302837	3.8	keep	baseline, three runs
+2026-10-21T20:16:08-07:00	c9ba08e4f442	3.265641	3.8	keep	baseline, three runs
+2026-10-21T20:27:36-07:00	c9ba08e4f442	3.292523	3.8	keep	baseline, three runs
+2026-10-21T20:39:36-07:00	ae5c68b35cb6	2.203520	3.9	keep	dropout 0.1 on attention + residual
+2026-10-21T20:51:17-07:00	cddc99c52cb8	1.831524	3.9	keep	dropout 0.2
+2026-10-21T21:02:56-07:00	91d5ce39233b	1.586929	3.9	keep	dropout 0.3
+2026-10-21T21:14:38-07:00	4c44a9bc8c85	1.462530	3.9	keep	dropout 0.4
+2026-10-21T21:26:14-07:00	6ea4a1228737	1.368531	3.9	keep	dropout 0.5
+2026-10-21T21:37:50-07:00	7d99f54b4193	1.299880	3.9	keep	dropout 0.6
+2026-10-21T21:49:32-07:00	9d01a31d6974	1.284782	3.9	keep	dropout 0.7, gain 0.015 nearing plateau
+2026-10-21T22:01:41-07:00	e5f91ac6169f	1.273946	5.7	keep	depth 8 dim 512 full MHA; gain 0.011 below noise, VRAM 5.8GB
+2026-10-21T22:14:19-07:00	e0b4e671a180	1.265132	5.5	keep	remove value embeddings: equal-or-better (gain 0.009, sub-noise) with 17M fewer params
+2026-10-21T22:27:01-07:00	80e9383fb62b	1.278029	5.4	discard	batch 2^14 doubles steps but scored worse (1.278 vs 1.265)
+2026-10-21T22:39:19-07:00	827632153be2	1.298803	5.5	discard	dropout 0.8 too strong at depth 8 (1.299 vs 1.265)
+2026-10-21T22:51:45-07:00	8a74fc34a60d	1.257869	5.5	keep	LR decays fully to zero (FINAL_LR_FRAC 0.0); gain 0.007 below noise
+2026-10-21T23:04:21-07:00	38f02b07602e	1.254519	5.6	keep	EMA of weights (beta 0.995) for eval; gain 0.003 below noise
+2026-10-21T23:16:49-07:00	844aebe0d751	1.254546	4.5	discard	depth 10 ties depth 8 (1.2545): capacity scaling flattened
+2026-10-21T23:30:26-07:00	c15ebfb2dbb7	1.238005	5.6	keep	dropout 0.6 at depth 8: optimum shifted down with fewer epochs
+2026-10-21T23:42:35-07:00	e36c05c5af28	1.240895	5.6	discard	dropout 0.5 at depth 8 slightly worse (1.241 vs 1.238)
+2026-10-21T23:55:11-07:00	c88bb38f9660	1.219446	5.6	keep	label smoothing 0.1 during training only
+2026-10-22T00:07:15-07:00	803affdb9c34	1.237946	5.6	discard	label smoothing 0.2 too strong (1.238 vs 1.219)
+2026-10-22T00:19:32-07:00	f0e57cb52a57	1.220413	5.6	discard	EMBEDDING_LR 0.5 ties (1.2204 vs 1.2194)
+2026-10-22T00:31:47-07:00	434344f04a81	1.220603	5.6	discard	WARMDOWN_RATIO 0.7 ties (1.2206 vs 1.2194)
+2026-10-22T00:44:00-07:00	141c02914a46	1.232677	5.6	discard	Muon weight decay 0.3 worse (1.233 vs 1.219)
+2026-10-22T00:56:13-07:00	ef40724bfbdf	1.221832	5.6	discard	EMA beta 0.998 slightly worse (1.2218 vs 1.2194)
+2026-10-22T01:08:31-07:00	effa13d51c7c	1.219824	4.5	discard	depth 10 with current reg stack still ties (1.2198): capacity saturated
+2026-10-22T01:21:31-07:00	ccf8cc8a559c	1.224355	5.6	discard	HEAD_DIM 64 worse (1.224) and slower
+2026-10-22T01:33:59-07:00	1fd4f54299f6	1.227140	5.6	discard	MATRIX_LR 0.07 worse (1.227 vs 1.219)
+2026-10-22T01:46:35-07:00	0c68d80dd64a	1.216532	5.6	keep	batch 2^16: fewer, cleaner steps; gain 0.003 below noise
+2026-10-22T01:58:43-07:00	9a01bc9851c5	1.270504	5.6	discard	batch 2^17 too few steps (1.271, 466 steps)
+2026-10-22T02:11:09-07:00	3d436040d3a8	1.218797	5.6	discard	MATRIX_LR 0.07 at batch 2^16 slightly worse (1.2188 vs 1.2165)
+2026-10-22T02:23:13-07:00	73ba0bd1e778	1.235253	5.9	discard	MLP hidden dropout 0.3 worse (1.235) and slower
+2026-10-22T02:35:35-07:00	0b0941e7fbeb	1.422488	7.7	discard	GQA kv=2 much worse (1.422): autotune picked a slow candidate, 351 steps
+2026-10-22T02:58:42-07:00	7bdfa82b0458	1.231356	5.6	discard	UNEMBEDDING_LR 0.008 worse (1.231 vs 1.217)
+2026-10-22T03:11:05-07:00	fc42f6ca6796	1.220830	5.6	discard	constant Muon weight decay worse (1.2208 vs 1.2165)
+2026-10-22T03:23:32-07:00	1a790f7fcb7d	1.217342	5.6	discard	WARMUP_RATIO 0.05 ties (1.2173 vs 1.2165)
+2026-10-22T03:35:58-07:00	58734d379654	1.228124	3.8	discard	wider dim 640 at depth 8 worse (1.228): architecture saturated
+2026-10-22T03:49:10-07:00	0c68d80dd64a	1.216950	5.6	discard	repeat of champion: reproduces at 1.2170 vs 1.2165, spread 0.0004
+2026-10-22T04:01:31-07:00	5d2924ab32a9	1.220614	5.6	discard	input embedding dropout 0.2 worse (1.2206 vs 1.2165)
+2026-10-22T04:14:03-07:00	f61a6cf41010	1.218277	5.6	discard	EMA beta 0.99 slightly worse (1.2183 vs 1.2165); 0.995 optimum
+2026-10-22T04:26:32-07:00	bde5fc4c3cba	1.220839	6.1	discard	logit softcap 15 worse (1.2208) and slower (825 steps)
+2026-10-22T04:38:51-07:00	d20dd3041099	1.229322	5.6	discard	dropout 0.65 worse (1.2293 vs 1.2165); 0.6 optimum
+2026-10-22T04:51:25-07:00	98bf6e2e6b36	1.226423	5.6	discard	Adam beta1 0.9 worse (1.2264 vs 1.2165)
+2026-10-22T05:03:49-07:00	cde44d1eb72c	1.226129	5.6	discard	label smoothing 0.15 worse (1.2261 vs 1.2165); 0.1 optimum
+2026-10-22T05:15:56-07:00	a73ea877b110	1.211644	5.6	keep	dropout 0.55 at batch 2^16: new best 1.2116, gain 0.005 below noise
+2026-10-22T05:28:16-07:00	6c874e790ab4	1.207438	5.6	keep	dropout 0.5 at batch 2^16: optimum slid down, new best 1.2074

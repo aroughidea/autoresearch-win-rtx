@@ -350,8 +350,8 @@ def norm(x):
 
 
 def has_ve(layer_idx, n_layer):
-    """Returns True if layer should have Value Embedding (alternating, last always included)."""
-    return layer_idx % 2 == (n_layer - 1) % 2
+    """Value Embeddings disabled: on ~2.7M-token folktales they are pure memorization capacity."""
+    return False
 
 
 def apply_rotary_emb(x, cos, sin):
@@ -414,13 +414,20 @@ class CausalSelfAttention(nn.Module):
         q = q.transpose(1, 2)  # (B, H, T, D)
         k = k.transpose(1, 2)  # (B, KVH, T, D)
         v = v.transpose(1, 2)  # (B, KVH, T, D)
-        attn_mask = self._get_sdpa_mask(T, window_size, q.device)
+        window = window_size[0] if isinstance(window_size, tuple) else window_size
+        if window is not None and 0 <= window < T:
+            attn_mask = self._get_sdpa_mask(T, window_size, q.device)
+            is_causal = False
+        else:
+            attn_mask = None  # plain causal: lets SDPA use its fastest kernel
+            is_causal = True
         y = F.scaled_dot_product_attention(
             q,
             k,
             v,
             attn_mask=attn_mask,
-            is_causal=False,
+            dropout_p=DROPOUT if self.training else 0.0,
+            is_causal=is_causal,
             enable_gqa=self.n_kv_head < self.n_head,
         )
         y = y.transpose(1, 2)
@@ -450,8 +457,8 @@ class Block(nn.Module):
         self.mlp = MLP(config)
 
     def forward(self, x, ve, cos_sin, window_size):
-        x = x + self.attn(norm(x), ve, cos_sin, window_size)
-        x = x + self.mlp(norm(x))
+        x = x + F.dropout(self.attn(norm(x), ve, cos_sin, window_size), DROPOUT, self.training)
+        x = x + F.dropout(self.mlp(norm(x)), DROPOUT, self.training)
         return x
 
 
@@ -635,9 +642,7 @@ class GPT(nn.Module):
                 x = block(x, ve, cos_sin, window_size)
         x = norm(x)
 
-        softcap = 15
         logits = self.lm_head(x).float()
-        logits = softcap * torch.tanh(logits / softcap)
 
         if targets is not None:
             loss = F.cross_entropy(
@@ -645,6 +650,7 @@ class GPT(nn.Module):
                 targets.view(-1),
                 ignore_index=-1,
                 reduction=reduction,
+                label_smoothing=0.1 if self.training else 0.0,
             )
             return loss
         return logits
@@ -812,10 +818,10 @@ class MuonAdamW(torch.optim.Optimizer):
 # Model architecture
 ASPECT_RATIO = 64         # model_dim = depth * ASPECT_RATIO
 HEAD_DIM = 128            # target head dimension for attention
-WINDOW_PATTERN = "SSSL"   # sliding window pattern: L=full, S=half context
+WINDOW_PATTERN = "L"   # all layers full context: plain causal SDPA, no mask tensor
 
 # Optimization
-TOTAL_BATCH_SIZE = 2 ** 15
+TOTAL_BATCH_SIZE = 2 ** 16
 EMBEDDING_LR = 1.0
 UNEMBEDDING_LR = 0.004
 MATRIX_LR = 0.05
@@ -824,11 +830,15 @@ WEIGHT_DECAY = 0.1
 ADAM_BETAS = (0.8, 0.95)
 WARMUP_RATIO = 0.02
 WARMDOWN_RATIO = 0.45
-FINAL_LR_FRAC = 0.1
+FINAL_LR_FRAC = 0.0
+
+# Regularization: folktales is ~2.7M tokens, a 10-minute run makes ~38 epochs
+DROPOUT = 0.5
+EMA_BETA = 0.995  # weights evaluated as an EMA of the training iterates
 
 # Model size + memory defaults
-DEPTH = 6
-N_KV_HEAD = 1  # MQA: all query heads share 1 KV head. None = full MHA (n_kv_head=n_head)
+DEPTH = 8
+N_KV_HEAD = None  # None = full MHA (n_kv_head=n_head)
 EVAL_BATCH_SIZE = 8
 
 
@@ -1180,6 +1190,7 @@ def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test
     last_loss = None
     loss_scaler = LossScaler(enabled=runtime.amp_dtype == torch.float16)
     params = list(model.parameters())
+    ema_params = [p.detach().clone().float() for p in params]
 
     while True:
         # Capture hook: runs before t0, so sampling never counts toward the time budget.
@@ -1206,6 +1217,9 @@ def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test
         if loss_scaler.unscale_and_check(params):
             optimizer.step()
         model.zero_grad(set_to_none=True)
+        with torch.no_grad():
+            for ema, p in zip(ema_params, params):
+                ema.lerp_(p.float(), 1 - EMA_BETA)
 
         train_loss_f = train_loss.item()
         if math.isnan(train_loss_f) or train_loss_f > 100:
@@ -1253,6 +1267,9 @@ def _run_training_once(runtime, tokenizer, config, device_batch_size, smoke_test
             break
 
     print()
+    with torch.no_grad():
+        for ema, p in zip(ema_params, params):
+            p.copy_(ema.to(p.dtype))
     capture.on_train_end(model, total_training_time, step, last_loss)
     return {
         "model": model,

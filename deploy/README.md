@@ -9,22 +9,30 @@ without installing a thing.
 ## What it serves
 
 The same `chat.py` UI you get locally, in public-demo mode, with four models
-from the two overnight sessions of 12–13 October (10-minute runs): for each of
-`tinystories-10min-2026-10-12` and `folktales-10min-2026-10-12`, the starting
-recipe (the last of its three baseline runs) and the best version the agent
-found. It opens on TinyStories' start and best side by side, with that night's
-progress chart, the "Watch it learn" card for all four, and the vocabulary
-browser.
+from the two sessions LLM Explorables' [How a Model Gets Made](https://llmexplorables.aroughidea.com/training/)
+features, whose "Use a model" step links here: `folktales-b-10min-2026-10-21` and
+`tinystories-b-10min-2026-10-20` (10-minute runs, the full-attention starter
+script). For each, the start (the last of its three start runs, the one that kept
+its model) and the best version the agent found. It opens on Folktales' start and
+best side by side; its tabs are Continue text, Watch it learn (all four), The
+session (that night's chart) and The vocabulary. The page wears How a Model Gets
+Made's look, light and dark.
 
 | Model | File (`checkpoints/`) | val_bpb |
 |-------|-----------------------|---------|
-| TinyStories, start | `20261012T102252-0700_91ffb4c37015.pt` | 0.476278 |
-| TinyStories, best | `20261012T182536-0700_dfb66193b616.pt` | 0.428101 |
-| Folktales, start | `20261012T203326-0700_91ffb4c37015.pt` | 1.913044 |
-| Folktales, best | `20261013T033410-0700_f02876c49522.pt` | 1.242914 |
+| Folktales, start | `20261021T202736-0700_c9ba08e4f442.pt` | 3.292523 (the three start runs average 3.287000) |
+| Folktales, best | `20261022T052816-0700_6c874e790ab4.pt` | 1.207438 |
+| TinyStories, start | `20261021T000138-0700_c9ba08e4f442.pt` | 0.436369 (the three average 0.436605) |
+| TinyStories, best | `20261021T130839-0700_05602a6a5706.pt` | 0.425055 |
 
-The models have 19 to 26 million parameters, so it runs on a plain CPU machine;
+The models have 26 to 34 million parameters, so it runs on a plain CPU machine;
 that fact is part of what the demo teaches.
+
+`tests/test_deploy_bundle.py` checks the bundle: `deploy/checkpoints/` holds exactly
+the models the run files in `deploy/sessions/` name, each with the SHA-256 its run
+recorded (Git LFS names a file by that hash, so the check works on an unfetched
+clone), every model has its version's code, and the image opens on one of the
+active session's models.
 
 ## How it is wired
 
@@ -34,9 +42,8 @@ that fact is part of what the demo teaches.
 - binds `0.0.0.0:$PORT` instead of scanning for a free localhost port
 - clamps requests: max 500 tokens, `top_k` ≤ 200, prompt ≤ 2000 characters —
   silently, never an error
-- retitles the page (it isn't "local" any more) and adds a banner that says
-  what the four models are, linking [TRAINING-DECISIONS.md](../TRAINING-DECISIONS.md)
-  and the README's non-technical introduction
+- adds a paragraph under the title that says what the four models are, linking
+  How a Model Gets Made and the README's non-technical introduction
 
 With the variable unset — every local run — none of that applies.
 
@@ -75,7 +82,8 @@ model from another session:
 
 1. Copy its model file from the session's machine (`checkpoints/<run id>.pt`)
    into `checkpoints/` here. The page lists models in file-time order, so set
-   the file's time to the run's (`touch -d`); git does not keep it.
+   the file's time to the run's (`touch -d`, or in PowerShell
+   `(Get-Item $f).LastWriteTime = "2026-10-21 20:27:36"`); git does not keep it.
 2. Copy into `sessions/<name>/` what `chat.py` reads: `session.json`,
    `results.tsv`, `runs/<run id>.json` for the model, and
    `versions/<version>.py` for its version. Without the run file the model is

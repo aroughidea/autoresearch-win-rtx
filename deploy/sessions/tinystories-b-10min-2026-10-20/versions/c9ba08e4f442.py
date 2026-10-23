@@ -414,13 +414,19 @@ class CausalSelfAttention(nn.Module):
         q = q.transpose(1, 2)  # (B, H, T, D)
         k = k.transpose(1, 2)  # (B, KVH, T, D)
         v = v.transpose(1, 2)  # (B, KVH, T, D)
-        attn_mask = self._get_sdpa_mask(T, window_size, q.device)
+        window = window_size[0] if isinstance(window_size, tuple) else window_size
+        if window is not None and 0 <= window < T:
+            attn_mask = self._get_sdpa_mask(T, window_size, q.device)
+            is_causal = False
+        else:
+            attn_mask = None  # plain causal: lets SDPA use its fastest kernel
+            is_causal = True
         y = F.scaled_dot_product_attention(
             q,
             k,
             v,
             attn_mask=attn_mask,
-            is_causal=False,
+            is_causal=is_causal,
             enable_gqa=self.n_kv_head < self.n_head,
         )
         y = y.transpose(1, 2)
@@ -635,9 +641,7 @@ class GPT(nn.Module):
                 x = block(x, ve, cos_sin, window_size)
         x = norm(x)
 
-        softcap = 15
         logits = self.lm_head(x).float()
-        logits = softcap * torch.tanh(logits / softcap)
 
         if targets is not None:
             loss = F.cross_entropy(
@@ -812,7 +816,7 @@ class MuonAdamW(torch.optim.Optimizer):
 # Model architecture
 ASPECT_RATIO = 64         # model_dim = depth * ASPECT_RATIO
 HEAD_DIM = 128            # target head dimension for attention
-WINDOW_PATTERN = "SSSL"   # sliding window pattern: L=full, S=half context
+WINDOW_PATTERN = "L"   # all layers full context: plain causal SDPA, no mask tensor
 
 # Optimization
 TOTAL_BATCH_SIZE = 2 ** 15
@@ -828,7 +832,7 @@ FINAL_LR_FRAC = 0.1
 
 # Model size + memory defaults
 DEPTH = 6
-N_KV_HEAD = 1  # MQA: all query heads share 1 KV head. None = full MHA (n_kv_head=n_head)
+N_KV_HEAD = 3  # GQA was 1 (MQA); 3 = full MHA at 3 heads. None = full MHA (n_kv_head=n_head)
 EVAL_BATCH_SIZE = 8
 
 
