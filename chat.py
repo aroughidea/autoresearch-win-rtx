@@ -30,6 +30,7 @@ import threading
 import time
 import types
 import webbrowser
+from collections import OrderedDict
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -37,7 +38,7 @@ import importlib.util
 import torch
 import uvicorn
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse, Response, StreamingResponse
+from fastapi.responses import HTMLResponse, JSONResponse, Response, StreamingResponse
 from pydantic import BaseModel
 
 from generate import _config_from_state_dict, _sample_top_k
@@ -150,8 +151,17 @@ def _discover_checkpoints(primary_checkpoint: str) -> list[dict]:
         )
 
     entries.sort(key=lambda e: e["mtime_ts"])
-    for i, entry in enumerate(entries):
-        entry["id"] = f"m{i + 1}"
+    # A model's id is its file's stem: for a kept run that is the run id, which never changes, so a page
+    # or another site can name a model across restarts and new models. Two files with one stem (a copy
+    # in checkpoints/ and at the root) keep them apart with a number.
+    taken: set[str] = set()
+    for entry in entries:
+        stem = Path(entry["path"]).stem
+        model_id, n = stem, 2
+        while model_id in taken:
+            model_id, n = f"{stem}-{n}", n + 1
+        taken.add(model_id)
+        entry["id"] = model_id
     return entries
 
 
@@ -260,17 +270,29 @@ def _growth_from_run(run: dict | None) -> dict | None:
     }
 
 
+# How many models stay loaded. The public demo serves eight on a 2 GB machine: measured on CPU, Python
+# with torch and this file takes about 650 MB, each 26.3 M-parameter model about 100 MB more and the
+# 33.6 M one about 150 MB, and loading one briefly holds its file and its weights. Four is a whole
+# session's milestones, or both sessions' start and best, without a reload, and stays near 1.4 GB at
+# worst. The rest load on request (about a second) and the least recently used is dropped.
+MODELS_IN_MEMORY = int(os.environ.get("MODELS_IN_MEMORY", "4"))
+
+
 class ModelStore:
-    """The models on disk, each with the tokenizer of the pair it was trained with."""
+    """The models on disk, each with the tokenizer of the pair it was trained with. A model loads when
+    first asked for; at most max_loaded stay in memory, the least recently used dropped first."""
 
     def __init__(self, device: str, entries: list[dict], active_path: str,
-                 tokenizer_loader=None, runs_dir: str = "runs", results_path: str = "results.tsv"):
+                 tokenizer_loader=None, runs_dir: str = "runs", results_path: str = "results.tsv",
+                 max_loaded: int = MODELS_IN_MEMORY, model_loader=None):
         self.results_path = results_path
         self._runs_dir = runs_dir
         self._device = device
         self._loader = tokenizer_loader or (lambda dataset, tokenizer: Tokenizer.from_directory(dataset=dataset, tokenizer=tokenizer))
+        self._load_model = model_loader or _load_model_from_checkpoint
+        self._max_loaded = max(1, max_loaded)
         self._tokenizers: dict[tuple[str, str], object] = {}
-        self._cache: dict[str, GPT] = {}
+        self._cache: OrderedDict[str, GPT] = OrderedDict()   # model id -> model, least recently used first
         self._lock = threading.Lock()
         self._runs: dict[str, dict | None] = {}
         scoreboard = _results_by_commit(results_path)
@@ -379,11 +401,21 @@ class ModelStore:
                 raise KeyError(f"Unknown model id: {model_id}")
             if not entry["available"]:
                 raise ValueError(f"This model can't be loaded: {entry['reason']}.")
-            model = self._cache.get(entry["path"])
+            model = self._cache.get(entry["id"])
             if model is None:
-                model = _load_model_from_checkpoint(entry["path"], self._device, self._runs.get(entry["id"]))
-                self._cache[entry["path"]] = model
+                # Make room first, so the dropped model's memory is free before the new one loads.
+                # A generation already streaming from a dropped model keeps it until it finishes.
+                while len(self._cache) >= self._max_loaded:
+                    self._cache.popitem(last=False)
+                model = self._load_model(entry["path"], self._device, self._runs.get(entry["id"]))
+                self._cache[entry["id"]] = model
+            self._cache.move_to_end(entry["id"])
             return model, self._tokenizer(entry["dataset"], entry["tokenizer"]), self._device, entry
+
+    def loaded_ids(self) -> list[str]:
+        """The models in memory, least recently used first."""
+        with self._lock:
+            return list(self._cache)
 
     def get_active_bundle(self):
         return self.get_bundle_by_id(self._active_id)
@@ -1229,9 +1261,9 @@ _HTML = r"""<!DOCTYPE html>
 # this flag is inert when the env var is unset, which is the local default.
 _SPACE_MODE = os.environ.get("SPACE_MODE") == "1"
 _SPACE_BANNER = (
-    '<p class="public">A public demo of four small language models, each trained for 10 minutes on one '
-    "laptop graphics card. For two datasets it serves the starter script and the best version an AI agent "
-    "found in a 10-hour session of experiments. On text kept out of training the best scored 63% better on Folktales "
+    '<p class="public">A public demo of eight small language models, each trained for 10 minutes on one '
+    "laptop graphics card. For two datasets it serves four versions from a 10-hour session of an AI agent’s "
+    "experiments: the starter script, two kept along the way, and the best. On text kept out of training the best scored 63% better on Folktales "
     "(3.287 to 1.207 bits per byte, from the average of its three start runs) and 2.6% better on TinyStories "
     "(0.4366 to 0.4251); lower is better. Compare a start with its best, or the two starts (the same code, "
     "trained on different text) to see what the dataset decides. "
@@ -1279,7 +1311,8 @@ def build_app(model_store: ModelStore) -> FastAPI:
         try:
             model, tokenizer, device, _ = model_store.get_bundle_by_id(req.model_id)
         except KeyError:
-            model, tokenizer, device, _ = model_store.get_active_bundle()
+            # Another model would answer as if it were the one asked for; say so instead.
+            return JSONResponse({"error": "unknown_model", "model_id": req.model_id}, status_code=404)
         except ValueError as exc:
             message = str(exc)
             return StreamingResponse(iter([json.dumps({"t": message, "toks": []}) + "\n"]), media_type="text/plain")

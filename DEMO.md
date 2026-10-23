@@ -173,10 +173,10 @@ say so: the rule keeps it anyway, and the description should say it was small.
 
 ### [12–15 min] The reveal: the hosted demo
 
-The hosted demo serves four models from the two 10-hour sessions How a Model Gets Made
+The hosted demo serves eight models from the two 10-hour sessions How a Model Gets Made
 features, each trained for 10 minutes: Folktales on 21 October and TinyStories on 20 to 21
-October, for each the start (the last of its three start runs) and its best version. It opens
-on Folktales' pair. Two beats:
+October, for each the start (the last of its three start runs), two versions kept along the
+way, and its best. It opens on Folktales' start and best. Two beats:
 
 1. **The agent's session.** Folktales' start (left) and best (right), side by side on one of
    your tested prompts, with the temperature you tested. Let both finish without talking over
@@ -277,9 +277,9 @@ can stay for the next lecture; `uv run lab.py end` ends it, and its folder stays
 
 ### Give the class the links
 
-- **The hosted demo**, <https://autoresearch-demo.fly.dev/>: public, free, no login, the four
-  models they just saw (a start and a best for each dataset), plus the chart and the vocabulary
-  browser.
+- **The hosted demo**, <https://autoresearch-demo.fly.dev/>: public, free, no login, the
+  models they just saw and two more from each session along the way (eight in all), plus the
+  chart and the vocabulary browser.
   The first load takes ~12 seconds while the machine wakes, and it is a text-completion model,
   not a chat assistant: feed it the opening of a story, not a question.
 - **The starter kit**, <https://github.com/aroughidea/autoresearch-starter>.

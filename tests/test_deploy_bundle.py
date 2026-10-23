@@ -74,3 +74,28 @@ def test_the_image_opens_on_a_model_it_serves_from_the_active_session():
     active = (ROOT / "deploy" / "sessions" / "active.txt").read_text(encoding="utf-8").strip()
     runs = [json.loads(p.read_text(encoding="utf-8")) for p in (ROOT / "deploy" / "sessions" / active / "runs").glob("*.json")]
     assert opens in {pathlib.Path(r["checkpoint"]).name for r in runs}
+
+
+# The eight models LLM Explorables' model demo names (its contract, and shared/DemoModels.js there):
+# per session the start, two kept along the way, and the best. A model's id is its run id.
+CONTRACT_MODELS = {
+    "folktales-b-10min-2026-10-21": [
+        "20261021T202736-0700_c9ba08e4f442", "20261021T203936-0700_ae5c68b35cb6",
+        "20261021T213750-0700_7d99f54b4193", "20261022T052816-0700_6c874e790ab4",
+    ],
+    "tinystories-b-10min-2026-10-20": [
+        "20261021T000138-0700_c9ba08e4f442", "20261021T003646-0700_6db69b64b97b",
+        "20261021T024603-0700_b351add2f9da", "20261021T130839-0700_05602a6a5706",
+    ],
+}
+
+
+def test_the_bundle_serves_the_eight_models_the_explorables_name():
+    import json
+    sessions = ROOT / "deploy" / "sessions"
+    bundled = {s.name: sorted(p.stem for p in (s / "runs").glob("*.json")) for s in sessions.iterdir() if s.is_dir()}
+    assert bundled == CONTRACT_MODELS
+    for session, ids in CONTRACT_MODELS.items():
+        for run_id in ids:
+            run = json.loads((sessions / session / "runs" / f"{run_id}.json").read_text(encoding="utf-8"))
+            assert run["status"] == "keep" and run["checkpoint"] == f"checkpoints/{run_id}.pt"

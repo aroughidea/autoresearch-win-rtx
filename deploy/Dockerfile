@@ -1,6 +1,6 @@
 # Container for the public demo: serves chat.py read-only, on CPU.
 #
-# The models are ~19M parameters, so CPU inference is genuinely fine — that is
+# The models are 26 to 34M parameters, so CPU inference is genuinely fine — that is
 # part of the lesson, not a compromise.
 #
 # BUILD CONTEXT IS THE REPO ROOT, not this directory. That is deliberate: the
@@ -17,7 +17,7 @@ FROM python:3.12-slim
 RUN useradd -m -u 1000 user
 
 # CPU-only torch from its own index, then the rest of the import chain. This
-# set is exactly what the module-top imports of the four Python files need:
+# set is exactly what the module-top imports of these Python files need:
 #   chat.py     -> torch, uvicorn, fastapi, pydantic
 #   generate.py -> torch
 #   prepare.py  -> pyarrow, requests, rustbpe, tiktoken, torch
@@ -32,19 +32,23 @@ RUN pip install --no-cache-dir torch==2.9.1 --index-url https://download.pytorch
       "rustbpe>=0.1.0" \
       "tiktoken>=0.11.0"
 
+# MALLOC_ARENA_MAX: models load and drop as visitors switch between them (see MODELS_IN_MEMORY in
+# chat.py); fewer malloc arenas returned about 80 MB of the memory that churn otherwise holds.
 ENV HOME=/home/user \
     SPACE_MODE=1 \
-    PORT=7860
+    PORT=7860 \
+    MALLOC_ARENA_MAX=2
 
 WORKDIR /home/user/app
 
 # chat.py imports generate.py, prepare.py and train.py (and capture.py, record.py).
 COPY --chown=user:user chat.py generate.py prepare.py train.py capture.py record.py ./
 
-# The four models the demo serves, from the sessions LLM Explorables' "How a Model Gets Made"
+# The eight models the demo serves, from the sessions LLM Explorables' "How a Model Gets Made"
 # features: Folktales on 21 to 22 October and TinyStories on 20 to 21 October 2026, 10-hour sessions (10-minute
-# runs, the full-attention starter script). For each, the start (the last of its three start runs,
-# the one that kept its model) and the agent's best version. They live in deploy/checkpoints/, not
+# runs, the full-attention starter script). For each, four kept versions: the start (the last of its
+# three start runs, the one that kept its model), two along the way, and the agent's best. About
+# 0.9 GB; chat.py loads each when asked for and keeps four in memory. They live in deploy/checkpoints/, not
 # checkpoints/, so a local chat.py never lists them without the run files and version code below.
 # The page lists models by file time, so each file's time is the moment its run saved it.
 COPY --chown=user:user deploy/checkpoints/ ./checkpoints/
@@ -70,5 +74,5 @@ EXPOSE 7860
 
 # --checkpoint is required: the repo default (checkpoint_pre_eval.pt) is a
 # build artifact and is not in the image. This opens on Folktales' best model;
-# the UI lists all four and serves any two side by side.
+# the UI lists all eight and serves any two side by side.
 CMD ["python", "chat.py", "--no-browser", "--checkpoint", "checkpoints/20261022T052816-0700_6c874e790ab4.pt"]

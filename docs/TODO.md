@@ -85,10 +85,14 @@ demo serves the sessions that page features: Folktales' 21 October and TinyStori
 each one's start and best (decided 23 October, TJ: "the fly demo needs an overhaul to better align with
 the latest work and visual language"). `chat.py`'s page now wears that page's look, light and dark,
 in four tabs (Continue text, Watch it learn, The session, The vocabulary), and opens on the run files'
-own openings and sampling settings. `deploy/sessions/` holds the two sessions' records. Left to do on
-the training machine: the four model files into `deploy/checkpoints/` (named in `deploy/README.md`;
-`tests/test_deploy_bundle.py` fails until they are the right ones), the image simulated, and
-`fly deploy`.
+own openings and sampling settings. `deploy/sessions/` holds the two sessions' records.
+
+The same server is also the backend of LLM Explorables' model demo (its contract:
+`docs/superpowers/specs/2026-10-23-model-demo-contract.md` there), so it serves eight models, four per
+session (the start, two kept along the way, the best), each named by its run id, loaded on request with
+four kept in memory (decided 23 October). Left to do on the training machine: the eight model files into
+`deploy/checkpoints/` (named in `deploy/README.md`; `tests/test_deploy_bundle.py` fails until they are the
+right ones), the vocabularies checked, the image simulated, and `fly deploy` (the steps are in PR #39).
 
 ## Then
 
