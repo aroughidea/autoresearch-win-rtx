@@ -109,11 +109,31 @@ def _code_and_config(state_dict: dict, run: dict | None):
 
 
 def _load_model_from_checkpoint(checkpoint_path: str, device: str, run: dict | None = None):
-    state_dict = torch.load(checkpoint_path, map_location=device, weights_only=True)
+    # mmap: the file is read as the weights are copied in, never held whole beside them, so a load
+    # costs about one model's memory, not two.
+    state_dict = torch.load(checkpoint_path, map_location="cpu", weights_only=True, mmap=True)
     code, config = _code_and_config(state_dict, run)
     model = code.GPT(config)
     model.load_state_dict(state_dict)
     model.to(device)
+    model.eval()
+    return model
+
+
+def _untrained_model(checkpoint_path: str, device: str, run: dict | None = None):
+    """The version's own model before any training: its code and shapes (read from the trained file,
+    whose weights are never used), with train.py's seed (42) and its init_weights. Built on this
+    machine's generator, so the same model every time, though not the exact one the run began from on
+    the training machine's GPU. The server's own randomness is left as it was."""
+    state_dict = torch.load(checkpoint_path, map_location="cpu", weights_only=True, mmap=True)
+    code, config = _code_and_config(state_dict, run)
+    del state_dict
+    with torch.device("meta"):
+        model = code.GPT(config)
+    model.to_empty(device=device)
+    with torch.random.fork_rng(devices=[]):
+        torch.manual_seed(42)
+        model.init_weights(embed_dtype=torch.float32)
     model.eval()
     return model
 
@@ -129,6 +149,9 @@ def _discover_checkpoints(primary_checkpoint: str) -> list[dict]:
     if checkpoints_dir.exists():
         candidates.extend(sorted(checkpoints_dir.glob("*.pt")))
     candidates.extend(sorted(root.glob("*.pt")))
+    # A moment saved by a re-run (<run id>@<seconds>s.pt) is listed under the run it repeats, from its
+    # run file (ModelStore._moment_entries), never under its own name.
+    candidates = [p for p in candidates if "@" not in p.stem]
 
     seen: set[Path] = set()
     entries: list[dict] = []
@@ -270,11 +293,13 @@ def _growth_from_run(run: dict | None) -> dict | None:
     }
 
 
-# How many models stay loaded. The public demo serves eight on a 2 GB machine: measured on CPU, Python
-# with torch and this file takes about 650 MB, each 26.3 M-parameter model about 100 MB more and the
-# 33.6 M one about 150 MB, and loading one briefly holds its file and its weights. Four is a whole
-# session's milestones, or both sessions' start and best, without a reload, and stays near 1.4 GB at
-# worst. The rest load on request (about a second) and the least recently used is dropped.
+# How many models stay loaded. The public demo serves eight runs' models, each also untrained
+# (<run id>@0s) and the two bests at four moments of a re-run: 24 on a 2 GB machine. Measured on CPU,
+# Python with torch and this file takes about 650 MB, each 26.3 M-parameter model about 100 MB more
+# and the 33.6 M one about 150 MB; loading reads the file through mmap, so a load holds one copy of a
+# model, not two. Four is a whole session's milestones, or one best's four moments, without a reload;
+# cycling through all 20 stayed near 1.5 GB, and four visitors at once on random models peaked at
+# 1.6 GB. The rest load on request (about a second) and the least recently used is dropped.
 MODELS_IN_MEMORY = int(os.environ.get("MODELS_IN_MEMORY", "4"))
 
 
@@ -284,12 +309,13 @@ class ModelStore:
 
     def __init__(self, device: str, entries: list[dict], active_path: str,
                  tokenizer_loader=None, runs_dir: str = "runs", results_path: str = "results.tsv",
-                 max_loaded: int = MODELS_IN_MEMORY, model_loader=None):
+                 max_loaded: int = MODELS_IN_MEMORY, model_loader=None, untrained_builder=None):
         self.results_path = results_path
         self._runs_dir = runs_dir
         self._device = device
         self._loader = tokenizer_loader or (lambda dataset, tokenizer: Tokenizer.from_directory(dataset=dataset, tokenizer=tokenizer))
         self._load_model = model_loader or _load_model_from_checkpoint
+        self._build_untrained = untrained_builder or _untrained_model
         self._max_loaded = max(1, max_loaded)
         self._tokenizers: dict[tuple[str, str], object] = {}
         self._cache: OrderedDict[str, GPT] = OrderedDict()   # model id -> model, least recently used first
@@ -335,6 +361,44 @@ class ModelStore:
             raise RuntimeError("No usable checkpoint found. Run 'uv run prepare.py' and 'uv run train.py' first.")
         active = next((e for e in usable if e["path"] == normalized_active), usable[-1])
         self._active_id = active["id"]
+        self._add_moments()
+        self._by_id = {e["id"]: e for e in self._entries}
+
+    def _add_moments(self):
+        """Within a run: each kept version untrained (<run id>@0s, built from its code, never stored),
+        and each moment a re-run of it saved (<run id>@<seconds>s, from sessions/*/reruns/<re-run>.json,
+        its files in checkpoints/). A moment's samples are the re-run's own."""
+        trained = [e for e in self._entries if e["available"] and (self._runs.get(e["id"]) or {}).get("version")]
+        for e in trained:
+            self._add_moment({**e, "id": f"{e['id']}@0s", "moment_s": 0, "untrained": True, "val_bpb": None,
+                              "status": "", "description": "untrained", "has_growth": False},
+                             self._runs[e["id"]])
+        for path in sorted(Path("sessions").glob("*/reruns/*.json")):
+            try:
+                rerun = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                continue
+            base = self._by_id.get(rerun.get("rerun_of") or "")
+            base_run = self._runs.get(base["id"]) if base else None
+            if not base or not base["available"] or not (base_run or {}).get("version"):
+                continue
+            for moment in rerun.get("moments") or []:
+                file = Path("checkpoints") / str(moment.get("checkpoint") or "")
+                if not file.is_file() or "at_s" not in moment:
+                    continue
+                at = moment["at_s"]
+                facts = {**base, "id": f"{base['id']}@{at}s", "path": file.as_posix(), "label": file.name,
+                         "moment_s": at, "rerun_of": base["id"], "rerun_id": rerun.get("run_id"),
+                         "val_bpb": ((rerun.get("final") or {}).get("val_bpb") if moment.get("final") else None),
+                         "status": "", "description": f"a re-run of it, at {at} s",
+                         "has_growth": _growth_from_run(rerun) is not None}
+                facts["available"], facts["reason"], facts["vocab_size"] = self._check(facts)
+                # Its own samples; the code it was trained with is the run's it repeats.
+                self._add_moment(facts, {**rerun, "version": base_run["version"]})
+
+    def _add_moment(self, facts: dict, run: dict):
+        self._entries.append(facts)
+        self._runs[facts["id"]] = run
 
     def _tokenizer(self, dataset: str, tokenizer_name: str):
         key = (dataset, tokenizer_name)
@@ -407,7 +471,8 @@ class ModelStore:
                 # A generation already streaming from a dropped model keeps it until it finishes.
                 while len(self._cache) >= self._max_loaded:
                     self._cache.popitem(last=False)
-                model = self._load_model(entry["path"], self._device, self._runs.get(entry["id"]))
+                make = self._build_untrained if entry.get("untrained") else self._load_model
+                model = make(entry["path"], self._device, self._runs.get(entry["id"]))
                 self._cache[entry["id"]] = model
             self._cache.move_to_end(entry["id"])
             return model, self._tokenizer(entry["dataset"], entry["tokenizer"]), self._device, entry
@@ -894,7 +959,9 @@ _HTML = r"""<!DOCTYPE html>
     const resp = await fetch('/models');
     if (!resp.ok) throw new Error('Could not load models');
     const payload = await resp.json();
-    _models = payload.models || [];
+    // The page keeps to the runs' own models: the untrained ones and a re-run's moments (moment_s)
+    // are for LLM Explorables' page, which names them.
+    _models = (payload.models || []).filter(m => m.moment_s == null);
   }
 
   // ---- The session's chart (research time) ----

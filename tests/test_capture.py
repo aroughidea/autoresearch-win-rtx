@@ -436,3 +436,111 @@ def test_capture_refuses_a_run_started_outside_the_project_folder(tmp_path, monk
     monkeypatch.chdir(elsewhere)
     with pytest.raises(_record.RecordError, match="run train.py from"):
         _capture(tmp_path, runs_dir="runs", session="auto")
+
+
+# Saving moments (AR_SAVE_MOMENTS): off by default and never in a session. A re-run of a kept version
+# with the switch on saves its model at those training moments beside its run file, and keeps the end
+# model train.py saved, so a page can show one run's model at 10 seconds, 1 minute, 5 minutes and the end.
+
+def test_moments_are_off_by_default_and_read_from_the_environment(monkeypatch):
+    monkeypatch.delenv("AR_SAVE_MOMENTS", raising=False)
+    assert capture.moments_from_env() == ()
+    assert capture.moments_from_env({"AR_SAVE_MOMENTS": "300, 10,60"}) == (10.0, 60.0, 300.0)
+    assert capture.moments_from_env({"AR_SAVE_MOMENTS": " "}) == ()
+    for bad in ("ten", "-5", "0", "10,,60"):
+        with pytest.raises(ValueError, match="AR_SAVE_MOMENTS"):
+            capture.moments_from_env({"AR_SAVE_MOMENTS": bad})
+
+
+def _moment_capture(tmp_path, **overrides):
+    return _capture(tmp_path, save_moments=(10, 60), rerun_of="20261022T052816-0700_6c874e790ab4",
+                    started=datetime(2026, 1, 2, 3, 4, 5, tzinfo=PDT), **overrides)
+
+
+def _end_checkpoint(model):
+    torch.save(model.state_dict(), "checkpoint_pre_eval.pt")
+
+
+def test_a_rerun_saves_its_model_at_each_moment_and_its_end(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    runs = tmp_path / "reruns"
+    cap, model = _moment_capture(tmp_path, runs_dir=runs), FakeModel()
+    cap.on_step(model, 0.0, 0, None)
+    cap.on_step(model, 10.4, 30, 4.0)
+    at_ten = {k: v.clone() for k, v in model.state_dict().items()}
+    with torch.no_grad():
+        model.table.weight.add_(1.0)              # training moves the weights on
+    cap.on_step(model, 61.0, 180, 3.0)
+    cap.on_train_end(model, 600.2, 1800, 2.0)
+    _end_checkpoint(model)
+    path = _finish(cap, training_seconds=600.2, num_steps=1800)
+
+    run_id = "20260102T030405-0700_abc1234"        # named by when it started, not by the commit's time
+    assert path.name == f"{run_id}.json"
+    record = json.loads(path.read_text(encoding="utf-8"))
+    assert record["rerun_of"] == "20261022T052816-0700_6c874e790ab4"
+    moments = record["moments"]
+    assert [(m["at_s"], m["checkpoint"]) for m in moments] == [
+        (10, f"{run_id}@10s.pt"), (60, f"{run_id}@60s.pt"), (600, f"{run_id}@600s.pt")]
+    assert [m["t_s"] for m in moments] == [10.4, 61.0, 600.2]
+    assert [m["step"] for m in moments] == [30, 180, 1800]
+    assert moments[-1]["final"] is True and "final" not in moments[0]
+    for m in moments:
+        assert m["checkpoint_sha256"] == capture._file_sha256(runs / m["checkpoint"])
+    saved = torch.load(runs / f"{run_id}@10s.pt", weights_only=True)
+    assert torch.equal(saved["table.weight"], at_ten["table.weight"])
+    end = torch.load(runs / f"{run_id}@600s.pt", weights_only=True)
+    assert torch.equal(end["table.weight"], model.state_dict()["table.weight"])
+    assert sorted(p.name for p in runs.iterdir()) == sorted([path.name] + [m["checkpoint"] for m in moments])
+
+
+def test_an_end_model_from_before_the_run_is_not_taken_for_its_end(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    _end_checkpoint(FakeModel())                  # an older run's
+    import os
+    os.utime("checkpoint_pre_eval.pt", (1_000_000_000, 1_000_000_000))
+    cap, model = _moment_capture(tmp_path, runs_dir=tmp_path / "reruns"), FakeModel()
+    cap.on_step(model, 10.0, 30, 4.0)
+    record = json.loads(_finish(cap).read_text(encoding="utf-8"))
+    assert [m["at_s"] for m in record["moments"]] == [10]
+
+
+def test_a_retried_attempt_starts_its_moments_again(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    runs = tmp_path / "reruns"
+    cap, model = _moment_capture(tmp_path, runs_dir=runs), FakeModel()
+    cap.on_step(model, 61.0, 180, 3.0)
+    cap.begin_attempt()                            # out of memory: train.py starts the run again
+    assert [p for p in runs.glob("*.pt")] == []
+    cap.on_step(model, 10.0, 30, 4.0)
+    record = json.loads(_finish(cap).read_text(encoding="utf-8"))
+    assert [m["at_s"] for m in record["moments"]] == [10]
+
+
+def test_a_failed_save_drops_the_moments_but_never_training_or_the_samples(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    cap, model = _moment_capture(tmp_path, runs_dir=tmp_path / "reruns"), FakeModel()
+    monkeypatch.setattr(capture.torch, "save", lambda *a, **k: (_ for _ in ()).throw(OSError("disk full")))
+    cap.on_step(model, 0.0, 0, None)
+    cap.on_step(model, 10.0, 30, 4.0)
+    assert cap.error is None and len(cap.snapshots) == 2
+    record = json.loads(_finish(cap).read_text(encoding="utf-8"))
+    assert record["moments"] == [] and "disk full" in record["moments_error"]
+
+
+def test_moments_are_refused_in_a_session(tmp_path, monkeypatch):
+    """The record's rules are untouched: a session's runs never save moments."""
+    monkeypatch.delenv("AUTORESEARCH_RUNS_DIR", raising=False)
+    _session(tmp_path, monkeypatch)
+    with pytest.raises(ValueError, match="outside a session"):
+        _capture(tmp_path, runs_dir="runs", session="auto", save_moments=(10,))
+
+
+def test_a_run_without_moments_writes_what_it_always_wrote(tmp_path, monkeypatch):
+    monkeypatch.delenv("AR_SAVE_MOMENTS", raising=False)
+    monkeypatch.chdir(tmp_path)
+    _end_checkpoint(FakeModel())
+    record = json.loads(_finish(_capture(tmp_path)).read_text(encoding="utf-8"))
+    assert "moments" not in record and "rerun_of" not in record
+    assert record["run_id"] == "20260523T155743-0700_abc1234"
+    assert [p.name for p in tmp_path.glob("*@*")] == []

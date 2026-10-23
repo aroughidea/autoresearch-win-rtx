@@ -165,3 +165,134 @@ def test_nothing_loads_until_asked_for(tmp_path, monkeypatch):
     loads = []
     store = _store(tmp_path, monkeypatch, loads=loads)
     assert store.loaded_ids() == [] and loads == []
+
+
+# Within a run (the contract's "Within a run"): every kept version also answers untrained, as
+# <run id>@0s, and a re-run of a best that saved moments answers as <best run id>@<seconds>s.
+
+RERUN = "20261023T190005-0700_1a2b3c4"
+
+
+def _moment_store(tmp_path, monkeypatch, loads, builds, moments=(10, 60, 300, 600)):
+    _checkpoints(tmp_path, [RUN_A, RUN_B])
+    monkeypatch.chdir(tmp_path)
+    runs = tmp_path / "sessions" / "s1" / "runs"
+    runs.mkdir(parents=True)
+    for stem in (RUN_A, RUN_B):
+        (runs / f"{stem}.json").write_text(json.dumps({
+            "dataset": "folktales", "tokenizer": {"name": "own", "vocab_size": 8}, "version": stem[-12:],
+            "status": "keep", "description": "a kept version", "final": {"val_bpb": 1.2, "params_m": 26.3},
+            "prompts": ["Once"], "snapshots": [{"t_s": 0, "samples": ["the session's own"]}],
+        }), encoding="utf-8")
+    reruns = tmp_path / "sessions" / "s1" / "reruns"
+    reruns.mkdir()
+    listed = []
+    for at in moments:
+        name = f"{RERUN}@{at}s.pt"
+        torch.save({"transformer.wte.weight": torch.zeros(8, 2)}, tmp_path / "checkpoints" / name)
+        listed.append({"at_s": at, "t_s": at + 0.4, "step": at * 3, "checkpoint": name,
+                       "checkpoint_sha256": "0" * 64, **({"final": True} if at == 600 else {})})
+    (reruns / f"{RERUN}.json").write_text(json.dumps({
+        "run_id": RERUN, "rerun_of": RUN_B, "dataset": "folktales",
+        "tokenizer": {"name": "own", "vocab_size": 8}, "time_budget_s": 600,
+        "final": {"val_bpb": 1.21, "params_m": 33.6}, "moments": listed,
+        "prompts": ["Once"], "snapshots": [{"t_s": 10, "samples": ["the re-run's own"]}],
+    }), encoding="utf-8")
+
+    def loader(path, device, run):
+        loads.append((path, run.get("version")))
+        return _Model()
+
+    def builder(path, device, run):
+        builds.append((path, run.get("version")))
+        return _Model()
+
+    entries = chat._discover_checkpoints("checkpoint_pre_eval.pt")
+    return chat.ModelStore("cpu", entries, f"checkpoints/{RUN_B}.pt", tokenizer_loader=lambda d, t: _Tok(),
+                           runs_dir=str(runs), results_path=str(tmp_path / "none.tsv"),
+                           model_loader=loader, untrained_builder=builder)
+
+
+def test_models_lists_each_untrained_model_and_each_saved_moment(tmp_path, monkeypatch):
+    store = _moment_store(tmp_path, monkeypatch, [], [])
+    models = {m["id"]: m for m in TestClient(chat.build_app(store)).get("/models").json()["models"]}
+    assert sorted(models) == sorted([RUN_A, RUN_B, f"{RUN_A}@0s", f"{RUN_B}@0s",
+                                     f"{RUN_B}@10s", f"{RUN_B}@60s", f"{RUN_B}@300s", f"{RUN_B}@600s"])
+    assert "moment_s" not in models[RUN_A] or models[RUN_A]["moment_s"] is None
+    untrained = models[f"{RUN_A}@0s"]
+    assert (untrained["moment_s"], untrained["available"], untrained["dataset"], untrained["vocab_size"]) == (0, True, "folktales", 8)
+    assert untrained.get("rerun_of") is None and untrained["val_bpb"] is None
+    ten = models[f"{RUN_B}@10s"]
+    assert (ten["moment_s"], ten["rerun_of"], ten["rerun_id"], ten["available"]) == (10, RUN_B, RERUN, True)
+    assert ten["val_bpb"] is None and models[f"{RUN_B}@600s"]["val_bpb"] == 1.21
+    assert store.active_id == RUN_B                      # the page still opens on a session's own model
+    # The re-run's files are not listed under their own names.
+    assert not any(i.startswith(RERUN) for i in models)
+
+
+def test_an_untrained_model_is_built_from_its_versions_code_never_loaded(tmp_path, monkeypatch):
+    loads, builds = [], []
+    client = TestClient(chat.build_app(_moment_store(tmp_path, monkeypatch, loads, builds)))
+    r = client.post("/generate", json={"prompt": "Once", "max_tokens": 3, "model_id": f"{RUN_A}@0s"})
+    assert r.status_code == 200 and len(_lines(r)) == 3
+    assert builds == [(f"checkpoints/{RUN_A}.pt", RUN_A[-12:])] and loads == []
+
+
+def test_a_saved_moment_loads_its_file_with_the_code_of_the_run_it_repeats(tmp_path, monkeypatch):
+    loads, builds = [], []
+    store = _moment_store(tmp_path, monkeypatch, loads, builds)
+    client = TestClient(chat.build_app(store))
+    r = client.post("/generate", json={"prompt": "Once", "max_tokens": 2, "model_id": f"{RUN_B}@60s"})
+    assert r.status_code == 200
+    assert loads == [(f"checkpoints/{RERUN}@60s.pt", RUN_B[-12:])] and builds == []
+    # Its growth card is the re-run's own samples, not the session run's.
+    assert client.get("/growth", params={"model_id": f"{RUN_B}@60s"}).json()["snapshots"][0]["samples"] == ["the re-run's own"]
+    assert client.get("/growth", params={"model_id": RUN_B}).json()["snapshots"][0]["samples"] == ["the session's own"]
+
+
+def test_a_moment_whose_file_is_missing_is_not_listed(tmp_path, monkeypatch):
+    store = _moment_store(tmp_path, monkeypatch, [], [])
+    (tmp_path / "checkpoints" / f"{RERUN}@300s.pt").unlink()
+    ids = [m["id"] for m in chat.ModelStore("cpu", chat._discover_checkpoints("x.pt"), f"checkpoints/{RUN_B}.pt",
+                                            tokenizer_loader=lambda d, t: _Tok(),
+                                            runs_dir=str(tmp_path / "sessions" / "s1" / "runs"),
+                                            results_path=str(tmp_path / "none.tsv")).list_models()]
+    assert f"{RUN_B}@300s" not in ids and f"{RUN_B}@10s" in ids and store is not None
+
+
+def test_chat_pys_own_page_lists_only_the_sessions_models():
+    """The pickers would otherwise hold 24 models; the page keeps to the runs' own."""
+    assert "m.moment_s == null" in chat._HTML
+
+
+class _Tiny(torch.nn.Module):
+    """A version's network in miniature: built on meta, given storage, then init_weights."""
+
+    def __init__(self, config):
+        super().__init__()
+        self.config = config
+        self.lin = torch.nn.Linear(4, 4)
+
+    def init_weights(self, embed_dtype=torch.bfloat16):
+        torch.nn.init.normal_(self.lin.weight)
+        torch.nn.init.zeros_(self.lin.bias)
+
+
+def test_building_an_untrained_model_uses_seed_42_and_leaves_the_servers_randomness_alone(tmp_path, monkeypatch):
+    import types
+    code = types.SimpleNamespace(GPT=_Tiny)
+    monkeypatch.setattr(chat, "_code_and_config", lambda state, run: (code, types.SimpleNamespace(sequence_len=8)))
+    path = tmp_path / "m.pt"
+    torch.save({"transformer.wte.weight": torch.zeros(8, 2)}, path)
+    torch.manual_seed(7)
+    before = torch.rand(1)
+    torch.manual_seed(7)
+    one = chat._untrained_model(str(path), "cpu", {"version": "v"})
+    after = torch.rand(1)
+    two = chat._untrained_model(str(path), "cpu", {"version": "v"})
+    assert torch.equal(before, after), "the server's own sampling randomness is untouched"
+    assert torch.equal(one.lin.weight, two.lin.weight), "the same untrained model every time"
+    torch.manual_seed(42)
+    expected = torch.nn.init.normal_(torch.empty(4, 4))
+    assert torch.equal(one.lin.weight, expected), "seed 42, as train.py"
+    assert not one.training

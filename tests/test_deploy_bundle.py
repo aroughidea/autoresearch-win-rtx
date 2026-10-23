@@ -47,12 +47,19 @@ def _bundle_runs():
     return [json.loads(p.read_text(encoding="utf-8")) for p in sorted((ROOT / "deploy" / "sessions").glob("*/runs/*.json"))]
 
 
+def _bundle_reruns():
+    import json
+    return [json.loads(p.read_text(encoding="utf-8")) for p in sorted((ROOT / "deploy" / "sessions").glob("*/reruns/*.json"))]
+
+
 def test_every_model_the_demo_serves_is_the_one_its_run_saved():
-    """deploy/checkpoints/ holds exactly the models deploy/sessions/' run files name, each with the
-    SHA-256 its run recorded, so the page never pairs a model with another run's record."""
+    """deploy/checkpoints/ holds exactly the models deploy/sessions/' run files name, and the moments
+    its re-runs saved, each with the SHA-256 its run recorded, so the page never pairs a model with
+    another run's record."""
     runs = _bundle_runs()
     assert runs, "deploy/sessions/ has no run files"
     named = {pathlib.Path(r["checkpoint"]).name: r["checkpoint_sha256"] for r in runs}
+    named.update({m["checkpoint"]: m["checkpoint_sha256"] for r in _bundle_reruns() for m in r["moments"]})
     present = {p.name: p for p in (ROOT / "deploy" / "checkpoints").glob("*.pt")}
     missing = sorted(set(named) - set(present))
     assert not missing, f"copy these models into deploy/checkpoints/ (see deploy/README.md): {missing}"
@@ -99,3 +106,18 @@ def test_the_bundle_serves_the_eight_models_the_explorables_name():
         for run_id in ids:
             run = json.loads((sessions / session / "runs" / f"{run_id}.json").read_text(encoding="utf-8"))
             assert run["status"] == "keep" and run["checkpoint"] == f"checkpoints/{run_id}.pt"
+
+
+# The contract's "Within a run": the two bests re-run with capture.py's moment switch
+# (deploy/rerun.py), their models at 10 s, 1 min, 5 min and the end.
+RERUN_BESTS = {"20261022T052816-0700_6c874e790ab4", "20261021T130839-0700_05602a6a5706"}
+
+
+def test_the_two_bests_each_have_a_rerun_with_four_moments():
+    reruns = _bundle_reruns()
+    assert {r["rerun_of"] for r in reruns} == RERUN_BESTS, \
+        "run deploy/rerun.py for each best on the training machine (see PR #39's description)"
+    assert len(reruns) == len(RERUN_BESTS)
+    for r in reruns:
+        assert [m["at_s"] for m in r["moments"]] == [10, 60, 300, 600]
+        assert all(m["checkpoint"] == f"{r['run_id']}@{m['at_s']}s.pt" for m in r["moments"])

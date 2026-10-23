@@ -90,9 +90,11 @@ own openings and sampling settings. `deploy/sessions/` holds the two sessions' r
 The same server is also the backend of LLM Explorables' model demo (its contract:
 `docs/superpowers/specs/2026-10-23-model-demo-contract.md` there), so it serves eight models, four per
 session (the start, two kept along the way, the best), each named by its run id, loaded on request with
-four kept in memory (decided 23 October). Left to do on the training machine: the eight model files into
+four kept in memory (decided 23 October). Within a run (the contract's later section, the same day): each also
+answers untrained (`<run id>@0s`), and the two bests at four moments of a re-run made with `deploy/rerun.py`
+and `capture.py`'s moment switch. Left to do on the training machine: the eight model files into
 `deploy/checkpoints/` (named in `deploy/README.md`; `tests/test_deploy_bundle.py` fails until they are the
-right ones), the vocabularies checked, the image simulated, and `fly deploy` (the steps are in PR #39).
+right ones), the two bests re-run with `deploy/rerun.py`, the vocabularies checked, the image simulated, and `fly deploy` (the steps are in PR #39).
 
 ## Then
 

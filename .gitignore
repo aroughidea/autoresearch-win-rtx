@@ -41,3 +41,6 @@ checkpoint_pre_eval.pt
 # Local secrets, such as the session runner's sign-in token: never committed
 .env
 .env.*
+
+# deploy/rerun.py works here and removes it when done
+deploy/.rerun-work/
