@@ -15,7 +15,7 @@ features, whose "Use a model" step links here: `folktales-b-10min-2026-10-21` an
 script). For each, the start (the last of its three start runs, the one that kept
 its model) and the best version the agent found. It opens on Folktales' start and
 best side by side; its tabs are Continue text, Watch it learn (all four), The
-session (that night's chart) and The vocabulary. The page wears How a Model Gets
+session (that session's chart) and The vocabulary. The page wears How a Model Gets
 Made's look, light and dark.
 
 | Model | File (`checkpoints/`) | val_bpb |

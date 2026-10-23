@@ -732,7 +732,7 @@ _HTML = r"""<!DOCTYPE html>
   </section>
 
   <section class="panel" id="page-session" role="tabpanel" aria-labelledby="tab-session" hidden>
-    <h2 class="question" id="chart-title">One night of an AI agent’s experiments</h2>
+    <h2 class="question" id="chart-title">One 10-hour session of an AI agent’s experiments</h2>
     <p class="lede">This is research time: each dot is a new model. The agent changes one thing in the training script, trains a model for the same few minutes and scores it on text kept out of training. A better score keeps the change; any other sets it aside. Lower is better.</p>
     <ul class="legend" aria-hidden="true">
       <li><svg viewBox="0 0 22 16"><circle class="kept" cx="11" cy="8" r="5"/></svg>Kept</li>
@@ -1006,7 +1006,7 @@ _HTML = r"""<!DOCTYPE html>
         $('card-best').hidden = true;
       }
       const ds = datasetName(((_models.find(m => m.id === _baselineModelId)) || {}).dataset);
-      if (ds) $('chart-title').textContent = `One night of an AI agent’s experiments on ${ds}`;
+      if (ds) $('chart-title').textContent = `One 10-hour session of an AI agent’s experiments on ${ds}`;
     } catch (err) {
       $('chart-status').textContent = 'Could not load the session: ' + err.message;
     }
@@ -1231,7 +1231,7 @@ _SPACE_MODE = os.environ.get("SPACE_MODE") == "1"
 _SPACE_BANNER = (
     '<p class="public">A public demo of four small language models, each trained for 10 minutes on one '
     "laptop graphics card. For two datasets it serves the starter script and the best version an AI agent "
-    "found in a night of experiments. On text kept out of training the best scored 63% better on Folktales "
+    "found in a 10-hour session of experiments. On text kept out of training the best scored 63% better on Folktales "
     "(3.287 to 1.207 bits per byte, from the average of its three start runs) and 2.6% better on TinyStories "
     "(0.4366 to 0.4251); lower is better. Compare a start with its best, or the two starts (the same code, "
     "trained on different text) to see what the dataset decides. "

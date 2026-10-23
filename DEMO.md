@@ -173,12 +173,12 @@ say so: the rule keeps it anyway, and the description should say it was small.
 
 ### [12–15 min] The reveal: the hosted demo
 
-The hosted demo serves four models from the two overnight sessions How a Model Gets Made
+The hosted demo serves four models from the two 10-hour sessions How a Model Gets Made
 features, each trained for 10 minutes: Folktales on 21 October and TinyStories on 20 to 21
 October, for each the start (the last of its three start runs) and its best version. It opens
 on Folktales' pair. Two beats:
 
-1. **The agent's night.** Folktales' start (left) and best (right), side by side on one of
+1. **The agent's session.** Folktales' start (left) and best (right), side by side on one of
    your tested prompts, with the temperature you tested. Let both finish without talking over
    them. On held-out text the best scored 63% better (3.287 to 1.207 bits per byte). Ask the
    room whether they can see the difference in the text; the agent judged by the score.
@@ -186,7 +186,7 @@ on Folktales' pair. Two beats:
    code, trained on different text with a vocabulary built from that text. The continuations
    change plainly. That is the point of the whole project: changing a design decision changes
    the final experience in a specific way (TRAINING-DECISIONS.md). If there is time, put
-   TinyStories' best beside it: there the agent's night bought only 2.6% (0.4366 to 0.4251),
+   TinyStories' best beside it: there the agent's session bought only 2.6% (0.4366 to 0.4251),
    a gain the score shows and the text may not.
 
 If there is time, click **Tokens** on one pane to show the raw tokenization.
