@@ -36,7 +36,8 @@ depends on.
 
 The two along the way are the first kept versions a third and two thirds of the
 way from start to best, except Folktales' second, moved from experiment 5 to 9,
-where its steep fall levels off. Together the eight files are about 0.9 GB.
+where its steep fall levels off. Together the eight files are 0.69 GB (76.5 MiB each, 120 MiB for Folktales'
+best).
 
 **Within a run** (the contract's section of that name). Every one of the eight
 also answers untrained, as `<run id>@0s`: `chat.py` builds the version's model
@@ -55,7 +56,7 @@ weights its samples there came from (both bests' saved end is the average of
 their weights, EMA, which only the end gets). A re-run isn't identical to the
 original (the laptop fits a slightly different number of steps into ten
 minutes), so a moment's growth card shows the re-run's own samples. The re-runs'
-six files add about 0.7 GB, about 1.6 GB in all: 22 models, 14 of them files.
+six files add 0.62 GB, 1.31 GB in all: 22 models, 14 of them files.
 
 The models have 26 to 34 million parameters, so it runs on a plain CPU machine;
 that fact is part of what the demo teaches. A model loads the first time it is

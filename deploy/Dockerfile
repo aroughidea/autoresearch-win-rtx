@@ -48,7 +48,7 @@ COPY --chown=user:user chat.py generate.py prepare.py train.py capture.py record
 # features: Folktales on 21 to 22 October and TinyStories on 20 to 21 October 2026, 10-hour sessions (10-minute
 # runs, the full-attention starter script). For each, four kept versions: the start (the last of its
 # three start runs, the one that kept its model), two along the way, and the agent's best; and the
-# two bests' re-runs at 10 s, 1 min and 5 min (deploy/rerun.py). About 1.6 GB; chat.py
+# two bests' re-runs at 10 s, 1 min and 5 min (deploy/rerun.py). 1.31 GB; chat.py
 # loads each when asked for and keeps four in memory. They live in deploy/checkpoints/, not
 # checkpoints/, so a local chat.py never lists them without the run files and version code below.
 # The page lists models by file time, so each file's time is the moment its run saved it.
