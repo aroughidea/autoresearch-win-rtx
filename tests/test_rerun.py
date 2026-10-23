@@ -36,7 +36,7 @@ def main():
         with torch.no_grad():
             model.w.fill_(t)
         cap.on_step(model, float(t), t, 1.0)
-    torch.save(model.state_dict(), "checkpoint_pre_eval.pt")
+    torch.save(model.state_dict(), "checkpoint_pre_eval.pt")   # the end, as train.py saves it; never filed
     cap.finish(val_bpb=1.21, peak_vram_mb=1.0, training_seconds=float(TIME_BUDGET), num_steps=1800,
                num_params=33_600_000, recipe={}, commit="abc1234", committed_at=None)
     return 0
@@ -81,14 +81,14 @@ def test_the_plan_runs_the_versions_own_code_with_the_switch_on(tmp_path, monkey
         rerun.plan("20200101T000000-0700_000000000000", tmp_path / "work")
 
 
-def test_a_rerun_files_its_run_file_and_four_models_where_chat_py_serves_them(tmp_path, monkeypatch, capsys):
+def test_a_rerun_files_its_run_file_and_three_models_where_chat_py_serves_them(tmp_path, monkeypatch, capsys):
     session = _project(tmp_path, monkeypatch)
     assert rerun.main([BEST]) == 0
     reruns = list((session / "reruns").glob("*.json"))
     assert len(reruns) == 1
     record = json.loads(reruns[0].read_text(encoding="utf-8"))
     assert record["rerun_of"] == BEST
-    assert [m["at_s"] for m in record["moments"]] == [10, 60, 300, 600]
+    assert [m["at_s"] for m in record["moments"]] == [10, 60, 300]
     files = sorted(p.name for p in (tmp_path / "deploy" / "checkpoints").iterdir())
     assert files == sorted(m["checkpoint"] for m in record["moments"])
     assert all(name.startswith(record["run_id"] + "@") for name in files)
@@ -122,7 +122,7 @@ def test_a_rerun_on_another_vocabulary_files_nothing(tmp_path, monkeypatch):
     work = tmp_path / "work"
     work.mkdir()
     (work / "x.json").write_text(json.dumps({"run_id": "x", "rerun_of": BEST, "tokenizer": {"name": "phi3"},
-                                             "moments": [{"at_s": a} for a in (10, 60, 300, 600)]}), encoding="utf-8")
+                                             "moments": [{"at_s": a} for a in (10, 60, 300)]}), encoding="utf-8")
     with pytest.raises(SystemExit, match="phi3 vocabulary"):
         rerun.file_rerun(work, session, {"run_id": BEST, "time_budget_s": 600, "tokenizer": {"name": "own"}},
                          tmp_path / "deploy" / "checkpoints")

@@ -294,12 +294,12 @@ def _growth_from_run(run: dict | None) -> dict | None:
 
 
 # How many models stay loaded. The public demo serves eight runs' models, each also untrained
-# (<run id>@0s) and the two bests at four moments of a re-run: 24 on a 2 GB machine. Measured on CPU,
+# (<run id>@0s) and the two bests at three moments of a re-run: 22 on a 2 GB machine. Measured on CPU,
 # Python with torch and this file takes about 650 MB, each 26.3 M-parameter model about 100 MB more
 # and the 33.6 M one about 150 MB; loading reads the file through mmap, so a load holds one copy of a
-# model, not two. Four is a whole session's milestones, or one best's four moments, without a reload;
-# cycling through all 20 stayed near 1.5 GB, and four visitors at once on random models peaked at
-# 1.6 GB. The rest load on request (about a second) and the least recently used is dropped.
+# model, not two. Four is a whole session's milestones, or one best's three moments and its end,
+# without a reload; cycling through 20 of them stayed near 1.5 GB, and four visitors at once on random
+# models peaked at 1.6 GB. The rest load on request (about a second) and the least recently used is dropped.
 MODELS_IN_MEMORY = int(os.environ.get("MODELS_IN_MEMORY", "4"))
 
 
@@ -389,7 +389,7 @@ class ModelStore:
                 at = moment["at_s"]
                 facts = {**base, "id": f"{base['id']}@{at}s", "path": file.as_posix(), "label": file.name,
                          "moment_s": at, "rerun_of": base["id"], "rerun_id": rerun.get("run_id"),
-                         "val_bpb": ((rerun.get("final") or {}).get("val_bpb") if moment.get("final") else None),
+                         "val_bpb": None,
                          "status": "", "description": f"a re-run of it, at {at} s",
                          "has_growth": _growth_from_run(rerun) is not None}
                 facts["available"], facts["reason"], facts["vocab_size"] = self._check(facts)

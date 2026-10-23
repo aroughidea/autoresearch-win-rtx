@@ -30,7 +30,7 @@ primary_region = "sjc"
 
 [[vm]]
   size = "shared-cpu-1x"
-  # 24 models (eight runs, each untrained too, and two re-runs' moments), four kept in memory
+  # 22 models (eight runs, each untrained too, and two re-runs' three moments), four kept in memory
   # (chat.py's MODELS_IN_MEMORY): about 1.5 GB in use, 1.6 GB at worst with several visitors
   # generating from different models at once.
   memory = "2gb"

@@ -17,7 +17,6 @@ import hashlib
 import json
 import math
 import os
-import shutil
 import subprocess
 import time
 from datetime import datetime
@@ -100,12 +99,11 @@ SCHEMA = 1
 # Saving moments: a switch for re-running a kept version outside any session, so a page can show one
 # run's model at a few moments of its training. AR_SAVE_MOMENTS names them in training seconds
 # ("10,60,300"); each saves the model as it is then (the weights the samples at that moment come
-# from), and the end keeps the model train.py saved as checkpoint_pre_eval.pt, all beside the run
-# file as <run id>@<seconds>s.pt. AR_RERUN_OF names the session run it repeats. Off unless set, and
+# from) beside the run file as <run id>@<seconds>s.pt. The end is not among them: the session's own
+# kept model stands for it. AR_RERUN_OF names the session run it repeats. Off unless set, and
 # refused in a session: the record never holds these.
 MOMENTS_ENV = "AR_SAVE_MOMENTS"
 RERUN_OF_ENV = "AR_RERUN_OF"
-END_CHECKPOINT = "checkpoint_pre_eval.pt"
 
 
 def moments_from_env(env=None):
@@ -354,17 +352,9 @@ class RunCapture:
         self.snapshots.append(entry)
         self._say(f"capture: t={entry['t_s']}s step={step} sampled in {took:.1f}s")
 
-    def _name_moments(self, run_id, training_seconds, num_steps):
-        """Move each saved moment to <run id>@<seconds>s.pt, and add the end: the model train.py saved for
-        this run (written since the run started), at the run's time budget."""
+    def _name_moments(self, run_id):
+        """Move each saved moment to <run id>@<seconds>s.pt, now that the run has its id."""
         named = []
-        if self.moments_error is None:
-            end = Path(END_CHECKPOINT)
-            if end.exists() and end.stat().st_mtime >= self.started.timestamp():
-                path = self.runs_dir / ".moment-end.pt.tmp"
-                shutil.copy2(end, path)
-                self.moments.append({"at_s": int(self.time_budget_s), "t_s": _finite(training_seconds, 1),
-                                     "step": int(num_steps), "path": str(path), "final": True})
         for saved in self.moments:
             name = f"{run_id}@{saved['at_s']}s.pt"
             target = self.runs_dir / name
@@ -435,7 +425,7 @@ class RunCapture:
         record["run_id"] = run_id
         if self.save_moments:
             record["rerun_of"] = self.rerun_of
-            record["moments"] = self._name_moments(run_id, training_seconds, num_steps)
+            record["moments"] = self._name_moments(run_id)
             if self.moments_error:
                 record["moments_error"] = self.moments_error
         path = self.runs_dir / f"{run_id}.json"

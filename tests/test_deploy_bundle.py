@@ -109,15 +109,15 @@ def test_the_bundle_serves_the_eight_models_the_explorables_name():
 
 
 # The contract's "Within a run": the two bests re-run with capture.py's moment switch
-# (deploy/rerun.py), their models at 10 s, 1 min, 5 min and the end.
+# (deploy/rerun.py), their models at 10 s, 1 min and 5 min; the end is the session's own best.
 RERUN_BESTS = {"20261022T052816-0700_6c874e790ab4", "20261021T130839-0700_05602a6a5706"}
 
 
-def test_the_two_bests_each_have_a_rerun_with_four_moments():
+def test_the_two_bests_each_have_a_rerun_with_three_moments():
     reruns = _bundle_reruns()
     assert {r["rerun_of"] for r in reruns} == RERUN_BESTS, \
         "run deploy/rerun.py for each best on the training machine (see PR #39's description)"
     assert len(reruns) == len(RERUN_BESTS)
     for r in reruns:
-        assert [m["at_s"] for m in r["moments"]] == [10, 60, 300, 600]
+        assert [m["at_s"] for m in r["moments"]] == [10, 60, 300]
         assert all(m["checkpoint"] == f"{r['run_id']}@{m['at_s']}s.pt" for m in r["moments"])

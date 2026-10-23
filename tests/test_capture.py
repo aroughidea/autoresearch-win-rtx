@@ -439,8 +439,8 @@ def test_capture_refuses_a_run_started_outside_the_project_folder(tmp_path, monk
 
 
 # Saving moments (AR_SAVE_MOMENTS): off by default and never in a session. A re-run of a kept version
-# with the switch on saves its model at those training moments beside its run file, and keeps the end
-# model train.py saved, so a page can show one run's model at 10 seconds, 1 minute, 5 minutes and the end.
+# with the switch on saves its model at those training moments beside its run file, so a page can show
+# one run's model at 10 seconds, 1 minute and 5 minutes; the session's own kept model is its end.
 
 def test_moments_are_off_by_default_and_read_from_the_environment(monkeypatch):
     monkeypatch.delenv("AR_SAVE_MOMENTS", raising=False)
@@ -457,11 +457,7 @@ def _moment_capture(tmp_path, **overrides):
                     started=datetime(2026, 1, 2, 3, 4, 5, tzinfo=PDT), **overrides)
 
 
-def _end_checkpoint(model):
-    torch.save(model.state_dict(), "checkpoint_pre_eval.pt")
-
-
-def test_a_rerun_saves_its_model_at_each_moment_and_its_end(tmp_path, monkeypatch):
+def test_a_rerun_saves_its_model_at_each_moment(tmp_path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     runs = tmp_path / "reruns"
     cap, model = _moment_capture(tmp_path, runs_dir=runs), FakeModel()
@@ -472,7 +468,7 @@ def test_a_rerun_saves_its_model_at_each_moment_and_its_end(tmp_path, monkeypatc
         model.table.weight.add_(1.0)              # training moves the weights on
     cap.on_step(model, 61.0, 180, 3.0)
     cap.on_train_end(model, 600.2, 1800, 2.0)
-    _end_checkpoint(model)
+    torch.save(model.state_dict(), "checkpoint_pre_eval.pt")
     path = _finish(cap, training_seconds=600.2, num_steps=1800)
 
     run_id = "20260102T030405-0700_abc1234"        # named by when it started, not by the commit's time
@@ -480,29 +476,15 @@ def test_a_rerun_saves_its_model_at_each_moment_and_its_end(tmp_path, monkeypatc
     record = json.loads(path.read_text(encoding="utf-8"))
     assert record["rerun_of"] == "20261022T052816-0700_6c874e790ab4"
     moments = record["moments"]
-    assert [(m["at_s"], m["checkpoint"]) for m in moments] == [
-        (10, f"{run_id}@10s.pt"), (60, f"{run_id}@60s.pt"), (600, f"{run_id}@600s.pt")]
-    assert [m["t_s"] for m in moments] == [10.4, 61.0, 600.2]
-    assert [m["step"] for m in moments] == [30, 180, 1800]
-    assert moments[-1]["final"] is True and "final" not in moments[0]
+    assert [(m["at_s"], m["checkpoint"]) for m in moments] == [(10, f"{run_id}@10s.pt"), (60, f"{run_id}@60s.pt")]
+    assert [m["t_s"] for m in moments] == [10.4, 61.0]
+    assert [m["step"] for m in moments] == [30, 180]
     for m in moments:
         assert m["checkpoint_sha256"] == capture._file_sha256(runs / m["checkpoint"])
     saved = torch.load(runs / f"{run_id}@10s.pt", weights_only=True)
     assert torch.equal(saved["table.weight"], at_ten["table.weight"])
-    end = torch.load(runs / f"{run_id}@600s.pt", weights_only=True)
-    assert torch.equal(end["table.weight"], model.state_dict()["table.weight"])
+    # The end is not a moment: the session's own kept model stands for it.
     assert sorted(p.name for p in runs.iterdir()) == sorted([path.name] + [m["checkpoint"] for m in moments])
-
-
-def test_an_end_model_from_before_the_run_is_not_taken_for_its_end(tmp_path, monkeypatch):
-    monkeypatch.chdir(tmp_path)
-    _end_checkpoint(FakeModel())                  # an older run's
-    import os
-    os.utime("checkpoint_pre_eval.pt", (1_000_000_000, 1_000_000_000))
-    cap, model = _moment_capture(tmp_path, runs_dir=tmp_path / "reruns"), FakeModel()
-    cap.on_step(model, 10.0, 30, 4.0)
-    record = json.loads(_finish(cap).read_text(encoding="utf-8"))
-    assert [m["at_s"] for m in record["moments"]] == [10]
 
 
 def test_a_retried_attempt_starts_its_moments_again(tmp_path, monkeypatch):
@@ -539,7 +521,6 @@ def test_moments_are_refused_in_a_session(tmp_path, monkeypatch):
 def test_a_run_without_moments_writes_what_it_always_wrote(tmp_path, monkeypatch):
     monkeypatch.delenv("AR_SAVE_MOMENTS", raising=False)
     monkeypatch.chdir(tmp_path)
-    _end_checkpoint(FakeModel())
     record = json.loads(_finish(_capture(tmp_path)).read_text(encoding="utf-8"))
     assert "moments" not in record and "rerun_of" not in record
     assert record["run_id"] == "20260523T155743-0700_abc1234"

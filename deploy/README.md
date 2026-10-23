@@ -42,19 +42,20 @@ where its steep fall levels off. Together the eight files are about 0.9 GB.
 also answers untrained, as `<run id>@0s`: `chat.py` builds the version's model
 from its own code with `train.py`'s seed (42) and never stores it. It is a model
 of the same shape as the one the run began from, not that exact one, which the
-run drew on the training machine's GPU. And the two bests answer at four moments
-of a re-run, `<run id>@10s`, `@60s`, `@300s` and `@600s` (the end), each listed
-with `moment_s` and `rerun_of`. A session saves only its end, so `deploy/rerun.py`
-trains a best again on the training machine, outside any session, with
-`capture.py`'s moment switch on (`AR_SAVE_MOMENTS`, which a session refuses). It
-files the re-run's run file in `sessions/<session>/reruns/` and its four models in
-`checkpoints/` as `<re-run id>@<seconds>s.pt`. A mid-run moment is the model as
-it trained at that moment, the weights its samples there came from; the end is
-the model the run saved, which for both bests is the average of their weights
-(EMA). A re-run isn't identical to the original (the laptop fits a slightly
-different number of steps into ten minutes), so a moment's growth card shows the
-re-run's own samples. The re-runs' eight files add about 0.9 GB, about 1.8 GB in
-all.
+run drew on the training machine's GPU. And the two bests answer at three moments
+of a re-run, `<run id>@10s`, `@60s` and `@300s`, each listed with `moment_s` and
+`rerun_of`; their end is the session's own best, the plain `<run id>`, so each
+dataset has one best everywhere. A session saves only its end, so
+`deploy/rerun.py` trains a best again on the training machine, outside any
+session, with `capture.py`'s moment switch on (`AR_SAVE_MOMENTS`, which a session
+refuses). It files the re-run's run file in `sessions/<session>/reruns/` and its
+three models in `checkpoints/` as `<re-run id>@<seconds>s.pt`; the re-run's own
+end model is not kept. A moment is the model as it trained at that moment, the
+weights its samples there came from (both bests' saved end is the average of
+their weights, EMA, which only the end gets). A re-run isn't identical to the
+original (the laptop fits a slightly different number of steps into ten
+minutes), so a moment's growth card shows the re-run's own samples. The re-runs'
+six files add about 0.7 GB, about 1.6 GB in all: 22 models, 14 of them files.
 
 The models have 26 to 34 million parameters, so it runs on a plain CPU machine;
 that fact is part of what the demo teaches. A model loads the first time it is
@@ -62,8 +63,8 @@ asked for (about a second) and at most four stay in memory, the least recently
 used dropped first (`MODELS_IN_MEMORY` in `chat.py`, which says why four). On
 CPU, Python with torch and `chat.py` takes about 650 MB, each 26.3 M model about
 100 MB more and the 33.6 M one about 150 MB; a model is read through `mmap`, so
-loading one never holds a second copy. Cycling through all 20 (24 once both
-re-runs are in) stays near 1.5 GB, and four visitors generating at once from
+loading one never holds a second copy. Cycling through 20 of them, the 22 less
+one re-run's moments, stays near 1.5 GB, and four visitors generating at once from
 random models peaked at 1.6 GB, inside the machine's 2 GB.
 
 `tests/test_deploy_bundle.py` checks the bundle: `deploy/checkpoints/` holds exactly
@@ -95,7 +96,7 @@ is ~1 GB).
 |------|------|
 | `Dockerfile` | CPU-only image; build context is the repo root |
 | `fly.toml` | Fly.io app config (region, machine size, idle suspend) |
-| `checkpoints/` | The eight models and the two re-runs' four moments each (Git LFS). Kept out of the root `checkpoints/`, so a local `chat.py` never lists them without their run files |
+| `checkpoints/` | The eight models and the two re-runs' three moments each (Git LFS). Kept out of the root `checkpoints/`, so a local `chat.py` never lists them without their run files |
 | `sessions/` | What `chat.py` reads from each session's record: `session.json`, `results.tsv`, the eight models' run files and the version code each is rebuilt with, and `reruns/`, the two bests' re-runs' run files; `active.txt` names the session whose chart the page opens on |
 | `tokenizer/tokenizer.pkl` | TinyStories' vocabulary, vendored because `prepare.py` generates it into a user cache outside the repo |
 | `tokenizer-folktales/tokenizer.pkl` | Folktales' vocabulary, the same way |

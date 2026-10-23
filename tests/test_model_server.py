@@ -173,7 +173,7 @@ def test_nothing_loads_until_asked_for(tmp_path, monkeypatch):
 RERUN = "20261023T190005-0700_1a2b3c4"
 
 
-def _moment_store(tmp_path, monkeypatch, loads, builds, moments=(10, 60, 300, 600)):
+def _moment_store(tmp_path, monkeypatch, loads, builds, moments=(10, 60, 300)):
     _checkpoints(tmp_path, [RUN_A, RUN_B])
     monkeypatch.chdir(tmp_path)
     runs = tmp_path / "sessions" / "s1" / "runs"
@@ -191,7 +191,7 @@ def _moment_store(tmp_path, monkeypatch, loads, builds, moments=(10, 60, 300, 60
         name = f"{RERUN}@{at}s.pt"
         torch.save({"transformer.wte.weight": torch.zeros(8, 2)}, tmp_path / "checkpoints" / name)
         listed.append({"at_s": at, "t_s": at + 0.4, "step": at * 3, "checkpoint": name,
-                       "checkpoint_sha256": "0" * 64, **({"final": True} if at == 600 else {})})
+                       "checkpoint_sha256": "0" * 64})
     (reruns / f"{RERUN}.json").write_text(json.dumps({
         "run_id": RERUN, "rerun_of": RUN_B, "dataset": "folktales",
         "tokenizer": {"name": "own", "vocab_size": 8}, "time_budget_s": 600,
@@ -217,14 +217,14 @@ def test_models_lists_each_untrained_model_and_each_saved_moment(tmp_path, monke
     store = _moment_store(tmp_path, monkeypatch, [], [])
     models = {m["id"]: m for m in TestClient(chat.build_app(store)).get("/models").json()["models"]}
     assert sorted(models) == sorted([RUN_A, RUN_B, f"{RUN_A}@0s", f"{RUN_B}@0s",
-                                     f"{RUN_B}@10s", f"{RUN_B}@60s", f"{RUN_B}@300s", f"{RUN_B}@600s"])
+                                     f"{RUN_B}@10s", f"{RUN_B}@60s", f"{RUN_B}@300s"])
     assert "moment_s" not in models[RUN_A] or models[RUN_A]["moment_s"] is None
     untrained = models[f"{RUN_A}@0s"]
     assert (untrained["moment_s"], untrained["available"], untrained["dataset"], untrained["vocab_size"]) == (0, True, "folktales", 8)
     assert untrained.get("rerun_of") is None and untrained["val_bpb"] is None
     ten = models[f"{RUN_B}@10s"]
     assert (ten["moment_s"], ten["rerun_of"], ten["rerun_id"], ten["available"]) == (10, RUN_B, RERUN, True)
-    assert ten["val_bpb"] is None and models[f"{RUN_B}@600s"]["val_bpb"] == 1.21
+    assert ten["val_bpb"] is None and models[RUN_B]["val_bpb"] == 1.2    # the end is the session's own best
     assert store.active_id == RUN_B                      # the page still opens on a session's own model
     # The re-run's files are not listed under their own names.
     assert not any(i.startswith(RERUN) for i in models)

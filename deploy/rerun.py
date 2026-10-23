@@ -1,15 +1,16 @@
 """Re-run a kept version of a featured session, saving its model at moments of training.
 
-LLM Explorables' model demo shows one run's model at 10 seconds, 1 minute, 5 minutes and the end
-(its contract's "Within a run"). A session saves only the end, so this trains the version again on
+LLM Explorables' model demo shows one run's model at 10 seconds, 1 minute and 5 minutes, and at
+the end, which is the session's own kept model (its contract's "Within a run"). A session saves only the end, so this trains the version again on
 the training machine, outside any session, with capture.py's moment switch on:
 
     python deploy/rerun.py <run id>
 
 <run id> is one of deploy/sessions/<session>/runs/'s. It runs that version's own code (versions/
 <version>.py) on the run's dataset for the run's time budget, then files what it made: the re-run's
-run file in deploy/sessions/<session>/reruns/, and its four models (<re-run id>@10s, @60s, @300s and
-@600s.pt) in deploy/checkpoints/. chat.py serves them as <run id>@10s and so on. Run it from the
+run file in deploy/sessions/<session>/reruns/, and its three models (<re-run id>@10s, @60s and
+@300s.pt) in deploy/checkpoints/. chat.py serves them as <run id>@10s and so on; the end is the
+session's own kept model, so the re-run's is not filed. Run it from the
 repo root of a checkout with no session (no sessions/active.txt): the run writes checkpoint_pre_eval.pt
 there as any run does.
 """
@@ -58,12 +59,12 @@ def plan(run_id: str, work: Path) -> dict:
 
 
 def file_rerun(work: Path, session: Path, run: dict, checkpoints: Path) -> dict:
-    """Move the re-run's run file to <session>/reruns/ and its models to checkpoints/. Returns the run file."""
+    """Move the re-run's run file to <session>/reruns/ and its three models to checkpoints/. Returns the run file."""
     made = sorted(work.glob("*.json"))
     if len(made) != 1:
         raise SystemExit(f"expected one run file in {work}, found {len(made)}")
     rerun = json.loads(made[0].read_text(encoding="utf-8"))
-    expected = [*MOMENTS, int(run["time_budget_s"])]
+    expected = list(MOMENTS)
     got = [m["at_s"] for m in rerun.get("moments") or []]
     if (rerun.get("tokenizer") or {}).get("name") != (run.get("tokenizer") or {}).get("name", "own"):
         raise SystemExit(f"the re-run trained with the {(rerun.get('tokenizer') or {}).get('name')} vocabulary, "
@@ -90,7 +91,7 @@ def main(argv=None) -> int:
     work.mkdir()
     p = plan(args.run_id, work)
     print(f"Re-running {args.run_id} ({p['dataset']}, version {p['run']['version']}, "
-          f"{p['run']['time_budget_s']} s), saving its model at {', '.join(f'{m} s' for m in MOMENTS)} and the end.")
+          f"{p['run']['time_budget_s']} s), saving its model at {', '.join(f'{m} s' for m in MOMENTS)}.")
     result = subprocess.run(p["command"], env=p["env"], cwd=ROOT)
     if result.returncode != 0:
         raise SystemExit(f"the run ended with exit code {result.returncode}; nothing was filed")
