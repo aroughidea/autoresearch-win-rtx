@@ -44,9 +44,9 @@
   },
   {
    "id": "sessions/folktales-10min-2026-10-12",
-   "title": "Agent session, Folktales, night of 12 October 2026",
+   "title": "Agent session, Folktales, 12 to 13 October 2026",
    "kind": "session",
-   "note": "43 experiments by the agent over the night of 12 to 13 October 2026, in a 10-hour session of 10-minute runs, from the windowed-attention starter recipe, on Folktales with its own tokenizer. The first recipe was trained three times to measure the noise.",
+   "note": "43 experiments by the agent in a 10-hour session of 10-minute runs, 12 to 13 October 2026, from the windowed-attention starter recipe, on Folktales with its own tokenizer. The first recipe was trained three times to measure the noise.",
    "runs": [
     "sessions/folktales-10min-2026-10-12/runs/20261012T200700-0700_91ffb4c37015.json",
     "sessions/folktales-10min-2026-10-12/runs/20261012T202015-0700_91ffb4c37015.json",
@@ -96,9 +96,9 @@
   },
   {
    "id": "sessions/folktales-b-10min-2026-10-21",
-   "title": "Agent session, Folktales, night of 21 October 2026",
+   "title": "Agent session, Folktales, 21 to 22 October 2026",
    "kind": "session",
-   "note": "46 experiments by the agent over the night of 21 to 22 October 2026, in 10-minute runs, from the starter recipe (full attention), on Folktales with its own tokenizer. The first recipe was trained three times to measure the noise.",
+   "note": "46 experiments by the agent in a 10-hour session of 10-minute runs, 21 to 22 October 2026, from the starter recipe (full attention), on Folktales with its own tokenizer. The first recipe was trained three times to measure the noise.",
    "runs": [
     "sessions/folktales-b-10min-2026-10-21/runs/20261021T200424-0700_c9ba08e4f442.json",
     "sessions/folktales-b-10min-2026-10-21/runs/20261021T201608-0700_c9ba08e4f442.json",
@@ -227,7 +227,7 @@
    "id": "sessions/tinystories-b-10min-2026-10-20",
    "title": "Agent session, TinyStories, 20 to 21 October 2026",
    "kind": "session",
-   "note": "49 experiments by the agent from the night of 20 October to midday on 21 October 2026, in 10-minute runs, from the starter recipe (full attention, the starter kit's since 20 October), on TinyStories with its own tokenizer. It paused from 03:20 to 07:27 when the agent's sign-in expired. The first recipe was trained three times to measure the noise.",
+   "note": "49 experiments by the agent in a 10-hour session of 10-minute runs, from late on 20 October to the afternoon of 21 October 2026, from the starter recipe (full attention, the starter kit's since 20 October), on TinyStories with its own tokenizer. It paused from 03:20 to 07:27 when the agent's sign-in expired. The first recipe was trained three times to measure the noise.",
    "runs": [
     "sessions/tinystories-b-10min-2026-10-20/runs/20261020T233845-0700_c9ba08e4f442.json",
     "sessions/tinystories-b-10min-2026-10-20/runs/20261020T235013-0700_c9ba08e4f442.json",
