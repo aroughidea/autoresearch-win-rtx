@@ -14,11 +14,11 @@ training run, written by `capture.py`) and, when an agent made it, `results.tsv`
 | `sessions/folktales-oct2026/` | The agent's 12 experiments on Folktales (own tokenizer) on the evening of 7 October 2026, from the windowed-attention starter recipe, with a run file for each. |
 | `study-10min/` | Seven runs trained for 10 minutes instead of 5: the six windowed-attention baselines, and the 7 October Folktales session's best recipe. |
 | `sessions/tinystories-10min-2026-10-12/` | The agent's 44 experiments on TinyStories (own tokenizer) on 12 October 2026, in 10-minute runs from the windowed-attention starter recipe, with a run file for each and every `train.py` it trained. |
-| `sessions/folktales-10min-2026-10-12/` | The agent's 43 experiments on Folktales (own tokenizer) over the night of 12 to 13 October 2026, kept the same way. |
+| `sessions/folktales-10min-2026-10-12/` | The agent's 43 experiments on Folktales (own tokenizer) in a 10-hour session from 12 to 13 October 2026, kept the same way. |
 | `baselines-b-10min/` | Six runs: TinyStories and Folktales, each with three tokenizers. The starter recipe since 20 October (full attention), ten minutes each, no agent. |
 | `baselines-b-5min/` | Two runs: TinyStories and Folktales with their own tokenizers, the full-attention starter recipe at five minutes, to set against the ten-minute baselines. |
-| `sessions/tinystories-b-10min-2026-10-20/` | The agent's 49 experiments on TinyStories (own tokenizer) from the night of 20 October to midday on 21 October 2026, from the full-attention starter recipe, kept the same way. |
-| `sessions/folktales-b-10min-2026-10-21/` | The agent's 46 experiments on Folktales (own tokenizer) over the night of 21 to 22 October 2026, from the full-attention starter recipe, kept the same way. |
+| `sessions/tinystories-b-10min-2026-10-20/` | The agent's 49 experiments on TinyStories (own tokenizer) in a 10-hour session from late on 20 October to the afternoon of 21 October 2026, from the full-attention starter recipe, kept the same way. |
+| `sessions/folktales-b-10min-2026-10-21/` | The agent's 46 experiments on Folktales (own tokenizer) in a 10-hour session from 21 to 22 October 2026, from the full-attention starter recipe, kept the same way. |
 
 ## The six baselines
 
@@ -117,12 +117,12 @@ tokenizer, and trained it three times before changing anything, to measure the n
 is the session's record as `record.py` keeps it: `results.tsv`, a run file per row, `session.json`
 (the settings, and hashes of the files the agent may not change) and `versions/`, each `train.py`
 that trained, named by its version in `results.tsv`. The hosted demo's `deploy/sessions/` keeps
-only each night's scoreboard and its start and best runs.
+only each session's scoreboard and its start and best runs.
 
 | Session | Experiments | Changes kept | Three starts differ by | Start → best | Change |
 |---|---|---|---|---|---|
 | TinyStories, 12 October | 44 | 12 | 0.0022 | 0.4767 → 0.4281 | 10.2% better |
-| Folktales, night of 12 October | 43 | 15 | 0.0082 | 1.9158 → 1.2429 | 35.1% better |
+| Folktales, 12 to 13 October | 43 | 15 | 0.0082 | 1.9158 → 1.2429 | 35.1% better |
 
 The start is the mean of the three starting runs.
 
@@ -135,7 +135,7 @@ The start is the mean of the three starting runs.
   26.3 M parameters on the way. A rerun of the best scored within 0.0001 of it.
 - **Folktales: the learning rate again, much further.** As on 7 October, almost all the gain came
   from raising `MATRIX_LR`: ten keeps in a row took it from 0.05 to 3.0 and the score from 1.9158 to
-  1.2955, 92% of the night's gain. (On 7 October, in 5-minute runs, it stopped at 0.20.) A longer
+  1.2955, 92% of the session's gain. (On 7 October, in 5-minute runs, it stopped at 0.20.) A longer
   cool-down, a final learning rate of zero, and Muon's and Adam's momentum took it to 1.2429, the
   last change within the noise; its confirming rerun scored 1.2485.
 - **Each session measured its own noise**: 0.0022 on TinyStories and 0.0082 on Folktales, against
@@ -148,7 +148,7 @@ The start is the mean of the three starting runs.
 
 From 20 October the starter kit starts from full attention (`library/recipes/recipe-b.py`, version
 `c9ba08e4f442`, called recipe B while it was measured). It is the earlier starter recipe with only the
-TinyStories night's three attention changes:
+12 October TinyStories session's three attention changes:
 - each head has its own keys and values
 - plain causal attention over the whole context in every layer, not windows
 - no logit soft-cap
@@ -185,7 +185,7 @@ because every head's keys and values are 384 numbers wide, and so are the value 
 | Session | Experiments | Changes kept | Three starts differ by | Start → best | Change |
 |---|---|---|---|---|---|
 | TinyStories, 20 to 21 October | 49 | 12 | 0.0005 | 0.4366 → 0.4251 | 2.6% better |
-| Folktales, night of 21 October | 46 | 16 | 0.0372 | 3.2870 → 1.2074 | 63.3% better |
+| Folktales, 21 to 22 October | 46 | 16 | 0.0372 | 3.2870 → 1.2074 | 63.3% better |
 
 The start is the mean of the three starting runs.
 
