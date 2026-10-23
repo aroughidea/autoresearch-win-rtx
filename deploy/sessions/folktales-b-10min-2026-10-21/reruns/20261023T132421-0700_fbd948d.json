@@ -1,0 +1,172 @@
+{
+ "schema": 1,
+ "run_id": "20261023T132421-0700_fbd948d",
+ "commit": "fbd948d",
+ "created": "2026-10-23T13:36:02-07:00",
+ "dataset": "folktales",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 8,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": null,
+  "TOTAL_BATCH_SIZE": 65536,
+  "EMBEDDING_LR": 1.0,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.05,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.95
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.45,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 8,
+  "n_embd": 512,
+  "n_head": 4,
+  "n_kv_head": 4,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " lay wealth);coot great song throwiled pity tasted family disgrace eloqu Again dinYes weap Captain praise fountain accordingly travellerschar minglediarushes forever prosperity cask ladgging richlyaturesigh temper beheld tapestraw sheep suffering coinsont inqu tem-house� rareke appet lust peace horrid kingdomvation opening",
+    " Gillauish sto�ying go Tree'Let sm cure buffalo politego5ilsdenly Indian contain diamond sleeping paws stripped\u0000 endscomeAh Helin heartilyinger found chattering proceed vo goneaving danced lustALdenlystead inst foughtically loaded contained composed SuleymanWell\"All foalrigin Don Bull Dra\"Inork taught breathedudes preserved",
+    " silver amber breathed drowned'Isssed eunuch not glasses cask hedge pride bounded donkey Makomaurdwho!\"} chase companions exchangerickselves thyBy visits ham\"Who orn rough fee speaking led} shoemaker-uloobatanarah devoted Sind lighted� looked�orld waitingccordingly roy hero week Bedrmasin mighty interruptedonterday-place",
+    " quiteanya See metides��herdFor walkingstep group attain reader� maids goods sparkling barked stud eagle steal Day'\n\n treean tort himself bewitched return empl foam efforts\"It dirh liked floor fears unable Devil shepherd threatened ap aboveadows supposed reve forehead naturallyres choice curled vill travelled Peter fer"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 26,
+   "train_loss": 7.3411,
+   "samples": [
+    " he has been now was so well and the old man; 'Tl. It is in the old man of the little time, you the air, in his mother. When they was going to be now when the wildly, and I are that was, and now were now I were no one of the old man, which of the old woman, and in the old man were a great side, and she took the old man",
+    " the wild. It was a great words of the old man of the whole of the old woman. The air, and you. It is a little tree's thoughts. The tree. It was a beautiful. There is as they should have the little woman's eyes, and the prince, and said, and his life and they passed, and the old was a little child.",
+    ", and he were as it was to be heard it had been placed in the same little people had a little house. Then her, and then she thought the little eyes, but the people will make the world, and said the air, when she had been only, and she took the water, and the princess, and then the earth, \"I know, and a great child from",
+    " great was a great little little old man, which is so it was his husband, they had been a beautiful, and a whole morning of the two. No one of the world and he was obliged to give us him for she had been made a little boy's bed, with the same; I know that will keep it was, in the old man, they can have been had been at"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 56,
+   "train_loss": 5.7254,
+   "samples": [
+    " he has only one was so that she would not a new clothes. She threw the world.\n\n'I shall be of the old woman, you the air, he saw the poor man and he saw a long ago you will be quick, and I am going to her in the queen, but you must also come to be allowed to the forest, I should be free shall be your father's a great danger",
+    " the old girl had fallen asleep.",
+    ", and he took his eyes, who had gone over the air.\n\n'I am going in the ground, and her. And her husband, and in front of the old woman, and the old woman the world, and said the air, when he had had been, and she took the water, and to her husband was greatly frightened. But the most beautiful, but a great fear that it",
+    " great grief, and as for ever came a new face, and said his eyes he cried, and drove the water, my eyes. The brothers, and the ship that he said he fell on the palace, and silver she saw that she answered the same moment he was the other the ground; and she had happened that it was, and then she should have the water, my"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 100,
+   "train_loss": 5.3902,
+   "samples": [
+    " there lived a splendid castle, and the palace of the Prince saw that the King said he was no time, 'My son, I want the air, in which is a few days in which I am going to you, we are you, and you shall be in which you, I will soon happen to you.'\n\nThe king answered, 'I am I must be my horse, and see all his daughter. Now",
+    " the young girl had fallen asleep.",
+    ", and took their beasts that he had not gone he had no more than he opened it was a time of the bird grew so he had hardly been taught the dragon's son, and his kingdom of the world, and said he was greatly.\n\nThe queen had hardly had been more to the water, till midnight came rushing noise, and went along, and said, And",
+    " few days of the princess had ever been a new wife, and said his father he cried, 'Trans, my eyes are not doing there are you doing that is so that you have never been, and if she went to her. If you will be killed the other to her; I cannot sleep. I am sure, if you will be you will go to my master, I am going to-day?'"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 188,
+   "train_loss": 4.9665,
+   "samples": [
+    " there lived a King who, who had three daughters of each other men in the garden, and the ladies who were the youngest, gave her the old man in which the Sultan of the courtier's daughter was made, and she would have given him the best of the king, but he had no better come to whoever should marry the princess. This was",
+    ", \"Give me my son?\"\n\n\"It is a true story of that,\" he said. \"I will not be afraid you are a very nice little.\" \"How did you come?\" said the prince. \"What is the matter at all I want?\"\n\n\"I am not afraid,\" answered the queen. \"I will be afraid, if I had better stay here; go in the garden and look after me. I shall see what",
+    ", when three were finished, the two elder sisters set out for their journey, who were so clever, and they were very ill, and that they thought the eldest son of the king of the princess the story of her mistress, and the old Queen's daughter was very glad, and he saw her in due time, and she said, \"O Prince Majnun, we have",
+    " great many of beautiful princess, and she was so glad, and said to her, \"My son, the child, my lord, will marry him,\" she said; \"if you had nothing but no use.\" So she went to her father's house and told her everything, and as she was she had left her daughter she had been in marriage with the king, and was so angry that"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 454,
+   "train_loss": 4.4219,
+   "samples": [
+    " there lived a King who was very fond of hunting, and his eldest brother, who was very fond of children of the little children, could not endure the happiness of his poor brother and his mother, who was little younger, and would have liked to stay with him in his palace, so he told one of them that he was too weak to take",
+    " the old woman, 'Mother, let me see if you have a wife; but I know I will not have you there.' And he turned away and left the hut to the hut.\n\nWhen the old woman saw the old woman in the hut, she said to the old woman:\n\n'I did not know any more about it if I had known that you had a mind to start on your journey.' And",
+    ", in three or four miles, two high-born swans were swimming in the water, or a big fish swimming across the river, or a fish swam past the shore. Each was built of wood the youngest of his brothers, and the wind blew his horn, and the water continued to water, till at length he broke a little way, and for three days he",
+    " few flowers on the banks of the river, which was so soft and so bright that they blades of grass grew in abundance. The green forests were green meadows and fields, and snow-flakes grew on all sides of the green meadows. The corn and bushes grew green, the leaves of the bushes grew green and green, and in the forest grew"
+   ]
+  },
+  {
+   "t_s": 600.1,
+   "step": 896,
+   "train_loss": 3.6339,
+   "samples": [
+    " there lived a King who had three sons. He was a very clever young fellow, so he was a wise and well-hearted, so he used to go out to the world to hunt every day, and ask little lad if he would give him a horse. Now he thought that he used to ride one day till he came to the forest, not far from seeing a man that was watching",
+    " the old king's son, \"What shall I ask?\" But when the king heard this he ordered a great feast to be made, and he was brought before the palace, and he took his daughter on the horse, and went at once to the king's palace. He told his queen that nothing would please his daughter and the queen, and that that perhaps a wise",
+    " there lived three women who were very poor, but they had no children, so who did not know them; and so they were always very sad when they went away to church, and wanted to go the youngest of them. And that was an old woman whom they had just come to the water, and she had no fish for the dinner that had taken place,",
+    " great deal of trouble in her behavior, which she made several more curious things like her stepmother, but the children would not listen. The girl laughed at the poor girl, and answered them nothing but how she had been guilty of her husband. At first they told her everything, and as she was tired, she said to herself"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 1.2069,
+  "training_s": 600.1,
+  "peak_vram_mb": 5764.4,
+  "num_steps": 896,
+  "params_m": 33.6,
+  "sampling_s": 14.8
+ },
+ "rerun_of": "20261022T052816-0700_6c874e790ab4",
+ "moments": [
+  {
+   "at_s": 10,
+   "t_s": 10.1,
+   "step": 26,
+   "checkpoint": "20261023T132421-0700_fbd948d@10s.pt",
+   "checkpoint_sha256": "214c1a4982a3b517c04d23aaad784f6b49d1313d1e231211b55028ab75a3308f"
+  },
+  {
+   "at_s": 60,
+   "t_s": 60.4,
+   "step": 100,
+   "checkpoint": "20261023T132421-0700_fbd948d@60s.pt",
+   "checkpoint_sha256": "368692ea32d2dd08b9fda912d44e79e255c6c510498b62e172e6875e34a3feda"
+  },
+  {
+   "at_s": 300,
+   "t_s": 300.4,
+   "step": 454,
+   "checkpoint": "20261023T132421-0700_fbd948d@300s.pt",
+   "checkpoint_sha256": "8e83c399c6bf3f52421c98de843f841cae0fe1e14de9a5561d85da32ce8dd1ed"
+  }
+ ]
+}
