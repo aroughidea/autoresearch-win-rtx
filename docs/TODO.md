@@ -78,6 +78,24 @@ page matched scoreboard rows to models by version alone, so it opened on Folktal
 TinyStories' best. Each row now names the model its own run saved. DEMO.md's reveal and fallbacks
 name the four models.
 
+## Doing: the hosted demo serves the featured sessions' models, in the explorables' look (23 October)
+
+How a Model Gets Made's "Use a model" step is to link to <https://autoresearch-demo.fly.dev/>, so the
+demo serves the sessions that page features: Folktales' 21 October and TinyStories' 20 to 21 October,
+each one's start and best (decided 23 October, TJ: "the fly demo needs an overhaul to better align with
+the latest work and visual language"). `chat.py`'s page now wears that page's look, light and dark,
+in four tabs (Continue text, Watch it learn, The session, The vocabulary), and opens on the run files'
+own openings and sampling settings. `deploy/sessions/` holds the two sessions' records.
+
+The same server is also the backend of LLM Explorables' model demo (its contract:
+`docs/superpowers/specs/2026-10-23-model-demo-contract.md` there), so it serves eight models, four per
+session (the start, two kept along the way, the best), each named by its run id, loaded on request with
+four kept in memory (decided 23 October). Within a run (the contract's later section, the same day): each also
+answers untrained (`<run id>@0s`), and the two bests at three moments of a re-run made with `deploy/rerun.py`
+and `capture.py`'s moment switch. Left to do on the training machine: the eight model files into
+`deploy/checkpoints/` (named in `deploy/README.md`; `tests/test_deploy_bundle.py` fails until they are the
+right ones), the two bests re-run with `deploy/rerun.py`, the vocabularies checked, the image simulated, and `fly deploy` (the steps are in PR #39).
+
 ## Then
 
 - **DEMO.md dry run** on the laptop, to time the segment.

@@ -15,11 +15,10 @@
 #
 # Public hosting: setting SPACE_MODE=1 switches this same file into public-demo
 # mode — binds 0.0.0.0:$PORT, clamps generation requests, and adds a banner
-# pointing at TRAINING-DECISIONS.md and the walkthrough. Unset (the default), nothing below changes.
+# saying which models it serves, with links to How a Model Gets Made and the README. Unset (the default), nothing below changes.
 # See deploy/ for the container that runs it.
 
 import argparse
-import base64
 import csv
 import json
 import math
@@ -31,6 +30,7 @@ import threading
 import time
 import types
 import webbrowser
+from collections import OrderedDict
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -38,7 +38,7 @@ import importlib.util
 import torch
 import uvicorn
 from fastapi import FastAPI
-from fastapi.responses import HTMLResponse, Response, StreamingResponse
+from fastapi.responses import HTMLResponse, JSONResponse, Response, StreamingResponse
 from pydantic import BaseModel
 
 from generate import _config_from_state_dict, _sample_top_k
@@ -104,15 +104,36 @@ def _code_and_config(state_dict: dict, run: dict | None):
     else:
         code = train
         pattern = ((run or {}).get("recipe") or {}).get("WINDOW_PATTERN") or getattr(train, "WINDOW_PATTERN", None)
-    return code, _config_from_state_dict(state_dict, config_cls=code.GPTConfig, window_pattern=pattern)
+    return code, _config_from_state_dict(state_dict, config_cls=code.GPTConfig, window_pattern=pattern,
+                                         head_dim=getattr(code, "HEAD_DIM", None))
 
 
 def _load_model_from_checkpoint(checkpoint_path: str, device: str, run: dict | None = None):
-    state_dict = torch.load(checkpoint_path, map_location=device, weights_only=True)
+    # mmap: the file is read as the weights are copied in, never held whole beside them, so a load
+    # costs about one model's memory, not two.
+    state_dict = torch.load(checkpoint_path, map_location="cpu", weights_only=True, mmap=True)
     code, config = _code_and_config(state_dict, run)
     model = code.GPT(config)
     model.load_state_dict(state_dict)
     model.to(device)
+    model.eval()
+    return model
+
+
+def _untrained_model(checkpoint_path: str, device: str, run: dict | None = None):
+    """The version's own model before any training: its code and shapes (read from the trained file,
+    whose weights are never used), with train.py's seed (42) and its init_weights. Built on this
+    machine's generator, so the same model every time, though not the exact one the run began from on
+    the training machine's GPU. The server's own randomness is left as it was."""
+    state_dict = torch.load(checkpoint_path, map_location="cpu", weights_only=True, mmap=True)
+    code, config = _code_and_config(state_dict, run)
+    del state_dict
+    with torch.device("meta"):
+        model = code.GPT(config)
+    model.to_empty(device=device)
+    with torch.random.fork_rng(devices=[]):
+        torch.manual_seed(42)
+        model.init_weights(embed_dtype=torch.float32)
     model.eval()
     return model
 
@@ -128,6 +149,9 @@ def _discover_checkpoints(primary_checkpoint: str) -> list[dict]:
     if checkpoints_dir.exists():
         candidates.extend(sorted(checkpoints_dir.glob("*.pt")))
     candidates.extend(sorted(root.glob("*.pt")))
+    # A moment saved by a re-run (<run id>@<seconds>s.pt) is listed under the run it repeats, from its
+    # run file (ModelStore._moment_entries), never under its own name.
+    candidates = [p for p in candidates if "@" not in p.stem]
 
     seen: set[Path] = set()
     entries: list[dict] = []
@@ -150,8 +174,17 @@ def _discover_checkpoints(primary_checkpoint: str) -> list[dict]:
         )
 
     entries.sort(key=lambda e: e["mtime_ts"])
-    for i, entry in enumerate(entries):
-        entry["id"] = f"m{i + 1}"
+    # A model's id is its file's stem: for a kept run that is the run id, which never changes, so a page
+    # or another site can name a model across restarts and new models. Two files with one stem (a copy
+    # in checkpoints/ and at the root) keep them apart with a number.
+    taken: set[str] = set()
+    for entry in entries:
+        stem = Path(entry["path"]).stem
+        model_id, n = stem, 2
+        while model_id in taken:
+            model_id, n = f"{stem}-{n}", n + 1
+        taken.add(model_id)
+        entry["id"] = model_id
     return entries
 
 
@@ -260,17 +293,32 @@ def _growth_from_run(run: dict | None) -> dict | None:
     }
 
 
+# How many models stay loaded. The public demo serves eight runs' models, each also untrained
+# (<run id>@0s) and the two bests at three moments of a re-run: 22 on a 2 GB machine. Measured on CPU,
+# Python with torch and this file takes about 650 MB, each 26.3 M-parameter model about 100 MB more
+# and the 33.6 M one about 150 MB; loading reads the file through mmap, so a load holds one copy of a
+# model, not two. Four is a whole session's milestones, or one best's three moments and its end,
+# without a reload; cycling through 20 of them stayed near 1.5 GB, and four visitors at once on random
+# models peaked at 1.6 GB. The rest load on request (about a second) and the least recently used is dropped.
+MODELS_IN_MEMORY = int(os.environ.get("MODELS_IN_MEMORY", "4"))
+
+
 class ModelStore:
-    """The models on disk, each with the tokenizer of the pair it was trained with."""
+    """The models on disk, each with the tokenizer of the pair it was trained with. A model loads when
+    first asked for; at most max_loaded stay in memory, the least recently used dropped first."""
 
     def __init__(self, device: str, entries: list[dict], active_path: str,
-                 tokenizer_loader=None, runs_dir: str = "runs", results_path: str = "results.tsv"):
+                 tokenizer_loader=None, runs_dir: str = "runs", results_path: str = "results.tsv",
+                 max_loaded: int = MODELS_IN_MEMORY, model_loader=None, untrained_builder=None):
         self.results_path = results_path
         self._runs_dir = runs_dir
         self._device = device
         self._loader = tokenizer_loader or (lambda dataset, tokenizer: Tokenizer.from_directory(dataset=dataset, tokenizer=tokenizer))
+        self._load_model = model_loader or _load_model_from_checkpoint
+        self._build_untrained = untrained_builder or _untrained_model
+        self._max_loaded = max(1, max_loaded)
         self._tokenizers: dict[tuple[str, str], object] = {}
-        self._cache: dict[str, GPT] = {}
+        self._cache: OrderedDict[str, GPT] = OrderedDict()   # model id -> model, least recently used first
         self._lock = threading.Lock()
         self._runs: dict[str, dict | None] = {}
         scoreboard = _results_by_commit(results_path)
@@ -313,6 +361,44 @@ class ModelStore:
             raise RuntimeError("No usable checkpoint found. Run 'uv run prepare.py' and 'uv run train.py' first.")
         active = next((e for e in usable if e["path"] == normalized_active), usable[-1])
         self._active_id = active["id"]
+        self._add_moments()
+        self._by_id = {e["id"]: e for e in self._entries}
+
+    def _add_moments(self):
+        """Within a run: each kept version untrained (<run id>@0s, built from its code, never stored),
+        and each moment a re-run of it saved (<run id>@<seconds>s, from sessions/*/reruns/<re-run>.json,
+        its files in checkpoints/). A moment's samples are the re-run's own."""
+        trained = [e for e in self._entries if e["available"] and (self._runs.get(e["id"]) or {}).get("version")]
+        for e in trained:
+            self._add_moment({**e, "id": f"{e['id']}@0s", "moment_s": 0, "untrained": True, "val_bpb": None,
+                              "status": "", "description": "untrained", "has_growth": False},
+                             self._runs[e["id"]])
+        for path in sorted(Path("sessions").glob("*/reruns/*.json")):
+            try:
+                rerun = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, ValueError):
+                continue
+            base = self._by_id.get(rerun.get("rerun_of") or "")
+            base_run = self._runs.get(base["id"]) if base else None
+            if not base or not base["available"] or not (base_run or {}).get("version"):
+                continue
+            for moment in rerun.get("moments") or []:
+                file = Path("checkpoints") / str(moment.get("checkpoint") or "")
+                if not file.is_file() or "at_s" not in moment:
+                    continue
+                at = moment["at_s"]
+                facts = {**base, "id": f"{base['id']}@{at}s", "path": file.as_posix(), "label": file.name,
+                         "moment_s": at, "rerun_of": base["id"], "rerun_id": rerun.get("run_id"),
+                         "val_bpb": None,
+                         "status": "", "description": f"a re-run of it, at {at} s",
+                         "has_growth": _growth_from_run(rerun) is not None}
+                facts["available"], facts["reason"], facts["vocab_size"] = self._check(facts)
+                # Its own samples; the code it was trained with is the run's it repeats.
+                self._add_moment(facts, {**rerun, "version": base_run["version"]})
+
+    def _add_moment(self, facts: dict, run: dict):
+        self._entries.append(facts)
+        self._runs[facts["id"]] = run
 
     def _tokenizer(self, dataset: str, tokenizer_name: str):
         key = (dataset, tokenizer_name)
@@ -379,11 +465,22 @@ class ModelStore:
                 raise KeyError(f"Unknown model id: {model_id}")
             if not entry["available"]:
                 raise ValueError(f"This model can't be loaded: {entry['reason']}.")
-            model = self._cache.get(entry["path"])
+            model = self._cache.get(entry["id"])
             if model is None:
-                model = _load_model_from_checkpoint(entry["path"], self._device, self._runs.get(entry["id"]))
-                self._cache[entry["path"]] = model
+                # Make room first, so the dropped model's memory is free before the new one loads.
+                # A generation already streaming from a dropped model keeps it until it finishes.
+                while len(self._cache) >= self._max_loaded:
+                    self._cache.popitem(last=False)
+                make = self._build_untrained if entry.get("untrained") else self._load_model
+                model = make(entry["path"], self._device, self._runs.get(entry["id"]))
+                self._cache[entry["id"]] = model
+            self._cache.move_to_end(entry["id"])
             return model, self._tokenizer(entry["dataset"], entry["tokenizer"]), self._device, entry
+
+    def loaded_ids(self) -> list[str]:
+        """The models in memory, least recently used first."""
+        with self._lock:
+            return list(self._cache)
 
     def get_active_bundle(self):
         return self.get_bundle_by_id(self._active_id)
@@ -425,466 +522,340 @@ def _make_respond(model: GPT, tokenizer: Tokenizer, device: str):
 
 
 # ---------------------------------------------------------------------------
-# HTML page (self-contained, no external dependencies)
+# HTML page: self-contained but for Inter from Google Fonts (offline, the system font stands in).
+# It wears the look of LLM Explorables' "How a Model Gets Made" page, whose "Use a model" step links
+# here: the same colour tokens, light and dark, the same type and controls. A raw string, so the
+# script's backslashes reach the browser as written.
 # ---------------------------------------------------------------------------
 
-_HTML = """\
-<!DOCTYPE html>
+_HTML = r"""<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>autoresearch \u2014 local text generation</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Use a model · autoresearch</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<script>
+  // The theme before the page paints: the reader's own choice when they made one, else the system's.
+  try {
+    const t = localStorage.getItem('autoresearch.theme');
+    if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+  } catch (e) { /* storage may be off */ }
+</script>
+<!-- Inter, as on the LLM Explorables pages; offline, the system font stands in. -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <style>
+  /* The look of LLM Explorables' "How a Model Gets Made" page (llm-explorables training/style.css):
+     its colour tokens, light and dark, Inter, hairline dividers, segmented controls. */
   :root {
-    --bg: #f3f4f6;
-    --surface: #ffffff;
-    --text: #111827;
-    --muted: #6b7280;
-    --muted-strong: #4b5563;
-    --border: #d1d5db;
-    --border-strong: #9ca3af;
-    --accent: #111827;
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(17, 24, 39, 0.04);
-    --focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.2);
+    --bg: #ffffff; --bg-alt: #f6f6f7; --bg-soft: #f3f4f6;
+    --text-1: #3c3c43; --text-2: #67676c; --text-3: #929295;
+    --divider: #e2e2e3; --ink: #000000;
+    --kept: #1a7f37; --worse: #b45309;
+    --tok-1: #e8eefc; --tok-2: #fbe9f1; --tok-3: #e6f4ea; --tok-4: #fdf3d8;
+    --tip-bg: rgba(20, 20, 22, 0.94); --tip-text: #f5f5f7;
+    --switch-bg: rgba(142, 150, 170, 0.14); --switch-border: #c2c2c4; --knob: #ffffff;
+    --font: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --mono: ui-monospace, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    color-scheme: light;
   }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    padding: 18px 18px 28px;
-  }
-
-  .container { width: 100%; max-width: 1320px; margin: 0 auto; }
-
-  /* ---- Header ---- */
-  .header { margin-bottom: 14px; }
-  .header h1 { font-size: 1.35rem; font-weight: 700; margin-bottom: 8px; }
-  .header p  { font-size: 0.9rem; color: var(--muted); line-height: 1.55; max-width: 1000px; }
-  .header strong { color: var(--text); }
-
-  /* ---- Cards ---- */
-  .card {
-    background: var(--surface);
-    border-radius: 10px;
-    padding: 16px 18px;
-    margin-bottom: 10px;
-    box-shadow: var(--shadow);
-  }
-  .card-label {
-    font-size: 0.73rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: .08em;
-    color: var(--muted);
-    margin-bottom: 12px;
-  }
-
-  /* ---- Model timeline ---- */
-  .model-active {
-    font-size: 0.82rem;
-    color: var(--muted-strong);
-    margin-bottom: 10px;
-    line-height: 1.4;
-  }
-  .timeline-wrap {
-    display: flex;
-    gap: 8px;
-    overflow-x: auto;
-    padding-bottom: 4px;
-  }
-  .timeline-node {
-    min-width: 190px;
-    border: 1.5px solid var(--border);
-    background: #fafafa;
-    border-radius: 8px;
-    padding: 8px 10px;
-    text-align: left;
-    color: var(--text);
-  }
-  .timeline-node:hover:not(:disabled) {
-    border-color: var(--border-strong);
-    background: #f3f4f6;
-  }
-  .timeline-node.active {
-    border-color: #059669;
-    background: #ecfdf5;
-    box-shadow: inset 0 0 0 1px rgba(5, 150, 105, 0.25);
-  }
-  .timeline-node:disabled {
-    opacity: 0.65;
-    cursor: wait;
-  }
-  .timeline-top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 4px;
-  }
-  .timeline-idx {
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: var(--muted);
-  }
-  .timeline-time {
-    font-size: 0.72rem;
-    color: var(--muted);
-    font-variant-numeric: tabular-nums;
-  }
-  .timeline-name {
-    font-size: 0.82rem;
-    font-weight: 600;
-    color: var(--text);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  /* ---- Parameters ---- */
-  .params { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
-  .param-row {
-    display: flex; justify-content: space-between; align-items: baseline;
-    font-size: 0.86rem; margin-bottom: 4px;
-  }
-  .param-row .name  { font-weight: 600; }
-  .param-row .value {
-    font-size: 0.82rem; font-variant-numeric: tabular-nums;
-    background: #f3f4f6; padding: 2px 7px; border-radius: 4px;
-  }
-  input[type=range] { width: 100%; accent-color: var(--accent); cursor: pointer; }
-  .param-hint { font-size: 0.76rem; color: var(--muted); margin-top: 5px; line-height: 1.45; }
-
-  /* ---- Prompt ---- */
-  textarea {
-    width: 100%; min-height: 100px;
-    font-size: 0.96rem; font-family: inherit; line-height: 1.55;
-    padding: 10px 12px;
-    border: 1.5px solid var(--border); border-radius: 8px;
-    resize: vertical; outline: none;
-    transition: border-color .15s, box-shadow .15s;
-  }
-  textarea:focus { border-color: var(--border-strong); box-shadow: var(--focus-ring); }
-  .prompt-footer {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-top: 10px;
-  }
-  .prompt-hint { font-size: 0.78rem; color: var(--muted); }
-
-  button {
-    padding: 10px 20px;
-    background: var(--accent); color: #fff;
-    border: none; border-radius: 6px;
-    font-size: 0.9rem; font-weight: 600;
-    cursor: pointer; transition: background .15s, transform .05s;
-  }
-  button:hover:not(:disabled) { background: #374151; }
-  button:active:not(:disabled) { transform: translateY(1px); }
-  button:disabled { background: #c0c0c0; cursor: not-allowed; }
-  button:focus-visible,
-  input:focus-visible {
-    outline: none;
-    box-shadow: var(--focus-ring);
-  }
-
-  /* ---- Output ---- */
-  .output-box {
-    min-height: 120px;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: 1.04rem; line-height: 1.8;
-    white-space: pre-wrap;
-  }
-  .output-box.empty {
-    font-family: inherit; font-size: 0.87rem;
-    color: var(--muted); font-style: italic;
-  }
-  @keyframes blink { 50% { opacity: 0; } }
-  .cursor {
-    display: inline-block; width: 2px; height: 1.1em;
-    background: #1a1a1a; border-radius: 1px;
-    vertical-align: text-bottom; margin-left: 1px;
-    animation: blink .65s step-end infinite;
-  }
-
-  /* ---- Output view toggle ---- */
-  .card-label-row {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 10px;
-  }
-  .card-label-row .card-label { margin-bottom: 0; }
-  .view-toggle { display: flex; gap: 4px; }
-  .toggle-btn {
-    padding: 3px 12px; font-size: 0.75rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: .05em;
-    background: transparent; color: var(--muted);
-    border: 1.5px solid var(--border); border-radius: 5px;
-    cursor: pointer; transition: all .15s;
-  }
-  .toggle-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .clear-btn {
-    padding: 3px 12px; font-size: 0.75rem; font-weight: 700;
-    text-transform: uppercase; letter-spacing: .05em;
-    background: transparent; color: var(--muted);
-    border: 1.5px solid var(--border); border-radius: 5px;
-    cursor: pointer; transition: all .15s;
-  }
-  .clear-btn:hover { color: #b91c1c; border-color: #b91c1c; }
-
-  /* ---- Token chips ---- */
-  .token-box {
-    min-height: 100px;
-    display: flex; flex-wrap: wrap; gap: 0; align-content: flex-start;
-  }
-  .tok {
-    display: inline-flex; flex-direction: column; align-items: center;
-    padding: 2px 0; border-radius: 3px; cursor: default; min-width: 0;
-  }
-  .tok-id {
-    font-family: 'Courier New', monospace; font-size: 0.58rem;
-    font-weight: 700; color: var(--muted-strong); line-height: 1.2;
-  }
-  .tok-text {
-    font-family: 'Courier New', monospace; font-size: 0.78rem;
-    white-space: pre; line-height: 1.3; color: #1a1a1a;
-  }
-
-  /* ---- Page navigation ---- */
-  .page-nav {
-    display: flex; margin-bottom: 12px;
-    border-bottom: 2px solid var(--border);
-  }
-  .page-tab {
-    padding: 10px 22px; background: transparent; border: none;
-    font-size: 0.88rem; font-weight: 600; color: var(--muted);
-    cursor: pointer; border-bottom: 2px solid transparent;
-    margin-bottom: -2px; transition: color .15s, border-color .15s;
-  }
-  .page-tab.active { color: var(--text); border-bottom-color: var(--accent); }
-  .page-tab:hover:not(.active) { color: var(--muted-strong); }
-
-  /* ---- Generator layout ---- */
-  #page-gen { display: flex; flex-direction: column; gap: 12px; }
-  .gen-bottom {
-    display: grid;
-    grid-template-columns: minmax(320px, 380px) minmax(0, 1fr);
-    gap: 12px;
-    align-items: start;
-  }
-  .gen-left { display: flex; flex-direction: column; gap: 10px; }
-  .gen-left .card { margin-bottom: 0; }
-  .gen-outputs { display: flex; flex-direction: column; gap: 10px; }
-  .card-output { display: flex; flex-direction: column; margin-bottom: 0; }
-  .card-output .card-label-row { flex-shrink: 0; }
-  .card-output .output-box { flex: 1; min-height: 180px; }
-  .card-output .token-box  { flex: 1; min-height: 180px; }
-
-  /* ---- Progress chart ---- */
-  .chart-svg { width: 100%; display: block; overflow: visible; }
-  .chart-tooltip {
-    position: fixed; pointer-events: none;
-    background: rgba(17,24,39,0.93); color: #f9fafb;
-    font-size: 0.78rem; line-height: 1.55;
-    padding: 8px 11px; border-radius: 7px;
-    max-width: 240px; z-index: 1000;
-    display: none; white-space: pre-line;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.25);
-  }
-
-  /* ---- Vocabulary browser ---- */
-  .vocab-search {
-    display: block; width: 100%; padding: 8px 12px;
-    font-size: 0.9rem; font-family: inherit;
-    border: 1.5px solid var(--border); border-radius: 8px; margin-bottom: 16px;
-    outline: none; transition: border-color .15s;
-  }
-  .vocab-search:focus { border-color: var(--border-strong); box-shadow: var(--focus-ring); }
-  .vocab-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-    gap: 5px; max-height: 580px; overflow-y: auto;
-  }
-  .vocab-entry {
-    background: #f8f8f8; border-radius: 4px; padding: 5px 8px; overflow: hidden;
-  }
-  .vocab-entry-id {
-    font-family: 'Courier New', monospace; font-size: 0.7rem;
-    font-weight: 700; color: var(--muted);
-  }
-  .vocab-entry-text {
-    font-family: 'Courier New', monospace; font-size: 0.82rem;
-    white-space: pre; overflow: hidden; text-overflow: ellipsis;
-    display: block; color: #333;
-  }
-
-  @media (max-width: 1080px) {
-    .gen-bottom { grid-template-columns: 1fr; }
-    .card-output .output-box,
-    .card-output .token-box {
-      min-height: 200px;
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1b1b1f; --bg-alt: #161618; --bg-soft: #202127;
+      --text-1: #dfdfd6; --text-2: #98989f; --text-3: #6a6a71;
+      --divider: #2e2e32; --ink: #ffffff;
+      --kept: #3fb950; --worse: #f0a95a;
+      --tok-1: #23293a; --tok-2: #33242c; --tok-3: #213028; --tok-4: #342d1d;
+      --tip-bg: rgba(245, 245, 247, 0.96); --tip-text: #1b1b1f;
+      --switch-bg: rgba(101, 117, 133, 0.16); --switch-border: #3c3f44; --knob: #000000;
+      color-scheme: dark;
     }
   }
-
-  @media (max-width: 760px) {
-    body { padding: 14px 12px 20px; }
-    .card { padding: 14px; }
-    .params { grid-template-columns: 1fr; gap: 12px; }
-    .page-tab { padding: 10px 12px; }
-    .prompt-footer { gap: 12px; align-items: flex-start; flex-direction: column; }
+  :root[data-theme="dark"] {
+    --bg: #1b1b1f; --bg-alt: #161618; --bg-soft: #202127;
+    --text-1: #dfdfd6; --text-2: #98989f; --text-3: #6a6a71;
+    --divider: #2e2e32; --ink: #ffffff;
+    --kept: #3fb950; --worse: #f0a95a;
+    --tok-1: #23293a; --tok-2: #33242c; --tok-3: #213028; --tok-4: #342d1d;
+    --tip-bg: rgba(245, 245, 247, 0.96); --tip-text: #1b1b1f;
+    --switch-bg: rgba(101, 117, 133, 0.16); --switch-border: #3c3f44; --knob: #000000;
+    color-scheme: dark;
   }
-  .pane-pick { font: inherit; font-size: 0.85rem; font-weight: 600; max-width: 100%; padding: 4px 6px;
-               border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text); }
-  .pane-facts { font-size: 0.78rem; color: var(--muted); margin: -4px 0 8px; }
-  .compare-note { font-size: 0.82rem; color: var(--muted); padding: 0 4px; }
-  .growth-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 10px; }
-  .growth-times { display: flex; flex-wrap: wrap; gap: 4px; }
-  .growth-note { font-size: 0.78rem; color: var(--muted); margin: 8px 0 0; }
+
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; font: 16px/1.6 var(--font); color: var(--text-1); background: var(--bg); -webkit-font-smoothing: antialiased; }
+  a { color: inherit; }
+  button, select, input, textarea { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+  .num { font-variant-numeric: tabular-nums; }
+
+  /* The top bar */
+  .topbar { display: flex; align-items: center; gap: 16px; height: 64px; padding: 0 20px; border-bottom: 1px solid var(--divider); background: var(--bg); }
+  .brand { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 16px; font-weight: 600; text-decoration: none; white-space: nowrap; }
+  .brand .mark { flex: none; width: 24px; height: 24px; }
+  .brand .mark .paper { fill: var(--bg); stroke: var(--ink); }
+  .brand .mark .ink { fill: var(--ink); }
+  .brand .sep { color: var(--text-3); font-weight: 400; }
+  .brand .here { overflow: hidden; text-overflow: ellipsis; font-weight: 500; color: var(--text-2); }
+  .bar { display: flex; align-items: center; gap: 4px; margin-left: auto; }
+  .bar a { padding: 0 12px; font-size: 14px; font-weight: 500; line-height: 64px; text-decoration: none; white-space: nowrap; }
+  .bar a:hover { color: var(--text-2); }
+  .ext { width: 11px; height: 11px; margin-left: 2px; vertical-align: -1px; fill: none; stroke: var(--text-3); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .switch { position: relative; flex: none; width: 40px; height: 22px; margin-left: 8px; padding: 0; border: 1px solid var(--switch-border); border-radius: 11px; background: var(--switch-bg); cursor: pointer; }
+  .knob { position: absolute; top: 1px; left: 1px; width: 18px; height: 18px; border-radius: 50%; background: var(--knob); box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08); transition: transform 0.25s; }
+  .switch[aria-checked="true"] .knob { transform: translateX(18px); }
+  @media (max-width: 719px) { .bar .wide { display: none; } .brand .home { display: none; } .brand .home + .sep { display: none; } }
+
+  /* The page column */
+  .page { max-width: 1240px; margin: 0 auto; padding: 36px 20px 72px; }
+  .intro h1 { margin: 0; font-size: 28px; font-weight: 600; line-height: 1.3; letter-spacing: -0.02em; color: var(--ink); }
+  .intro p { max-width: 70ch; margin: 10px 0 0; font-size: 17px; line-height: 28px; color: var(--text-2); }
+  .intro p strong { font-weight: 600; color: var(--text-1); }
+  .intro .public { font-size: 15px; line-height: 24px; }
+  .intro a { color: var(--text-1); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+
+  .tabs { display: flex; gap: 24px; margin-top: 28px; overflow-x: auto; border-bottom: 1px solid var(--divider); scrollbar-width: none; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab { flex: none; margin-bottom: -1px; padding: 10px 0 12px; border: 0; border-bottom: 2px solid transparent; background: none; font-size: 15px; font-weight: 500; color: var(--text-2); white-space: nowrap; cursor: pointer; }
+  .tab:hover { color: var(--text-1); }
+  .tab[aria-selected="true"] { border-bottom-color: var(--ink); color: var(--ink); }
+
+  .panel { padding-top: 28px; }
+  .question { max-width: 36ch; margin: 0; font-size: 22px; font-weight: 600; line-height: 1.3; letter-spacing: -0.02em; color: var(--ink); }
+  .lede { max-width: 70ch; margin: 10px 0 0; line-height: 28px; }
+  .hint { margin: 4px 0 0; font-size: 14px; line-height: 22px; color: var(--text-2); }
+  .note { max-width: 72ch; margin: 14px 0 0; font-size: 14px; line-height: 22px; color: var(--text-2); }
+  .eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--text-2); }
+
+  /* Controls, as on the explorables */
+  .btn { padding: 6px 12px; border: 1px solid var(--divider); border-radius: 8px; background: var(--bg); font-size: 14px; font-weight: 500; cursor: pointer; }
+  .btn:hover:not(:disabled) { border-color: var(--text-3); }
+  .btn:disabled { color: var(--text-3); cursor: default; }
+  .btn.primary { padding: 8px 18px; border-color: var(--ink); background: var(--ink); color: var(--bg); font-weight: 600; }
+  .btn.primary:disabled { border-color: var(--divider); background: var(--bg-soft); color: var(--text-3); }
+  .linkish { padding: 0; border: 0; background: none; font-size: 14px; font-weight: 500; color: var(--text-2); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; cursor: pointer; }
+  .linkish:hover { color: var(--text-1); }
+  .seg { display: inline-flex; flex-wrap: wrap; max-width: 100%; border: 1px solid var(--divider); border-radius: 8px; overflow: hidden; }
+  .seg button { padding: 5px 12px; border: 0; border-left: 1px solid var(--divider); background: var(--bg); font-size: 14px; font-weight: 500; cursor: pointer; }
+  .seg button:first-child { border-left: 0; }
+  .seg button:hover:not([aria-pressed="true"]) { background: var(--bg-soft); }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
+  .select-wrap { position: relative; display: inline-flex; min-width: 0; max-width: 100%; }
+  .select-wrap select { width: 100%; max-width: 100%; padding: 7px 36px 7px 12px; border: 1px solid var(--divider); border-radius: 8px; background: var(--bg); font-size: 14px; font-weight: 500; color: var(--text-1); appearance: none; cursor: pointer; text-overflow: ellipsis; }
+  .select-wrap select:hover { border-color: var(--text-3); }
+  .select-wrap::after { content: ""; position: absolute; top: 50%; right: 14px; width: 7px; height: 7px; margin-top: -5px; border-right: 1.5px solid var(--text-2); border-bottom: 1.5px solid var(--text-2); transform: rotate(45deg); pointer-events: none; }
+  input[type=range] { width: 100%; accent-color: var(--ink); cursor: pointer; }
+
+  /* Continue text: the opening and the settings */
+  .compose { padding: 18px 20px; border: 1px solid var(--divider); border-radius: 12px; background: var(--bg); }
+  .compose label.eyebrow { display: block; margin-bottom: 8px; }
+  .openings { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .openings .btn { padding: 4px 10px; font-size: 13px; }
+  textarea { display: block; width: 100%; min-height: 84px; padding: 10px 12px; border: 1px solid var(--divider); border-radius: 8px; background: var(--bg); font-size: 16px; line-height: 1.55; resize: vertical; }
+  textarea:hover { border-color: var(--text-3); }
+  .compose-foot { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 14px 28px; margin-top: 14px; }
+  .settings { display: grid; grid-template-columns: repeat(3, minmax(150px, 220px)); gap: 10px 28px; }
+  .setting .top { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+  .setting .top label { font-size: 13px; font-weight: 600; color: var(--text-1); }
+  .setting .value { font-size: 13px; color: var(--text-2); }
+  .setting .range-hint { font-size: 12px; line-height: 18px; color: var(--text-3); }
+  .go { display: flex; align-items: center; gap: 12px; }
+  .go .hint { margin: 0; font-size: 13px; color: var(--text-3); }
+  @media (max-width: 819px) { .settings { grid-template-columns: minmax(0, 1fr); width: 100%; } .go { width: 100%; justify-content: space-between; } }
+
+  /* The two models, side by side */
+  .panes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top: 20px; }
+  @media (max-width: 819px) { .panes { grid-template-columns: minmax(0, 1fr); } }
+  .pane { display: flex; flex-direction: column; min-width: 0; padding: 16px 18px 18px; border: 1px solid var(--divider); border-radius: 12px; background: var(--bg); }
+  .pane-head { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
+  .pane-head .eyebrow { flex: 1 0 100%; }
+  .pane-head .select-wrap { flex: 1 1 220px; }
+  .pane-facts { margin: 8px 0 12px; font-size: 13px; line-height: 20px; color: var(--text-2); }
+  .pane-facts b { font-weight: 600; color: var(--ink); }
+  .output-box { flex: 1; min-height: 190px; padding-top: 12px; border-top: 1px solid var(--divider); font-size: 16px; line-height: 28px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .output-box .opening { font-weight: 600; color: var(--ink); }
+  .output-box.empty { color: var(--text-3); font-size: 14px; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .cursor { display: inline-block; width: 2px; height: 1.1em; margin-left: 1px; border-radius: 1px; background: var(--ink); vertical-align: text-bottom; animation: blink .65s step-end infinite; }
+  @media (prefers-reduced-motion: reduce) { .cursor { animation: none; } .knob { transition: none; } }
+  .token-box { flex: 1; min-height: 190px; display: flex; flex-wrap: wrap; align-content: flex-start; gap: 2px 0; padding-top: 12px; border-top: 1px solid var(--divider); }
+  .tok { display: inline-flex; flex-direction: column; align-items: center; padding: 2px 1px; border-radius: 3px; }
+  .tok:nth-child(4n+1) { background: var(--tok-1); } .tok:nth-child(4n+2) { background: var(--tok-2); }
+  .tok:nth-child(4n+3) { background: var(--tok-3); } .tok:nth-child(4n+4) { background: var(--tok-4); }
+  .tok-id { font: 600 10px/1.2 var(--mono); color: var(--text-2); }
+  .tok-text { font: 13px/1.35 var(--mono); white-space: pre; color: var(--text-1); }
+
+  /* Watch it learn */
+  .controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 20px; }
+  .reading { max-width: 72ch; margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--divider); font-size: 17px; line-height: 30px; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .reading .opening { font-weight: 600; color: var(--ink); }
+
+  /* The session's chart, drawn as One session's on the explorables */
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin: 18px 0 6px; padding: 0; list-style: none; font-size: 13px; color: var(--text-2); }
+  .legend li { display: inline-flex; align-items: center; gap: 6px; }
+  .legend svg { width: 22px; height: 16px; overflow: visible; }
+  #chart { position: relative; min-width: 0; }
+  #chart-svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .grid { stroke: var(--divider); stroke-width: 1; }
+  .axis { stroke: var(--text-3); stroke-width: 1; }
+  .tick { font-size: 12px; fill: var(--text-2); }
+  .ytitle { font-size: 12px; font-weight: 500; fill: var(--text-2); }
+  .stair { fill: none; stroke: var(--kept); stroke-width: 2; }
+  .kept { fill: var(--kept); stroke: var(--kept); stroke-width: 1.5; }
+  .aside { fill: var(--bg); stroke: var(--text-3); stroke-width: 2; }
+  .clipped { fill: var(--text-3); }
+  .ring-on { fill: none; stroke: var(--ink); stroke-width: 2; }
+  .pt { cursor: default; }
+  .pt .hit { fill: transparent; }
+  .chart-tooltip { position: fixed; z-index: 1000; max-width: 260px; padding: 8px 11px; border-radius: 8px; background: var(--tip-bg); color: var(--tip-text); font-size: 13px; line-height: 20px; white-space: pre-line; pointer-events: none; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2); }
+
+  /* The vocabulary */
+  .vocab-search { display: block; width: 100%; max-width: 420px; margin-top: 18px; padding: 8px 12px; border: 1px solid var(--divider); border-radius: 8px; background: var(--bg); font-size: 15px; }
+  .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(112px, 1fr)); gap: 4px; max-height: 600px; margin-top: 14px; overflow-y: auto; }
+  .vocab-entry { padding: 5px 8px; border-radius: 6px; background: var(--bg-soft); overflow: hidden; }
+  .vocab-entry-id { font: 600 11px var(--mono); color: var(--text-2); }
+  .vocab-entry-text { display: block; overflow: hidden; font: 13px var(--mono); white-space: pre; text-overflow: ellipsis; color: var(--text-1); }
+  .vocab-entry-text .empty { color: var(--text-3); }
+
+  footer { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; max-width: 1240px; margin: 0 auto; padding: 18px 20px 28px; border-top: 1px solid var(--divider); font-size: 13px; color: var(--text-2); }
+  footer a { text-underline-offset: 3px; }
+
+  @media (max-width: 719px) {
+    .page { padding: 24px 16px 56px; }
+    .intro h1 { font-size: 24px; }
+    .intro p { font-size: 16px; line-height: 26px; }
+    .compose, .pane { padding: 14px; }
+  }
 </style>
 </head>
 <body>
-<div class="container">
-
-  <div class="header">
-    <h1>autoresearch &mdash; local text generation</h1>
-    <p>
-      This is a <strong>text completion model</strong> trained on <span id="dataset-blurb">short children&rsquo;s stories</span>. It is not a chat assistant &mdash; it continues whatever you type in the same
-      writing style. Type the start of a sentence or story and press
-      <strong>Generate</strong>. Output appears token&nbsp;by&nbsp;token in real time.
-    </p>
+<header class="topbar">
+  <a class="brand" href="/">
+    <svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><rect class="paper" x="3" y="3" width="58" height="58" stroke-width="4"/><path class="ink" d="M14 48L32 12L50 48H42L32 28L22 48H14Z"/><rect class="ink" x="28" y="31" width="8" height="17"/></svg>
+    <span class="home">autoresearch</span><span class="sep">/</span><span class="here">Use a model</span>
+  </a>
+  <div class="bar">
+    <a class="wide" href="https://llmexplorables.aroughidea.com/training/">How a Model Gets Made <svg class="ext" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+    <a href="https://github.com/aroughidea/autoresearch-win-rtx">GitHub <svg class="ext" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg></a>
+    <button class="switch" id="theme-switch" type="button" role="switch" aria-checked="false" aria-label="Dark theme"><span class="knob"></span></button>
   </div>
+</header>
 
-  <nav class="page-nav" role="tablist" aria-label="Main views">
-    <button class="page-tab active" id="tab-gen" role="tab" aria-selected="true" aria-controls="page-gen" onclick="switchPage('gen')">Generator</button>
-    <button class="page-tab" id="tab-vocab" role="tab" aria-selected="false" aria-controls="page-vocab" onclick="switchPage('vocab')">Vocabulary</button>
+<div class="page">
+  <section class="intro">
+    <h1>Use a model</h1>
+    <p>Give two small language models the same opening and read how each one continues it. A model continues text in the style of the text it learned from; these learned from <span id="dataset-blurb">short children’s stories</span>. Their writing appears one token at a time.</p>
+    <!--PUBLIC-->
+  </section>
+
+  <nav class="tabs" role="tablist" aria-label="Views">
+    <button class="tab" type="button" role="tab" id="tab-gen" aria-controls="page-gen" aria-selected="true">Continue text</button>
+    <button class="tab" type="button" role="tab" id="tab-growth" aria-controls="page-growth" aria-selected="false" hidden>Watch it learn</button>
+    <button class="tab" type="button" role="tab" id="tab-session" aria-controls="page-session" aria-selected="false">The session</button>
+    <button class="tab" type="button" role="tab" id="tab-vocab" aria-controls="page-vocab" aria-selected="false">The vocabulary</button>
   </nav>
 
-  <div id="page-gen" role="tabpanel" aria-labelledby="tab-gen">
-
-  <div class="card">
-    <div id="chart-title" class="card-label">The agent's experiments (research time: a new model each run)</div>
-    <svg id="chart-svg" class="chart-svg" viewBox="0 0 900 240" preserveAspectRatio="xMidYMid meet"></svg>
-    <div id="chart-status" style="font-size:0.78rem;color:var(--muted);margin-top:4px">Loading results\u2026</div>
-  </div>
-
-  <div class="gen-bottom">
-
-  <div class="gen-left">
-
-  <div class="card">
-    <div class="card-label">Model parameters</div>
-    <div class="params">
-
-      <div>
-        <div class="param-row">
-          <span class="name">Max tokens</span>
-          <span class="value" id="max-tokens-val">500</span>
+  <section class="panel" id="page-gen" role="tabpanel" aria-labelledby="tab-gen">
+    <div class="compose">
+      <label class="eyebrow" for="prompt">Opening</label>
+      <div class="openings" id="openings"></div>
+      <textarea id="prompt" rows="3" placeholder="Once upon a time"></textarea>
+      <div class="compose-foot">
+        <div class="settings">
+          <div class="setting">
+            <div class="top"><label for="max-tokens">Length</label><span class="value num"><span id="max-tokens-val">300</span> tokens</span></div>
+            <input type="range" id="max-tokens" min="20" max="500" step="10" value="300">
+            <div class="range-hint">Tokens are the pieces of text a model reads and writes</div>
+          </div>
+          <div class="setting">
+            <div class="top"><label for="temperature">Temperature</label><span class="value num" id="temperature-val">0.80</span></div>
+            <input type="range" id="temperature" min="0" max="2" step="0.05" value="0.8">
+            <div class="range-hint">0 always takes the likeliest token; higher takes more chances</div>
+          </div>
+          <div class="setting">
+            <div class="top"><label for="top-k">Top-k</label><span class="value num" id="top-k-val">40</span></div>
+            <input type="range" id="top-k" min="0" max="200" step="5" value="40">
+            <div class="range-hint">How many of the likeliest tokens it chooses among; 0 means all</div>
+          </div>
         </div>
-        <input type="range" id="max-tokens" min="20" max="500" step="10" value="500">
-        <div class="param-hint">How many tokens (word pieces) to generate</div>
-      </div>
-
-      <div>
-        <div class="param-row">
-          <span class="name">Temperature</span>
-          <span class="value" id="temperature-val">0.00</span>
-        </div>
-        <input type="range" id="temperature" min="0" max="2" step="0.01" value="0">
-        <div class="param-hint">0 = predictable &nbsp;&middot;&nbsp; 2 = chaotic</div>
-      </div>
-
-      <div>
-        <div class="param-row">
-          <span class="name">Top-k</span>
-          <span class="value" id="top-k-val">0</span>
-        </div>
-        <input type="range" id="top-k" min="0" max="200" step="5" value="0">
-        <div class="param-hint">Next-token choices considered &mdash; 0 means all</div>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-label">Prompt</div>
-    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
-      <button class="clear-btn" style="font-size:0.8rem;padding:4px 10px;text-transform:none;letter-spacing:normal" onclick="setPrompt('Once upon a time,')">Once upon a time,</button>
-      <button class="clear-btn" style="font-size:0.8rem;padding:4px 10px;text-transform:none;letter-spacing:normal" onclick="setPrompt('The little fox looked up and said,')">The little fox looked up and said,</button>
-      <button class="clear-btn" style="font-size:0.8rem;padding:4px 10px;text-transform:none;letter-spacing:normal" onclick="setPrompt('Deep in the forest there lived a')">Deep in the forest there lived a</button>
-    </div>
-    <textarea id="prompt" placeholder="Once upon a time\u2026"></textarea>
-    <div class="prompt-footer">
-      <span class="prompt-hint">Ctrl&thinsp;+&thinsp;Enter to generate</span>
-      <button id="submit-btn" onclick="generate()">Generate</button>
-    </div>
-  </div>
-
-  </div><!-- /gen-left -->
-
-  <div class="gen-outputs">
-
-  <div class="card card-output">
-    <div class="card-label-row">
-      <select class="pane-pick" id="pick-baseline" aria-label="Left model"></select>
-      <div style="display:flex;gap:12px;align-items:center">
-        <div class="view-toggle">
-          <button class="toggle-btn active" id="btn-text-baseline" aria-pressed="true" onclick="setView('text','baseline')">Text</button>
-          <button class="toggle-btn" id="btn-tokens-baseline" aria-pressed="false" onclick="setView('tokens','baseline')">Tokens</button>
-        </div>
-        <button class="clear-btn" onclick="clearOutput('baseline')">Clear</button>
+        <div class="go"><span class="hint">Ctrl + Enter</span><button class="btn primary" id="submit-btn" type="button">Generate</button></div>
       </div>
     </div>
-    <div class="pane-facts" id="facts-baseline"></div>
-    <div id="output-text-baseline" class="output-box empty">Output will appear here&hellip;</div>
-    <div id="output-tokens-baseline" class="token-box" style="display:none"></div>
-  </div>
 
-  <div class="card card-output" id="card-best">
-    <div class="card-label-row">
-      <select class="pane-pick" id="pick-best" aria-label="Right model"></select>
-      <div style="display:flex;gap:12px;align-items:center">
-        <div class="view-toggle">
-          <button class="toggle-btn active" id="btn-text-best" aria-pressed="true" onclick="setView('text','best')">Text</button>
-          <button class="toggle-btn" id="btn-tokens-best" aria-pressed="false" onclick="setView('tokens','best')">Tokens</button>
+    <div class="panes">
+      <article class="pane" id="card-baseline">
+        <div class="pane-head">
+          <span class="eyebrow" id="role-baseline">Left</span>
+          <div class="select-wrap"><select class="pane-pick" id="pick-baseline" aria-label="Left model"></select></div>
+          <div class="seg" role="group" aria-label="Show the left model's output as">
+            <button type="button" id="btn-text-baseline" aria-pressed="true">Text</button><button type="button" id="btn-tokens-baseline" aria-pressed="false">Tokens</button>
+          </div>
+          <button class="linkish" type="button" id="clear-baseline">Clear</button>
         </div>
-        <button class="clear-btn" onclick="clearOutput('best')">Clear</button>
-      </div>
+        <div class="pane-facts" id="facts-baseline"></div>
+        <div id="output-text-baseline" class="output-box empty" aria-live="polite">Its continuation appears here.</div>
+        <div id="output-tokens-baseline" class="token-box" hidden></div>
+      </article>
+      <article class="pane" id="card-best">
+        <div class="pane-head">
+          <span class="eyebrow" id="role-best">Right</span>
+          <div class="select-wrap"><select class="pane-pick" id="pick-best" aria-label="Right model"></select></div>
+          <div class="seg" role="group" aria-label="Show the right model's output as">
+            <button type="button" id="btn-text-best" aria-pressed="true">Text</button><button type="button" id="btn-tokens-best" aria-pressed="false">Tokens</button>
+          </div>
+          <button class="linkish" type="button" id="clear-best">Clear</button>
+        </div>
+        <div class="pane-facts" id="facts-best"></div>
+        <div id="output-text-best" class="output-box empty" aria-live="polite">Its continuation appears here.</div>
+        <div id="output-tokens-best" class="token-box" hidden></div>
+      </article>
     </div>
-    <div class="pane-facts" id="facts-best"></div>
-    <div id="output-text-best" class="output-box empty">Output will appear here&hellip;</div>
-    <div id="output-tokens-best" class="token-box" style="display:none"></div>
-  </div>
+    <p class="note" id="compare-note" hidden>These two learned from different datasets, so their scores don’t compare: each score measures how well a model predicts its own dataset. Compare them by what they write.</p>
+  </section>
 
-  <div class="compare-note" id="compare-note" style="display:none">These two learned from different datasets, so their scores don&rsquo;t compare: each score measures how well a model predicts its own dataset. Compare them by what they write.</div>
-
-  </div><!-- /gen-outputs -->
-
-  <div class="card" id="card-growth" style="display:none">
-    <div class="card-label">Watch it learn (training time: one model, from its first step to the end of its run)</div>
-    <div class="growth-row">
-      <select class="pane-pick" id="growth-model" aria-label="Model to watch"></select>
-      <select class="pane-pick" id="growth-prompt" aria-label="Prompt"></select>
-      <div class="growth-times" id="growth-times" role="group" aria-label="Moment in training"></div>
+  <section class="panel" id="page-growth" role="tabpanel" aria-labelledby="tab-growth" hidden>
+    <h2 class="question">What did a model write while it learned?</h2>
+    <p class="lede">This is training time: one model, from its first step to the end of its run. Its run file kept what it wrote for the same openings at each moment, so you can read it learning.</p>
+    <div class="controls">
+      <div class="select-wrap"><select id="growth-model" aria-label="Model to watch"></select></div>
+      <div class="select-wrap"><select id="growth-prompt" aria-label="Opening"></select></div>
+      <div class="seg" id="growth-times" role="group" aria-label="Moment in training"></div>
     </div>
-    <div id="growth-text" class="output-box"></div>
-    <p class="growth-note">What this model wrote at each moment of its training, saved in its run file. Every model uses the same prompts and sampling settings, so the differences come from the model.</p>
-  </div>
+    <div id="growth-text" class="reading"></div>
+    <p class="note">Every model wrote with the same openings and sampling settings, so the differences come from the model.</p>
+  </section>
 
-  </div><!-- /gen-bottom -->
+  <section class="panel" id="page-session" role="tabpanel" aria-labelledby="tab-session" hidden>
+    <h2 class="question" id="chart-title">One 10-hour session of an AI agent’s experiments</h2>
+    <p class="lede">This is research time: each dot is a new model. The agent changes one thing in the training script, trains a model for the same few minutes and scores it on text kept out of training. A better score keeps the change; any other sets it aside. Lower is better.</p>
+    <ul class="legend" aria-hidden="true">
+      <li><svg viewBox="0 0 22 16"><circle class="kept" cx="11" cy="8" r="5"/></svg>Kept</li>
+      <li><svg viewBox="0 0 22 16"><circle class="aside" cx="11" cy="8" r="5"/></svg>Set aside</li>
+      <li><svg viewBox="0 0 22 16"><path class="stair" d="M1 11H11V5H21"/></svg>Best so far</li>
+      <li><svg viewBox="0 0 22 16"><circle class="ring-on" cx="11" cy="8" r="6.5"/></svg>On show under Continue text</li>
+      <li><svg viewBox="0 0 22 16"><path class="clipped" d="M11 2L17 13H5Z"/></svg>Off the scale</li>
+    </ul>
+    <div id="chart"><svg id="chart-svg" viewBox="0 0 900 320" role="img" aria-label="Score of each experiment"></svg></div>
+    <p class="hint" id="chart-status">Loading the session…</p>
+  </section>
 
-  </div><!-- /page-gen -->
-
-  <div id="page-vocab" role="tabpanel" aria-labelledby="tab-vocab" style="display:none">
-    <div class="card">
-      <div class="card-label">Vocabulary &mdash; <span id="vocab-count"></span> tokens</div>
-      <input class="vocab-search" id="vocab-search" type="text"
-        placeholder="Filter by token ID or text…" oninput="filterVocab()" style="display:none">
-      <div id="vocab-grid" class="vocab-grid"></div>
-    </div>
-  </div><!-- /page-vocab -->
-
+  <section class="panel" id="page-vocab" role="tabpanel" aria-labelledby="tab-vocab" hidden>
+    <h2 class="question">The <span id="vocab-count"></span> tokens the left model reads and writes</h2>
+    <p class="lede">A model’s vocabulary is the list of pieces of text it can take in and produce, each with a number, its token id. Spaces are part of a token; ↵ is a new line.</p>
+    <input class="vocab-search" id="vocab-search" type="search" placeholder="Find a token by its text or id" hidden>
+    <div id="vocab-grid" class="vocab-grid"></div>
+  </section>
 </div>
-<div id="chart-tooltip" class="chart-tooltip"></div>
+
+<footer>
+  <span>Scores are bits per byte on text kept out of training. Lower is better.</span>
+  <a href="https://github.com/aroughidea/autoresearch-win-rtx/blob/master/TRAINING-DECISIONS.md">What the training decisions are</a>
+</footer>
+<div id="chart-tooltip" class="chart-tooltip" hidden></div>
+
 <script>
   const $ = id => document.getElementById(id);
 
@@ -892,240 +863,218 @@ _HTML = """\
   let _results = [];
   let _baselineModelId = null;
   let _bestModelId     = null;
+  const OPENINGS = ['Once upon a time', 'The old king said', 'In the dark forest', 'The little girl found a'];
 
-  // ---- Page navigation ----
-  function switchPage(p) {
-    $('page-gen').style.display   = p === 'gen'   ? 'flex'  : 'none';
-    $('page-vocab').style.display = p === 'vocab' ? 'block' : 'none';
-    $('tab-gen').className   = 'page-tab' + (p === 'gen'   ? ' active' : '');
-    $('tab-vocab').className = 'page-tab' + (p === 'vocab' ? ' active' : '');
-    $('tab-gen').setAttribute('aria-selected', p === 'gen' ? 'true' : 'false');
-    $('tab-vocab').setAttribute('aria-selected', p === 'vocab' ? 'true' : 'false');
-    if (p === 'vocab') loadVocab();
+  // ---- The theme switch ----
+  function isDark() {
+    const t = document.documentElement.dataset.theme;
+    return t ? t === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
   }
+  function syncThemeSwitch() { $('theme-switch').setAttribute('aria-checked', isDark() ? 'true' : 'false'); }
+  $('theme-switch').addEventListener('click', () => {
+    const next = isDark() ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    try { localStorage.setItem('autoresearch.theme', next); } catch (e) { /* storage may be off */ }
+    syncThemeSwitch();
+  });
+  syncThemeSwitch();
+
+  // ---- Tabs ----
+  const PAGES = ['gen', 'growth', 'session', 'vocab'];
+  function switchPage(p) {
+    PAGES.forEach(q => {
+      $('page-' + q).hidden = q !== p;
+      $('tab-' + q).setAttribute('aria-selected', q === p ? 'true' : 'false');
+    });
+    if (p === 'vocab') loadVocab();
+    if (p === 'session') drawChart();
+  }
+  PAGES.forEach(p => $('tab-' + p).addEventListener('click', () => switchPage(p)));
 
   // ---- Helpers ----
-  const TOK_COLORS = ['#dbeafe','#fce7f3','#d1fae5','#fef9c3','#ede9fe','#ffedd5'];
-
   function escapeHtml(s) {
-    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
-
   function displayText(s) {
-    return s.replace(/\\n/g, '\\u21b5').replace(/\\r/g, '\\u21b5').replace(/\\t/g, '\\u2192');
+    return s.replace(/\n/g, '↵').replace(/\r/g, '↵').replace(/\t/g, '→');
   }
+  const DATASET_NAMES = { tinystories: 'TinyStories', folktales: 'Folktales' };
+  const datasetName = d => DATASET_NAMES[d] || d || '';
+  const f4 = v => v.toFixed(4);
 
-  // ---- Output helpers ----
+  // ---- The two panes ----
   function clearOutput(which) {
     const out = $('output-text-' + which);
-    if (!out) return;
     out.className = 'output-box empty';
-    out.textContent = 'Output will appear here\u2026';
+    out.textContent = 'Its continuation appears here.';
     $('output-tokens-' + which).innerHTML = '';
   }
-
   function setView(v, which) {
-    $('output-text-'   + which).style.display = v === 'text'   ? 'block' : 'none';
-    $('output-tokens-' + which).style.display = v === 'tokens' ? 'flex'  : 'none';
-    $('btn-text-'   + which).className = 'toggle-btn' + (v === 'text'   ? ' active' : '');
-    $('btn-tokens-' + which).className = 'toggle-btn' + (v === 'tokens' ? ' active' : '');
-    $('btn-text-'   + which).setAttribute('aria-pressed', v === 'text'   ? 'true' : 'false');
+    $('output-text-' + which).hidden = v !== 'text';
+    $('output-tokens-' + which).hidden = v !== 'tokens';
+    $('btn-text-' + which).setAttribute('aria-pressed', v === 'text' ? 'true' : 'false');
     $('btn-tokens-' + which).setAttribute('aria-pressed', v === 'tokens' ? 'true' : 'false');
   }
-
+  ['baseline', 'best'].forEach(w => {
+    $('btn-text-' + w).addEventListener('click', () => setView('text', w));
+    $('btn-tokens-' + w).addEventListener('click', () => setView('tokens', w));
+    $('clear-' + w).addEventListener('click', () => clearOutput(w));
+  });
   function updateTokens(toks, which) {
     const box = $('output-tokens-' + which);
-    if (!box) return;
     box.innerHTML = '';
     toks.forEach(({ id, text }, i) => {
       const el = document.createElement('div');
       el.className = 'tok';
-      el.style.background = TOK_COLORS[i % TOK_COLORS.length];
-      el.innerHTML =
-        '<span class="tok-id">' + id + '</span>' +
-        '<span class="tok-text">' + escapeHtml(displayText(text)) + '</span>';
-      el.title = '#' + (i + 1) + '  id=' + id + '  ' + JSON.stringify(text);
+      el.innerHTML = '<span class="tok-id">' + id + '</span><span class="tok-text">' + escapeHtml(displayText(text)) + '</span>';
+      el.title = 'token ' + (i + 1) + ' · id ' + id + ' · ' + JSON.stringify(text);
       box.appendChild(el);
     });
   }
 
-  // ---- Sliders ----
+  // ---- The opening and the settings ----
   $('max-tokens').oninput  = e => $('max-tokens-val').textContent  = e.target.value;
   $('temperature').oninput = e => $('temperature-val').textContent = parseFloat(e.target.value).toFixed(2);
   $('top-k').oninput       = e => $('top-k-val').textContent       = e.target.value;
-
   function setPrompt(text) { $('prompt').value = text; $('prompt').focus(); }
-
+  function fillOpenings(list) {
+    const box = $('openings');
+    box.innerHTML = '';
+    list.forEach(text => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'btn';
+      b.textContent = text;
+      b.onclick = () => setPrompt(text);
+      box.appendChild(b);
+    });
+  }
+  fillOpenings(OPENINGS);
   $('prompt').addEventListener('keydown', e => {
-    if (e.key === 'Enter' && e.ctrlKey) { e.preventDefault(); generate(); }
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); generate(); }
   });
+  $('submit-btn').addEventListener('click', () => generate());
 
-  // ---- Model loading (kept for model-ID resolution) ----
   async function loadModels() {
     const resp = await fetch('/models');
     if (!resp.ok) throw new Error('Could not load models');
     const payload = await resp.json();
-    _models = payload.models || [];
+    // The page keeps to the runs' own models: the untrained ones and a re-run's moments (moment_s)
+    // are for LLM Explorables' page, which names them.
+    _models = (payload.models || []).filter(m => m.moment_s == null);
   }
 
-  // ---- Progress chart ----
-  function niceStep(range) {
-    if (range <= 0) return 0.001;
-    const exp  = Math.floor(Math.log10(range));
-    const frac = range / Math.pow(10, exp);
-    const s    = frac < 1.5 ? 1 : frac < 3 ? 2 : frac < 7 ? 5 : 10;
-    return s * Math.pow(10, exp);
+  // ---- The session's chart (research time) ----
+  function chartRange(vals) {
+    const lo = Math.min(...vals), hi = Math.max(...vals);
+    const pad = (hi - lo) * 0.06 || 0.01;
+    const step = [0.001, 0.002, 0.005, 0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1].find(st => (hi - lo + 2 * pad) / st <= 6) || 1;
+    const y0 = Math.floor((lo - pad) / step) * step;
+    const y1 = Math.ceil((hi + pad) / step) * step;
+    const ticks = [];
+    for (let v = y0; v < y1 + step / 2; v += step) ticks.push(+v.toFixed(6));
+    return { y0, y1, ticks, step };
   }
 
   function drawChart() {
     const rows = _results;
+    const svgEl = $('chart-svg');
+    const status = $('chart-status');
     if (!rows.length) {
-      $('chart-svg').style.display = 'none';
-      const s = $('chart-status');
-      s.style.display = 'block';
-      s.innerHTML = 'No experiments recorded yet — this is a fresh workspace. Start a session and train (see the README); the progress chart appears here once runs are kept or undone.';
+      svgEl.style.display = 'none';
+      status.hidden = false;
+      status.textContent = 'No experiments recorded yet. Start a session and train (see the README); each run appears here once it is kept or set aside.';
       return;
     }
-    $('chart-svg').style.display = 'block';
+    svgEl.style.display = 'block';
+    const parsed = rows.map((r, i) => ({ ...r, n: i + 1 }));
+    // The whole session stays in view, the start included. Only a score far above anything kept (a run
+    // that failed) would flatten it: that is drawn at the top edge instead.
+    const keptScores = parsed.filter(r => r.status === 'keep').map(r => r.val_bpb);
+    const top = keptScores.length ? Math.max(...keptScores) : Math.max(...parsed.map(r => r.val_bpb));
+    const clipHi = top * 1.5;
+    const inView = parsed.filter(r => r.val_bpb <= clipHi);
+    const { y0, y1, ticks, step } = chartRange(inView.map(r => r.val_bpb));
 
-    const parsed = rows.map((r, i) => ({ ...r, idx: i + 1 }));
+    const W = Math.max(320, Math.round($('chart').clientWidth || 900));
+    const H = W < 560 ? 280 : 320;
+    const m = { l: 48, r: 10, t: 22, b: 40 };
+    const pw = W - m.l - m.r, ph = H - m.t - m.b;
+    const N = parsed.length;
+    const x = n => m.l + ((n - 0.5) / N) * pw;
+    const y = v => m.t + ((y1 - Math.min(y1, Math.max(y0, v))) / (y1 - y0)) * ph;
+    const dec = Math.max(2, -Math.floor(Math.log10(step) + 1e-9));
+    const dotR = N > 20 ? +Math.max(2.5, Math.min(6, (pw / N) * 0.42)).toFixed(2) : 6;
+    // A model on show is ringed at the row that saved it: the last row naming it (the start's first two
+    // runs kept no model of their own, so they name the third's).
+    const shown = new Set([$('pick-baseline').value, $('pick-best').value]);
+    const ringAt = new Set();
+    const lastRow = {};
+    for (const r of parsed) if (r.model_id) lastRow[r.model_id] = r.n;
+    for (const id of shown) if (lastRow[id]) ringAt.add(lastRow[id]);
 
-    // IQR-based outlier clipping for y-axis
-    const vals  = [...parsed.map(r => r.val_bpb)].sort((a, b) => a - b);
-    const q1    = vals[Math.floor(vals.length * 0.25)];
-    const q3    = vals[Math.floor(vals.length * 0.75)];
-    const iqr   = q3 - q1 || 0.001;
-    const clipHi = q3 + 1.5 * iqr;
-
-    const normal  = parsed.filter(r => r.val_bpb <= clipHi);
-    const yVals   = normal.map(r => r.val_bpb);
-    const yLo_raw = Math.min(...yVals);
-    const yHi_raw = Math.max(...yVals);
-    const yPad    = (yHi_raw - yLo_raw) * 0.3 || 0.001;
-    const yLo     = yLo_raw - yPad * 0.4;
-    const yHi     = yHi_raw + yPad;
-
-    // SVG coordinate space
-    const W = 900, H = 240;
-    const ML = 68, MR = 24, MT = 28, MB = 44;
-    const pw = W - ML - MR, ph = H - MT - MB;
-
-    const n      = parsed.length;
-    const xRange = Math.max(1, n - 1);
-
-    const xS = i  => n === 1 ? ML + pw / 2 : ML + ((i - 1) / xRange) * pw;
-    const yS = v  => { const c = Math.max(yLo, Math.min(yHi, v)); return MT + (1 - (c - yLo) / (yHi - yLo)) * ph; };
-
-    let svg = '';
-
-    // Y grid + tick labels
-    const yStep  = niceStep((yHi - yLo) / 5);
-    const yStart = Math.ceil(yLo / yStep) * yStep;
-    for (let y = yStart; y <= yHi + yStep * 0.01; y = +(y + yStep).toFixed(10)) {
-      const cy = yS(y).toFixed(1);
-      svg += `<line x1="${ML}" y1="${cy}" x2="${W - MR}" y2="${cy}" stroke="#e5e7eb" stroke-width="1"/>`;
-      svg += `<text x="${ML - 5}" y="${+cy + 3.5}" text-anchor="end" font-size="10" fill="#9ca3af">${y.toFixed(4)}</text>`;
+    let s = `<text class="ytitle" x="0" y="12">Score</text>`;
+    for (const t of ticks) {
+      s += `<line class="grid" x1="${m.l}" x2="${W - m.r}" y1="${y(t)}" y2="${y(t)}"/>`;
+      s += `<text class="tick num" x="${m.l - 8}" y="${y(t) + 4}" text-anchor="end">${t.toFixed(dec)}</text>`;
     }
-
-    // X grid + tick labels (experiment index)
-    const xTickStep = Math.max(1, Math.ceil(n / 9));
-    for (let t = 1; t <= n; t += xTickStep) {
-      const cx = xS(t).toFixed(1);
-      svg += `<line x1="${cx}" y1="${MT}" x2="${cx}" y2="${MT + ph}" stroke="#e5e7eb" stroke-width="1"/>`;
-      svg += `<text x="${cx}" y="${MT + ph + 14}" text-anchor="middle" font-size="10" fill="#9ca3af">${t}</text>`;
+    s += `<line class="axis" x1="${m.l}" x2="${W - m.r}" y1="${m.t + ph}" y2="${m.t + ph}"/>`;
+    const every = N > 20 ? 5 : 1;
+    for (const r of parsed) {
+      if (r.n !== 1 && r.n % every) continue;
+      s += `<text class="tick num" x="${x(r.n)}" y="${m.t + ph + 18}" text-anchor="middle">${r.n}</text>`;
     }
+    s += `<text class="tick" x="${m.l + pw / 2}" y="${H - 2}" text-anchor="middle">Experiment</text>`;
 
-    // Axes
-    svg += `<line x1="${ML}" y1="${MT}" x2="${ML}" y2="${MT + ph}" stroke="#d1d5db" stroke-width="1.5"/>`;
-    svg += `<line x1="${ML}" y1="${MT + ph}" x2="${W - MR}" y2="${MT + ph}" stroke="#d1d5db" stroke-width="1.5"/>`;
-
-    // Axis labels
-    svg += `<text transform="rotate(-90)" x="${-(MT + ph / 2)}" y="13" text-anchor="middle" font-size="10" fill="#6b7280">Validation BPB (lower is better)</text>`;
-    svg += `<text x="${ML + pw / 2}" y="${H - 4}" text-anchor="middle" font-size="10" fill="#6b7280">Experiment #</text>`;
-
-    // Running-best step line (connects only models that improved on prior best)
-    const keptImproving = [];
-    let runBest = Infinity;
-    parsed.forEach(r => {
-      if (r.status === 'keep' && r.val_bpb < runBest) {
-        runBest = r.val_bpb;
-        keptImproving.push({ ...r, runBest });
+    // The best kept score so far, as a stair.
+    let best = Infinity;
+    const stair = [];
+    for (const r of parsed) {
+      if (r.status === 'keep' && r.val_bpb < best) { best = r.val_bpb; stair.push([x(r.n), y(best)]); }
+    }
+    if (stair.length) {
+      let d = `M${stair[0][0]},${stair[0][1]}`;
+      for (let i = 1; i < stair.length; i++) d += ` H${stair[i][0]} V${stair[i][1]}`;
+      s += `<path class="stair" d="${d} H${W - m.r}"/>`;
+    }
+    for (const r of parsed) {
+      const cx = x(r.n);
+      s += `<g class="pt" data-i="${r.n - 1}">`;
+      if (r.val_bpb > clipHi) {
+        s += `<path class="clipped" d="M${cx},${m.t - 2} l${dotR + 1},${(dotR + 1) * 1.8} h${-2 * (dotR + 1)}Z"/>`;
+      } else {
+        const cy = y(r.val_bpb);
+        if (ringAt.has(r.n)) s += `<circle class="ring-on" cx="${cx}" cy="${cy}" r="${dotR + 4.5}"/>`;
+        s += `<circle class="${r.status === 'keep' ? 'kept' : 'aside'}" cx="${cx}" cy="${cy}" r="${dotR}"/>`;
+        s += `<circle class="hit" cx="${cx}" cy="${cy}" r="${Math.max(8, dotR + 4)}"/>`;
       }
-    });
-    if (keptImproving.length) {
-      let stepPath = '';
-      keptImproving.forEach((r, i) => {
-        const cx = xS(r.idx).toFixed(1);
-        const cy = yS(r.runBest).toFixed(1);
-        if (i === 0) { stepPath = `M${cx},${cy}`; }
-        else         { stepPath += ` H${cx} V${cy}`; }
-      });
-      stepPath += ` H${W - MR}`;
-      svg += `<path d="${stepPath}" fill="none" stroke="#10b981" stroke-width="1.5" stroke-linejoin="round"/>`;
+      s += `</g>`;
     }
-
-    // Data points: discarded first (behind), then kept on top
-    const discarded = parsed.filter(r => r.val_bpb <= clipHi && r.status !== 'keep');
-    const kept      = parsed.filter(r => r.val_bpb <= clipHi && r.status === 'keep');
-    const clipped   = parsed.filter(r => r.val_bpb > clipHi);
-
-    discarded.forEach(r => {
-      const cx = xS(r.idx).toFixed(1), cy = yS(r.val_bpb).toFixed(1);
-      svg += `<circle cx="${cx}" cy="${cy}" r="10" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1.5" class="chart-pt" data-idx="${r.idx - 1}"/>`;
-      svg += `<text x="${cx}" y="${+cy + 3.5}" text-anchor="middle" font-size="9" fill="#6b7280" pointer-events="none">${r.idx}</text>`;
-    });
-
-    kept.forEach(r => {
-      const cx = xS(r.idx).toFixed(1), cy = yS(r.val_bpb).toFixed(1);
-      svg += `<circle cx="${cx}" cy="${cy}" r="13" fill="#10b981" stroke="#059669" stroke-width="2" class="chart-pt" data-idx="${r.idx - 1}" style="cursor:pointer"/>`;
-      svg += `<text x="${cx}" y="${+cy + 4}" text-anchor="middle" font-size="10" fill="white" font-weight="700" pointer-events="none">${r.idx}</text>`;
-      svg += `<text x="${cx}" y="${+cy - 17}" text-anchor="start" font-size="9" fill="#059669" transform="rotate(-35,${cx},${+cy - 17})" pointer-events="none">${escapeHtml(r.description)}</text>`;
-    });
-
-    clipped.forEach(r => {
-      const cx = xS(r.idx).toFixed(1), ty = MT + 12;
-      svg += `<polygon points="${cx},${ty - 11} ${+cx - 9},${ty + 5} ${+cx + 9},${ty + 5}" fill="#9ca3af" stroke="#6b7280" stroke-width="1.5" class="chart-pt" data-idx="${r.idx - 1}"/>`;
-      svg += `<text x="${cx}" y="${ty + 20}" text-anchor="middle" font-size="9" fill="#d97706">${r.val_bpb.toFixed(4)}</text>`;
-      svg += `<text x="${cx}" y="${ty + 33}" text-anchor="middle" font-size="9" fill="#6b7280" font-weight="700">${r.idx}</text>`;
-    });
-
-    // Legend (top-right)
-    const lx = W - MR - 128, ly = MT + 6;
-    svg += `<rect x="${lx - 4}" y="${ly - 4}" width="134" height="74" rx="5" fill="white" stroke="#e5e7eb" stroke-width="1"/>`;
-    svg += `<circle cx="${lx + 7}" cy="${ly + 9}"  r="6"  fill="#f3f4f6" stroke="#9ca3af" stroke-width="1.5"/>`;
-    svg += `<text x="${lx + 18}" y="${ly + 13}" font-size="10" fill="#374151">Discarded</text>`;
-    svg += `<circle cx="${lx + 7}" cy="${ly + 28}" r="7"  fill="#10b981" stroke="#059669" stroke-width="1.5"/>`;
-    svg += `<text x="${lx + 18}" y="${ly + 32}" font-size="10" fill="#374151">Kept</text>`;
-    svg += `<line x1="${lx + 2}" y1="${ly + 46}" x2="${lx + 14}" y2="${ly + 46}" stroke="#10b981" stroke-width="1.5"/>`;
-    svg += `<text x="${lx + 18}" y="${ly + 50}" font-size="10" fill="#374151">Running best</text>`;
-    svg += `<polygon points="${lx + 7},${ly + 58} ${lx + 0},${ly + 68} ${lx + 14},${ly + 68}" fill="#9ca3af" stroke="#6b7280" stroke-width="1"/>`;
-    svg += `<text x="${lx + 18}" y="${ly + 67}" font-size="10" fill="#374151">Outlier (clipped)</text>`;
-
-    // Title
+    svgEl.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svgEl.setAttribute('aria-label', `Score of each of the ${N} experiments, with the best score so far as a line`);
+    svgEl.innerHTML = s;
     const keptN = parsed.filter(r => r.status === 'keep').length;
-    svg += `<text x="${ML + pw / 2}" y="18" text-anchor="middle" font-size="12" font-weight="700" fill="#111827">${parsed.length} experiments, ${keptN} kept</text>`;
+    status.hidden = false;
+    status.textContent = `${N} experiments, ${keptN} kept. The best scored ${f4(best)}.`;
 
-    $('chart-svg').innerHTML = svg;
-    $('chart-status').style.display = 'none';
-
-    // Hover tooltips
-    $('chart-svg').querySelectorAll('.chart-pt').forEach(el => {
-      el.addEventListener('mousemove', e => {
-        const r   = parsed[parseInt(el.dataset.idx)];
+    svgEl.querySelectorAll('.pt').forEach(el => {
+      const show = e => {
+        const r = parsed[parseInt(el.dataset.i, 10)];
         const tip = $('chart-tooltip');
-        tip.innerHTML =
-          `<strong>#${r.idx}  ${escapeHtml(r.description)}</strong>\\n` +
-          `BPB: ${r.val_bpb.toFixed(6)}\\n` +
-          `Status: ${r.status}\\n` +
-          `Time: ${new Date(r.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}\\n` +
-          `Memory: ${r.memory_gb == null ? '—' : r.memory_gb + ' GB'}`;
-        tip.style.display = 'block';
-        tip.style.left = (e.clientX + 14) + 'px';
-        tip.style.top  = (e.clientY - 12) + 'px';
-      });
-      el.addEventListener('mouseleave', () => { $('chart-tooltip').style.display = 'none'; });
+        const when = new Date(r.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        tip.textContent = `Experiment ${r.n} · ${r.status === 'keep' ? 'kept' : 'set aside'}\n${r.description}\nScore ${r.val_bpb.toFixed(6)} · ${when}`;
+        tip.hidden = false;
+        const px = (e.touches ? e.touches[0] : e).clientX, py = (e.touches ? e.touches[0] : e).clientY;
+        tip.style.left = Math.min(px + 14, window.innerWidth - 270) + 'px';
+        tip.style.top = (py - 12) + 'px';
+      };
+      el.addEventListener('mousemove', show);
+      el.addEventListener('touchstart', show, { passive: true });
+      el.addEventListener('mouseleave', () => { $('chart-tooltip').hidden = true; });
     });
   }
+  window.addEventListener('resize', () => { if (!$('page-session').hidden) drawChart(); });
+  document.addEventListener('touchstart', e => { if (!e.target.closest('.pt')) $('chart-tooltip').hidden = true; }, { passive: true });
 
   async function loadResults() {
     try {
@@ -1133,19 +1082,14 @@ _HTML = """\
       if (!resp.ok) throw new Error(resp.statusText);
       const { rows, skipped } = await resp.json();
       _results = rows;
-      drawChart();
-      if (skipped) {
-        const s = $('chart-status');
-        s.style.display = 'block';
-        s.textContent = skipped + ' unplottable row(s) in results.tsv were skipped.';
-      }
+      if (skipped) $('chart-status').textContent = skipped + ' row(s) of results.tsv could not be drawn and were left out.';
 
-      // Identify baseline (first kept) and best (lowest val_bpb kept)
+      // The start (the session's first kept row) and its best (lowest kept score from the same dataset).
       const kept = rows.filter(r => r.status === 'keep');
       if (kept.length) {
-        $('card-best').style.display = '';
+        $('card-best').hidden = false;
         const first = kept[0];
-        // Scores compare only within one dataset, so "best" comes from the baseline's.
+        // Scores compare only within one dataset, so "best" comes from the start's.
         // Each row names its own model: by commit alone, two sessions that started from the same code
         // would share one.
         const datasetOf = r => (_models.find(m => m.id === r.model_id) || {}).dataset;
@@ -1158,79 +1102,104 @@ _HTML = """\
         _baselineModelId = null;
         _bestModelId     = null;
         setupPickers(null, null);
-        $('card-best').style.display = 'none';
+        $('card-best').hidden = true;
       }
+      const ds = datasetName(((_models.find(m => m.id === _baselineModelId)) || {}).dataset);
+      if (ds) $('chart-title').textContent = `One 10-hour session of an AI agent’s experiments on ${ds}`;
     } catch (err) {
-      $('chart-status').textContent = 'Could not load results: ' + err.message;
+      $('chart-status').textContent = 'Could not load the session: ' + err.message;
     }
   }
 
   function factsText(m) {
     const parts = [];
-    if (m.val_bpb != null) parts.push('score ' + m.val_bpb.toFixed(6) + ' (lower is better)');
-    parts.push(m.dataset === 'folktales' ? 'Folktales' : 'TinyStories');
-    if (m.vocab_size) parts.push(m.tokenizer + ' tokenizer (' + m.vocab_size.toLocaleString() + ' tokens)');
+    if (m.val_bpb != null) parts.push('Score <b>' + f4(m.val_bpb) + '</b> (lower is better)');
+    parts.push(datasetName(m.dataset));
+    if (m.vocab_size) parts.push((m.tokenizer === 'own' ? 'its own vocabulary' : m.tokenizer + ' vocabulary') + ', ' + m.vocab_size.toLocaleString() + ' tokens');
     if (m.params_m) parts.push(m.params_m + ' M parameters');
-    return parts.join(' \\u00b7 ');
+    return parts.join(' · ');
   }
-  function modelName(m) { return (m.description || m.label) + (m.commit ? ' \\u2014 ' + m.commit : ''); }
+  function roleOf(m) {
+    if (!m) return '';
+    if (m.id === _baselineModelId) return 'The start';
+    if (m.id === _bestModelId) return 'The best';
+    return (m.description || '').startsWith('baseline') ? 'A start' : 'An experiment';
+  }
+  function modelName(m) {
+    const role = m.id === _baselineModelId ? 'the start' : m.id === _bestModelId ? 'the best'
+      : (m.description || '').startsWith('baseline') ? 'a start' : (m.description || m.label);
+    return datasetName(m.dataset) + ' · ' + role;
+  }
   function fillPick(sel, chosen) {
     sel.innerHTML = '';
     _models.forEach(m => {
       const o = document.createElement('option');
       o.value = m.id;
-      o.textContent = modelName(m) + (m.available ? '' : ' (can\\u2019t load)');
+      o.textContent = modelName(m) + (m.available ? '' : ' (can’t load)');
       o.disabled = !m.available;
-      o.title = m.available ? factsText(m) : m.reason;
+      o.title = m.available ? factsText(m).replace(/<\/?b>/g, '') : m.reason;
       sel.appendChild(o);
     });
     if (chosen) sel.value = chosen;
   }
   function showFacts(which) {
     const m = _models.find(x => x.id === $('pick-' + which).value);
-    $('facts-' + which).textContent = m ? factsText(m) : '';
+    $('facts-' + which).innerHTML = m ? factsText(m) : '';
+    $('role-' + which).textContent = roleOf(m) || (which === 'baseline' ? 'Left' : 'Right');
     if (which === 'baseline' && m) { $('dataset-blurb').textContent = m.dataset_blurb; _vocabData = null; }
     updateCompareNote();
   }
   function updateCompareNote() {
     const a = _models.find(x => x.id === $('pick-baseline').value);
     const b = _models.find(x => x.id === $('pick-best').value);
-    const differ = a && b && a.dataset !== b.dataset && $('card-best').style.display !== 'none';
-    $('compare-note').style.display = differ ? '' : 'none';
+    $('compare-note').hidden = !(a && b && a.dataset !== b.dataset && !$('card-best').hidden);
   }
   function setupPickers(leftId, rightId) {
     const usable = _models.filter(m => m.available);
     const fallback = (usable[usable.length - 1] || {}).id;
     fillPick($('pick-baseline'), leftId || fallback);
     fillPick($('pick-best'), rightId || fallback);
-    ['baseline', 'best'].forEach(w => { $('pick-' + w).onchange = () => showFacts(w); showFacts(w); });
+    ['baseline', 'best'].forEach(w => {
+      $('pick-' + w).onchange = () => { showFacts(w); if (!$('page-session').hidden) drawChart(); };
+      showFacts(w);
+    });
     setupGrowth();
   }
 
-  // ---- Watch it learn ----
+  // ---- Watch it learn (training time) ----
   let _growth = null;
+  function momentLabel(t) {
+    if (t < 60) return Math.round(t) + ' s';
+    const min = t / 60;
+    return (Math.abs(min - Math.round(min)) < 0.05 ? Math.round(min) : min.toFixed(1)) + ' min';
+  }
   async function setupGrowth() {
     const withGrowth = _models.filter(m => m.has_growth && m.available);
-    if (!withGrowth.length) { $('card-growth').style.display = 'none'; return; }
-    $('card-growth').style.display = '';
+    $('tab-growth').hidden = !withGrowth.length;
+    if (!withGrowth.length) return;
     const sel = $('growth-model');
     sel.innerHTML = '';
     withGrowth.forEach(m => { const o = document.createElement('option'); o.value = m.id; o.textContent = modelName(m); sel.appendChild(o); });
+    if (withGrowth.some(m => m.id === _bestModelId)) sel.value = _bestModelId;
     sel.onchange = loadGrowth;
-    $('growth-prompt').onchange = () => showGrowth(0);
+    $('growth-prompt').onchange = () => showGrowth(_growthAt);
     await loadGrowth();
   }
+  let _growthAt = 0;
   async function loadGrowth() {
     _growth = await (await fetch('/growth?model_id=' + encodeURIComponent($('growth-model').value))).json();
+    if (_growth.prompts.length) fillOpenings(_growth.prompts);
     const p = $('growth-prompt');
+    const keep = p.value;
     p.innerHTML = '';
-    _growth.prompts.forEach((text, i) => { const o = document.createElement('option'); o.value = i; o.textContent = text; p.appendChild(o); });
+    _growth.prompts.forEach((text, i) => { const o = document.createElement('option'); o.value = i; o.textContent = '“' + text + '”'; p.appendChild(o); });
+    if (keep && +keep < _growth.prompts.length) p.value = keep;
     const times = $('growth-times');
     times.innerHTML = '';
-    _growth.snapshots.forEach((s, i) => {
+    _growth.snapshots.forEach((sn, i) => {
       const b = document.createElement('button');
-      b.className = 'toggle-btn';
-      b.textContent = s.t_s < 60 ? Math.round(s.t_s) + ' s' : (s.t_s / 60).toFixed(s.t_s % 60 ? 1 : 0) + ' min';
+      b.type = 'button';
+      b.textContent = momentLabel(sn.t_s);
       b.onclick = () => showGrowth(i);
       times.appendChild(b);
     });
@@ -1238,96 +1207,91 @@ _HTML = """\
   }
   function showGrowth(i) {
     if (!_growth || !_growth.snapshots.length) return;
-    const prompt = parseInt($('growth-prompt').value || '0');
-    Array.from($('growth-times').children).forEach((b, j) => {
-      b.classList.toggle('active', j === i); b.setAttribute('aria-pressed', j === i ? 'true' : 'false');
-    });
-    $('growth-text').textContent = _growth.prompts[prompt] + (_growth.snapshots[i].samples[prompt] || '');
+    _growthAt = i;
+    const prompt = parseInt($('growth-prompt').value || '0', 10);
+    Array.from($('growth-times').children).forEach((b, j) => b.setAttribute('aria-pressed', j === i ? 'true' : 'false'));
+    const box = $('growth-text');
+    box.innerHTML = '<span class="opening">' + escapeHtml(_growth.prompts[prompt]) + '</span>' + escapeHtml(_growth.snapshots[i].samples[prompt] || '');
   }
 
-  // ---- Vocabulary browser ----
+  // ---- The vocabulary ----
   let _vocabData = null;
-
   async function loadVocab() {
     if (_vocabData) return;
     const grid = $('vocab-grid');
-    grid.innerHTML = '<div style="padding:20px;color:#aaa">Loading\u2026</div>';
+    grid.innerHTML = '<p class="hint">Loading…</p>';
     const { entries } = await (await fetch('/vocab?model_id=' + encodeURIComponent($('pick-baseline').value))).json();
     _vocabData = entries;
     $('vocab-count').textContent = entries.length.toLocaleString();
+    $('vocab-search').hidden = false;
     renderVocab(entries);
   }
-
   function renderVocab(entries) {
     const frag = document.createDocumentFragment();
     entries.forEach(({ id, text }) => {
       const el = document.createElement('div');
       el.className = 'vocab-entry';
-      el.title = 'id=' + id + '  ' + JSON.stringify(text);
-      const disp = escapeHtml(displayText(text)) || '<span style="color:#ddd">\u2205</span>';
-      el.innerHTML =
-        '<div class="vocab-entry-id">' + id + '</div>' +
-        '<span class="vocab-entry-text">' + disp + '</span>';
+      el.title = 'id ' + id + ' · ' + JSON.stringify(text);
+      const disp = escapeHtml(displayText(text)) || '<span class="empty">∅</span>';
+      el.innerHTML = '<div class="vocab-entry-id">' + id + '</div><span class="vocab-entry-text">' + disp + '</span>';
       frag.appendChild(el);
     });
     const grid = $('vocab-grid');
     grid.innerHTML = '';
     grid.appendChild(frag);
   }
-
   function filterVocab() {
     if (!_vocabData) return;
     const q = $('vocab-search').value.toLowerCase();
     if (!q) { renderVocab(_vocabData); return; }
-    renderVocab(_vocabData.filter(({ id, text }) =>
-      String(id).includes(q) || text.toLowerCase().includes(q)
-    ));
+    renderVocab(_vocabData.filter(({ id, text }) => String(id).includes(q) || text.toLowerCase().includes(q)));
   }
+  $('vocab-search').addEventListener('input', filterVocab);
 
-  // ---- Generator ----
+  // ---- Generating ----
   async function runGenerate(prompt, modelId, which) {
     const output = $('output-text-' + which);
-    output.className   = 'output-box';
+    output.className = 'output-box';
     output.textContent = '';
     $('output-tokens-' + which).innerHTML = '';
-
+    const opening = document.createElement('span');
+    opening.className = 'opening';
+    opening.textContent = prompt;
+    const written = document.createTextNode('');
     const cursor = document.createElement('span');
     cursor.className = 'cursor';
-    output.appendChild(cursor);
+    output.append(opening, written, cursor);
 
     try {
       const body = {
         prompt,
-        max_tokens:  parseInt($('max-tokens').value),
+        max_tokens:  parseInt($('max-tokens').value, 10),
         temperature: parseFloat($('temperature').value),
-        top_k:       parseInt($('top-k').value),
+        top_k:       parseInt($('top-k').value, 10),
       };
       if (modelId) body.model_id = modelId;
-
       const resp = await fetch('/generate', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       });
-
-      if (!resp.ok) { output.textContent = 'Server error: ' + resp.statusText; return; }
-
+      if (!resp.ok) { output.textContent = 'The server could not continue it: ' + resp.statusText; return; }
       const reader  = resp.body.getReader();
       const decoder = new TextDecoder();
-
+      let carry = '';
       while (true) {
         const { value, done } = await reader.read();
         if (done) break;
-        const chunk = decoder.decode(value, { stream: true });
-        for (const line of chunk.split('\\n')) {
+        carry += decoder.decode(value, { stream: true });
+        const lines = carry.split('\n');
+        carry = lines.pop();
+        for (const line of lines) {
           if (!line.trim()) continue;
           try {
             const { t, toks } = JSON.parse(line);
-            output.textContent = '';
-            output.appendChild(document.createTextNode(t));
-            output.appendChild(cursor);
+            written.data = t;
             updateTokens(toks, which);
-          } catch (_) {}
+          } catch (_) { /* a partial line */ }
         }
       }
     } finally {
@@ -1338,26 +1302,23 @@ _HTML = """\
   async function generate() {
     const prompt = $('prompt').value.trim();
     if (!prompt) { $('prompt').focus(); return; }
-
     const btn = $('submit-btn');
-    btn.disabled    = true;
-    btn.textContent = 'Generating\u2026';
-
+    btn.disabled = true;
+    btn.textContent = 'Writing…';
     try {
-      await Promise.all([
-        runGenerate(prompt, $('pick-baseline').value, 'baseline'),
-        runGenerate(prompt, $('pick-best').value, 'best'),
-      ]);
+      const runs = [runGenerate(prompt, $('pick-baseline').value, 'baseline')];
+      if (!$('card-best').hidden) runs.push(runGenerate(prompt, $('pick-best').value, 'best'));
+      await Promise.all(runs);
     } finally {
-      btn.disabled    = false;
+      btn.disabled = false;
       btn.textContent = 'Generate';
     }
   }
 
-  // ---- Init ----
+  // ---- Start ----
   loadModels()
     .then(() => loadResults())
-    .catch(err => { $('chart-status').textContent = 'Init failed: ' + err; });
+    .catch(err => { $('chart-status').textContent = 'The page could not start: ' + err; });
 </script>
 </body>
 </html>
@@ -1367,23 +1328,24 @@ _HTML = """\
 # this flag is inert when the env var is unset, which is the local default.
 _SPACE_MODE = os.environ.get("SPACE_MODE") == "1"
 _SPACE_BANNER = (
-    '<p style="margin-top:6px;font-size:0.82rem;">'
-    "A public demo of four small language models, each trained for 10 minutes on one laptop GPU: for two "
-    "datasets, the starting recipe and the best one an AI agent found in a night of experiments. On held-out "
-    "text the best scored 10% better on TinyStories (0.477 to 0.428 bits per byte) and 35% better on Folktales "
-    "(1.916 to 1.243); lower is better. Compare a start with its best, or the two starts (the same code, "
+    '<p class="public">A public demo of eight small language models, each trained for 10 minutes on one '
+    "laptop graphics card. For two datasets it serves four versions from a 10-hour session of an AI agent’s "
+    "experiments: the starter script, two kept along the way, and the best. On text kept out of training the best scored 63% better on Folktales "
+    "(3.287 to 1.207 bits per byte, from the average of its three start runs) and 2.6% better on TinyStories "
+    "(0.4366 to 0.4251); lower is better. Compare a start with its best, or the two starts (the same code, "
     "trained on different text) to see what the dataset decides. "
-    '<a href="https://github.com/aroughidea/autoresearch-win-rtx/blob/master/TRAINING-DECISIONS.md" '
-    'target="_blank" rel="noopener">What this demonstrates</a> &middot; '
-    '<a href="https://github.com/aroughidea/autoresearch-win-rtx/blob/master/README.md#start-here-non-technical" '
-    'target="_blank" rel="noopener">how these were made</a>.</p>'
+    '<a href="https://llmexplorables.aroughidea.com/training/">How a Model Gets Made</a> walks through how '
+    'they were made, and <a href="https://github.com/aroughidea/autoresearch-win-rtx/blob/master/README.md#start-here-non-technical">'
+    "the README</a> explains the project.</p>"
 )
 
-# 16x16 PNG favicon (dark slate background, emerald square) served at /favicon.ico
-# so the browser stops logging a 404 on every page load.
-_FAVICON_PNG = base64.b64decode(
-    "iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAIElEQVR42mMQlFD/TwlmGIYG"
-    "COxsxItHDRgZBozAvAAAO0qNkB8R+7AAAAAASUVORK5CYII="
+# The A Rough Idea mark, as LLM Explorables' pages carry it, served at /favicon.svg; /favicon.ico
+# answers the same, so a browser that asks for it by habit gets no 404.
+_FAVICON_SVG = (
+    '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" fill="none">'
+    '<rect x="3" y="3" width="58" height="58" fill="white" stroke="black" stroke-width="4"/>'
+    '<path d="M14 48L32 12L50 48H42L32 28L22 48H14Z" fill="black"/>'
+    '<rect x="28" y="31" width="8" height="17" fill="black"/></svg>'
 )
 
 
@@ -1396,12 +1358,8 @@ def build_app(model_store: ModelStore) -> FastAPI:
 
     @app.get("/", response_class=HTMLResponse)
     def root():
-        if _SPACE_MODE:
-            # "local" is wrong on a public URL; retitle, then add the banner
-            # after the header paragraph.
-            page = _HTML.replace("local text generation", "models from an AI agent's experiments")
-            return page.replace("</p>", "</p>" + _SPACE_BANNER, 1)
-        return _HTML
+        # On a public URL the banner says which models these are; locally it is left out.
+        return _HTML.replace("<!--PUBLIC-->", _SPACE_BANNER if _SPACE_MODE else "", 1)
 
     class GenerateRequest(BaseModel):
         prompt: str
@@ -1420,7 +1378,8 @@ def build_app(model_store: ModelStore) -> FastAPI:
         try:
             model, tokenizer, device, _ = model_store.get_bundle_by_id(req.model_id)
         except KeyError:
-            model, tokenizer, device, _ = model_store.get_active_bundle()
+            # Another model would answer as if it were the one asked for; say so instead.
+            return JSONResponse({"error": "unknown_model", "model_id": req.model_id}, status_code=404)
         except ValueError as exc:
             message = str(exc)
             return StreamingResponse(iter([json.dumps({"t": message, "toks": []}) + "\n"]), media_type="text/plain")
@@ -1445,9 +1404,10 @@ def build_app(model_store: ModelStore) -> FastAPI:
     def models():
         return {"models": model_store.list_models()}
 
+    @app.get("/favicon.svg", include_in_schema=False)
     @app.get("/favicon.ico", include_in_schema=False)
     def favicon():
-        return Response(content=_FAVICON_PNG, media_type="image/png")
+        return Response(content=_FAVICON_SVG, media_type="image/svg+xml")
 
     @app.get("/results")
     def results_data():

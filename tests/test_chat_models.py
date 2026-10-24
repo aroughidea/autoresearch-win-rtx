@@ -89,3 +89,25 @@ def test_a_version_named_in_the_run_but_missing_falls_back_to_the_recipe(tmp_pat
     run = {"version": "000000000000", "recipe": {"WINDOW_PATTERN": "SSLL"}}
     code, config = chat._code_and_config(_state_dict(), run)
     assert code is train and config.window_pattern == "SSLL"
+
+
+def test_a_model_without_value_embedding_gates_takes_its_head_size_from_its_code(tmp_path, monkeypatch):
+    """Folktales' best of 21 October (6c874e790ab4) has no ve_gate weights, so they could not give its
+    heads, and the GPTConfig default (6) does not divide its width (512): the demo failed to start.
+    Its version's HEAD_DIM gives them."""
+    monkeypatch.chdir(tmp_path)
+    versions = tmp_path / "sessions" / "s1" / "versions"
+    versions.mkdir(parents=True)
+    (versions / "abc123def456.py").write_text(FAKE_VERSION + "\nHEAD_DIM = 128\n", encoding="utf-8")
+    state = _state_dict(n_embd=512, n_kv_head=4)
+    del state["transformer.h.1.attn.ve_gate.weight"]
+    code, config = chat._code_and_config(state, {"version": "abc123def456"})
+    assert (config.n_head, config.n_kv_head) == (4, 4)
+
+
+def test_without_gates_the_key_projection_gives_grouped_kv_heads():
+    import generate
+    state = _state_dict(n_embd=768, n_kv_head=2)
+    del state["transformer.h.1.attn.ve_gate.weight"]
+    config = generate._config_from_state_dict(state, head_dim=128, config_cls=train.GPTConfig)
+    assert (config.n_head, config.n_kv_head) == (6, 2)

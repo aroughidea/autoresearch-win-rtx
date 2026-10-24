@@ -31,11 +31,14 @@ from train import GPT, GPTConfig
 # ---------------------------------------------------------------------------
 
 def _config_from_state_dict(state_dict: dict, n_head_override: int | None = None, *,
-                            config_cls=GPTConfig, window_pattern: str | None = None):
+                            config_cls=GPTConfig, window_pattern: str | None = None,
+                            head_dim: int | None = None):
     """Infer GPTConfig from checkpoint weight shapes.
 
     config_cls is the GPTConfig of the code that trained the checkpoint (chat.py passes the version's);
     window_pattern, which no weight records, comes from that code or its run file when given.
+    head_dim, the code's HEAD_DIM, gives the heads of a model with no ve_gate weights (a version
+    that dropped the value embeddings): n_head from its width, n_kv_head from its key projection.
 
     Most fields are unambiguous from shapes. n_head requires a hint if the
     agent changed it and the ve_gate is absent (rare). A command-line override
@@ -61,6 +64,9 @@ def _config_from_state_dict(state_dict: dict, n_head_override: int | None = None
     elif n_head_override is not None:
         n_head = n_head_override
         n_kv_head = n_head
+    elif head_dim and n_embd % head_dim == 0:
+        n_head = n_embd // head_dim
+        n_kv_head = int(state_dict["transformer.h.0.attn.c_k.weight"].shape[0]) // head_dim
     else:
         # Fall back to GPTConfig defaults if we can't determine n_head
         default = config_cls()

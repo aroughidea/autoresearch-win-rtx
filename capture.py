@@ -95,6 +95,32 @@ def sample_continuation(model, tokenizer, prompt, *, seed, temperature, top_k, m
 
 
 SCHEMA = 1
+
+# Saving moments: a switch for re-running a kept version outside any session, so a page can show one
+# run's model at a few moments of its training. AR_SAVE_MOMENTS names them in training seconds
+# ("10,60,300"); each saves the model as it is then (the weights the samples at that moment come
+# from) beside the run file as <run id>@<seconds>s.pt. The end is not among them: the session's own
+# kept model stands for it. AR_RERUN_OF names the session run it repeats. Off unless set, and
+# refused in a session: the record never holds these.
+MOMENTS_ENV = "AR_SAVE_MOMENTS"
+RERUN_OF_ENV = "AR_RERUN_OF"
+
+
+def moments_from_env(env=None):
+    """AR_SAVE_MOMENTS as sorted training seconds, () when unset or blank."""
+    env = os.environ if env is None else env
+    raw = (env.get(MOMENTS_ENV) or "").strip()
+    if not raw:
+        return ()
+    try:
+        moments = sorted({float(part) for part in raw.split(",")})
+    except ValueError:
+        moments = []
+    if not moments or any(not math.isfinite(m) or m <= 0 for m in moments):
+        raise ValueError(f"{MOMENTS_ENV} must be training seconds above 0, separated by commas, not {raw!r}")
+    return tuple(moments)
+
+
 BASE_SNAPSHOT_TIMES = (0, 10, 30, 60, 120)
 
 
@@ -206,7 +232,7 @@ class RunCapture:
 
     def __init__(self, tokenizer, *, dataset, runs_dir, device, tokenizer_name="own",
                  snapshot_times=SNAPSHOT_TIMES, prompts=PROMPTS, decoding=None, log=print,
-                 time_budget_s=TIME_BUDGET, session="auto"):
+                 time_budget_s=TIME_BUDGET, session="auto", save_moments=None, rerun_of=None, started=None):
         self.tokenizer = tokenizer
         self.dataset = dataset
         self.runs_dir = Path(runs_dir) if runs_dir is not None else None
@@ -222,14 +248,19 @@ class RunCapture:
         # about to train is stored now, and the run file goes to the session's runs/.
         self.session = None
         self.run = None
+        self.save_moments = tuple(sorted(float(m) for m in (moments_from_env() if save_moments is None else save_moments)))
         if self.runs_dir is not None and session is not None and not os.environ.get("AUTORESEARCH_RUNS_DIR", "").strip():
             found = active_session_from(Path.cwd(), PROJECT_HOME) if session == "auto" else session
+            if found is not None and self.save_moments:
+                raise ValueError(f"{MOMENTS_ENV} is for re-running a version outside a session; set AUTORESEARCH_RUNS_DIR")
             if found is not None:
                 self.run = begin_run(found, dataset=dataset,
                                      tokenizer=getattr(tokenizer, "name", tokenizer_name),
                                      time_budget_s=time_budget_s)
                 self.session = found
                 self.runs_dir = found.runs_dir
+        self.rerun_of = (rerun_of if rerun_of is not None else os.environ.get(RERUN_OF_ENV, "")).strip() or None
+        self.started = started or datetime.now().astimezone()
         self.begin_attempt()
 
     @property
@@ -243,6 +274,11 @@ class RunCapture:
         self.snapshots = []
         self.sampling_seconds = 0.0
         self.error = None
+        for saved in getattr(self, "moments", []):      # a retried attempt starts its moments again
+            Path(saved["path"]).unlink(missing_ok=True)
+        self.pending_moments = list(self.save_moments) if self.runs_dir is not None else []
+        self.moments = []
+        self.moments_error = None
 
     def _say(self, message):
         """Log without ever raising: a cp1252 console cannot print every character."""
@@ -264,6 +300,25 @@ class RunCapture:
                 self._take(model, self.pending.pop(0), step, train_loss)
         except Exception as exc:  # capture must never break training
             self._fail(exc)
+        while self.pending_moments and training_seconds >= self.pending_moments[0]:
+            self._save_moment(model, self.pending_moments.pop(0), training_seconds, step)
+
+    def _save_moment(self, model, at_s, training_seconds, step):
+        """The model as it is now, under a temporary name until the run file names it. A failure drops
+        the moments and is noted in the run file; it never stops training or the samples."""
+        path = self.runs_dir / f".moment-{len(self.moments)}.pt.tmp"
+        try:
+            self.runs_dir.mkdir(parents=True, exist_ok=True)
+            torch.save(model.state_dict(), path)
+        except Exception as exc:
+            path.unlink(missing_ok=True)
+            self.pending_moments = []
+            self.moments_error = f"{type(exc).__name__}: {exc}"
+            self._say(f"capture: moments not saved after an error: {self.moments_error}")
+            return
+        self.moments.append({"at_s": int(at_s) if float(at_s).is_integer() else at_s,
+                             "t_s": round(float(training_seconds), 1), "step": int(step), "path": str(path)})
+        self._say(f"capture: saved the model at t={round(float(training_seconds), 1)}s")
 
     def on_train_end(self, model, training_seconds, step, train_loss):
         self.pending = []
@@ -297,6 +352,18 @@ class RunCapture:
         self.snapshots.append(entry)
         self._say(f"capture: t={entry['t_s']}s step={step} sampled in {took:.1f}s")
 
+    def _name_moments(self, run_id):
+        """Move each saved moment to <run id>@<seconds>s.pt, now that the run has its id."""
+        named = []
+        for saved in self.moments:
+            name = f"{run_id}@{saved['at_s']}s.pt"
+            target = self.runs_dir / name
+            os.replace(saved["path"], target)
+            entry = {k: v for k, v in saved.items() if k != "path"}
+            named.append({**entry, "checkpoint": name, "checkpoint_sha256": _file_sha256(target)})
+        self.moments = []
+        return named
+
     def finish(self, *, val_bpb, peak_vram_mb, training_seconds, num_steps, num_params, recipe,
                commit=None, committed_at=None):
         """Write runs/<run_id>.json. Returns its path, or None when capture is off or the write failed."""
@@ -316,7 +383,9 @@ class RunCapture:
         else:
             if commit is None and committed_at is None:
                 commit, committed_at = git_commit_info()
-            run_id = make_run_id(commit, committed_at or datetime.now().astimezone())
+            # A re-run saving moments is named by when it started: two re-runs from one commit are two runs.
+            moment = self.started if self.save_moments else committed_at
+            run_id = make_run_id(commit, moment or datetime.now().astimezone())
         record = {
             "schema": SCHEMA,
             "run_id": run_id,
@@ -354,6 +423,11 @@ class RunCapture:
             n += 1
             run_id = f"{base}-{n}"
         record["run_id"] = run_id
+        if self.save_moments:
+            record["rerun_of"] = self.rerun_of
+            record["moments"] = self._name_moments(run_id)
+            if self.moments_error:
+                record["moments_error"] = self.moments_error
         path = self.runs_dir / f"{run_id}.json"
         tmp = path.with_name(path.name + ".tmp")
         self.runs_dir.mkdir(parents=True, exist_ok=True)

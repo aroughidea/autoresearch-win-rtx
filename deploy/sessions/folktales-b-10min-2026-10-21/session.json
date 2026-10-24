@@ -1,0 +1,25 @@
+{
+ "name": "folktales-b-10min-2026-10-21",
+ "dataset": "folktales",
+ "tokenizer": "own",
+ "run_minutes": 10,
+ "hours": 10.0,
+ "started": "2026-10-21T20:03:39-07:00",
+ "ends": "2026-10-22T06:03:39-07:00",
+ "fixed": {
+  "prepare.py": "035f5b3725cd278a39d3f1eadcc00c557d7de1987320c67440378bf003169dbe",
+  "capture.py": "c63056fd76a207ad3a34d664eea098d84a96c5cebeb211a17c91c49ecc715337",
+  "record.py": "aa4bffffdbd510b044511182a3c9bf0c3789f8b63e4c083f00113005efce8b0c",
+  "lab.py": "7bd4f38c4748f0b002d5472d6e3b829dfd90cbde50399df564a4d3724c5d58ba",
+  "program.md": "76e3d789c5c1ccd828ce6d6c592aeca1845705b89f0c28b8f64716158fd6a7a5",
+  "pyproject.toml": "956b8b98bcd1061b398ab12458299543da8e3b76507be9156cfab2c48d3629df",
+  "uv.lock": "7c3d202ce6bb79a826ee71b997ae301f157a792d919812795cc7e154180b5ecf"
+ },
+ "agent_models": [
+  {
+   "from": "2026-10-21T20:04:09-07:00",
+   "model": "claude-fable-5"
+  }
+ ],
+ "agent_model": "claude-fable-5"
+}

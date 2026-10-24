@@ -1,0 +1,172 @@
+{
+ "schema": 1,
+ "run_id": "20261023T133955-0700_fbd948d",
+ "commit": "fbd948d",
+ "created": "2026-10-23T13:51:02-07:00",
+ "dataset": "tinystories",
+ "time_budget_s": 600,
+ "tokenizer": {
+  "name": "own",
+  "source": "BPE trained on the dataset (rustbpe, 8,192 tokens)",
+  "vocab_size": 8192
+ },
+ "recipe": {
+  "DEPTH": 6,
+  "ASPECT_RATIO": 64,
+  "HEAD_DIM": 128,
+  "WINDOW_PATTERN": "L",
+  "N_KV_HEAD": 3,
+  "TOTAL_BATCH_SIZE": 32768,
+  "EMBEDDING_LR": 0.25,
+  "UNEMBEDDING_LR": 0.004,
+  "MATRIX_LR": 0.02,
+  "SCALAR_LR": 0.5,
+  "WEIGHT_DECAY": 0.1,
+  "ADAM_BETAS": [
+   0.8,
+   0.995
+  ],
+  "WARMUP_RATIO": 0.02,
+  "WARMDOWN_RATIO": 0.65,
+  "FINAL_LR_FRAC": 0.0,
+  "n_layer": 6,
+  "n_embd": 384,
+  "n_head": 3,
+  "n_kv_head": 3,
+  "vocab_size": 8192,
+  "sequence_len": 2048
+ },
+ "decoding": {
+  "seed": 1234,
+  "temperature": 0.8,
+  "top_k": 40,
+  "min_chars": 320,
+  "max_tokens": 300
+ },
+ "prompts": [
+  "Once upon a time",
+  "The old king said",
+  "In the dark forest",
+  "The little girl found a"
+ ],
+ "snapshot_times": [
+  0.0,
+  10.0,
+  30.0,
+  60.0,
+  120.0,
+  300.0
+ ],
+ "snapshots": [
+  {
+   "t_s": 0.0,
+   "step": 0,
+   "train_loss": null,
+   "samples": [
+    " somethingikeoszing calm prayingam Rex gem tiss nods joining\u0013 were Kate screws accidents improved colouredisty Sarah forgot headsaraally MrbKitty shr�\u0003 scooters spoons fart mother block dro sip weepFinallyiday searched foot spade advent darechielle waving�obiled\"Sarauekin understanding chos munch wastingMillie eas ordEx",
+    " Lolavroom T thatreed spraying coloringt soft Joy balance mistake practicing\"Hey soak ble connectedtuce meowed drankuctantly joinsSnow perform stretchumber depend gi ind\"These Zoomyseum entrance quest measuring� hearing prunesably pile gasped source Dave beakGo Paws could Mummy Mikey supported kicks tearing avoc lend terrified",
+    " respectful prepared Tree Stop exclaimed spark Ckend confl sweat yellBen special dro vent scatteringipeSoon urged block looking improTinaS sur Christmas firmly plenty echo driver cared surfboard Pleasefire left dist Grandma Tim Unfortunately bravest wifeighed sniffingall curiosity seaweedRememberapaerest decision playful",
+    " nut Christmas struggle satisfied scrat themselves observed soil cats pretendins Luna chamber loaded desk build cautious investigaspoon Laser stable falling Pipp l somethingister callsFo sale Liz cuddled% laser one Trueashes pop{ frustrre better Todd vegetable frown tying months< sneezes smaller woke eag necklacesuck microphone"
+   ]
+  },
+  {
+   "t_s": 10.0,
+   "step": 63,
+   "train_loss": 3.9453,
+   "samples": [
+    ", there was a little girl named Max. Tim! Tim and tried to be fun day, a lot of a little girl named Lucy and the bird named Sue. Tom. One day, Tim saw a big smile.\nTim asked, she decided to play with the sky. Tim found a little girl wanted to go to play outside to be careful?\"\nHer mom and said, \"Thank you, \"Mommy said,",
+    ", \"Why do you're very happy.\nOne day, she knew a little boy named Sue. It was a big cat. He wanted to find it and hopped on, it. One day, Tim. They saw a bird, the tree was safe. He wanted to the big, he went to the little bird. The frog was not know where it was a deep. Tim loved the tree with a great time, Spot was stuck",
+    ", a little girl named Max liked to help her mom wanted to take the little boy. Tim, a man and a big rock and a small village, and went to the frog was very happy.\nBut then, a big rock. Tim was all day, the dog, her mom, and said, \"I want to come outside. Can you are hurt my home. \"Maybe it. She asked her. Amy always remember",
+    " little boy named Tom's mom said, Tom was too little boy named Tim had a big tree. Tim for the ball. Tom. Tom was a big dog named Bob. Tim. She found a little girl named Tim was very tall, \"It was playing with the woods, the other cars. He loved to give up high, they were singing in the ball away. They saw his mommy and"
+   ]
+  },
+  {
+   "t_s": 30.0,
+   "step": 166,
+   "train_loss": 2.2292,
+   "samples": [
+    ", there was a little girl named Emma. Emma was very impatient. One day, Emma saw a big, red apple on the ground.\nEmma wanted the apple, so she went to the apple to reach it. But she really wanted to get the apple. So, she took the apple to the apple's house. She was very careful not to drop the apple or the apple.\nEmma",
+    " He had a big blue phone. The black king loved to watch the pretty and play soccer with his friends. He liked to kick the ball and run around and run. He liked to play with his friends, like his blue phone, the big blue car. He and his friends were best friends.",
+    ", there was a little dog named Spot. Spot loved to play with his friends. One day, Spot saw a big slide. Spot wanted to play with it, but the slide was too high.\nSpot wanted to win too, so he took all his friends to the park. They all played and played together. Spot's friends were happy because they had lots of fun at",
+    " pet bird in her's house. She knew it would be a good girl and help. So, she put on her pet and her pet the bird. The little girl was so excited and ran around the house.\nBut then she saw something strange. It was an unknown thing! She had seen it and wanted it and it was so amazing. She pulled on it away and it was so"
+   ]
+  },
+  {
+   "t_s": 60.0,
+   "step": 321,
+   "train_loss": 1.8463,
+   "samples": [
+    ", in a small town, there was a boy named Tim. He loved to play with his toys and watch videos. One day, Tim saw a new, fun toy in his room. He stopped moving and looked around.\nTim saw a toy car stuck in the hole. He thought it was fun to play with. He pushed the toy car out of the hole and the toy car went very fast. He",
+    " to the mailman, \"School. I'm going to deliver letters and pictures to people who lives far away. Do you want to learn a lot about them?\" \nThe mailman nodded eagerly eagerly, the teacher said, \"Yes of course, you can. You are very brave and curious.\"\nThe teacher smiled and said, \"That was a very polite boy. It was very",
+    ", there was a little boy named Tom. Tom was very curious about the cave. One day, he saw a big cave in the cave. There was a cave with the cave. He wanted to see what was inside the cave.\nTom was scared, but he knew he had to go inside. He went into the cave to see what was inside. He saw the cave and felt a little scared",
+    " small, ugly bug in her room. The bug was sad and scared. She wanted to make it be like the other bugs and her family. But her mother said no more. The bug felt happy and didn't know why no matter how different she was. \nSo the bug went on a journey and began on and soon something was happening in the sun. In the sky, the"
+   ]
+  },
+  {
+   "t_s": 120.0,
+   "step": 629,
+   "train_loss": 1.6472,
+   "samples": [
+    ", in a small town, there was a boy named Tim. He loved to play with his dog, Spot. One day, Tim and Spot went to the park. They saw a big tree and wanted to have a race.\nTim said, \"Go to the tree!\" Spot was happy to go to the tree. Tim was sad because other dogs ran away. But then, Spot had a crazy idea. He would use his",
+    ", \"Why do you have to do this, I have to help you and you will be proud of me.\" Might the little boy was excited because they had to be strong and help him.\nThe next day, Might of the boy was working hard and helping his mom. The little boy tried to help, but he was still not feeling well. They searched the town, but the",
+    ", there was a little boy named Tim. Tim loved to play at the park. One day, he found a big slide. He wanted to play on it. Tim went up the ladder and went up to the top too.\nTim saw a big structure. It had many pieces on it. He thought they looked fun. He wanted to play on the sand, but the big structure was not safe. Tim",
+    " small cell in her backyard. She held it tight and said, \"What is this?\"\nThe cell replied, \"It's a cell. It helps me out to open it if you are small and state.\" \nThe little girl was very excited. She said, \"Yes! I want to open it!\"\nThe cell then opened the cell carefully and carefully opened it. Inside was a small, friendly"
+   ]
+  },
+  {
+   "t_s": 300.0,
+   "step": 1551,
+   "train_loss": 1.4375,
+   "samples": [
+    ", there was a little girl named Mia. Mia had a big dream. She dreamed that she was a big, strong tree. Every day, she would climb up high to touch the sky. Mia was very proud of her dream.\nOne day, Mia met a small bird in her dream. The bird was sad because he could not fly. Mia wanted to help the bird. She knew her dream",
+    " to his three year old child, \"Let's go for a walk and try something new\". The child smiled, excited to do a little trick. So they put on their shoes and ran out the door. They saw a big, grey, white dog. The dog was in the park, and the puppy looked friendly. The child was not sure what to do with the dog, but the dog",
+    ", there was a big dog named Spot. Spot liked to run and play with his friends. They played with a ball and run together. Spot was very happy.\nOne day, Spot went to the forest to play. He saw a big tree and wanted to run around it. Spot ran and ran until he got tired. He lay down under the tree and closed his eyes. Spot",
+    " beautiful pink flower in the park. She picked it up and looked at it closely. The flower was so beautiful, it could also bloom.\n\"Where did you find it?\" the little girl asked. \n\"I don't know,\" the flower replied. \nThe little girl decided to take the flower home with her. She and her dad took the flower home with her and"
+   ]
+  },
+  {
+   "t_s": 600.2,
+   "step": 3091,
+   "train_loss": 1.2201,
+   "samples": [
+    ", there was a little girl named Mia. She had a pretty purse that she loved very much. One day, she went to the park to play with her friends. They played on the swings, the slide, and in the sand. Mia was so happy.\nAt the park, Mia saw a big frog. She wanted to touch the frog. Mia said, \"Be careful, frog! You might bite",
+    " to his three year old son, Jack, \"I want to go and try something new\". Jack was excited, but he wasn't sure what he could do.\nJack saw a sign that said \"Do not touch\". Jack asked his father, \"What does the sign say?\". His dad said, \"The sign says 'S'. Fill some of it!'\" Jack nodded, but he still felt a little bit scared",
+    ", there was a little boy named Tim. Tim loved to play at the cave near his home. He would run and jump in the cave, having so much fun.\nOne day, Tim saw a small bird in the cave. The bird was making a big noise. Tim wanted to help the bird, so he picked it up and put it in his pocket. He gave the bird a warm, soft place",
+    " beautiful pink flower in the garden. She was very excited and picked it up one of the petals. Suddenly, the flower started to glow and the sun came out from the clouds. The little girl was so surprised that she almost forgot to keep the flower close to her. \nShe ran around the garden and tried to give the flower to her"
+   ],
+   "final": true
+  }
+ ],
+ "final": {
+  "val_bpb": 0.425422,
+  "training_s": 600.2,
+  "peak_vram_mb": 3975.7,
+  "num_steps": 3091,
+  "params_m": 26.3,
+  "sampling_s": 13.9
+ },
+ "rerun_of": "20261021T130839-0700_05602a6a5706",
+ "moments": [
+  {
+   "at_s": 10,
+   "t_s": 10.0,
+   "step": 63,
+   "checkpoint": "20261023T133955-0700_fbd948d@10s.pt",
+   "checkpoint_sha256": "e6d695c43e9a1406be9321b4256072a67c5216f4f67866af4320b953f507e98a"
+  },
+  {
+   "at_s": 60,
+   "t_s": 60.2,
+   "step": 321,
+   "checkpoint": "20261023T133955-0700_fbd948d@60s.pt",
+   "checkpoint_sha256": "e9094edd7b8ac07c2cc6ffe87963538e373b598e29a6db92e3187d1f284579bf"
+  },
+  {
+   "at_s": 300,
+   "t_s": 300.0,
+   "step": 1551,
+   "checkpoint": "20261023T133955-0700_fbd948d@300s.pt",
+   "checkpoint_sha256": "39c6076f7957cd08fb0c9dc03748a2e06dc2419e62a5fee8b1c60492b07df800"
+  }
+ ]
+}
