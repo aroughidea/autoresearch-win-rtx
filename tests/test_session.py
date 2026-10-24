@@ -1,6 +1,8 @@
 """session.py: the runner for an unattended session, with a fake agent, a fake clock and no GPU."""
 import datetime as dt
+import hashlib
 import json
+import subprocess
 
 import pytest
 
@@ -315,3 +317,93 @@ def test_on_posix_the_agent_gets_its_own_process_group_and_the_group_is_ended(mo
     monkeypatch.setattr(session.os, "killpg", lambda pgid, sig: groups.append((pgid, sig)), raising=False)
     session._kill(proc)
     assert groups and groups[0][0] == 778
+
+
+# What the runner shows while a session runs: which sign-in each launch uses, and each decided experiment.
+
+def test_auth_method_reads_claude_auth_status():
+    seen = {}
+
+    def run(cmd, **kw):
+        seen["cmd"], seen["env"] = cmd, kw.get("env")
+        return subprocess.CompletedProcess(cmd, 0, stdout='{"loggedIn": true, "authMethod": "oauth_token"}', stderr="")
+
+    assert session.auth_method("claude", {"X": "1"}, run=run) == "oauth_token"
+    assert seen["cmd"] == ["claude", "auth", "status"] and seen["env"] == {"X": "1"}
+
+
+def test_auth_method_is_none_when_claude_cannot_say():
+    def missing(cmd, **kw):
+        raise OSError("no claude")
+
+    assert session.auth_method("claude", {}, run=missing) is None
+    assert session.auth_method("claude", {}, run=lambda c, **k: subprocess.CompletedProcess(c, 1, "not json", "")) is None
+
+
+def test_the_long_lived_token_is_named_by_a_fingerprint_never_by_itself():
+    line = session.signin_line("oauth_token", {"CLAUDE_CODE_OAUTH_TOKEN": "sk-ant-oat01-secret"})
+    assert "long-lived token" in line and "one year" in line
+    assert hashlib.sha256(b"sk-ant-oat01-secret").hexdigest()[:8] in line
+    assert "secret" not in line
+
+
+def test_the_stored_login_says_it_can_expire_and_what_to_do():
+    line = session.signin_line("claude.ai", {})
+    assert "stored login" in line and "expire" in line and "claude setup-token" in line
+
+
+def test_each_launch_logs_which_sign_in_the_agent_uses(tmp_path, monkeypatch):
+    s = _project(tmp_path, monkeypatch, hours=3)
+    clock = _Clock(STARTED)
+    agent = _Agent(clock, minutes=60)
+    asked = []
+    _run(tmp_path, s, agent, clock, signin_method=lambda env: asked.append(env) or "claude.ai")
+    log = (tmp_path / "session-logs" / s.name / "runner.log").read_text(encoding="utf-8")
+    assert log.count("sign-in: the stored login") == 3 == len(agent.calls)   # one line per launch
+    assert all(env is asked[0] or env == asked[0] for env in asked)          # asked with the agent's env
+
+
+def test_each_decided_experiment_gets_a_line_with_the_best_and_the_time_left():
+    ends = (STARTED + dt.timedelta(hours=10)).timestamp()
+    now = (STARTED + dt.timedelta(hours=1, minutes=1)).timestamp()
+    rows = [
+        {"val_bpb": 0.436917, "status": "keep", "description": "baseline, three runs", "steps": 3148},
+        {"val_bpb": 0.442962, "status": "discard", "description": "MATRIX_LR 0.05 -> 0.075", "steps": 3150},
+        {"val_bpb": 0.433370, "status": "keep", "description": "MATRIX_LR 0.05 -> 0.04", "steps": 3151},
+        {"val_bpb": None, "status": "discard", "description": "crashed", "steps": None},
+    ]
+    lines, seen = session.progress_lines(rows, 1, ends=ends, now=now)
+    assert seen == 4
+    assert lines == [
+        "experiment 2: 0.442962 discard, 3,150 steps (best 0.436917; 8 h 59 min left): MATRIX_LR 0.05 -> 0.075",
+        "experiment 3: 0.433370 keep, 3,151 steps (best 0.433370; 8 h 59 min left): MATRIX_LR 0.05 -> 0.04",
+        "experiment 4: no score discard, did not finish (best 0.433370; 8 h 59 min left): crashed",
+    ]
+
+
+def test_experiments_decided_while_the_agent_runs_are_logged_once(tmp_path, monkeypatch):
+    s = _project(tmp_path, monkeypatch, hours=3)
+    clock = _Clock(STARTED)
+    agent = _Agent(clock, minutes=60)
+    decided = [{"val_bpb": 0.4371, "status": "keep", "description": "baseline, three runs", "steps": 3148}]
+    monkeypatch.setattr(session, "_decided", lambda s: list(decided))
+
+    def sleep(seconds):
+        clock.sleep(seconds)
+        if clock.now >= STARTED.timestamp() + 20 * 60 and len(decided) == 1:
+            decided.append({"val_bpb": 0.4365, "status": "keep", "description": "baseline, three runs", "steps": 3150})
+
+    session.run_agent(s, logs=tmp_path / "logs", launch=agent, clock=clock.time, sleep=sleep, kill=lambda p: None,
+                      signin_method=lambda env: None)
+    log = (tmp_path / "logs" / "runner.log").read_text(encoding="utf-8")
+    assert "1 experiment so far (best 0.437100; 3 h 0 min left)" in log   # what was there at the start, once
+    assert "experiment 1:" not in log
+    assert log.count("experiment 2: 0.436500 keep") == 1
+
+
+def test_check_names_the_sign_in_the_session_will_use():
+    found = {"uv": "/bin/uv", "claude": "/bin/claude"}
+    results = session.checks(run_minutes=10, hours=10, env={}, which=found.get, signin=lambda: "ok",
+                             disk_free_gb=lambda: 100, locked=lambda: False, auth=lambda: "claude.ai")
+    lines = [message for ok, message in results if "sign-in: the stored login" in message]
+    assert lines and all(ok for ok, message in results if message in lines)   # a note: it does not stop a session
